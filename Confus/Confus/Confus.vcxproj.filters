@@ -33,7 +33,10 @@
     <ClCompile Include="framework\Win32\aldlist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OpenALAudio.cpp">
+    <ClCompile Include="OpenALSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenALListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,7 +56,10 @@
     <ClInclude Include="framework\Win32\aldlist.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OpenALAudio.h">
+    <ClInclude Include="OpenALSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenALListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

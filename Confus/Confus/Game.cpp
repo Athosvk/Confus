@@ -1,32 +1,43 @@
 #include <Irrlicht/irrlicht.h>
 
 #include "Game.h"
-#include "OpenALAudio.h"
-#include <sstream>
+#include "OpenALSource.h"
+#include "OpenALListener.h"
 
 const double Game::FixedUpdateInterval = 0.02;
 const double Game::MaxFixedUpdateInterval = 0.1;
 
 void Game::run()
 { 
-    m_Device = irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL);
+    //Create Game Device
+	m_Device = irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL);
+	m_Device->setWindowCaption(L"Confus");
 
-	//Test
-	OpenALAudio sound;
-	std::ostringstream oss;
-	oss << "Played Sound: " << sound.PlayASound();
-	
+	//Create Sound Listener
+	m_Listener = new OpenALListener();
 
-	irr::ILogger* logger = m_Device->getLogger();
-	logger->log(oss.str().c_str());
-	logger->log("Test");
+	//Test Sound
+	int position = 5;
+	OpenALSource* source = new OpenALSource();
+	source->init("Footsteps.wav");
+	source->setPlaySpeed(5);
+	source->setPosition(position, 0, 0);
+	source->setLoop(true);
+	source->play();
 
+	//Game Loop
     while(m_Device->run())
     {
         handleInput();
         update();
         processFixedUpdates();
         render();
+
+		//Test sound
+		if (source->isPlaying() == false) {
+			source->setPosition(--position, 0, 0);
+			source->play();
+		}
     }
 }
 

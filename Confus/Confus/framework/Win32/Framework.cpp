@@ -89,7 +89,8 @@ ALenum eXRAMAccessible = 0;
 // Initialization and enumeration
 void ALFWInit()
 {
-	g_pWaveLoader = new CWaves();
+	if (!g_pWaveLoader)
+		g_pWaveLoader = new CWaves();
 }
 
 void ALFWShutdown()
