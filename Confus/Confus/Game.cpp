@@ -14,11 +14,11 @@ void Game::run()
 	m_Device->setWindowCaption(L"Confus");
 
 	//Create Sound Listener
-	m_Listener = new OpenALListener();
+	m_Listener = new Confus::OpenALListener();
 
 	//Test Sound
 	int position = 5;
-	OpenALSource* source = new OpenALSource();
+	Confus::OpenALSource* source = new Confus::OpenALSource();
 	source->init("Footsteps.wav");
 	source->setPlaySpeed(5);
 	source->setPosition(position, 0, 0);

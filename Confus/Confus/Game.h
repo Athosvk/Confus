@@ -13,7 +13,7 @@ private:
     static const double MaxFixedUpdateInterval; 
 
     irr::IrrlichtDevice* m_Device;
-	OpenALListener* m_Listener;
+	Confus::OpenALListener* m_Listener;
     double m_FixedUpdateTimer = 0.0;
     double m_DeltaTime = 0.0;
 
