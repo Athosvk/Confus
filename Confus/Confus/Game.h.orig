@@ -1,0 +1,35 @@
+#pragma once
+#include <Irrlicht/irrlicht.h>
+
+namespace Confus
+{
+    class Game
+    {
+    private:
+        static const double FixedUpdateInterval;
+        static const double MaxFixedUpdateInterval;
+
+<<<<<<< 378a055ad1485dc2214626f78b0a609f857543e8
+        irr::IrrlichtDevice* m_Device;
+        irr::scene::ISceneManager* m_SceneManager;
+        irr::video::IVideoDriver* m_VideoDriver;
+        irr::gui::IGUIEnvironment* m_GuiEnvironment;
+=======
+    irr::IrrlichtDevice* m_Device;
+>>>>>>> updated player a bit, starting on EventManager
+
+        double m_FixedUpdateTimer = 0.0;
+        double m_DeltaTime = 0.0;
+
+    public:
+        virtual ~Game() = default;
+
+        void run();
+    private:
+        void handleInput();
+        void update();
+        void processFixedUpdates();
+        void fixedUpdate();
+        void render();
+    };
+}

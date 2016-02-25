@@ -160,6 +160,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="framework\Win32\aldlist.cpp" />
     <ClCompile Include="framework\Win32\CWaves.cpp" />
     <ClCompile Include="framework\Win32\Framework.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EventManager.h" />
     <ClInclude Include="framework\Win32\aldlist.h" />
     <ClInclude Include="framework\Win32\CWaves.h" />
     <ClInclude Include="framework\Win32\Framework.h" />
