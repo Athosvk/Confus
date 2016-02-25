@@ -1,5 +1,10 @@
 #include "OpenALSource.h"
 namespace Confus {
+
+	OpenALSource::OpenALSource(char* a_WaveFileString) {
+		init(a_WaveFileString);
+	}
+
 	void OpenALSource::init(char* a_WaveFileString) {
 		m_WaveFileString = a_WaveFileString;
 

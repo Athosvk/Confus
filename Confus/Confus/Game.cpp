@@ -18,8 +18,7 @@ void Game::run()
 
 	//Test Sound
 	int position = 5;
-	Confus::OpenALSource* source = new Confus::OpenALSource();
-	source->init("Footsteps.wav");
+	Confus::OpenALSource* source = new Confus::OpenALSource("Footsteps.wav");
 	source->setPlaySpeed(5);
 	source->setPosition(position, 0, 0);
 	source->setVolume(10);

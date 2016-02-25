@@ -65,6 +65,7 @@ namespace Confus {
 		/// Stop playing
 		/// </summary>
 		void stop();
+		OpenALSource(char* a_WaveFileString);
 		~OpenALSource();
 	private:
 		ALuint      m_Buffer;
