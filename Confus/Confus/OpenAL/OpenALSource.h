@@ -1,5 +1,5 @@
 #pragma once
-#include "framework/Win32/Framework.h"
+#include "Framework/Framework.h"
 
 namespace Confus {
 	/// <summary>
@@ -33,6 +33,10 @@ namespace Confus {
 		/// Set the speed at which the source will be played.
 		/// </summary>
 		void setPlaySpeed(float a_Speed = 1.0f);
+		/// <summary>
+		/// Set the volume of the source.
+		/// </summary>
+		void setVolume(float a_Volume);
 		/// <summary>
 		/// Set the pitch of the source.
 		/// </summary>

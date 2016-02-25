@@ -1,8 +1,8 @@
 #include <Irrlicht/irrlicht.h>
 
 #include "Game.h"
-#include "OpenALSource.h"
-#include "OpenALListener.h"
+#include "OpenAL/OpenALSource.h"
+#include "OpenAL/OpenALListener.h"
 
 const double Game::FixedUpdateInterval = 0.02;
 const double Game::MaxFixedUpdateInterval = 0.1;
@@ -22,7 +22,7 @@ void Game::run()
 	source->init("Footsteps.wav");
 	source->setPlaySpeed(5);
 	source->setPosition(position, 0, 0);
-	source->setLoop(true);
+	source->setVolume(10);
 	source->play();
 
 	//Game Loop

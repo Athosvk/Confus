@@ -7,7 +7,7 @@ namespace Confus {
 		alGenBuffers(1, &m_Buffer);
 
 		// Load Wave file into OpenAL Buffer
-		if (!ALFWLoadWaveToBuffer((char*)ALFWaddMediaPath(m_WaveFileString), m_Buffer))
+		if (!OpenAL::ALFWLoadWaveToBuffer((char*)OpenAL::ALFWaddMediaPath(m_WaveFileString), m_Buffer))
 		{
 			return; //Something wrong with path
 		}
@@ -25,6 +25,10 @@ namespace Confus {
 
 	void OpenALSource::setLoop(bool a_ShouldLoop) {
 		alSourcei(m_Source, AL_LOOPING, a_ShouldLoop);
+	}
+
+	void OpenALSource::setVolume(float a_Volume) {
+		alSourcei(m_Source, AL_GAIN, a_Volume);
 	}
 
 	void OpenALSource::setDirection(float a_AtX, float a_AtY, float a_AtZ, float a_UpX, float a_UpY, float a_UpZ) {

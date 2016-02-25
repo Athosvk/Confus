@@ -5,17 +5,17 @@ namespace Confus {
 	}
 
 	void OpenALListener::init() {
-		ALFWInit();
-		if (!ALFWInitOpenAL())
+		OpenAL::ALFWInit();
+		if (!OpenAL::ALFWInitOpenAL())
 		{
-			ALFWShutdown();
+			OpenAL::ALFWShutdown();
 			throw; //Failed to init
 		}
 	}
 
 	void OpenALListener::clear() {
-		ALFWShutdownOpenAL();
-		ALFWShutdown();
+		OpenAL::ALFWShutdownOpenAL();
+		OpenAL::ALFWShutdown();
 	}
 
 

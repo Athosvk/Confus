@@ -1,5 +1,5 @@
 #pragma once
-#include "framework/Win32/Framework.h"
+#include "Framework/Framework.h"
 
 namespace Confus {
 	class OpenALListener {

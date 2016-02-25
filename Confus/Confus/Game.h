@@ -1,10 +1,14 @@
 #pragma once
-#include "OpenALListener.h"
-
 namespace irr
 {
     class IrrlichtDevice;
 }
+
+namespace Confus {
+	class OpenALListener;
+}
+
+
 
 class Game
 {

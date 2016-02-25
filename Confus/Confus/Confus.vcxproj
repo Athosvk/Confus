@@ -160,23 +160,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="framework\Win32\aldlist.cpp" />
-    <ClCompile Include="framework\Win32\CWaves.cpp" />
-    <ClCompile Include="framework\Win32\Framework.cpp" />
-    <ClCompile Include="framework\Win32\LoadOAL.cpp" />
+    <ClCompile Include="OpenAL\Framework\aldlist.cpp" />
+    <ClCompile Include="OpenAL\Framework\CWaves.cpp" />
+    <ClCompile Include="OpenAL\Framework\Framework.cpp" />
+    <ClCompile Include="OpenAL\Framework\LoadOAL.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="OpenALListener.cpp" />
-    <ClCompile Include="OpenALSource.cpp" />
+    <ClCompile Include="OpenAL\OpenALListener.cpp" />
+    <ClCompile Include="OpenAL\OpenALSource.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework\Win32\aldlist.h" />
-    <ClInclude Include="framework\Win32\CWaves.h" />
-    <ClInclude Include="framework\Win32\Framework.h" />
-    <ClInclude Include="framework\Win32\LoadOAL.h" />
+    <ClInclude Include="OpenAL\Framework\aldlist.h" />
+    <ClInclude Include="OpenAL\Framework\CWaves.h" />
+    <ClInclude Include="OpenAL\Framework\Framework.h" />
+    <ClInclude Include="OpenAL\Framework\LoadOAL.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="OpenALListener.h" />
-    <ClInclude Include="OpenALSource.h" />
+    <ClInclude Include="OpenAL\OpenALListener.h" />
+    <ClInclude Include="OpenAL\OpenALSource.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
