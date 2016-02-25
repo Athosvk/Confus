@@ -9,10 +9,7 @@ namespace Confus
         static const double FixedUpdateInterval;
         static const double MaxFixedUpdateInterval;
 
-        irr::IrrlichtDevice* m_Device;
-        irr::scene::ISceneManager* m_SceneManager;
-        irr::video::IVideoDriver* m_VideoDriver;
-        irr::gui::IGUIEnvironment* m_GuiEnvironment;
+    irr::IrrlichtDevice* m_Device;
 
         double m_FixedUpdateTimer = 0.0;
         double m_DeltaTime = 0.0;
