@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <IrrAssimp/IrrAssimp.h>
 
-
+using namespace Confus;
 
 Player::Player(irr::scene::ISceneManager * sceneManager)
 {

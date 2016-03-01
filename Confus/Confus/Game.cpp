@@ -1,5 +1,4 @@
 #include <Irrlicht/irrlicht.h>
-#include <sstream>
 
 #include "Game.h"
 #include "OpenALAudio.h"
@@ -17,12 +16,9 @@ void Game::run()
 
     auto camera = m_SceneManager->addCameraSceneNodeFPS();
     m_Device->getCursorControl()->setVisible(false);
+	//camera->setPosition({ 10, 0, -10 });
 
     auto playerNode = Player(m_SceneManager);
-
-	OpenALAudio sound;
-	std::ostringstream oss;
-	oss << "Played Sound: " << sound.PlayASound();
 
     while(m_Device->run())
     {
