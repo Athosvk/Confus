@@ -19,10 +19,7 @@ namespace Confus
         m_RegularTexture = videoDriver->getTexture("Media/Moveable wall/Concrete.png");
         m_TransparentTexture = videoDriver->getTexture("Media/Moveable wall/Transparent.png");
         m_Mesh->setPosition(a_HiddenPosition);
-        m_Mesh->setRotation(irr::core::vector3df(0.0f, 90.0f, 0.0f));
-        m_Mesh->setMaterialFlag(irr::video::EMF_LIGHTING, false);
         m_Mesh->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_TRANSPARENT_ALPHA_CHANNEL);
-        rise();
     }
 
     void MoveableWall::hide()
