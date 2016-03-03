@@ -17,7 +17,7 @@ namespace Confus
         irr::gui::IGUIEnvironment* m_GuiEnvironment;
         MoveableWall m_MoveableWall;
         double m_FixedUpdateTimer = 0.0;
-        double m_DeltaTime = 0.01;
+        double m_DeltaTime = 0.0;
 
     public:
         Game();
