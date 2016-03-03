@@ -160,7 +160,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="framework\Win32\aldlist.cpp" />
     <ClCompile Include="framework\Win32\CWaves.cpp" />
     <ClCompile Include="framework\Win32\Framework.cpp" />
