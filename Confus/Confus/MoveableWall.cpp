@@ -16,6 +16,14 @@ namespace Confus
         solidify();
     }
 
+    MoveableWall::~MoveableWall()
+    {
+        m_MeshNode->drop();
+        m_TriangleSelector->drop();
+        m_RegularTexture->drop();
+        m_TransparentTexture->drop();
+    }
+
     void MoveableWall::loadTextures(irr::video::IVideoDriver* a_VideoDriver)
     {
         m_RegularTexture = a_VideoDriver->getTexture("Media/Moveable wall/Concrete.png");

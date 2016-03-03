@@ -65,6 +65,10 @@ namespace Confus
         MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition,
             irr::core::vector3df a_HiddenPosition);        
         /// <summary>
+        /// Finalizes an instance of the <see cref="MoveableWall"/> class, cleans up Irrlicht resources
+        /// </summary>
+        ~MoveableWall();
+        /// <summary>
         /// Starts the hiding transition
         /// </summary>
         void hide();
