@@ -33,45 +33,38 @@ namespace Confus
     void MoveableWall::hide()
     {
         m_TargetPosition = m_HiddenPosition;
-        m_TransitionState = ETransitionState::Hiding;
+        m_Transitioning = true;
     }
 
     void MoveableWall::rise()
     {
         m_TargetPosition = m_RegularPosition;
-        m_TransitionState = ETransitionState::Rising;
-        m_MeshNode->setMaterialTexture(0, m_TransparentTexture);
+        m_Transitioning = true;
     }
 
     void MoveableWall::fixedUpdate()
     {
-        if(m_TransitionState != ETransitionState::Stationary)
+        if(m_Transitioning)
         {
             updatePosition();
-            if(m_TransitionState == ETransitionState::Rising)
-            {
-                updateTransparency();
-            }
+            updateTransparency();
         }
     }
 
     void MoveableWall::updateTransparency()
     {
-        auto distance = (m_TargetPosition - m_MeshNode->getPosition()).getLength();
-        if(distance > 0)
+        auto distance = (m_HiddenPosition - m_MeshNode->getPosition()).getLength();
+        if(distance > 0.0f)
         {
             auto deltaDistance = distance / (m_HiddenPosition - m_RegularPosition).getLength();
-            if(deltaDistance <= m_SolifyPoint)
-            {
-                m_MeshNode->setMaterialTexture(0, m_RegularTexture);
-            }
+            m_MeshNode->setMaterialTexture(0, deltaDistance >= m_SolifyPoint ? m_RegularTexture : m_TransparentTexture);
         }
     }
 
     void MoveableWall::updatePosition()
     {
         auto distance = (m_TargetPosition - m_MeshNode->getPosition()).getLength();
-        if(distance > 0.0)
+        if(distance > 0.0f)
         {
             auto clampedSpeed = irr::core::clamp(m_TransitionSpeed, 0.0f, distance);
             auto velocity = ((m_TargetPosition - m_MeshNode->getPosition()) / distance) * clampedSpeed;
@@ -79,7 +72,7 @@ namespace Confus
         }
         else
         {
-            m_TransitionState = ETransitionState::Stationary;
+            m_Transitioning = false;
         }
     }
 }

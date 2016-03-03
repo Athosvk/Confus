@@ -6,13 +6,6 @@ namespace Confus
     class MoveableWall
     {
     private:
-        enum class ETransitionState
-        {
-            Hiding,
-            Rising,
-            Stationary
-        } 
-        m_TransitionState = ETransitionState::Stationary;
         irr::scene::IAnimatedMeshSceneNode* m_MeshNode;
         irr::core::vector3d<float> m_RegularPosition;
         irr::core::vector3d<float> m_HiddenPosition;
@@ -21,6 +14,7 @@ namespace Confus
         float m_SolifyPoint = 0.2f;
         irr::video::ITexture* m_RegularTexture;
         irr::video::ITexture* m_TransparentTexture;
+        bool m_Transitioning;
 
     public:
         MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition, 
