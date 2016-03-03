@@ -18,7 +18,7 @@ namespace Confus
         auto videoDriver = a_Device->getVideoDriver();
         m_RegularTexture = videoDriver->getTexture("Media/Moveable wall/Concrete.png");
         m_TransparentTexture = videoDriver->getTexture("Media/Moveable wall/Transparent.png");
-        m_Mesh->setPosition(a_HiddenPosition);
+        m_Mesh->setPosition(m_RegularPosition);
         m_Mesh->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_TRANSPARENT_ALPHA_CHANNEL);
     }
 

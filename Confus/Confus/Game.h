@@ -1,6 +1,8 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
 
+#include "MoveableWall.h"
+
 namespace Confus
 {
     class Game
@@ -18,6 +20,7 @@ namespace Confus
         double m_DeltaTime = 0.0;
 
     public:
+        Game();
         virtual ~Game() = default;
 
         void run();

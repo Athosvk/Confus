@@ -18,7 +18,7 @@ namespace Confus
         irr::core::vector3d<float> m_HiddenPosition;
         irr::core::vector3d<float> m_TargetPosition;
         float m_TransitionSpeed;
-        float m_SolifyPoint = 0.1f;
+        float m_SolifyPoint = 0.2f;
         irr::video::ITexture* m_RegularTexture;
         irr::video::ITexture* m_TransparentTexture;
 
