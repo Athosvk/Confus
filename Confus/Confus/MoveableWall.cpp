@@ -54,11 +54,9 @@ namespace Confus
     void MoveableWall::updateTransparency()
     {
         auto distance = (m_HiddenPosition - m_MeshNode->getPosition()).getLength();
-        if(distance > 0.0f)
-        {
-            auto deltaDistance = distance / (m_HiddenPosition - m_RegularPosition).getLength();
-            m_MeshNode->setMaterialTexture(0, deltaDistance >= m_SolifyPoint ? m_RegularTexture : m_TransparentTexture);
-        }
+        auto deltaDistance = distance / (m_HiddenPosition - m_RegularPosition).getLength();
+        m_MeshNode->setMaterialTexture(0, deltaDistance >= m_SolifyPoint ? m_RegularTexture : 
+            m_TransparentTexture);
     }
 
     void MoveableWall::updatePosition()

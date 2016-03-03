@@ -30,4 +30,3 @@ namespace Confus
         void updateTransparency();
     };
 }
-
