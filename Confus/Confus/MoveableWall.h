@@ -88,11 +88,11 @@ namespace Confus
         /// <param name="a_SceneManager">The current scene manager.</param>
         void loadMesh(irr::scene::ISceneManager* a_SceneManager);
         /// <summary>
-        /// Updates the position.when transitioning
+        /// Updates the position when transitioning
         /// </summary>
         void updatePosition();
         /// <summary>
-        /// Updates the transparency.when transitioning
+        /// Updates the transparency, including collision state, when transitioning
         /// </summary>
         void updateTransparency();        
         /// <summary>
