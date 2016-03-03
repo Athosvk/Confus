@@ -14,7 +14,6 @@ namespace Confus
         /// The, maximum, speed at which the wall transitions
         /// </summary>
         float TransitionSpeed = 0.1f;
-
         /// <summary>
         /// The relative distance, as a percentage, at which the wall becomes solid during transition
         /// <remarks> Measured as difference from the hidden position to the current position </remarks>
