@@ -49,7 +49,13 @@ namespace Confus
         /// <summary>
         /// Whether the wall is currently transitioning to a position or not
         /// </summary>
-        bool m_Transitioning = false;
+        enum class ETransitionStage
+        {
+            Stationary,
+            Hiding,
+            Rising,
+        }
+        m_TransitionStage = ETransitionStage::Stationary;
         /// <summary>
         /// The triangle selector used for collision detection
         /// </summary>
