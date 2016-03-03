@@ -6,10 +6,9 @@
 namespace Confus
 {
     MoveableWall::MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition,
-        irr::core::vector3df a_HiddenPosition, float a_TransitionSpeed)
+        irr::core::vector3df a_HiddenPosition)
         : m_RegularPosition(a_RegularPosition),
-        m_HiddenPosition(a_HiddenPosition),
-        m_TransitionSpeed(a_TransitionSpeed)
+        m_HiddenPosition(a_HiddenPosition)
     {
         loadMesh(a_Device->getSceneManager());
         loadTextures(a_Device->getVideoDriver());
@@ -55,7 +54,7 @@ namespace Confus
     {
         auto distance = (m_HiddenPosition - m_MeshNode->getPosition()).getLength();
         auto deltaDistance = distance / (m_HiddenPosition - m_RegularPosition).getLength();
-        m_MeshNode->setMaterialTexture(0, deltaDistance >= m_SolifyPoint ? m_RegularTexture : 
+        m_MeshNode->setMaterialTexture(0, deltaDistance >= SolifyPoint ? m_RegularTexture : 
             m_TransparentTexture);
     }
 
@@ -64,7 +63,7 @@ namespace Confus
         auto distance = (m_TargetPosition - m_MeshNode->getPosition()).getLength();
         if(distance > 0.0f)
         {
-            auto clampedSpeed = irr::core::clamp(m_TransitionSpeed, 0.0f, distance);
+            auto clampedSpeed = irr::core::clamp(TransitionSpeed, 0.0f, distance);
             auto velocity = ((m_TargetPosition - m_MeshNode->getPosition()) / distance) * clampedSpeed;
             m_MeshNode->setPosition(m_MeshNode->getPosition() + velocity);
         }
