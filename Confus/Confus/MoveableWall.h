@@ -30,6 +30,8 @@ namespace Confus
         void rise();
         void fixedUpdate();
     private:
+        void loadTextures(irr::video::IVideoDriver* a_VideoDriver);
+        void loadMesh(irr::scene::ISceneManager* a_SceneManager);
         void updatePosition();
         void updateTransparency();
         void setTransparency(irr::u32 a_Transparency);

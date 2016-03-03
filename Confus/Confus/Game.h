@@ -15,7 +15,7 @@ namespace Confus
         irr::scene::ISceneManager* m_SceneManager;
         irr::video::IVideoDriver* m_VideoDriver;
         irr::gui::IGUIEnvironment* m_GuiEnvironment;
-
+        MoveableWall m_MoveableWall;
         double m_FixedUpdateTimer = 0.0;
         double m_DeltaTime = 0.0;
 

@@ -11,14 +11,22 @@ namespace Confus
         m_HiddenPosition(a_HiddenPosition),
         m_TransitionSpeed(a_TransitionSpeed)
     {
-        auto sceneManager = a_Device->getSceneManager();
-        IrrAssimp importer(sceneManager);
-        m_Mesh = sceneManager->
-            addAnimatedMeshSceneNode(importer.getMesh("Media/Moveable wall/Moveable wall.3DS"));
-        auto videoDriver = a_Device->getVideoDriver();
-        m_RegularTexture = videoDriver->getTexture("Media/Moveable wall/Concrete.png");
-        m_TransparentTexture = videoDriver->getTexture("Media/Moveable wall/Transparent.png");
+        loadMesh(a_Device->getSceneManager());
+        loadTextures(a_Device->getVideoDriver());
         m_Mesh->setPosition(m_RegularPosition);
+        m_Mesh->setMaterialTexture(0, m_RegularTexture);
+    }
+
+    void MoveableWall::loadTextures(irr::video::IVideoDriver* a_VideoDriver)
+    {
+        m_RegularTexture = a_VideoDriver->getTexture("Media/Moveable wall/Concrete.png");
+        m_TransparentTexture = a_VideoDriver->getTexture("Media/Moveable wall/Transparent.png");
+    }
+
+    void MoveableWall::loadMesh(irr::scene::ISceneManager* a_SceneManager)
+    {
+        IrrAssimp importer(a_SceneManager);
+        m_Mesh = a_SceneManager->addAnimatedMeshSceneNode(importer.getMesh("Media/Moveable wall/Moveable wall.3DS"));
         m_Mesh->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_TRANSPARENT_ALPHA_CHANNEL);
     }
 
