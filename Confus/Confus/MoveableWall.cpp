@@ -15,7 +15,6 @@ namespace Confus
         m_MeshNode->setPosition(m_RegularPosition);
         m_MeshNode->setMaterialTexture(0, m_RegularTexture);
         enableCollision();
-        hide();
     }
 
     void MoveableWall::loadTextures(irr::video::IVideoDriver* a_VideoDriver)
@@ -35,18 +34,18 @@ namespace Confus
     void MoveableWall::hide()
     {
         m_TargetPosition = m_HiddenPosition;
-        m_TransitionStage = ETransitionStage::Hiding;
+        m_Transitioning = true;
     }
 
     void MoveableWall::rise()
     {
         m_TargetPosition = m_RegularPosition;
-        m_TransitionStage = ETransitionStage::Rising;
+        m_Transitioning = true;
     }
 
     void MoveableWall::fixedUpdate()
     {
-        if(m_TransitionStage != ETransitionStage::Stationary)
+        if(m_Transitioning)
         {
             updatePosition();
             updateTransparency();
@@ -90,7 +89,7 @@ namespace Confus
         }
         else
         {
-            m_TransitionStage = ETransitionStage::Stationary;
+            m_Transitioning = false;
         }
     }
 }

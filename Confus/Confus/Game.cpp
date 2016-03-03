@@ -11,14 +11,14 @@ namespace Confus
     const double Game::MaxFixedUpdateInterval = 0.1;
 
     Game::Game() : 
-        m_MoveableWall(m_Device, irr::core::vector3df(-30.0f, 0.0f, 0.0f), 
-            irr::core::vector3df(-30.f, -200.f, 0.0f))
+        m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
+        m_MoveableWall(m_Device, irr::core::vector3df(0.0f, 0.0f, 60.0f),
+            irr::core::vector3df(0.f, -200.f, 60.0f))
     {
     }
 
     void Game::run()
     {
-        m_Device = irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL);
         m_SceneManager = m_Device->getSceneManager();
         m_VideoDriver = m_Device->getVideoDriver();
         m_GuiEnvironment = m_Device->getGUIEnvironment();
