@@ -50,6 +50,10 @@ namespace Confus
         /// Whether the wall is currently transitioning to a position or not
         /// </summary>
         bool m_Transitioning = false;
+        /// <summary>
+        /// The triangle selector used for collision detection
+        /// </summary>
+        irr::scene::ITriangleSelector* m_TriangleSelector;
 
     public:        
         /// <summary>
@@ -90,6 +94,14 @@ namespace Confus
         /// <summary>
         /// Updates the transparency.when transitioning
         /// </summary>
-        void updateTransparency();
+        void updateTransparency();        
+        /// <summary>
+        /// Enables the collision.
+        /// </summary>
+        void enableCollision();        
+        /// <summary>
+        /// Disables the collision.
+        /// </summary>
+        void disableCollision();
     };
 }

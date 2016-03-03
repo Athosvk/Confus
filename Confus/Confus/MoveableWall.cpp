@@ -14,6 +14,7 @@ namespace Confus
         loadTextures(a_Device->getVideoDriver());
         m_MeshNode->setPosition(m_RegularPosition);
         m_MeshNode->setMaterialTexture(0, m_RegularTexture);
+        enableCollision();
     }
 
     void MoveableWall::loadTextures(irr::video::IVideoDriver* a_VideoDriver)
@@ -27,6 +28,7 @@ namespace Confus
         IrrAssimp importer(a_SceneManager);
         m_MeshNode = a_SceneManager->addAnimatedMeshSceneNode(importer.getMesh("Media/Moveable wall/Moveable wall.3DS"));
         m_MeshNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_TRANSPARENT_ALPHA_CHANNEL);
+        m_TriangleSelector = a_SceneManager->createTriangleSelector(m_MeshNode);
     }
 
     void MoveableWall::hide()
@@ -56,6 +58,16 @@ namespace Confus
         auto deltaDistance = distance / (m_HiddenPosition - m_RegularPosition).getLength();
         m_MeshNode->setMaterialTexture(0, deltaDistance >= SolifyPoint ? m_RegularTexture : 
             m_TransparentTexture);
+    }
+
+    void MoveableWall::enableCollision()
+    {
+        m_MeshNode->setTriangleSelector(m_TriangleSelector);
+    }
+
+    void MoveableWall::disableCollision()
+    {
+        m_MeshNode->setTriangleSelector(nullptr);
     }
 
     void MoveableWall::updatePosition()
