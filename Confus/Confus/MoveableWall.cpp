@@ -27,7 +27,7 @@ namespace Confus
     {
         IrrAssimp importer(a_SceneManager);
         m_MeshNode = a_SceneManager->addAnimatedMeshSceneNode(importer.getMesh("Media/Moveable wall/Moveable wall.3DS"));
-        m_Mesh->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_TRANSPARENT_ALPHA_CHANNEL);
+        m_MeshNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_TRANSPARENT_ALPHA_CHANNEL);
     }
 
     void MoveableWall::hide()
