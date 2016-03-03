@@ -47,14 +47,23 @@ namespace Confus
         /// </summary>
         irr::video::ITexture* m_TransparentTexture;
         /// <summary>
-        /// Whether the wall is currently transitioning to a position or not
+        /// Where the wall is currently transitioning towards
         /// </summary>
         enum class ETransitionStage
-        {
-            Stationary,
-            Hiding,
+        {            
+            /// <summary>
+            /// Set when the wall is not transitioning
+            /// </summary>
+            Stationary,            
+            /// <summary>
+            /// Set when the wall is currently transitioning towards the hidden position
+            /// </summary>
+            Hiding,            
+            /// <summary>
+            /// Set when the wall is currently transitioning into the maze
+            /// </summary>
             Rising,
-        }
+        }        
         m_TransitionStage = ETransitionStage::Stationary;
         /// <summary>
         /// The triangle selector used for collision detection
