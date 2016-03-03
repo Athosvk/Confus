@@ -13,8 +13,7 @@ namespace Confus
         loadMesh(a_Device->getSceneManager());
         loadTextures(a_Device->getVideoDriver());
         m_MeshNode->setPosition(m_RegularPosition);
-        m_MeshNode->setMaterialTexture(0, m_RegularTexture);
-        enableCollision();
+        solidify();
     }
 
     void MoveableWall::loadTextures(irr::video::IVideoDriver* a_VideoDriver)
@@ -58,14 +57,24 @@ namespace Confus
         auto deltaDistance = distance / (m_HiddenPosition - m_RegularPosition).getLength();
         if(deltaDistance >= SolifyPoint)
         {
-            m_MeshNode->setMaterialTexture(0, m_RegularTexture);
-            enableCollision();
+            solidify();
         }
         else
         {
-            m_MeshNode->setMaterialTexture(0, m_TransparentTexture);
-            disableCollision();
+            makeTransparent();
         }
+    }
+
+    void MoveableWall::solidify()
+    {
+        m_MeshNode->setMaterialTexture(0, m_RegularTexture);
+        enableCollision();
+    }
+
+    void MoveableWall::makeTransparent()
+    {
+        m_MeshNode->setMaterialTexture(0, m_TransparentTexture);
+        disableCollision();
     }
 
     void MoveableWall::enableCollision()
