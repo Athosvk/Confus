@@ -49,7 +49,7 @@ namespace Confus
         /// <summary>
         /// Whether the wall is currently transitioning
         /// </summary>
-        bool m_Transitioning;
+        bool m_Transitioning = false;
         /// <summary>
         /// The triangle selector used for collision detection
         /// </summary>
@@ -95,6 +95,14 @@ namespace Confus
         /// Updates the transparency, including collision state, when transitioning
         /// </summary>
         void updateTransparency();        
+        /// <summary>
+        /// Makes the wall solid and enables the collider
+        /// </summary>
+        void solidify();        
+        /// <summary>
+        /// Makes the wall transparent and disables the collider
+        /// </summary>
+        void makeTransparent();
         /// <summary>
         /// Enables the collision.
         /// </summary>
