@@ -13,8 +13,8 @@ namespace Confus
     {
         loadMesh(a_Device->getSceneManager());
         loadTextures(a_Device->getVideoDriver());
-        m_Mesh->setPosition(m_RegularPosition);
-        m_Mesh->setMaterialTexture(0, m_RegularTexture);
+        m_MeshNode->setPosition(m_RegularPosition);
+        m_MeshNode->setMaterialTexture(0, m_RegularTexture);
     }
 
     void MoveableWall::loadTextures(irr::video::IVideoDriver* a_VideoDriver)
@@ -26,7 +26,7 @@ namespace Confus
     void MoveableWall::loadMesh(irr::scene::ISceneManager* a_SceneManager)
     {
         IrrAssimp importer(a_SceneManager);
-        m_Mesh = a_SceneManager->addAnimatedMeshSceneNode(importer.getMesh("Media/Moveable wall/Moveable wall.3DS"));
+        m_MeshNode = a_SceneManager->addAnimatedMeshSceneNode(importer.getMesh("Media/Moveable wall/Moveable wall.3DS"));
         m_Mesh->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_TRANSPARENT_ALPHA_CHANNEL);
     }
 
@@ -40,7 +40,7 @@ namespace Confus
     {
         m_TargetPosition = m_RegularPosition;
         m_TransitionState = ETransitionState::Rising;
-        m_Mesh->setMaterialTexture(0, m_TransparentTexture);
+        m_MeshNode->setMaterialTexture(0, m_TransparentTexture);
     }
 
     void MoveableWall::fixedUpdate()
@@ -57,25 +57,25 @@ namespace Confus
 
     void MoveableWall::updateTransparency()
     {
-        auto distance = (m_TargetPosition - m_Mesh->getPosition()).getLength();
+        auto distance = (m_TargetPosition - m_MeshNode->getPosition()).getLength();
         if(distance > 0)
         {
             auto deltaDistance = distance / (m_HiddenPosition - m_RegularPosition).getLength();
             if(deltaDistance <= m_SolifyPoint)
             {
-                m_Mesh->setMaterialTexture(0, m_RegularTexture);
+                m_MeshNode->setMaterialTexture(0, m_RegularTexture);
             }
         }
     }
 
     void MoveableWall::updatePosition()
     {
-        auto distance = (m_TargetPosition - m_Mesh->getPosition()).getLength();
+        auto distance = (m_TargetPosition - m_MeshNode->getPosition()).getLength();
         if(distance > 0.0)
         {
             auto clampedSpeed = irr::core::clamp(m_TransitionSpeed, 0.0f, distance);
-            auto velocity = ((m_TargetPosition - m_Mesh->getPosition()) / distance) * clampedSpeed;
-            m_Mesh->setPosition(m_Mesh->getPosition() + velocity);
+            auto velocity = ((m_TargetPosition - m_MeshNode->getPosition()) / distance) * clampedSpeed;
+            m_MeshNode->setPosition(m_MeshNode->getPosition() + velocity);
         }
         else
         {

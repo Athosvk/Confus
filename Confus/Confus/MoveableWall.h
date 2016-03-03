@@ -13,7 +13,7 @@ namespace Confus
             Stationary
         } 
         m_TransitionState = ETransitionState::Stationary;
-        irr::scene::IAnimatedMeshSceneNode* m_Mesh;
+        irr::scene::IAnimatedMeshSceneNode* m_MeshNode;
         irr::core::vector3d<float> m_RegularPosition;
         irr::core::vector3d<float> m_HiddenPosition;
         irr::core::vector3d<float> m_TargetPosition;
