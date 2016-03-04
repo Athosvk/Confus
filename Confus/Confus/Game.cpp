@@ -42,6 +42,9 @@ namespace Confus
 
     void Game::update()
     {
+        m_PreviousTicks = m_CurrentTicks;
+        m_CurrentTicks = m_Device->getTimer()->getTime();
+        m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
     }
 
     void Game::processFixedUpdates()
