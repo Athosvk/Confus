@@ -171,8 +171,11 @@
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <ClInclude Include="EventManager.h" />
+=======
     <ClInclude Include="Debug.h" />
+>>>>>>> e4c6d4914912217f4d35caf2083313c9930c8dbd
     <ClInclude Include="framework\Win32\aldlist.h" />
     <ClInclude Include="framework\Win32\CWaves.h" />
     <ClInclude Include="framework\Win32\Framework.h" />

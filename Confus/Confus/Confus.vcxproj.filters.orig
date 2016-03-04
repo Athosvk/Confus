@@ -65,10 +65,11 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="EventManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+=======
     <ClInclude Include="Debug.h">
+>>>>>>> e4c6d4914912217f4d35caf2083313c9930c8dbd
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

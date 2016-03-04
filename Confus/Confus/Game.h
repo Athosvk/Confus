@@ -13,8 +13,11 @@ namespace Confus
 
         double m_FixedUpdateTimer = 0.0;
         double m_DeltaTime = 0.0;
+        irr::u32 m_PreviousTicks = 0;
+        irr::u32 m_CurrentTicks = 0;
 
     public:
+        Game();
         virtual ~Game() = default;
 
         void run();
