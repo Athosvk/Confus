@@ -1,0 +1,11 @@
+language: cpp
+compiler:
+  - gcc
+  - clang
+script: make && make test
+notifications:
+  email:
+    recipients:
+      - nickywild-1@hotmail.com
+    on_success: change
+    on_failure: always

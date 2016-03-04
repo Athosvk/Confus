@@ -101,7 +101,8 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Lansenou\Desktop\Confus\Libraries\32 bit\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,7 +117,8 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;Irrlicht.lib;IrrAssimp.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Lansenou\Desktop\Confus\Libraries\32 bit\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -158,15 +160,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="framework\Win32\aldlist.cpp" />
+    <ClCompile Include="framework\Win32\CWaves.cpp" />
+    <ClCompile Include="framework\Win32\Framework.cpp" />
+    <ClCompile Include="framework\Win32\LoadOAL.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="StaticWall.cpp" />
+    <ClCompile Include="OpenALAudio.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="framework\Win32\aldlist.h" />
+    <ClInclude Include="framework\Win32\CWaves.h" />
+    <ClInclude Include="framework\Win32\Framework.h" />
+    <ClInclude Include="framework\Win32\LoadOAL.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="StaticWall.h" />
+    <ClInclude Include="OpenALAudio.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

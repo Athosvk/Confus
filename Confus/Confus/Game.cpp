@@ -1,88 +1,68 @@
 #include <Irrlicht/irrlicht.h>
-#include "StaticWall.h"
-#include "Input.h"
-#include <iostream>
+#include <sstream>
 
 #include "Game.h"
+#include "OpenALAudio.h"
+#include "Player.h"
 
-const double Game::FixedUpdateInterval = 0.02;
-const double Game::MaxFixedUpdateInterval = 0.1;
+namespace Confus
+{
+    const double Game::FixedUpdateInterval = 0.02;
+    const double Game::MaxFixedUpdateInterval = 0.1;
 
-void Game::run()
-{ 
-    m_Device = irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL);
-
-    smgr = m_Device->getSceneManager();
-    driver = m_Device->getVideoDriver();
-    
-    StaticWall(m_Device, core::vector3d<float>(0.0f, 0.0f, 0.0f), core::vector3d<float>(0.0f, 90.0f, 90.0f)); 
-    Input* inputDevice = new Input(m_Device);
-
-      while(m_Device->run())
+    void Game::run()
     {
-        handleInput();
-        update();
-        processFixedUpdates();
-        render();
-    }
+        m_Device = irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL);
+        m_SceneManager = m_Device->getSceneManager();
+        m_VideoDriver = m_Device->getVideoDriver();
+        m_GuiEnvironment = m_Device->getGUIEnvironment();
 
-    m_Device->drop();
-}
+        auto camera = m_SceneManager->addCameraSceneNodeFPS();
+        m_Device->getCursorControl()->setVisible(false);
 
-void Game::handleInput()
-{
+        auto playerNode = Player(m_SceneManager);
 
-}
+        OpenALAudio sound;
+        std::ostringstream oss;
+        oss << "Played Sound: " << sound.PlayASound();
 
-void Game::update()
-{
-}
-
-void Game::processFixedUpdates()
-{
-    m_FixedUpdateTimer += m_DeltaTime;
-    m_FixedUpdateTimer = irr::core::min_(m_FixedUpdateTimer, MaxFixedUpdateInterval);
-    while(m_FixedUpdateTimer >= FixedUpdateInterval)
-    {
-        m_FixedUpdateTimer -= FixedUpdateInterval;
-        fixedUpdate();
-    }
-}
-
-void Game::fixedUpdate()
-{
-}
-
-void Game::render()
-{
-    int lastFPS = -1;
-
-    if(m_Device->isWindowActive())
-    {
-        driver->beginScene(true, true, video::SColor(255, 200, 200, 200));
-        smgr->drawAll();
-        driver->endScene();
-
-        int fps = driver->getFPS();
-
-        if(lastFPS != fps)
+        while (m_Device->run())
         {
-            core::stringw str = L"Confus  [";
-            str += driver->getName();
-            str += "] FPS:";
-            str += fps;
-
-            m_Device->setWindowCaption(str.c_str());
-            lastFPS = fps;
+            handleInput();
+            update();
+            processFixedUpdates();
+            render();
         }
     }
-    else 
+
+    void Game::handleInput()
     {
-        m_Device->yield();
+    }
+
+    void Game::update()
+    {
+    }
+
+    void Game::processFixedUpdates()
+    {
+        m_FixedUpdateTimer += m_DeltaTime;
+        m_FixedUpdateTimer = irr::core::min_(m_FixedUpdateTimer, MaxFixedUpdateInterval);
+        while (m_FixedUpdateTimer >= FixedUpdateInterval)
+        {
+            m_FixedUpdateTimer -= FixedUpdateInterval;
+            fixedUpdate();
+        }
+    }
+
+    void Game::fixedUpdate()
+    {
+    }
+
+    void Game::render()
+    {
+        m_VideoDriver->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
+        m_SceneManager->drawAll();
+        m_GuiEnvironment->drawAll();
+        m_VideoDriver->endScene();
     }
 }
-
-
-
-
-

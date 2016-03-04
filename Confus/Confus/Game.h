@@ -1,30 +1,31 @@
 #pragma once
+#include <Irrlicht/irrlicht.h>
 
-#include <Irrlicht\irrlicht.h>
-using namespace irr;
-
-class Game
+namespace Confus
 {
-private:
-    static const double FixedUpdateInterval;
-    static const double MaxFixedUpdateInterval; 
+    class Game
+    {
+    private:
+        static const double FixedUpdateInterval;
+        static const double MaxFixedUpdateInterval;
 
-    irr::IrrlichtDevice* m_Device;
-    scene::ISceneManager* smgr;
-    video::IVideoDriver* driver;
+        irr::IrrlichtDevice* m_Device;
+        irr::scene::ISceneManager* m_SceneManager;
+        irr::video::IVideoDriver* m_VideoDriver;
+        irr::gui::IGUIEnvironment* m_GuiEnvironment;
 
-    double m_FixedUpdateTimer = 0.0;
-    double m_DeltaTime = 0.0;
+        double m_FixedUpdateTimer = 0.0;
+        double m_DeltaTime = 0.0;
 
-public:
-    virtual ~Game() = default;
-    void run();
+    public:
+        virtual ~Game() = default;
 
-private:
-    void handleInput();
-    void update();
-    void processFixedUpdates();
-    void fixedUpdate();
-    void render();
-};
-
+        void run();
+    private:
+        void handleInput();
+        void update();
+        void processFixedUpdates();
+        void fixedUpdate();
+        void render();
+    };
+}
