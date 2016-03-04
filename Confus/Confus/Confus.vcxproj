@@ -171,6 +171,7 @@
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="framework\Win32\aldlist.h" />
     <ClInclude Include="framework\Win32\CWaves.h" />
     <ClInclude Include="framework\Win32\Framework.h" />
