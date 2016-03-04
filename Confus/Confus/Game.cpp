@@ -10,17 +10,18 @@ namespace Confus
     const double Game::FixedUpdateInterval = 0.02;
     const double Game::MaxFixedUpdateInterval = 0.1;
 
+    Game::Game()
+        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL))
+    {
+    }
+
     void Game::run()
     {
-        m_Device = irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL);
-        m_SceneManager = m_Device->getSceneManager();
-        m_VideoDriver = m_Device->getVideoDriver();
-        m_GuiEnvironment = m_Device->getGUIEnvironment();
-
-        auto camera = m_SceneManager->addCameraSceneNodeFPS();
+        auto sceneManager = m_Device->getSceneManager();
+        auto camera = sceneManager->addCameraSceneNodeFPS();
         m_Device->getCursorControl()->setVisible(false);
 
-        auto playerNode = Player(m_SceneManager);
+        auto playerNode = Player(sceneManager);
 
         OpenALAudio sound;
         std::ostringstream oss;
@@ -60,9 +61,9 @@ namespace Confus
 
     void Game::render()
     {
-        m_VideoDriver->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
-        m_SceneManager->drawAll();
-        m_GuiEnvironment->drawAll();
-        m_VideoDriver->endScene();
+        m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
+        m_Device->getSceneManager()->drawAll();
+        m_Device->getGUIEnvironment()->drawAll();
+        m_Device->getVideoDriver()->endScene();
     }
 }
