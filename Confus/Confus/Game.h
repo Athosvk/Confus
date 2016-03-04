@@ -9,7 +9,7 @@ namespace Confus
         static const double FixedUpdateInterval;
         static const double MaxFixedUpdateInterval;
 
-    irr::IrrlichtDevice* m_Device;
+        irr::IrrlichtDevice* m_Device;
 
         double m_FixedUpdateTimer = 0.0;
         double m_DeltaTime = 0.0;
