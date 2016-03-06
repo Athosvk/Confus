@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "OpenALAudio.h"
 #include "Player.h"
+#include "StaticWall.h"
 
 namespace Confus
 {
@@ -22,6 +23,7 @@ namespace Confus
         m_Device->getCursorControl()->setVisible(false);
 
         auto playerNode = Player(sceneManager);
+        auto wallNode = StaticWall(m_Device, irr::core::vector3df(0, 0, 0), irr::core::vector3df(270, 0, 0), camera);        
 
         OpenALAudio sound;
         std::ostringstream oss;
