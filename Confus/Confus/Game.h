@@ -31,5 +31,6 @@ private:
     void processFixedUpdates();
     void fixedUpdate();
     void render();
+    void shutdown();
 };
 

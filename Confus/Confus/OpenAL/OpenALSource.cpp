@@ -1,26 +1,31 @@
-#include "OpenALSource.h"
-namespace Confus {
+#include <stdexcept>
+#include <string>
 
-	OpenALSource::OpenALSource(char* a_WaveFileString) {
+#include "OpenALSource.h"
+
+namespace Confus {
+    struct Vector3 {
+        float x, y, z;
+    };
+
+	OpenALSource::OpenALSource(std::string a_WaveFileString) {
 		init(a_WaveFileString);
 	}
 
-	void OpenALSource::init(char* a_WaveFileString) {
-		m_WaveFileString = a_WaveFileString;
+    OpenALSource::~OpenALSource() {
+        dispose();
+    }
 
-		// Generate an AL Buffer
+	void OpenALSource::init(std::string a_WaveFileString) {
+		m_WaveFileString = a_WaveFileString;
 		alGenBuffers(1, &m_Buffer);
 
-		// Load Wave file into OpenAL Buffer
-		if (!OpenAL::ALFWLoadWaveToBuffer((char*)OpenAL::ALFWaddMediaPath(m_WaveFileString), m_Buffer))
+		if (!OpenAL::ALFWLoadWaveToBuffer((char*)OpenAL::ALFWaddMediaPath(m_WaveFileString.c_str()), m_Buffer))
 		{
-			return; //Something wrong with path
+            throw std::invalid_argument("Path was invalid");
 		}
 
-		// Generate a Source to playback the Buffer
 		alGenSources(1, &m_Source);
-
-		// Attach Source to Buffer
 		alSourcei(m_Source, AL_BUFFER, m_Buffer);
 	}
 
@@ -28,13 +33,29 @@ namespace Confus {
 		alSource3f(m_Source, AL_POSITION, a_PositionX, a_PositionY, a_PositionZ);
 	}
 
-	void OpenALSource::setLoop(bool a_ShouldLoop) {
-		alSourcei(m_Source, AL_LOOPING, a_ShouldLoop);
+    void OpenALSource::setPosition(Vector3 a_Position) {
+        setPosition(a_Position.x, a_Position.y, a_Position.z);
+    }
+
+	void OpenALSource::enableLoop() {
+		alSourcef(m_Source, AL_LOOPING, AL_TRUE);
 	}
 
+    void OpenALSource::disableLoop() {
+        alSourcef(m_Source, AL_LOOPING, AL_FALSE);
+    }
+
 	void OpenALSource::setVolume(float a_Volume) {
-		alSourcei(m_Source, AL_GAIN, a_Volume);
+		alSourcef(m_Source, AL_GAIN, a_Volume);
 	}
+
+    void OpenALSource::setPitch(float a_Pitch) {
+        alSourcef(m_Source, AL_PITCH, a_Pitch);
+    }
+
+    void OpenALSource::setDirection(Vector3 a_forwardVector, Vector3 a_UpVector) {
+        setDirection(a_forwardVector.x ,a_forwardVector.y, a_forwardVector.z, a_UpVector.x, a_UpVector.y, a_UpVector.z);
+    }
 
 	void OpenALSource::setDirection(float a_AtX, float a_AtY, float a_AtZ, float a_UpX, float a_UpY, float a_UpZ) {
 		ALfloat direction[6];
@@ -53,6 +74,10 @@ namespace Confus {
 	void OpenALSource::setVelocity(float a_VelocityX, float a_VelocityY, float a_VelocityZ) {
 		alSource3f(m_Source, AL_VELOCITY, a_VelocityX, a_VelocityY, a_VelocityZ);
 	}
+
+    void OpenALSource::setVelocity(Vector3 a_Velocity) {
+        setVelocity(a_Velocity.x, a_Velocity.y, a_Velocity.z);
+    }
 
 	void OpenALSource::setPlaySpeed(float a_Speed) {
 		alSourcef(m_Source, AL_PITCH, a_Speed);
@@ -84,18 +109,14 @@ namespace Confus {
 
 	void OpenALSource::play() {
 		if (isPlaying() == false) {
-			//Play audio source
 			alSourcePlay(m_Source);
 		}
 	}
 
-	void OpenALSource::clear() {
-		//Clean up by deleting Source(s) and Buffer(s)
+	void OpenALSource::dispose() {
 		alSourceStop(m_Source);
 		alDeleteSources(1, &m_Source);
 		alDeleteBuffers(1, &m_Buffer);
-		//ALFWShutdownOpenAL();
-		//ALFWShutdown();
 	}
 
 	bool OpenALSource::isPlaying() {
@@ -103,7 +124,5 @@ namespace Confus {
 		return (m_PlayingState == AL_PLAYING);
 	}
 
-	OpenALSource::~OpenALSource() {
-		clear();
-	}
+
 }

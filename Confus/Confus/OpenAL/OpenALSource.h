@@ -1,33 +1,57 @@
 #pragma once
 #include "Framework/Framework.h"
+#include <string>
 
 namespace Confus {
+    struct Vector3;
+
 	/// <summary>
 	/// OpenAL Sound Source class.
 	/// Needs the init() function to load a wave file.
 	/// </summary>
 	class OpenALSource {
+    private:
+        ALuint m_Buffer;
+        ALuint m_Source;
+        ALint m_PlayingState;
+        std::string m_WaveFileString;
 	private:
-		void clear();
+        /// <summary>
+        /// Get rid of the buffer and source
+        /// </summary>
+		void dispose();
+        /// <summary>
+        /// Load the .wav wave file and set up the source + buffer.
+        /// </summary>
+        void init(std::string a_WaveFileString = "stereo.wav");
 	public:
 		/// <summary>
-		/// Load the .wav wave file and set up the source + buffer.
-		/// </summary>
-		void init(char* a_WaveFileString = "stereo.wav");
-		/// <summary>
-		/// Set the direction of the sound source.
-		/// At is the at rotation vector (forward) and Up is the up rotation vector.
+		/// Set the position of the sound source.
 		/// </summary>
 		void setPosition(float a_PositionX = 0.0f, float a_PositionY = 0.0f, float a_PositionZ = 0.0f);
+        /// <summary>
+        /// Set the position of the sound source.
+        /// </summary>
+        void setPosition(Vector3 a_Position);
 		/// <summary>
 		/// Set the velocity of the sound source.
 		/// This creates a dooples effect.
 		/// </summary>
 		void setVelocity(float a_VelocityX = 0.0f, float a_VelocityY = 0.0f, float a_VelocityZ = 0.0f);
+        /// <summary>
+        /// Set the velocity of the sound source.
+        /// This creates a dooples effect.
+        /// </summary>
+        void setVelocity(Vector3 a_Velocity);
 		/// <summary>
 		/// Set the direction of the sound source.
 		/// At is the at rotation vector (forward) and Up is the up rotation vector.
 		/// </summary>
+        void setDirection(Vector3 a_forwardVector, Vector3 a_upVector);
+        /// <summary>
+        /// Set the direction of the sound source.
+        /// At is the at rotation vector (forward) and Up is the up rotation vector.
+        /// </summary>
 		void setDirection(float a_AtX = 0.0f, float a_AtY = 0.0f, float a_AtZ = 0.0f, float a_UpX = 0.0f, float a_UpY = 0.0f, float a_UpZ = 0.0f);
 		/// <summary>
 		/// Set the speed at which the source will be played.
@@ -42,9 +66,13 @@ namespace Confus {
 		/// </summary>
 		void setPitch(float a_Pitch);
 		/// <summary>
-		/// If shouldLoop is true, the sound will keep repeating.
+		/// Enables Looping
 		/// </summary>
-		void setLoop(bool a_ShouldLoop = false);
+		void enableLoop();
+        /// <summary>
+        /// Disables Looping
+        /// </summary>
+        void disableLoop();
 		/// <summary>
 		/// Start playing the sound if it's not
 		/// </summary>
@@ -65,12 +93,7 @@ namespace Confus {
 		/// Stop playing
 		/// </summary>
 		void stop();
-		OpenALSource(char* a_WaveFileString);
+		OpenALSource(std::string a_WaveFileString);
 		~OpenALSource();
-	private:
-		ALuint      m_Buffer;
-		ALuint      m_Source;
-		ALint       m_PlayingState;
-		char* m_WaveFileString;
 	};
 }

@@ -13,16 +13,9 @@ void Game::run()
 	m_Device = irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL);
 	m_Device->setWindowCaption(L"Confus");
 
-	//Create Sound Listener
-	m_Listener = new Confus::OpenALListener();
-
-	//Test Sound
-	int position = 5;
-	Confus::OpenALSource* source = new Confus::OpenALSource("Footsteps.wav");
-	source->setPlaySpeed(5);
-	source->setPosition(position, 0, 0);
-	source->setVolume(10);
-	source->play();
+	//Create Sound 
+    m_Listener = new Confus::OpenALListener();
+    m_Listener->init();
 
 	//Game Loop
     while(m_Device->run())
@@ -31,12 +24,6 @@ void Game::run()
         update();
         processFixedUpdates();
         render();
-
-		//Test sound
-		if (source->isPlaying() == false) {
-			source->setPosition(--position, 0, 0);
-			source->play();
-		}
     }
 }
 
@@ -65,4 +52,9 @@ void Game::fixedUpdate()
 
 void Game::render()
 {
+}
+
+void Game::shutdown() 
+{
+    m_Listener->dispose();
 }
