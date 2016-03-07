@@ -16,6 +16,12 @@ StaticWall::StaticWall(irr::IrrlichtDevice* a_Device, irr::core::vector3d<float>
     addLight(a_Position);
 }
 
+StaticWall::~StaticWall()
+{
+    m_MeshNode->drop();
+    m_SceneNode->drop();
+}
+
 void StaticWall::loadMesh()
 {
     IrrAssimp irrAssimp(m_SceneManager);
@@ -41,7 +47,7 @@ void StaticWall::addMeshCollider()
     irr::scene::IMetaTriangleSelector * meta = m_SceneManager->createMetaTriangleSelector();
     irr::scene::ITriangleSelector * selector = 0;
     selector = m_SceneManager->createTriangleSelector(((irr::scene::IMeshSceneNode*)m_SceneNode)->getMesh(), m_SceneNode);
-
+  
     if(selector)
     {
         // Add it to the meta selector, which will take a reference to it
@@ -60,7 +66,9 @@ void StaticWall::addLight(irr::core::vector3df a_Position)
 {
     irr::core::vector3df lightOffset = irr::core::vector3df(0, 10, 50);
     m_SceneManager->addLightSceneNode(m_SceneNode, a_Position + lightOffset,
-        irr::video::SColorf(1.0f, 1.0f, 1.0f), 40.0f);
+        irr::video::SColorf(1.0f, 1.0f, 1.0f), 50.0f);
 }
+
+
 
 

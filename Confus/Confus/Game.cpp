@@ -24,7 +24,7 @@ namespace Confus
 
         auto playerNode = Player(sceneManager);
         auto wallNode = StaticWall(m_Device, irr::core::vector3df(0, 0, 0), irr::core::vector3df(270, 0, 0), camera);        
-
+        
         OpenALAudio sound;
         std::ostringstream oss;
         oss << "Played Sound: " << sound.PlayASound();
