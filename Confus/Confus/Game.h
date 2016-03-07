@@ -2,7 +2,8 @@
 #include <Irrlicht/irrlicht.h>
 
 #include "MoveableWall.h"
-
+#include "Player.h"
+#include "EventManager.h"
 
 namespace Confus
 {

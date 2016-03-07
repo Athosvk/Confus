@@ -14,8 +14,9 @@ namespace Confus
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
         m_MoveableWall(m_Device, irr::core::vector3df(-30.0f, 0.0f, 0.0f),
-        m_PlayerNode(m_Device),
-            irr::core::vector3df(-30.f, -200.f, 0.0f))
+            irr::core::vector3df(-30.f, -200.f, 0.0f)),
+        m_PlayerNode(m_Device)
+
     {
     }
     void Game::run()
