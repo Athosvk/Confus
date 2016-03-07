@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "OpenALAudio.h"
 #include "Player.h"
+#include "EventManager.h"
 
 namespace Confus
 {
@@ -11,16 +12,16 @@ namespace Confus
     const double Game::MaxFixedUpdateInterval = 0.1;
 
     Game::Game()
-        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL))
+        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
+        m_PlayerNode(m_Device)
     {
     }
     void Game::run()
     {
         auto sceneManager = m_Device->getSceneManager();
-        auto camera = sceneManager->addCameraSceneNodeFPS();
         m_Device->getCursorControl()->setVisible(false);
 
-        auto player = Player(m_Device);
+        m_Device->setEventReceiver(&m_EventManager);
 
         OpenALAudio sound;
         std::ostringstream oss;
@@ -37,6 +38,27 @@ namespace Confus
 
     void Game::handleInput()
     {
+        auto nodePosition = m_PlayerNode.PlayerNode->getPosition();
+        const irr::f32 MOVEMENT_SPEED = 0.5f;
+
+        if(m_EventManager.IsKeyDown(irr::KEY_KEY_W))
+        {
+            nodePosition.Z += MOVEMENT_SPEED;
+        }
+        else if(m_EventManager.IsKeyDown(irr::KEY_KEY_S))
+        {
+            nodePosition.Z -= MOVEMENT_SPEED;
+        }
+        if(m_EventManager.IsKeyDown(irr::KEY_KEY_A))
+        {
+            nodePosition.X -= MOVEMENT_SPEED;
+        }
+        else if(m_EventManager.IsKeyDown(irr::KEY_KEY_D))
+        {
+            nodePosition.X += MOVEMENT_SPEED;
+        }
+
+        m_PlayerNode.PlayerNode->setPosition(nodePosition);
     }
 
     void Game::update()
