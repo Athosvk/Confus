@@ -39,7 +39,11 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="EventManager.cpp">
+=======
+    <ClCompile Include="MoveableWall.cpp">
+>>>>>>> c10966a1db21e5f3977e693ab31a4e3637f1f8f8
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,11 +69,13 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="EventManager.h">
-=======
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Debug.h">
->>>>>>> e4c6d4914912217f4d35caf2083313c9930c8dbd
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveableWall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

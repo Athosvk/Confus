@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "OpenALAudio.h"
 #include "Player.h"
+#include "EventManager.h"
 
 namespace Confus
 {
@@ -11,22 +12,25 @@ namespace Confus
     const double Game::MaxFixedUpdateInterval = 0.1;
 
     Game::Game()
-        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL))
+        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
+        m_MoveableWall(m_Device, irr::core::vector3df(-30.0f, 0.0f, 0.0f),
+            irr::core::vector3df(-30.f, -200.f, 0.0f)),
+        m_PlayerNode(m_Device)
+
     {
     }
     void Game::run()
     {
         auto sceneManager = m_Device->getSceneManager();
-        auto camera = sceneManager->addCameraSceneNodeFPS();
         m_Device->getCursorControl()->setVisible(false);
 
-        auto player = Player(m_Device);
+        m_Device->setEventReceiver(&m_EventManager);
 
         OpenALAudio sound;
         std::ostringstream oss;
         oss << "Played Sound: " << sound.PlayASound();
 
-        while (m_Device->run())
+        while(m_Device->run())
         {
             handleInput();
             update();
@@ -37,6 +41,27 @@ namespace Confus
 
     void Game::handleInput()
     {
+        auto nodePosition = m_PlayerNode.PlayerNode->getPosition();
+        const irr::f32 MOVEMENT_SPEED = 0.5f;
+
+        if(m_EventManager.IsKeyDown(irr::KEY_KEY_W))
+        {
+            nodePosition.Z += MOVEMENT_SPEED;
+        }
+        else if(m_EventManager.IsKeyDown(irr::KEY_KEY_S))
+        {
+            nodePosition.Z -= MOVEMENT_SPEED;
+        }
+        if(m_EventManager.IsKeyDown(irr::KEY_KEY_A))
+        {
+            nodePosition.X -= MOVEMENT_SPEED;
+        }
+        else if(m_EventManager.IsKeyDown(irr::KEY_KEY_D))
+        {
+            nodePosition.X += MOVEMENT_SPEED;
+        }
+
+        m_PlayerNode.PlayerNode->setPosition(nodePosition);
     }
 
     void Game::update()
@@ -50,7 +75,7 @@ namespace Confus
     {
         m_FixedUpdateTimer += m_DeltaTime;
         m_FixedUpdateTimer = irr::core::min_(m_FixedUpdateTimer, MaxFixedUpdateInterval);
-        while (m_FixedUpdateTimer >= FixedUpdateInterval)
+        while(m_FixedUpdateTimer >= FixedUpdateInterval)
         {
             m_FixedUpdateTimer -= FixedUpdateInterval;
             fixedUpdate();
@@ -59,13 +84,14 @@ namespace Confus
 
     void Game::fixedUpdate()
     {
+        m_MoveableWall.fixedUpdate();
     }
 
     void Game::render()
     {
-    m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
-    m_Device->getSceneManager()->drawAll();
-    m_Device->getGUIEnvironment()->drawAll();
-    m_Device->getVideoDriver()->endScene();
+        m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
+        m_Device->getSceneManager()->drawAll();
+        m_Device->getGUIEnvironment()->drawAll();
+        m_Device->getVideoDriver()->endScene();
     }
 }
