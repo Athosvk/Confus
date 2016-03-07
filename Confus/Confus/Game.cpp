@@ -11,7 +11,9 @@ namespace Confus
     const double Game::MaxFixedUpdateInterval = 0.1;
 
     Game::Game()
-        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL))
+        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
+        m_MoveableWall(m_Device, irr::core::vector3df(-30.0f, 0.0f, 0.0f),
+            irr::core::vector3df(-30.f, -200.f, 0.0f))
     {
     }
 
@@ -27,7 +29,7 @@ namespace Confus
         std::ostringstream oss;
         oss << "Played Sound: " << sound.PlayASound();
 
-        while (m_Device->run())
+        while(m_Device->run())
         {
             handleInput();
             update();
@@ -51,7 +53,7 @@ namespace Confus
     {
         m_FixedUpdateTimer += m_DeltaTime;
         m_FixedUpdateTimer = irr::core::min_(m_FixedUpdateTimer, MaxFixedUpdateInterval);
-        while (m_FixedUpdateTimer >= FixedUpdateInterval)
+        while(m_FixedUpdateTimer >= FixedUpdateInterval)
         {
             m_FixedUpdateTimer -= FixedUpdateInterval;
             fixedUpdate();
@@ -60,6 +62,7 @@ namespace Confus
 
     void Game::fixedUpdate()
     {
+        m_MoveableWall.fixedUpdate();
     }
 
     void Game::render()
