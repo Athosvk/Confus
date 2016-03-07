@@ -1,8 +1,8 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
 
-#include "Player.h"
-#include "EventManager.h"
+#include "MoveableWall.h"
+
 
 namespace Confus
 {
@@ -13,9 +13,9 @@ namespace Confus
         static const double MaxFixedUpdateInterval;
 
         irr::IrrlichtDevice* m_Device;
+        MoveableWall m_MoveableWall;
         EventManager m_EventManager;
         Player m_PlayerNode;
-
         double m_FixedUpdateTimer = 0.0;
         double m_DeltaTime = 0.0;
         irr::u32 m_PreviousTicks = 0;

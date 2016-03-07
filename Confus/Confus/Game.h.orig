@@ -1,6 +1,13 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
 
+<<<<<<< HEAD
+#include "Player.h"
+#include "EventManager.h"
+=======
+#include "MoveableWall.h"
+>>>>>>> c10966a1db21e5f3977e693ab31a4e3637f1f8f8
+
 namespace Confus
 {
     class Game
@@ -9,19 +16,21 @@ namespace Confus
         static const double FixedUpdateInterval;
         static const double MaxFixedUpdateInterval;
 
-<<<<<<< 378a055ad1485dc2214626f78b0a609f857543e8
         irr::IrrlichtDevice* m_Device;
-        irr::scene::ISceneManager* m_SceneManager;
-        irr::video::IVideoDriver* m_VideoDriver;
-        irr::gui::IGUIEnvironment* m_GuiEnvironment;
-=======
-    irr::IrrlichtDevice* m_Device;
->>>>>>> updated player a bit, starting on EventManager
+<<<<<<< HEAD
+        EventManager m_EventManager;
+        Player m_PlayerNode;
 
+=======
+        MoveableWall m_MoveableWall;
+>>>>>>> c10966a1db21e5f3977e693ab31a4e3637f1f8f8
         double m_FixedUpdateTimer = 0.0;
         double m_DeltaTime = 0.0;
+        irr::u32 m_PreviousTicks = 0;
+        irr::u32 m_CurrentTicks = 0;
 
     public:
+        Game();
         virtual ~Game() = default;
 
         void run();
