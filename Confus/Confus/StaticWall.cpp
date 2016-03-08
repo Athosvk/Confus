@@ -46,7 +46,7 @@ void StaticWall::addMeshCollider()
 {
     irr::scene::IMetaTriangleSelector * meta = m_SceneManager->createMetaTriangleSelector();
     irr::scene::ITriangleSelector * selector = 0;
-    selector = m_SceneManager->createTriangleSelector(((irr::scene::IMeshSceneNode*)m_SceneNode)->getMesh(), m_SceneNode);
+    selector = m_SceneManager->createTriangleSelector(static_cast<irr::scene::IMeshSceneNode*>(m_SceneNode)->getMesh(), m_SceneNode);
   
     if(selector)
     {
