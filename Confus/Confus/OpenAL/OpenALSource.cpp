@@ -84,14 +84,14 @@ namespace Confus {
 	}
 
 	void OpenALSource::pause() {
-		alGetSourcei(m_Source, (ALenum)AL_SOURCE_STATE, &m_PlayingState);
+		alGetSourcei(m_Source, static_cast<ALenum>(AL_SOURCE_STATE), &m_PlayingState);
 		if (m_PlayingState == AL_PLAYING) {
 			alSourcePause(m_Source);
 		}
 	}
 
 	void OpenALSource::resume() {
-		alGetSourcei(m_Source, (ALenum)AL_SOURCE_STATE, &m_PlayingState);
+		alGetSourcei(m_Source, static_cast<ALenum>(AL_SOURCE_STATE), &m_PlayingState);
 		if (m_PlayingState == AL_PAUSED) {
 			alSourcePause(m_Source);
 		}
@@ -101,7 +101,7 @@ namespace Confus {
 	}
 
 	void OpenALSource::stop() {
-		alGetSourcei(m_Source, (ALenum)AL_SOURCE_STATE, &m_PlayingState);
+		alGetSourcei(m_Source, static_cast<ALenum>(AL_SOURCE_STATE), &m_PlayingState);
 		if (m_PlayingState == AL_PLAYING) {
 			alSourceStop(m_Source);
 		}
