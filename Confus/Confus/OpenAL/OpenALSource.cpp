@@ -8,7 +8,7 @@ namespace Confus {
         float x, y, z;
     };
 
-	OpenALSource::OpenALSource(std::string a_WaveFileString) {
+	OpenALSource::OpenALSource(std::string a_WaveFileString) : m_WaveFileString(a_WaveFileString) {
 		init(a_WaveFileString);
 	}
 
