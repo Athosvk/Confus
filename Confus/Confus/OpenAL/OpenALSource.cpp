@@ -31,7 +31,7 @@ namespace Confus {
 	}
 
     void OpenALSource::setPosition(irr::core::vector3df a_Position) {
-        setPosition(a_Position.X, a_Position.Y, a_Position.Z);
+        alSource3f(m_Source, AL_POSITION, a_Position.X, a_Position.Y, a_Position.Z);
     }
 
 	void OpenALSource::enableLoop() {
@@ -73,7 +73,7 @@ namespace Confus {
 	}
 
     void OpenALSource::setVelocity(irr::core::vector3df a_Velocity) {
-        setVelocity(a_Velocity.X, a_Velocity.Y, a_Velocity.Z);
+        alSource3f(m_Source, AL_VELOCITY, a_Velocity.X, a_Velocity.Y, a_Velocity.Z);
     }
 
 	void OpenALSource::setPlaySpeed(float a_Speed) {

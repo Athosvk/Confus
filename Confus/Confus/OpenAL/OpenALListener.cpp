@@ -27,7 +27,7 @@ namespace Confus {
     }
 
     void OpenALListener::setPosition(irr::core::vector3df a_Position) {
-        setPosition(a_Position.X, a_Position.Y, a_Position.Z);
+        alListener3f(AL_POSITION, a_Position.X, a_Position.Y, a_Position.Z);
     }
 
     void OpenALListener::setDirection(float a_AtX, float a_AtY, float a_AtZ, float a_UpX, float a_UpY, float a_UpZ) 
@@ -55,6 +55,6 @@ namespace Confus {
     }
 
     void OpenALListener::setVelocity(irr::core::vector3df a_Velocity) {
-        setVelocity(a_Velocity.X, a_Velocity.Y, a_Velocity.Z);
+        alListener3f(AL_VELOCITY, a_Velocity.X, a_Velocity.Y, a_Velocity.Z);
     }
 }
