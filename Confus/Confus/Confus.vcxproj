@@ -171,7 +171,6 @@
     <ClCompile Include="OpenALAudio.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="StaticWall.cpp" />
-    <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collider.h" />
@@ -185,7 +184,6 @@
     <ClInclude Include="OpenALAudio.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="StaticWall.h" />
-    <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
