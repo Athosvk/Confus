@@ -20,6 +20,7 @@ namespace Confus
     void Game::run()
     {
         auto sceneManager = m_Device->getSceneManager();
+        sceneManager->loadScene("Media/IrrlichtScenes/Bases.irr");
         auto camera = sceneManager->addCameraSceneNodeFPS();
         m_Device->getCursorControl()->setVisible(false);
 
