@@ -35,6 +35,6 @@ namespace Confus
         /// Sets the callback called when a collision triggers.
         /// </summary>
         /// <param name="a_Callback">The callback to use.</param>
-        void setCallback(std::function<bool(irr::scene::ISceneNode* a_CollidedNode)>& a_Callback);
+        void setCallback(const std::function<bool(irr::scene::ISceneNode* a_CollidedNode)>& a_Callback);
     };
 }

@@ -12,7 +12,7 @@ namespace Confus
         return m_Callback(a_Animator.getCollisionNode());
     }
 
-    void Collider::setCallback(std::function<bool(irr::scene::ISceneNode*a_CollidedNode)>& a_Callback)
+    void Collider::setCallback(const std::function<bool(irr::scene::ISceneNode*a_CollidedNode)>& a_Callback)
     {
         m_Callback = a_Callback;
     }
