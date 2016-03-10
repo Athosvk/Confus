@@ -3,9 +3,6 @@
 #include "OpenALListener.h";
 
 namespace Confus {
-    struct Vector3 {
-        float x, y, z;
-    };
 
     void OpenALListener::init()
     {
@@ -29,8 +26,8 @@ namespace Confus {
         alListener3f(AL_POSITION, a_PositionX, a_PositionY, a_PositionZ);
     }
 
-    void OpenALListener::setPosition(Vector3 a_Position) {
-        setPosition(a_Position.x, a_Position.y, a_Position.z);
+    void OpenALListener::setPosition(irr::core::vector3df a_Position) {
+        setPosition(a_Position.X, a_Position.Y, a_Position.Z);
     }
 
     void OpenALListener::setDirection(float a_AtX, float a_AtY, float a_AtZ, float a_UpX, float a_UpY, float a_UpZ) 
@@ -48,8 +45,8 @@ namespace Confus {
         alListenerfv(AL_DIRECTION, direction);
     }
 
-    void OpenALListener::setDirection(Vector3 a_ForwardVector, Vector3 a_UpVector) {
-        setDirection(a_ForwardVector.x, a_ForwardVector.y, a_ForwardVector.z, a_UpVector.x, a_UpVector.y, a_UpVector.z);
+    void OpenALListener::setDirection(irr::core::vector3df a_ForwardVector, irr::core::vector3df a_UpVector) {
+        setDirection(a_ForwardVector.X, a_ForwardVector.Y, a_ForwardVector.Z, a_UpVector.X, a_UpVector.Y, a_UpVector.Z);
     }
 
     void OpenALListener::setVelocity(float a_VelocityX, float a_VelocityY, float a_VelocityZ)
@@ -57,7 +54,7 @@ namespace Confus {
         alListener3f(AL_VELOCITY, a_VelocityX, a_VelocityY, a_VelocityZ);
     }
 
-    void OpenALListener::setVelocity(Vector3 a_Velocity) {
-        setVelocity(a_Velocity.x, a_Velocity.y, a_Velocity.z);
+    void OpenALListener::setVelocity(irr::core::vector3df a_Velocity) {
+        setVelocity(a_Velocity.X, a_Velocity.Y, a_Velocity.Z);
     }
 }

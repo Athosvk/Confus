@@ -1,10 +1,10 @@
 #pragma once
+#include <Irrlicht\irrlicht.h>
+
 #include "Framework/Framework.h"
 #include <string>
 
 namespace Confus {
-    struct Vector3;
-
 	/// <summary>
 	/// OpenAL Sound Source class.
 	/// Needs the init() function to load a wave file.
@@ -32,7 +32,7 @@ namespace Confus {
         /// <summary>
         /// Set the position of the sound source.
         /// </summary>
-        void setPosition(Vector3 a_Position);
+        void setPosition(irr::core::vector3df a_Position);
 		/// <summary>
 		/// Set the velocity of the sound source.
 		/// This creates a dooples effect.
@@ -42,12 +42,12 @@ namespace Confus {
         /// Set the velocity of the sound source.
         /// This creates a doppler effect.
         /// </summary>
-        void setVelocity(Vector3 a_Velocity);
+        void setVelocity(irr::core::vector3df a_Velocity);
 		/// <summary>
 		/// Set the direction of the sound source.
 		/// At is the forward rotation vector at wich the object is facing and Up is the up rotation vector.
 		/// </summary>
-        void setDirection(Vector3 a_forwardVector, Vector3 a_upVector);
+        void setDirection(irr::core::vector3df a_forwardVector, irr::core::vector3df a_upVector);
         /// <summary>
         /// Set the direction of the sound source.
         /// At is the forward rotation vector at wich the object is facing and Up is the up rotation vector.

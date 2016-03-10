@@ -4,9 +4,6 @@
 #include "OpenALSource.h"
 
 namespace Confus {
-    struct Vector3 {
-        float x, y, z;
-    };
 
 	OpenALSource::OpenALSource(std::string a_WaveFileString) : m_WaveFileString(a_WaveFileString) {
 		init(a_WaveFileString);
@@ -33,8 +30,8 @@ namespace Confus {
 		alSource3f(m_Source, AL_POSITION, a_PositionX, a_PositionY, a_PositionZ);
 	}
 
-    void OpenALSource::setPosition(Vector3 a_Position) {
-        setPosition(a_Position.x, a_Position.y, a_Position.z);
+    void OpenALSource::setPosition(irr::core::vector3df a_Position) {
+        setPosition(a_Position.X, a_Position.Y, a_Position.Z);
     }
 
 	void OpenALSource::enableLoop() {
@@ -53,8 +50,8 @@ namespace Confus {
         alSourcef(m_Source, AL_PITCH, a_Pitch);
     }
 
-    void OpenALSource::setDirection(Vector3 a_forwardVector, Vector3 a_UpVector) {
-        setDirection(a_forwardVector.x ,a_forwardVector.y, a_forwardVector.z, a_UpVector.x, a_UpVector.y, a_UpVector.z);
+    void OpenALSource::setDirection(irr::core::vector3df a_forwardVector, irr::core::vector3df a_UpVector) {
+        setDirection(a_forwardVector.X ,a_forwardVector.Y, a_forwardVector.Z, a_UpVector.X, a_UpVector.Y, a_UpVector.Z);
     }
 
 	void OpenALSource::setDirection(float a_AtX, float a_AtY, float a_AtZ, float a_UpX, float a_UpY, float a_UpZ) {
@@ -75,8 +72,8 @@ namespace Confus {
 		alSource3f(m_Source, AL_VELOCITY, a_VelocityX, a_VelocityY, a_VelocityZ);
 	}
 
-    void OpenALSource::setVelocity(Vector3 a_Velocity) {
-        setVelocity(a_Velocity.x, a_Velocity.y, a_Velocity.z);
+    void OpenALSource::setVelocity(irr::core::vector3df a_Velocity) {
+        setVelocity(a_Velocity.X, a_Velocity.Y, a_Velocity.Z);
     }
 
 	void OpenALSource::setPlaySpeed(float a_Speed) {
