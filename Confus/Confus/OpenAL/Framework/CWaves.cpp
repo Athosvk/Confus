@@ -1,26 +1,26 @@
 /*
- * Copyright (c) 2006, Creative Labs Inc.
- * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification, are permitted provided
- * that the following conditions are met:
- * 
- *     * Redistributions of source code must retain the above copyright notice, this list of conditions and
- * 	     the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions
- * 	     and the following disclaimer in the documentation and/or other materials provided with the distribution.
- *     * Neither the name of Creative Labs Inc. nor the names of its contributors may be used to endorse or
- * 	     promote products derived from this software without specific prior written permission.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
- * PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
- * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- */
+* Copyright (c) 2006, Creative Labs Inc.
+* All rights reserved.
+*
+* Redistribution and use in source and binary forms, with or without modification, are permitted provided
+* that the following conditions are met:
+*
+*     * Redistributions of source code must retain the above copyright notice, this list of conditions and
+* 	     the following disclaimer.
+*     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions
+* 	     and the following disclaimer in the documentation and/or other materials provided with the distribution.
+*     * Neither the name of Creative Labs Inc. nor the names of its contributors may be used to endorse or
+* 	     promote products derived from this software without specific prior written permission.
+*
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+* WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+* PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+* ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+* TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+* HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+* NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+* POSSIBILITY OF SUCH DAMAGE.
+*/
 
 #include "CWaves.h"
 #include <ks.h>
@@ -53,7 +53,7 @@ typedef struct
 	unsigned short	usSize;
 	unsigned short  usReserved;
 	unsigned long	ulChannelMask;
-    GUID            guidSubFormat;
+	GUID            guidSubFormat;
 } WAVEFMT;
 
 #pragma pack(pop)
@@ -61,18 +61,18 @@ typedef struct
 #if _MSC_VER <= 1310 
 
 // Wrap around the deprecated functions for VS2003 support
-int fopen_s( FILE** pFile, const char *filename, const char *mode )
+int fopen_s(FILE** pFile, const char *filename, const char *mode)
 {
-    *pFile = fopen( filename, mode );
-    
-    return *pFile ? 0 : EBADF;
+	*pFile = fopen(filename, mode);
+
+	return *pFile ? 0 : EBADF;
 }
 
-int strncpy_s( char *strDest, size_t numberOfElements, const char *strSource, size_t count )
+int strncpy_s(char *strDest, size_t numberOfElements, const char *strSource, size_t count)
 {
-    strncpy( strDest, strSource, count );
+	strncpy(strDest, strSource, count);
 
-    return 0;
+	return 0;
 }
 
 #endif
@@ -306,7 +306,7 @@ WAVERESULT CWaves::ParseFile(const char *szFilename, LPWAVEFILEINFO pWaveInfo)
 					if (riffChunk.ulChunkSize <= sizeof(WAVEFMT))
 					{
 						fread(&waveFmt, 1, riffChunk.ulChunkSize, pWaveInfo->pFile);
-					
+
 						// Determine if this is a WAVEFORMATEX or WAVEFORMATEXTENSIBLE wave file
 						if (waveFmt.usFormatTag == WAVE_FORMAT_PCM)
 						{
@@ -519,8 +519,8 @@ WAVERESULT CWaves::GetWaveALBufferFormat(WAVEID WaveID, PFNALGETENUMVALUE pfnGet
 			{
 				if ((m_WaveIDs[WaveID]->wfEXT.Format.nChannels == 1) &&
 					((m_WaveIDs[WaveID]->wfEXT.dwChannelMask == SPEAKER_FRONT_CENTER) ||
-					 (m_WaveIDs[WaveID]->wfEXT.dwChannelMask == (SPEAKER_FRONT_LEFT|SPEAKER_FRONT_RIGHT)) ||
-					 (m_WaveIDs[WaveID]->wfEXT.dwChannelMask == 0)))
+						(m_WaveIDs[WaveID]->wfEXT.dwChannelMask == (SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT)) ||
+						(m_WaveIDs[WaveID]->wfEXT.dwChannelMask == 0)))
 				{
 					switch (m_WaveIDs[WaveID]->wfEXT.Format.wBitsPerSample)
 					{
@@ -535,7 +535,7 @@ WAVERESULT CWaves::GetWaveALBufferFormat(WAVEID WaveID, PFNALGETENUMVALUE pfnGet
 						break;
 					}
 				}
-				else if ((m_WaveIDs[WaveID]->wfEXT.Format.nChannels == 2) && (m_WaveIDs[WaveID]->wfEXT.dwChannelMask == (SPEAKER_FRONT_LEFT|SPEAKER_FRONT_RIGHT)))
+				else if ((m_WaveIDs[WaveID]->wfEXT.Format.nChannels == 2) && (m_WaveIDs[WaveID]->wfEXT.dwChannelMask == (SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT)))
 				{
 					switch (m_WaveIDs[WaveID]->wfEXT.Format.wBitsPerSample)
 					{
@@ -550,15 +550,15 @@ WAVERESULT CWaves::GetWaveALBufferFormat(WAVEID WaveID, PFNALGETENUMVALUE pfnGet
 						break;
 					}
 				}
-				else if ((m_WaveIDs[WaveID]->wfEXT.Format.nChannels == 2) && (m_WaveIDs[WaveID]->wfEXT.Format.wBitsPerSample == 16) && (m_WaveIDs[WaveID]->wfEXT.dwChannelMask == (SPEAKER_BACK_LEFT|SPEAKER_BACK_RIGHT)))
-					*pulFormat =  pfnGetEnumValue("AL_FORMAT_REAR16");
-				else if ((m_WaveIDs[WaveID]->wfEXT.Format.nChannels == 4) && (m_WaveIDs[WaveID]->wfEXT.Format.wBitsPerSample == 16) && (m_WaveIDs[WaveID]->wfEXT.dwChannelMask == (SPEAKER_FRONT_LEFT|SPEAKER_FRONT_RIGHT|SPEAKER_BACK_LEFT|SPEAKER_BACK_RIGHT)))
+				else if ((m_WaveIDs[WaveID]->wfEXT.Format.nChannels == 2) && (m_WaveIDs[WaveID]->wfEXT.Format.wBitsPerSample == 16) && (m_WaveIDs[WaveID]->wfEXT.dwChannelMask == (SPEAKER_BACK_LEFT | SPEAKER_BACK_RIGHT)))
+					*pulFormat = pfnGetEnumValue("AL_FORMAT_REAR16");
+				else if ((m_WaveIDs[WaveID]->wfEXT.Format.nChannels == 4) && (m_WaveIDs[WaveID]->wfEXT.Format.wBitsPerSample == 16) && (m_WaveIDs[WaveID]->wfEXT.dwChannelMask == (SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT | SPEAKER_BACK_LEFT | SPEAKER_BACK_RIGHT)))
 					*pulFormat = pfnGetEnumValue("AL_FORMAT_QUAD16");
-				else if ((m_WaveIDs[WaveID]->wfEXT.Format.nChannels == 6) && (m_WaveIDs[WaveID]->wfEXT.Format.wBitsPerSample == 16) && (m_WaveIDs[WaveID]->wfEXT.dwChannelMask == (SPEAKER_FRONT_LEFT|SPEAKER_FRONT_RIGHT|SPEAKER_FRONT_CENTER|SPEAKER_LOW_FREQUENCY|SPEAKER_BACK_LEFT|SPEAKER_BACK_RIGHT)))
+				else if ((m_WaveIDs[WaveID]->wfEXT.Format.nChannels == 6) && (m_WaveIDs[WaveID]->wfEXT.Format.wBitsPerSample == 16) && (m_WaveIDs[WaveID]->wfEXT.dwChannelMask == (SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT | SPEAKER_FRONT_CENTER | SPEAKER_LOW_FREQUENCY | SPEAKER_BACK_LEFT | SPEAKER_BACK_RIGHT)))
 					*pulFormat = pfnGetEnumValue("AL_FORMAT_51CHN16");
-				else if ((m_WaveIDs[WaveID]->wfEXT.Format.nChannels == 7) && (m_WaveIDs[WaveID]->wfEXT.Format.wBitsPerSample == 16) && (m_WaveIDs[WaveID]->wfEXT.dwChannelMask == (SPEAKER_FRONT_LEFT|SPEAKER_FRONT_RIGHT|SPEAKER_FRONT_CENTER|SPEAKER_LOW_FREQUENCY|SPEAKER_BACK_LEFT|SPEAKER_BACK_RIGHT|SPEAKER_BACK_CENTER)))
+				else if ((m_WaveIDs[WaveID]->wfEXT.Format.nChannels == 7) && (m_WaveIDs[WaveID]->wfEXT.Format.wBitsPerSample == 16) && (m_WaveIDs[WaveID]->wfEXT.dwChannelMask == (SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT | SPEAKER_FRONT_CENTER | SPEAKER_LOW_FREQUENCY | SPEAKER_BACK_LEFT | SPEAKER_BACK_RIGHT | SPEAKER_BACK_CENTER)))
 					*pulFormat = pfnGetEnumValue("AL_FORMAT_61CHN16");
-				else if ((m_WaveIDs[WaveID]->wfEXT.Format.nChannels == 8) && (m_WaveIDs[WaveID]->wfEXT.Format.wBitsPerSample == 16) && (m_WaveIDs[WaveID]->wfEXT.dwChannelMask == (SPEAKER_FRONT_LEFT|SPEAKER_FRONT_RIGHT|SPEAKER_FRONT_CENTER|SPEAKER_LOW_FREQUENCY|SPEAKER_BACK_LEFT|SPEAKER_BACK_RIGHT|SPEAKER_SIDE_LEFT|SPEAKER_SIDE_RIGHT)))
+				else if ((m_WaveIDs[WaveID]->wfEXT.Format.nChannels == 8) && (m_WaveIDs[WaveID]->wfEXT.Format.wBitsPerSample == 16) && (m_WaveIDs[WaveID]->wfEXT.dwChannelMask == (SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT | SPEAKER_FRONT_CENTER | SPEAKER_LOW_FREQUENCY | SPEAKER_BACK_LEFT | SPEAKER_BACK_RIGHT | SPEAKER_SIDE_LEFT | SPEAKER_SIDE_RIGHT)))
 					*pulFormat = pfnGetEnumValue("AL_FORMAT_71CHN16");
 			}
 
@@ -594,84 +594,84 @@ bool CWaves::IsWaveID(WAVEID WaveID)
 
 
 char *CWaves::GetErrorString(WAVERESULT wr, char *szErrorString, unsigned long nSizeOfErrorString)
-{	
+{
 	switch (wr)
 	{
-		case WR_OK:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Success\n", nSizeOfErrorString-1);
-			break;
+	case WR_OK:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Success\n", nSizeOfErrorString - 1);
+		break;
 
-		case WR_INVALIDFILENAME:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Invalid file name or file does not exist\n", nSizeOfErrorString-1);
-			break;
+	case WR_INVALIDFILENAME:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Invalid file name or file does not exist\n", nSizeOfErrorString - 1);
+		break;
 
-		case WR_BADWAVEFILE:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Invalid Wave file\n", nSizeOfErrorString-1);
-			break;
+	case WR_BADWAVEFILE:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Invalid Wave file\n", nSizeOfErrorString - 1);
+		break;
 
-		case WR_INVALIDPARAM:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Invalid parameter passed to function\n", nSizeOfErrorString-1);
-			break;
+	case WR_INVALIDPARAM:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Invalid parameter passed to function\n", nSizeOfErrorString - 1);
+		break;
 
-		case WR_FILEERROR:
-			strncpy_s(szErrorString, nSizeOfErrorString, "File I/O error\n", nSizeOfErrorString-1);
-			break;
+	case WR_FILEERROR:
+		strncpy_s(szErrorString, nSizeOfErrorString, "File I/O error\n", nSizeOfErrorString - 1);
+		break;
 
-		case WR_INVALIDWAVEID:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Invalid WAVEID\n", nSizeOfErrorString-1);
-			break;
+	case WR_INVALIDWAVEID:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Invalid WAVEID\n", nSizeOfErrorString - 1);
+		break;
 
-		case WR_NOTSUPPORTEDYET:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Function not supported yet\n", nSizeOfErrorString-1);
-			break;
+	case WR_NOTSUPPORTEDYET:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Function not supported yet\n", nSizeOfErrorString - 1);
+		break;
 
-		case WR_WAVEMUSTBEMONO:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Input wave files must be mono\n", nSizeOfErrorString-1);
-			break;
+	case WR_WAVEMUSTBEMONO:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Input wave files must be mono\n", nSizeOfErrorString - 1);
+		break;
 
-		case WR_WAVEMUSTBEWAVEFORMATPCM:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Input wave files must be in Wave Format PCM\n", nSizeOfErrorString-1);
-			break;
-		
-		case WR_WAVESMUSTHAVESAMEBITRESOLUTION:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Input wave files must have the same Bit Resolution\n", nSizeOfErrorString-1);
-			break;
+	case WR_WAVEMUSTBEWAVEFORMATPCM:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Input wave files must be in Wave Format PCM\n", nSizeOfErrorString - 1);
+		break;
 
-		case WR_WAVESMUSTHAVESAMEFREQUENCY:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Input wave files must have the same Frequency\n", nSizeOfErrorString-1);
-			break;
+	case WR_WAVESMUSTHAVESAMEBITRESOLUTION:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Input wave files must have the same Bit Resolution\n", nSizeOfErrorString - 1);
+		break;
 
-		case WR_WAVESMUSTHAVESAMEBITRATE:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Input wave files must have the same Bit Rate\n", nSizeOfErrorString-1);
-			break;
+	case WR_WAVESMUSTHAVESAMEFREQUENCY:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Input wave files must have the same Frequency\n", nSizeOfErrorString - 1);
+		break;
 
-		case WR_WAVESMUSTHAVESAMEBLOCKALIGNMENT:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Input wave files must have the same Block Alignment\n", nSizeOfErrorString-1);
-			break;
+	case WR_WAVESMUSTHAVESAMEBITRATE:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Input wave files must have the same Bit Rate\n", nSizeOfErrorString - 1);
+		break;
 
-		case WR_OFFSETOUTOFDATARANGE:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Wave files Offset is not within audio data\n", nSizeOfErrorString-1);
-			break;
+	case WR_WAVESMUSTHAVESAMEBLOCKALIGNMENT:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Input wave files must have the same Block Alignment\n", nSizeOfErrorString - 1);
+		break;
 
-		case WR_INVALIDSPEAKERPOS:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Invalid Speaker Destinations\n", nSizeOfErrorString-1);
-			break;
+	case WR_OFFSETOUTOFDATARANGE:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Wave files Offset is not within audio data\n", nSizeOfErrorString - 1);
+		break;
 
-		case WR_OUTOFMEMORY:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Out of memory\n", nSizeOfErrorString-1);
-			break;
+	case WR_INVALIDSPEAKERPOS:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Invalid Speaker Destinations\n", nSizeOfErrorString - 1);
+		break;
 
-		case WR_INVALIDWAVEFILETYPE:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Invalid Wave File Type\n", nSizeOfErrorString-1);
-			break;
+	case WR_OUTOFMEMORY:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Out of memory\n", nSizeOfErrorString - 1);
+		break;
 
-		case WR_NOTWAVEFORMATEXTENSIBLEFORMAT:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Wave file is not in WAVEFORMATEXTENSIBLE format\n", nSizeOfErrorString-1);
-			break;
+	case WR_INVALIDWAVEFILETYPE:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Invalid Wave File Type\n", nSizeOfErrorString - 1);
+		break;
 
-		default:
-			strncpy_s(szErrorString, nSizeOfErrorString, "Undefined error\n", nSizeOfErrorString-1);
+	case WR_NOTWAVEFORMATEXTENSIBLEFORMAT:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Wave file is not in WAVEFORMATEXTENSIBLE format\n", nSizeOfErrorString - 1);
+		break;
+
+	default:
+		strncpy_s(szErrorString, nSizeOfErrorString, "Undefined error\n", nSizeOfErrorString - 1);
 	}
-	szErrorString[nSizeOfErrorString-1] = '\0';
+	szErrorString[nSizeOfErrorString - 1] = '\0';
 	return szErrorString;
 }

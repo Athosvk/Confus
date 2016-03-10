@@ -2,7 +2,6 @@
 #include <sstream>
 
 #include "Game.h"
-#include "OpenALAudio.h"
 #include "Player.h"
 
 namespace Confus
@@ -20,14 +19,11 @@ namespace Confus
     void Game::run()
     {
         auto sceneManager = m_Device->getSceneManager();
+        sceneManager->loadScene("Media/IrrlichtScenes/Bases.irr");
         auto camera = sceneManager->addCameraSceneNodeFPS();
         m_Device->getCursorControl()->setVisible(false);
 
         auto playerNode = Player(sceneManager);
-
-        OpenALAudio sound;
-        std::ostringstream oss;
-        oss << "Played Sound: " << sound.PlayASound();
 
         while(m_Device->run())
         {
