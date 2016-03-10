@@ -109,7 +109,6 @@ namespace Confus {
 			ALDeviceList *pDeviceList = NULL;
 			ALCcontext *pContext = NULL;
 			ALCdevice *pDevice = NULL;
-			ALint i;
 			ALboolean bReturn = AL_FALSE;
 
 			pDeviceList = new ALDeviceList();
@@ -198,7 +197,7 @@ namespace Confus {
 		ALchar fullPath[_MAX_PATH];
 		ALchar *ALFWaddMediaPath(const ALchar *filename)
 		{
-			sprintf(fullPath, "%s%s", "Media\\", filename);
+			sprintf_s(fullPath, _MAX_PATH, "%s%s", "Media\\", filename);
 			return fullPath;
 		}
 

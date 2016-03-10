@@ -2,7 +2,6 @@
 #include <sstream>
 
 #include "Game.h"
-#include "OpenALAudio.h"
 #include "Player.h"
 
 namespace Confus
@@ -25,10 +24,6 @@ namespace Confus
         m_Device->getCursorControl()->setVisible(false);
 
         auto playerNode = Player(sceneManager);
-
-        OpenALAudio sound;
-        std::ostringstream oss;
-        oss << "Played Sound: " << sound.PlayASound();
 
         while(m_Device->run())
         {
