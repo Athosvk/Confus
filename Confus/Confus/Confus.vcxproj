@@ -169,6 +169,7 @@
     <ClCompile Include="MoveableWall.cpp" />
     <ClCompile Include="OpenALAudio.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Audio\PlayerAudioEmitter.cpp" />
     <ClCompile Include="StaticWall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +182,7 @@
     <ClInclude Include="MoveableWall.h" />
     <ClInclude Include="OpenALAudio.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Audio\PlayerAudioEmitter.h" />
     <ClInclude Include="StaticWall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
