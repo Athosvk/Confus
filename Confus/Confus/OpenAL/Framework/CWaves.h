@@ -12,58 +12,58 @@
 
 enum WAVEFILETYPE
 {
-	WF_EX  = 1,
+	WF_EX = 1,
 	WF_EXT = 2
 };
 
 enum WAVERESULT
 {
 	WR_OK = 0,
-	WR_INVALIDFILENAME					= - 1,
-	WR_BADWAVEFILE						= - 2,
-	WR_INVALIDPARAM						= - 3,
-	WR_INVALIDWAVEID					= - 4,
-	WR_NOTSUPPORTEDYET					= - 5,
-	WR_WAVEMUSTBEMONO					= - 6,
-	WR_WAVEMUSTBEWAVEFORMATPCM			= - 7,
-	WR_WAVESMUSTHAVESAMEBITRESOLUTION	= - 8,
-	WR_WAVESMUSTHAVESAMEFREQUENCY		= - 9,
-	WR_WAVESMUSTHAVESAMEBITRATE			= -10,
-	WR_WAVESMUSTHAVESAMEBLOCKALIGNMENT	= -11,
-	WR_OFFSETOUTOFDATARANGE				= -12,
-	WR_FILEERROR						= -13,
-	WR_OUTOFMEMORY						= -14,
-	WR_INVALIDSPEAKERPOS				= -15,
-	WR_INVALIDWAVEFILETYPE				= -16,
-	WR_NOTWAVEFORMATEXTENSIBLEFORMAT	= -17
+	WR_INVALIDFILENAME = -1,
+	WR_BADWAVEFILE = -2,
+	WR_INVALIDPARAM = -3,
+	WR_INVALIDWAVEID = -4,
+	WR_NOTSUPPORTEDYET = -5,
+	WR_WAVEMUSTBEMONO = -6,
+	WR_WAVEMUSTBEWAVEFORMATPCM = -7,
+	WR_WAVESMUSTHAVESAMEBITRESOLUTION = -8,
+	WR_WAVESMUSTHAVESAMEFREQUENCY = -9,
+	WR_WAVESMUSTHAVESAMEBITRATE = -10,
+	WR_WAVESMUSTHAVESAMEBLOCKALIGNMENT = -11,
+	WR_OFFSETOUTOFDATARANGE = -12,
+	WR_FILEERROR = -13,
+	WR_OUTOFMEMORY = -14,
+	WR_INVALIDSPEAKERPOS = -15,
+	WR_INVALIDWAVEFILETYPE = -16,
+	WR_NOTWAVEFORMATEXTENSIBLEFORMAT = -17
 };
 
 #ifndef _WAVEFORMATEX_
 #define _WAVEFORMATEX_
 typedef struct tWAVEFORMATEX
 {
-    WORD    wFormatTag;
-    WORD    nChannels;
-    DWORD   nSamplesPerSec;
-    DWORD   nAvgBytesPerSec;
-    WORD    nBlockAlign;
-    WORD    wBitsPerSample;
-    WORD    cbSize;
+	WORD    wFormatTag;
+	WORD    nChannels;
+	DWORD   nSamplesPerSec;
+	DWORD   nAvgBytesPerSec;
+	WORD    nBlockAlign;
+	WORD    wBitsPerSample;
+	WORD    cbSize;
 } WAVEFORMATEX;
 #endif /* _WAVEFORMATEX_ */
 
 #ifndef _WAVEFORMATEXTENSIBLE_
 #define _WAVEFORMATEXTENSIBLE_
 typedef struct {
-    WAVEFORMATEX    Format;
-    union {
-        WORD wValidBitsPerSample;       /* bits of precision  */
-        WORD wSamplesPerBlock;          /* valid if wBitsPerSample==0 */
-        WORD wReserved;                 /* If neither applies, set to zero. */
-    } Samples;
-    DWORD           dwChannelMask;      /* which channels are */
-                                        /* present in stream  */
-    GUID            SubFormat;
+	WAVEFORMATEX    Format;
+	union {
+		WORD wValidBitsPerSample;       /* bits of precision  */
+		WORD wSamplesPerBlock;          /* valid if wBitsPerSample==0 */
+		WORD wReserved;                 /* If neither applies, set to zero. */
+	} Samples;
+	DWORD           dwChannelMask;      /* which channels are */
+										/* present in stream  */
+	GUID            SubFormat;
 } WAVEFORMATEXTENSIBLE, *PWAVEFORMATEXTENSIBLE;
 #endif // !_WAVEFORMATEXTENSIBLE_
 
@@ -77,10 +77,10 @@ typedef struct
 	unsigned long	ulDataOffset;
 } WAVEFILEINFO, *LPWAVEFILEINFO;
 
-typedef int (__cdecl *PFNALGETENUMVALUE)( const char *szEnumName );
+typedef int(__cdecl *PFNALGETENUMVALUE)(const char *szEnumName);
 typedef int	WAVEID;
 
-class CWaves  
+class CWaves
 {
 public:
 	CWaves();
@@ -106,7 +106,7 @@ public:
 private:
 	WAVERESULT ParseFile(const char *szFilename, LPWAVEFILEINFO pWaveInfo);
 	WAVEID InsertWaveID(LPWAVEFILEINFO pWaveFileInfo);
-	
+
 	LPWAVEFILEINFO	m_WaveIDs[MAX_NUM_WAVEID];
 };
 
