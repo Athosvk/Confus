@@ -3,6 +3,8 @@
 #include "Game.h"
 #include "OpenAL/OpenALSource.h"
 #include "OpenAL/OpenALListener.h"
+#include "Debug.h"
+#define DEBUG_CONSOLE
 
 const double Game::FixedUpdateInterval = 0.02;
 const double Game::MaxFixedUpdateInterval = 0.1;
@@ -16,6 +18,9 @@ void Game::run()
 	//Create Sound 
     m_Listener = new Confus::OpenALListener();
     m_Listener->init();
+
+    Confus::OpenALSource source("Footsteps.wav");
+    source.play();
 
 	//Game Loop
     while(m_Device->run())

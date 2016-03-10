@@ -170,6 +170,7 @@
     <ClCompile Include="OpenAL\OpenALSource.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="OpenAL\Framework\aldlist.h" />
     <ClInclude Include="OpenAL\Framework\CWaves.h" />
     <ClInclude Include="OpenAL\Framework\Framework.h" />

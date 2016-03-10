@@ -113,14 +113,9 @@ namespace Confus {
 			ALboolean bReturn = AL_FALSE;
 
 			pDeviceList = new ALDeviceList();
-			if ((pDeviceList) && (pDeviceList->GetNumDevices()))
+			if ((pDeviceList)) 
 			{
-				int deviceCount = pDeviceList->GetNumDevices();
-				int i = 0;
-				std::cout << "\nSelect OpenAL Device " << i;
-
-
-				pDevice = alcOpenDevice(pDeviceList->GetDeviceName(i));
+				pDevice = alcOpenDevice(pDeviceList->GetDeviceName(pDeviceList->GetDefaultDevice()));
 				if (pDevice)
 				{
 					pContext = alcCreateContext(pDevice, NULL);
