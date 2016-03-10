@@ -160,6 +160,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Collider.cpp" />
     <ClCompile Include="framework\Win32\aldlist.cpp" />
     <ClCompile Include="framework\Win32\CWaves.cpp" />
     <ClCompile Include="framework\Win32\Framework.cpp" />
@@ -170,8 +171,10 @@
     <ClCompile Include="OpenALAudio.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="StaticWall.cpp" />
+    <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collider.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="framework\Win32\aldlist.h" />
     <ClInclude Include="framework\Win32\CWaves.h" />
@@ -182,6 +185,7 @@
     <ClInclude Include="OpenALAudio.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="StaticWall.h" />
+    <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
