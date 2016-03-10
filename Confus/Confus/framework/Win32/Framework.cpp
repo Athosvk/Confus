@@ -112,12 +112,8 @@ ALboolean ALFWInitOpenAL()
 	pDeviceList = new ALDeviceList();
 	if ((pDeviceList) && (pDeviceList->GetNumDevices()))
 	{
-		int deviceCount = pDeviceList->GetNumDevices();
-		int i = 0;
-		std::cout << "\nSelect OpenAL Device " << i;
-
-
-		pDevice = alcOpenDevice(pDeviceList->GetDeviceName(i));
+		//Open Default Device
+		pDevice = alcOpenDevice(pDeviceList->GetDeviceName(pDeviceList->GetDefaultDevice()));
 		if (pDevice)
 		{
 			pContext = alcCreateContext(pDevice, NULL);
@@ -135,7 +131,7 @@ ALboolean ALFWInitOpenAL()
 
 		delete pDeviceList;
 	}
-
+	//No devices available
 	return bReturn;
 }
 
