@@ -6,7 +6,8 @@ namespace Confus
     class Player
     {
     public:
-        Player(irr::scene::ISceneManager * sceneManager);
+        irr::scene::IAnimatedMeshSceneNode* PlayerNode;
+        Player(irr::IrrlichtDevice* a_Device);
         void fixedUpdate();
         void update();
     };

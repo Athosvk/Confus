@@ -4,16 +4,27 @@
 
 namespace Confus
 {
-    Player::Player(irr::scene::ISceneManager * sceneManager)
+    Player::Player(irr::IrrlichtDevice* a_Device)
     {
-        IrrAssimp irrAssimp(sceneManager);
-        auto meshNode = irrAssimp.getMesh("Media/arm.fbx");
-        auto sceneNode = sceneManager->addOctreeSceneNode(meshNode->getMesh(0), 0, -1, 1024);
-        sceneNode->setParent(sceneManager->getActiveCamera());
-        sceneNode->setPosition(irr::core::vector3d<float>(2.5f, 0.5f, 0.5f));
-        sceneNode->setRotation(irr::core::vector3d<float>(45.0f, 0.0f, 0.0f));
+        auto sceneManager = a_Device->getSceneManager();
+        auto videoDriver = a_Device->getVideoDriver();
 
-        auto collisionBox = sceneManager->addCubeSceneNode(2.0f, sceneNode->getParent(), -1, irr::core::vector3d<float>(0.0f, -1.0f, 0.0f), irr::core::vector3d<float>(0.0f, 0.0f, 0.0f), irr::core::vector3d<float>(1.0f, 1.5f, 1.0f));
+        IrrAssimp irrAssimp(sceneManager);
+        irr::scene::IAnimatedMesh* mesh = sceneManager->getMesh("Media/ninja.b3d");
+
+        PlayerNode = sceneManager->addAnimatedMeshSceneNode(mesh);
+        PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
+        PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
+        PlayerNode->setPosition(irr::core::vector3df(0, 0, 0));
+
+        PlayerNode->setAnimationSpeed(24);
+        PlayerNode->setFrameLoop(0, 13);
+        PlayerNode->setCurrentFrame(7);
+
+        auto camera = sceneManager->addCameraSceneNode(NULL, irr::core::vector3df(0, 10, -15));
+
+
+        auto collisionBox = sceneManager->addCubeSceneNode(1.0f, PlayerNode, -1, irr::core::vector3d<float>(0.0f, 5.0f, 0.0f), irr::core::vector3d<float>(0.0f, 0.0f, 0.0f), irr::core::vector3d<float>(2.5f, 10.0f, 2.0f));
         collisionBox->setVisible(false);
     }
 
