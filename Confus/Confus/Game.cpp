@@ -2,9 +2,7 @@
 #include <sstream>
 
 #include "Game.h"
-#include "OpenALAudio.h"
 #include "Player.h"
-#include "StaticWall.h"
 
 namespace Confus
 {
@@ -12,24 +10,22 @@ namespace Confus
     const double Game::MaxFixedUpdateInterval = 0.1;
 
     Game::Game()
-        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL))
+        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
+        m_MoveableWall(m_Device, irr::core::vector3df(-30.0f, 0.0f, 0.0f),
+            irr::core::vector3df(-30.f, -200.f, 0.0f))
     {
     }
 
     void Game::run()
     {
         auto sceneManager = m_Device->getSceneManager();
+        sceneManager->loadScene("Media/IrrlichtScenes/Bases.irr");
         auto camera = sceneManager->addCameraSceneNodeFPS();
         m_Device->getCursorControl()->setVisible(false);
 
         auto playerNode = Player(sceneManager);
-        auto wallNode = StaticWall(m_Device, irr::core::vector3df(0, 0, 0), irr::core::vector3df(270, 0, 0), camera);        
-        
-        OpenALAudio sound;
-        std::ostringstream oss;
-        oss << "Played Sound: " << sound.PlayASound();
 
-        while (m_Device->run())
+        while(m_Device->run())
         {
             handleInput();
             update();
@@ -53,7 +49,7 @@ namespace Confus
     {
         m_FixedUpdateTimer += m_DeltaTime;
         m_FixedUpdateTimer = irr::core::min_(m_FixedUpdateTimer, MaxFixedUpdateInterval);
-        while (m_FixedUpdateTimer >= FixedUpdateInterval)
+        while(m_FixedUpdateTimer >= FixedUpdateInterval)
         {
             m_FixedUpdateTimer -= FixedUpdateInterval;
             fixedUpdate();
@@ -62,6 +58,7 @@ namespace Confus
 
     void Game::fixedUpdate()
     {
+        m_MoveableWall.fixedUpdate();
     }
 
     void Game::render()

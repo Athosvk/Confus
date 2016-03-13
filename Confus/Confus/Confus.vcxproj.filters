@@ -21,22 +21,34 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="framework\Win32\Framework.cpp">
+    <ClCompile Include="OpenAL\OpenALListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="framework\Win32\CWaves.cpp">
+    <ClCompile Include="OpenAL\OpenALSource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="framework\Win32\LoadOAL.cpp">
+    <ClCompile Include="OpenAL\Framework\aldlist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="framework\Win32\aldlist.cpp">
+    <ClCompile Include="OpenAL\Framework\CWaves.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OpenALAudio.cpp">
+    <ClCompile Include="OpenAL\Framework\Framework.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenAL\Framework\LoadOAL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveableWall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticWall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,25 +56,40 @@
     <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="framework\Win32\Framework.h">
+    <ClInclude Include="OpenAL\OpenALListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="framework\Win32\CWaves.h">
+    <ClInclude Include="OpenAL\OpenALSource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="framework\Win32\LoadOAL.h">
+    <ClInclude Include="OpenAL\Framework\aldlist.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="framework\Win32\aldlist.h">
+    <ClInclude Include="OpenAL\Framework\CWaves.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OpenALAudio.h">
+    <ClInclude Include="OpenAL\Framework\Framework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenAL\Framework\LoadOAL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveableWall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticWall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -96,12 +96,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\Lansenou\Desktop\Confus\Libraries\32 bit\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -117,7 +118,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>OpenAL32.lib;Irrlicht.lib;IrrAssimp.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\Lansenou\Desktop\Confus\Libraries\32 bit\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -137,7 +138,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -156,28 +157,34 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="framework\Win32\aldlist.cpp" />
-    <ClCompile Include="framework\Win32\CWaves.cpp" />
-    <ClCompile Include="framework\Win32\Framework.cpp" />
-    <ClCompile Include="framework\Win32\LoadOAL.cpp" />
+    <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="OpenALAudio.cpp" />
+    <ClCompile Include="MoveableWall.cpp" />
+    <ClCompile Include="OpenAL\Framework\aldlist.cpp" />
+    <ClCompile Include="OpenAL\Framework\CWaves.cpp" />
+    <ClCompile Include="OpenAL\Framework\Framework.cpp" />
+    <ClCompile Include="OpenAL\Framework\LoadOAL.cpp" />
+    <ClCompile Include="OpenAL\OpenALListener.cpp" />
+    <ClCompile Include="OpenAL\OpenALSource.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="StaticWall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collider.h" />
     <ClInclude Include="Debug.h" />
-    <ClInclude Include="framework\Win32\aldlist.h" />
-    <ClInclude Include="framework\Win32\CWaves.h" />
-    <ClInclude Include="framework\Win32\Framework.h" />
-    <ClInclude Include="framework\Win32\LoadOAL.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="OpenALAudio.h" />
+    <ClInclude Include="MoveableWall.h" />
+    <ClInclude Include="OpenAL\Framework\aldlist.h" />
+    <ClInclude Include="OpenAL\Framework\CWaves.h" />
+    <ClInclude Include="OpenAL\Framework\Framework.h" />
+    <ClInclude Include="OpenAL\Framework\LoadOAL.h" />
+    <ClInclude Include="OpenAL\OpenALListener.h" />
+    <ClInclude Include="OpenAL\OpenALSource.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="StaticWall.h" />
   </ItemGroup>
