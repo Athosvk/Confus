@@ -62,9 +62,9 @@ namespace Confus
 
     void Game::render()
     {
-    m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
-    m_Device->getSceneManager()->drawAll();
-    m_Device->getGUIEnvironment()->drawAll();
-    m_Device->getVideoDriver()->endScene();
+        m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
+        m_Device->getSceneManager()->drawAll();
+        m_Device->getGUIEnvironment()->drawAll();
+        m_Device->getVideoDriver()->endScene();
     }
 }
