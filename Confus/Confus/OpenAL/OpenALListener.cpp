@@ -1,6 +1,6 @@
 #include <stdexcept>
 
-#include "OpenALListener.h";
+#include "OpenALListener.h"
 
 namespace Confus {
 
