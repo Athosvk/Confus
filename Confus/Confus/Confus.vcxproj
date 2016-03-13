@@ -163,10 +163,6 @@
   <ItemGroup>
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="EventManager.cpp" />
-    <ClCompile Include="framework\Win32\aldlist.cpp" />
-    <ClCompile Include="framework\Win32\CWaves.cpp" />
-    <ClCompile Include="framework\Win32\Framework.cpp" />
-    <ClCompile Include="framework\Win32\LoadOAL.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MoveableWall.cpp" />
