@@ -41,27 +41,12 @@ namespace Confus
 
     void Game::handleInput()
     {
-        auto nodePosition = m_PlayerNode.PlayerNode->getPosition();
-        const irr::f32 MOVEMENT_SPEED = 0.5f;
-
+        /*
         if(m_EventManager.IsKeyDown(irr::KEY_KEY_W))
         {
-            nodePosition.Z += MOVEMENT_SPEED;
+            nodePosition.Z += MOVEMENT_SPEED*m_DeltaTime;
         }
-        else if(m_EventManager.IsKeyDown(irr::KEY_KEY_S))
-        {
-            nodePosition.Z -= MOVEMENT_SPEED;
-        }
-        if(m_EventManager.IsKeyDown(irr::KEY_KEY_A))
-        {
-            nodePosition.X -= MOVEMENT_SPEED;
-        }
-        else if(m_EventManager.IsKeyDown(irr::KEY_KEY_D))
-        {
-            nodePosition.X += MOVEMENT_SPEED;
-        }
-
-        m_PlayerNode.PlayerNode->setPosition(nodePosition);
+        */
     }
 
     void Game::update()

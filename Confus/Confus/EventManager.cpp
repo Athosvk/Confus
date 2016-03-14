@@ -6,12 +6,6 @@ namespace Confus
 {
     EventManager::EventManager()
     {
-        /* 
-        for(irr::u32 i = 0; i < irr::KEY_KEY_CODES_COUNT; ++i)
-        {
-        m_KeyIsDown[i] = false;
-        }
-        */
     }
 
     bool EventManager::OnEvent(const irr::SEvent & a_Event)
