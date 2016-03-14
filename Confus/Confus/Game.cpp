@@ -2,7 +2,6 @@
 #include <sstream>
 
 #include "Game.h"
-#include "OpenALAudio.h"
 #include "Player.h"
 #include "EventManager.h"
 
@@ -26,7 +25,6 @@ namespace Confus
         m_Device->getCursorControl()->setVisible(false);
 
         m_Device->setEventReceiver(&m_EventManager);
-        auto player = Player(m_Device);
 
         while(m_Device->run())
         {
