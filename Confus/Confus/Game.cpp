@@ -16,7 +16,6 @@ namespace Confus
             irr::core::vector3df(-30.f, -200.f, 0.0f))
     {
     }
-
     void Game::run()
     {
         auto sceneManager = m_Device->getSceneManager();
@@ -24,7 +23,7 @@ namespace Confus
         auto camera = sceneManager->addCameraSceneNodeFPS();
         m_Device->getCursorControl()->setVisible(false);
 
-        auto playerNode = Player(sceneManager);
+        auto player = Player(m_Device);
 
         //Create Sound 
         OpenALListener* listener = new OpenALListener();
