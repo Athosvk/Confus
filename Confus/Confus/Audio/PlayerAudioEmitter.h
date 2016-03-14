@@ -15,13 +15,13 @@ namespace Confus
         class PlayerAudioEmitter
         {
             OpenALSource* m_AudioSource;
-            Player* m_AttachedPlayer;
+            irr::scene::IAnimatedMeshSceneNode* m_AttachedPlayer;
         public:            
             /// <summary>
             /// Initializes a new instance of the <see cref="PlayerAudioEmitter"/> class.
             /// </summary>
             /// <param name="a_AttachedPlayer">The player that owns this emitter.</param>
-            PlayerAudioEmitter(Player a_AttachedPlayer);
+            PlayerAudioEmitter(irr::scene::IAnimatedMeshSceneNode* a_AttachedPlayer);
             /// <summary>
             /// Finalizes an instance of the <see cref="PlayerAudioEmitter"/> class.
             /// </summary>

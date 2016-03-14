@@ -22,15 +22,13 @@ namespace Confus
         sceneManager->loadScene("Media/IrrlichtScenes/Bases.irr");
         auto camera = sceneManager->addCameraSceneNodeFPS();
         m_Device->getCursorControl()->setVisible(false);
-
-        auto player = Player(m_Device);
-
-        //Create Sound 
+        
+        //Create listener.
         OpenALListener* listener = new OpenALListener();
         listener->init();
 
-        Audio::PlayerAudioEmitter* emitter = new Audio::PlayerAudioEmitter(playerNode);
-        
+        auto player = Player(m_Device);
+
         while(m_Device->run())
         {
             handleInput();

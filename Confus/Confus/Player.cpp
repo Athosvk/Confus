@@ -1,7 +1,6 @@
 #include <IrrAssimp/IrrAssimp.h>
 
 #include "Player.h"
-
 namespace Confus
 {
     Player::Player(irr::IrrlichtDevice* a_Device)
@@ -26,6 +25,8 @@ namespace Confus
 
         auto collisionBox = sceneManager->addCubeSceneNode(1.0f, PlayerNode, -1, irr::core::vector3d<float>(0.0f, 5.0f, 0.0f), irr::core::vector3d<float>(0.0f, 0.0f, 0.0f), irr::core::vector3d<float>(2.5f, 10.0f, 2.0f));
         collisionBox->setVisible(false);
+
+        createAudioEmitter();
     }
 
     void Player::fixedUpdate()
@@ -34,5 +35,11 @@ namespace Confus
 
     void Player::update()
     {
+        m_FootstepSoundEmitter->updatePosition();
+    }
+
+    void Player::createAudioEmitter()
+    {
+        m_FootstepSoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
     }
 }
