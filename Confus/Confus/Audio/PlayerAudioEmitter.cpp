@@ -6,10 +6,8 @@ namespace Confus
     {
         PlayerAudioEmitter::PlayerAudioEmitter(Player a_AttachedPlayer) : m_AttachedPlayer(&a_AttachedPlayer)
         {
-            Confus::OpenALSource* m_AudioSource = new Confus::OpenALSource("Footsteps.wav");
-            m_AudioSource->play();
-            // Not working yet because m_AudioSource goes out of scope. 
-            //playFootStepSound(); 
+            m_AudioSource = new Confus::OpenALSource("Footsteps.wav");
+            playFootStepSound(); 
         }
 
         PlayerAudioEmitter::~PlayerAudioEmitter()
