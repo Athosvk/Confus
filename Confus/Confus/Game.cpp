@@ -24,7 +24,8 @@ namespace Confus
         //Create listener.
         OpenALListener* listener = new OpenALListener();
         listener->init();
-
+        listener->setPosition(camera->getAbsolutePosition());
+            
         m_Player = new Player(m_Device);
 
         while(m_Device->run())

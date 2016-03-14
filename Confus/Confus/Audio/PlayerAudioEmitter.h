@@ -37,8 +37,11 @@ namespace Confus
             /// <summary>
             /// Updates the position of this instance.
             /// </summary>
-            void updatePosition();
-
+            void updatePosition();            
+            /// <summary>
+            /// Creates the audio sources.
+            /// </summary>
+            void createAudioSources();
         };
     }
 }

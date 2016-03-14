@@ -6,10 +6,7 @@ namespace Confus
     {
         PlayerAudioEmitter::PlayerAudioEmitter(irr::scene::IAnimatedMeshSceneNode* a_AttachedPlayer) : m_AttachedPlayer(a_AttachedPlayer)
         {
-            m_AudioSourceFootstep1 = new OpenALSource("Footstep1_Concrete.wav");
-            m_AudioSourceFootstep2 = new OpenALSource("Footstep2_Concrete.wav");
-            m_AudioSourceFootstep3 = new OpenALSource("Footstep3_Concrete.wav");
-            playFootStepSound(); 
+            createAudioSources();
         }
 
         PlayerAudioEmitter::~PlayerAudioEmitter()
@@ -41,9 +38,13 @@ namespace Confus
             m_AudioSourceFootstep1->setPosition(m_AttachedPlayer->getAbsolutePosition());
             m_AudioSourceFootstep2->setPosition(m_AttachedPlayer->getAbsolutePosition());
             m_AudioSourceFootstep3->setPosition(m_AttachedPlayer->getAbsolutePosition());
+        }
 
-
-
+        void PlayerAudioEmitter::createAudioSources()
+        {
+            m_AudioSourceFootstep1 = new OpenALSource("Footstep1_Concrete.wav");
+            m_AudioSourceFootstep2 = new OpenALSource("Footstep2_Concrete.wav");
+            m_AudioSourceFootstep3 = new OpenALSource("Footstep3_Concrete.wav");
         }
     }
 }
