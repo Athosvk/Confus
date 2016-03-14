@@ -36,6 +36,11 @@ namespace Confus
     void Player::update()
     {
         m_FootstepSoundEmitter->updatePosition();
+
+        if(static_cast<int>(PlayerNode->getFrameNr()) == 3)
+        {
+            m_FootstepSoundEmitter->playFootStepSound();
+        }
     }
 
     void Player::createAudioEmitter()

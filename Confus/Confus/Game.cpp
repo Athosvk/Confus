@@ -2,8 +2,6 @@
 #include <sstream>
 
 #include "Game.h"
-#include "Player.h"
-#include "Audio\PlayerAudioEmitter.h"
 
 namespace Confus
 {
@@ -27,7 +25,7 @@ namespace Confus
         OpenALListener* listener = new OpenALListener();
         listener->init();
 
-        auto player = Player(m_Device);
+        m_Player = new Player(m_Device);
 
         while(m_Device->run())
         {
@@ -47,6 +45,8 @@ namespace Confus
         m_PreviousTicks = m_CurrentTicks;
         m_CurrentTicks = m_Device->getTimer()->getTime();
         m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
+
+        m_Player->update();
     }
 
     void Game::processFixedUpdates()

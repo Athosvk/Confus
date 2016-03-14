@@ -6,7 +6,7 @@ namespace Confus
     {
         PlayerAudioEmitter::PlayerAudioEmitter(irr::scene::IAnimatedMeshSceneNode* a_AttachedPlayer) : m_AttachedPlayer(a_AttachedPlayer)
         {
-            m_AudioSource = new OpenALSource("Footsteps.wav");
+            m_AudioSource = new OpenALSource("Footstep1_Concrete.wav");
             playFootStepSound(); 
         }
 

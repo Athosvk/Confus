@@ -3,7 +3,8 @@
 
 #include "OpenAL\OpenALListener.h"
 #include "MoveableWall.h"
-
+#include "Player.h"
+#include "Audio\PlayerAudioEmitter.h"
 namespace Confus
 {
     class Game
@@ -26,6 +27,10 @@ namespace Confus
         /// The MoveableWall as test object
         /// </summary>
         MoveableWall m_MoveableWall;
+        /// <summary>
+        /// The Player to test with.
+        /// </summary>
+        Player* m_Player;
         /// <summary>
         /// The delay between the last and future fixed update
         /// </summary>
