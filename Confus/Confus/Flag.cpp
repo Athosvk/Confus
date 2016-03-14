@@ -12,7 +12,7 @@ namespace Confus {
         auto videoDriver = a_Device->getVideoDriver();
 
         IrrAssimp irrAssimp(sceneManager);
-        irr::scene::IAnimatedMesh* mesh = sceneManager->getMesh("Media/flag.obj");
+        irr::scene::IAnimatedMesh* mesh = sceneManager->getMesh("Media/Models/flag.obj");
         m_FlagNode = sceneManager->addAnimatedMeshSceneNode(mesh);
         m_FlagNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
 
