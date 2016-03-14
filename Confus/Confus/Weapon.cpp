@@ -8,10 +8,10 @@ namespace Confus
     Weapon::Weapon(irr::scene::ISceneManager* a_SceneManager)
     {
         loadMesh(a_SceneManager);
-        auto triangleSelector = m_MeshNode->getTriangleSelector();
+        m_TriangleSelector = a_SceneManager->createTriangleSelectorFromBoundingBox(m_MeshNode);
 
         const irr::core::aabbox3df& boundingBox = m_MeshNode->getBoundingBox();
-        auto responseAnimator = a_SceneManager->createCollisionResponseAnimator(triangleSelector, m_MeshNode,
+        auto responseAnimator = a_SceneManager->createCollisionResponseAnimator(m_TriangleSelector, m_MeshNode,
             boundingBox.getExtent() / 2, irr::core::vector3df());
         m_Collider = std::make_unique<Collider>(responseAnimator);
 
@@ -24,6 +24,16 @@ namespace Confus
     void Weapon::damagePlayer() const
     {
 
+    }
+
+    void Weapon::enableCollider()
+    {
+        m_MeshNode->setTriangleSelector(m_TriangleSelector);
+    }
+
+    void Weapon::disableCollider()
+    {
+        m_MeshNode->setTriangleSelector(nullptr);
     }
 
     void Weapon::loadMesh(irr::scene::ISceneManager* a_SceneManager)
