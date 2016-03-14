@@ -1,6 +1,7 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
 
+#include "OpenAL\OpenALListener.h"
 #include "MoveableWall.h"
 
 namespace Confus

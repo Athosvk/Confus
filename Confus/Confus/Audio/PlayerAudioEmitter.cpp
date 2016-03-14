@@ -6,7 +6,10 @@ namespace Confus
     {
         PlayerAudioEmitter::PlayerAudioEmitter(Player a_AttachedPlayer) : m_AttachedPlayer(&a_AttachedPlayer)
         {
-            m_AudioSource = new Confus::OpenALSource("SFX\Player\Footsteps\Concrete\Footstep1_Concrete.wav");
+            Confus::OpenALSource* m_AudioSource = new Confus::OpenALSource("Footsteps.wav");
+            m_AudioSource->play();
+            // Not working yet because m_AudioSource goes out of scope. 
+            //playFootStepSound(); 
         }
 
         PlayerAudioEmitter::~PlayerAudioEmitter()
@@ -22,7 +25,7 @@ namespace Confus
 
         void PlayerAudioEmitter::updatePosition()
         {
-            m_AudioSource->setPosition(m_AttachedPlayer->getPosition());
+//            m_AudioSource->setPosition(m_AttachedPlayer->getPosition());
         }
     }
 }

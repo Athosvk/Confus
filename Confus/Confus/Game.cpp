@@ -3,6 +3,7 @@
 
 #include "Game.h"
 #include "Player.h"
+#include "Audio\PlayerAudioEmitter.h"
 
 namespace Confus
 {
@@ -25,6 +26,12 @@ namespace Confus
 
         auto playerNode = Player(sceneManager);
 
+        //Create Sound 
+        OpenALListener* listener = new OpenALListener();
+        listener->init();
+
+        Audio::PlayerAudioEmitter* emitter = new Audio::PlayerAudioEmitter(playerNode);
+        
         while(m_Device->run())
         {
             handleInput();
