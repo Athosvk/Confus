@@ -43,6 +43,9 @@ enum class FlagEnum
         irr::scene::IAnimatedMeshSceneNode* m_FlagNode;
         irr::core::vector3df m_StartPosition;
         irr::core::vector3df m_StartRotation;
+    private:
+        FlagEnum m_FlagStatus = FlagEnum::FLAG_BASE;
+        TeamIdentifier m_TeamIdentifier;
     public: 
         /// <summary>
         /// Flag class constructor
@@ -62,10 +65,10 @@ enum class FlagEnum
 		void Drop(Player* a_PlayerObject);
 		void Return();
 		void Score(Player* a_PlayerObject);
-	private:
-		FlagEnum m_FlagStatus = FlagEnum::FLAG_BASE;
-		TeamIdentifier m_TeamIdentifier;
-	public:
+        irr::video::SColor GetColor();
+
+    private:
+        void InitParticleSystem(irr::scene::ISceneManager* a_SceneManager);
 
 	};
 }

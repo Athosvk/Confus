@@ -22,6 +22,7 @@ namespace Confus
         PlayerNode->setCurrentFrame(7);
 
         auto camera = sceneManager->addCameraSceneNode(NULL, irr::core::vector3df(0, 10, -15));
+        sceneManager->addCameraSceneNodeFPS();
 
         auto collisionBox = sceneManager->addCubeSceneNode(1.0f, PlayerNode, -1, irr::core::vector3d<float>(0.0f, 5.0f, 0.0f), irr::core::vector3d<float>(0.0f, 0.0f, 0.0f), irr::core::vector3d<float>(2.5f, 10.0f, 2.0f));
         collisionBox->setVisible(false);
