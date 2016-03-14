@@ -4,13 +4,6 @@
 
 namespace Confus
 {
-    struct SMouseState
-    {
-        bool LeftButtonDown;
-        bool RightButtonDown;
-        SMouseState() : LeftButtonDown(false), RightButtonDown(false) { }
-    } MouseState;
-
     EventManager::EventManager()
     {
     }
@@ -22,16 +15,16 @@ namespace Confus
             switch(a_Event.MouseInput.Event)
             {
             case irr::EMIE_LMOUSE_PRESSED_DOWN:
-                MouseState.LeftButtonDown = true;
+                m_MouseState.LeftButtonDown = true;
                 break;
             case irr::EMIE_LMOUSE_LEFT_UP:
-                MouseState.LeftButtonDown = false;
+                m_MouseState.LeftButtonDown = false;
                 break;
             case irr::EMIE_RMOUSE_PRESSED_DOWN:
-                MouseState.RightButtonDown = true;
+                m_MouseState.RightButtonDown = true;
                 break;
             case irr::EMIE_RMOUSE_LEFT_UP:
-                MouseState.RightButtonDown = false;
+                m_MouseState.RightButtonDown = false;
                 break;
             default:
                 break;
@@ -53,10 +46,11 @@ namespace Confus
 
     bool EventManager::IsLeftMouseDown() const
     {
-        return MouseState.LeftButtonDown;
+        return m_MouseState.LeftButtonDown;
     }
+
     bool EventManager::IsRightMouseDown() const
     {
-        return MouseState.RightButtonDown;
+        return m_MouseState.RightButtonDown;
     }
 }

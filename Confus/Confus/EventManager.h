@@ -8,6 +8,12 @@ namespace Confus
     {
     private:
         std::array<bool, irr::KEY_KEY_CODES_COUNT> m_KeyIsDown = {false};
+        struct MouseState
+        {
+            bool LeftButtonDown;
+            bool RightButtonDown;
+            MouseState() : LeftButtonDown(false), RightButtonDown(false) { }
+        } m_MouseState;
     public:
         EventManager();
         virtual bool OnEvent(const irr::SEvent& a_Event);
