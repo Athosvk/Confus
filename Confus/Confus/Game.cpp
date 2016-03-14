@@ -22,13 +22,11 @@ namespace Confus
     void Game::run()
     {
         auto sceneManager = m_Device->getSceneManager();
+        sceneManager->loadScene("Media/IrrlichtScenes/Bases.irr");
         m_Device->getCursorControl()->setVisible(false);
 
         m_Device->setEventReceiver(&m_EventManager);
-
-        OpenALAudio sound;
-        std::ostringstream oss;
-        oss << "Played Sound: " << sound.PlayASound();
+        auto player = Player(m_Device);
 
         while(m_Device->run())
         {
