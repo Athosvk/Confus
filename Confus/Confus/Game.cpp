@@ -41,12 +41,14 @@ namespace Confus
 
     void Game::handleInput()
     {
-        /*
-        if(m_EventManager.IsKeyDown(irr::KEY_KEY_W))
+        if(m_EventManager.IsLeftMouseDown())
         {
-            nodePosition.Z += MOVEMENT_SPEED*m_DeltaTime;
+            //LMB stuff
         }
-        */
+        else if(m_EventManager.IsRightMouseDown())
+        {
+            //RMB stuff
+        }
     }
 
     void Game::update()

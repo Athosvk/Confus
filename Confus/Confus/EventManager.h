@@ -12,5 +12,7 @@ namespace Confus
         EventManager();
         virtual bool OnEvent(const irr::SEvent& a_Event);
         bool IsKeyDown(irr::EKEY_CODE a_KeyCode) const;
+        bool IsLeftMouseDown() const;
+        bool IsRightMouseDown() const;
     };
 }
