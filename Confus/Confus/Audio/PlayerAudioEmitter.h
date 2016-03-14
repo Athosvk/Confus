@@ -14,7 +14,9 @@ namespace Confus
         /// </summary>
         class PlayerAudioEmitter
         {
-            OpenALSource* m_AudioSource;
+            OpenALSource* m_AudioSourceFootstep1;
+            OpenALSource* m_AudioSourceFootstep2;
+            OpenALSource* m_AudioSourceFootstep3;
             irr::scene::IAnimatedMeshSceneNode* m_AttachedPlayer;
         public:            
             /// <summary>

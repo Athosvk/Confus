@@ -16,7 +16,7 @@ namespace Confus
         PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
         PlayerNode->setPosition(irr::core::vector3df(0, 0, 0));
 
-        PlayerNode->setAnimationSpeed(24);
+        PlayerNode->setAnimationSpeed(12);
         PlayerNode->setFrameLoop(0, 13);
         PlayerNode->setCurrentFrame(7);
 
@@ -37,7 +37,8 @@ namespace Confus
     {
         m_FootstepSoundEmitter->updatePosition();
 
-        if(static_cast<int>(PlayerNode->getFrameNr()) == 3)
+        int frameNumber = static_cast<int>(PlayerNode->getFrameNr());
+        if(frameNumber == 0 || frameNumber == 6)
         {
             m_FootstepSoundEmitter->playFootStepSound();
         }
