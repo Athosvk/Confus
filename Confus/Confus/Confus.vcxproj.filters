@@ -60,19 +60,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OpenAL\OpenALListener.h">
-    <ClInclude Include="framework\Win32\Framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OpenAL\OpenALSource.h">
-    <ClInclude Include="framework\Win32\CWaves.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OpenAL\Framework\aldlist.h">
-    <ClInclude Include="framework\Win32\LoadOAL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OpenAL\Framework\CWaves.h">
-    <ClInclude Include="framework\Win32\aldlist.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OpenAL\Framework\Framework.h">
