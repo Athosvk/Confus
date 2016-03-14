@@ -14,23 +14,23 @@ namespace Confus {
 
         //Load model
         IrrAssimp irrAssimp(sceneManager);
-        irr::scene::IAnimatedMesh* mesh = sceneManager->getMesh("Media/Models/flag.obj");
+        irr::scene::IAnimatedMesh* mesh = sceneManager->getMesh("Media/Meshes/Flag.3ds");
         m_FlagNode = sceneManager->addAnimatedMeshSceneNode(mesh);
         m_FlagNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
-        m_FlagNode->setScale({ 0.03f, 0.03f, 0.03f });
+        m_FlagNode->setScale({ 2, 2, 2 });
         
         //Set color & position based on color
         switch(m_TeamIdentifier)
         {
         case TeamIdentifier::TEAM_BLUE:
             m_FlagNode->setMaterialTexture(0, videoDriver->getTexture("Media/Textures/Flag/FLAG_BLUE.png"));
-            m_StartPosition = { -2.5f, 3.5f, -5.f };
+            m_StartPosition = { -2.5f, 3.5f, -2.f };
             m_StartRotation = { 0.f, 0.f, 0.f };
             Return();
             break;
         case TeamIdentifier::TEAM_RED:
             m_FlagNode->setMaterialTexture(0, videoDriver->getTexture("Media/Textures/Flag/FLAG_RED.png"));
-            m_StartPosition = { 3.5f, 3.5f, -75.f };
+            m_StartPosition = { 3.5f, 3.5f, -72.f };
             m_StartRotation = { 0.f, 180.f, 0.f };
             Return();
             break;
@@ -64,12 +64,12 @@ namespace Confus {
 
         //Affector
         irr::scene::IParticleAffector* paf = ps->createFadeOutParticleAffector();
-        ps->setScale({ 2, 2, 2 });
+        ps->setScale({ 0.1f, 0.1f, 0.1f });
         ps->setMaterialFlag(irr::video::EMF_LIGHTING, false);
         ps->setMaterialFlag(irr::video::EMF_ZWRITE_ENABLE, false);
         ps->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
         ps->setParent(m_FlagNode);
-        ps->setPosition({ 0, 2.5f, 0 });
+        ps->setPosition({ 0, 0, 0 });
 
         //Drop systems after setting them
         ps->setEmitter(em);

@@ -15,14 +15,14 @@ namespace Confus
         PlayerNode = sceneManager->addAnimatedMeshSceneNode(mesh);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
         PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
-        PlayerNode->setPosition(irr::core::vector3df(0, 0, 0));
+        PlayerNode->setPosition(irr::core::vector3df(0, 0, -35));
 
         PlayerNode->setAnimationSpeed(24);
         PlayerNode->setFrameLoop(0, 13);
         PlayerNode->setCurrentFrame(7);
 
         auto camera = sceneManager->addCameraSceneNode(NULL, irr::core::vector3df(0, 10, -15));
-        sceneManager->addCameraSceneNodeFPS();
+        //sceneManager->addCameraSceneNodeFPS();
 
         auto collisionBox = sceneManager->addCubeSceneNode(1.0f, PlayerNode, -1, irr::core::vector3d<float>(0.0f, 5.0f, 0.0f), irr::core::vector3d<float>(0.0f, 0.0f, 0.0f), irr::core::vector3d<float>(2.5f, 10.0f, 2.0f));
         collisionBox->setVisible(false);
