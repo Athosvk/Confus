@@ -2,6 +2,7 @@
 #include <sstream>
 
 #include "Game.h"
+#include "EventManager.h"
 
 namespace Confus
 {
@@ -11,7 +12,9 @@ namespace Confus
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
         m_MoveableWall(m_Device, irr::core::vector3df(-30.0f, 0.0f, 0.0f),
-            irr::core::vector3df(-30.f, -200.f, 0.0f))
+            irr::core::vector3df(-30.f, -200.f, 0.0f)),
+        m_PlayerNode(m_Device)
+
     {
     }
     void Game::run()
@@ -21,6 +24,7 @@ namespace Confus
         auto camera = sceneManager->addCameraSceneNodeFPS();
         m_Device->getCursorControl()->setVisible(false);
         
+        m_Device->setEventReceiver(&m_EventManager);
         //Create listener.
         OpenALListener* listener = new OpenALListener();
         listener->init();
@@ -39,6 +43,14 @@ namespace Confus
 
     void Game::handleInput()
     {
+        if(m_EventManager.IsLeftMouseDown())
+        {
+            //LMB stuff
+        }
+        else if(m_EventManager.IsRightMouseDown())
+        {
+            //RMB stuff
+        }
     }
 
     void Game::update()

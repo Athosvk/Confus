@@ -5,6 +5,8 @@
 #include "MoveableWall.h"
 #include "Player.h"
 #include "Audio\PlayerAudioEmitter.h"
+#include "EventManager.h"
+
 namespace Confus
 {
     class Game
@@ -27,6 +29,9 @@ namespace Confus
         /// The MoveableWall as test object
         /// </summary>
         MoveableWall m_MoveableWall;
+       
+        EventManager m_EventManager;
+        Player m_PlayerNode;
         /// <summary>
         /// The Player to test with.
         /// </summary>
