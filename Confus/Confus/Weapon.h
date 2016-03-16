@@ -8,7 +8,11 @@ namespace Confus
     class Weapon
     {
     public:
+        /// <summary> The damage dealt by the weapon on hit </summary>
         unsigned Damage = 0;
+
+        /// <summary> The angle at which an attack is seen as a backstab</summary>
+        irr::f32 BackstabAngle = 45.0f;
     private:
         /// <summary> The collider instance used for collision callbacks </summary>
         std::unique_ptr<Collider> m_Collider = nullptr;
@@ -52,6 +56,12 @@ namespace Confus
     private:
         /// <summary> Damages the playe. </summary>
         /// <remarks> Triggered as callback on collision </remarks>
-        void damagePlayer() const;
+        void damagePlayer(irr::scene::ISceneNode* a_CollidedNode) const;
+        
+        /// <summary> Backstabs the player collided with </summary>
+        /// <remarks> Triggered if we are in the given angle behind the player </remarks>
+        void backstabPlayer() const;
+
+        float getAngle(irr::core::vector3df a_Vector1, irr::core::vector3df a_Vector2) const;
     };
 }
