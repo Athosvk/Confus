@@ -28,12 +28,10 @@ namespace Confus
             /// Finalizes an instance of the <see cref="PlayerAudioEmitter"/> class.
             /// </summary>
             ~PlayerAudioEmitter();
-
             /// <summary>
             /// Plays a random footstep sound.
             /// </summary>
             void playFootStepSound();
-            
             /// <summary>
             /// Updates the position of this instance.
             /// </summary>

@@ -3,7 +3,6 @@
 #include "Player.h"
 namespace Confus
 {
-    float distance = 0;
     Player::Player(irr::IrrlichtDevice* a_Device)
     {
         auto sceneManager = a_Device->getSceneManager();
@@ -36,8 +35,6 @@ namespace Confus
 
     void Player::update()
     {
-        distance += 0.001f;
-        PlayerNode->setPosition(irr::core::vector3df(0, 0, distance));
         m_FootstepSoundEmitter->updatePosition();
 
         int frameNumber = static_cast<int>(PlayerNode->getFrameNr());
