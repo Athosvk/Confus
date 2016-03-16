@@ -62,6 +62,10 @@ namespace Confus
         /// <remarks> Triggered if we are in the given angle behind the player </remarks>
         void backstabPlayer() const;
 
+        /// <summary> Gets the angle between the given vectors </summary>
+        /// <param name="a_Vector1">The first vector </param>
+        /// <param name="a_Vector2">The other vector to compare the angle with </param>
+        /// <returns> The angle </returns>
         float getAngle(irr::core::vector3df a_Vector1, irr::core::vector3df a_Vector2) const;
     };
 }
