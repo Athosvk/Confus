@@ -2,6 +2,8 @@
 #include <Irrlicht/irrlicht.h>
 
 #include "MoveableWall.h"
+#include "Player.h"
+#include "EventManager.h"
 
 namespace Confus
 {
@@ -25,6 +27,8 @@ namespace Confus
         /// The MoveableWall as test object
         /// </summary>
         MoveableWall m_MoveableWall;
+        EventManager m_EventManager;
+        Player m_PlayerNode;
         /// <summary>
         /// The delay between the last and future fixed update
         /// </summary>
