@@ -6,6 +6,8 @@
 namespace Confus
 {
     const irr::u32 Player::WeaponJointIndex = 14u;
+    const unsigned Player::LightAttackDamage = 10u;
+    const unsigned Player::HeavyAttackDamage = 30u;
 
     Player::Player(irr::IrrlichtDevice* a_Device)
         : m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f))
@@ -88,6 +90,7 @@ namespace Confus
     {
         PlayerNode->setFrameLoop(38, 41);
         PlayerNode->setCurrentFrame(38);
+        m_Weapon.Damage = LightAttackDamage;
         initializeAttack();
     }
 
@@ -95,6 +98,7 @@ namespace Confus
     {
         PlayerNode->setFrameLoop(60, 68);
         PlayerNode->setCurrentFrame(60);
+        m_Weapon.Damage = HeavyAttackDamage;
         initializeAttack();
     }
 

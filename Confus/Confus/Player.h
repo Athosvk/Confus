@@ -12,6 +12,9 @@ namespace Confus
     private:
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
+        static const unsigned LightAttackDamage;
+        static const unsigned HeavyAttackDamage;
+
     public:
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
         irr::scene::ICameraSceneNode* CameraNode;
