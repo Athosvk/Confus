@@ -1,6 +1,7 @@
 #include <IrrAssimp/IrrAssimp.h>
 
 #include "Player.h"
+#include "EventManager.h"
 
 namespace Confus
 {
@@ -50,11 +51,7 @@ namespace Confus
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
     }
 
-    void Player::fixedUpdate()
-    {
-    }
-
-    void Player::update()
+    void Player::handleInput(EventManager& a_EventManager)
     {
     }
 }

@@ -1,11 +1,12 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
 
-#include "EventManager.h"
 #include "Weapon.h"
 
 namespace Confus
 {
+    class EventManager;
+
     class Player
     {
     private:
@@ -18,9 +19,8 @@ namespace Confus
 
     public:
         Player(irr::IrrlichtDevice* a_Device);
-        void fixedUpdate();
-        void update();
 
+        void handleInput(EventManager& a_EventManager);
     private:
         irr::SKeyMap m_KeyMap[5];
     };
