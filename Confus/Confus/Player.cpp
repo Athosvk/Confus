@@ -21,8 +21,6 @@ namespace Confus
         PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
         PlayerNode->setPosition(irr::core::vector3df(0, -7.0f, -1.5f));
 
-        startWalking();
-
         m_KeyMap[1].Action = irr::EKA_MOVE_FORWARD;
         m_KeyMap[1].KeyCode = irr::KEY_KEY_W;
 
@@ -46,7 +44,10 @@ namespace Confus
         auto collisionBox = sceneManager->addCubeSceneNode(1.0f, PlayerNode, -1, irr::core::vector3d<float>(0.0f, 5.0f, 0.0f), irr::core::vector3d<float>(0.0f, 0.0f, 0.0f), irr::core::vector3d<float>(2.5f, 10.0f, 2.0f));
         collisionBox->setVisible(false);
 
+        startWalking();
+
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
+        m_Weapon.disableCollider();
     }
 
     void Player::handleInput(EventManager& a_EventManager)
@@ -81,6 +82,7 @@ namespace Confus
         PlayerNode->setAnimationEndCallback(this);
         PlayerNode->setAnimationSpeed(10);
         m_Attacking = true;
+        m_Weapon.enableCollider();
     }
 
     void Player::startHeavyAttack()
@@ -91,6 +93,7 @@ namespace Confus
         PlayerNode->setAnimationEndCallback(this);
         PlayerNode->setAnimationSpeed(10);
         m_Attacking = true;
+        m_Weapon.enableCollider();
     }
 
     void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node)
@@ -98,6 +101,7 @@ namespace Confus
         if(m_Attacking)
         {
             m_Attacking = false;
+            m_Weapon.disableCollider();
             startWalking();
         }
     }
