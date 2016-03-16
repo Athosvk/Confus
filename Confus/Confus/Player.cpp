@@ -83,6 +83,7 @@ namespace Confus
         PlayerNode->setAnimationSpeed(10);
         m_Attacking = true;
         m_Weapon.enableCollider();
+        m_Weapon.resetCollider();
     }
 
     void Player::startHeavyAttack()
@@ -94,6 +95,7 @@ namespace Confus
         PlayerNode->setAnimationSpeed(10);
         m_Attacking = true;
         m_Weapon.enableCollider();
+        m_Weapon.resetCollider();
     }
 
     void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node)
