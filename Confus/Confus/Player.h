@@ -16,9 +16,7 @@ namespace Confus
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
         irr::scene::ICameraSceneNode* CameraNode;
     private:
-        /// <summary>
-        /// The player's weapon
-        /// </summary>
+        /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
         /// <summary> Whether the player is currently attacking or not </summary>
         bool m_Attacking = false;
