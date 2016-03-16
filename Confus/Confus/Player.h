@@ -7,7 +7,7 @@ namespace Confus
 {
     class EventManager;
 
-    class Player
+    class Player : irr::scene::IAnimationEndCallBack
     {
     private:
         static const irr::u32 WeaponJointIndex;
@@ -22,6 +22,10 @@ namespace Confus
 
         void handleInput(EventManager& a_EventManager);
     private:
+        void startWalking();
+        void startAttack();
+        void startHeavyAttack();
+        virtual void OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node) override;
         irr::SKeyMap m_KeyMap[5];
     };
 }

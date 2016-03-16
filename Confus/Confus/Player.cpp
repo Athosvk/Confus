@@ -19,7 +19,7 @@ namespace Confus
         PlayerNode = sceneManager->addAnimatedMeshSceneNode(mesh);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
         PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
-        PlayerNode->setPosition(irr::core::vector3df(0, -7.0f, 0));
+        PlayerNode->setPosition(irr::core::vector3df(0, -7.0f, -1.5f));
 
         PlayerNode->setAnimationSpeed(24);
         PlayerNode->setFrameLoop(0, 13);
@@ -53,5 +53,21 @@ namespace Confus
 
     void Player::handleInput(EventManager& a_EventManager)
     {
+        if(a_EventManager.IsLeftMouseDown())
+        {
+            PlayerNode->setFrameLoop(60, 68);
+            PlayerNode->setCurrentFrame(60);
+            PlayerNode->setLoopMode(false);
+            PlayerNode->setAnimationEndCallback(this);
+        }
+    }
+
+    void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node)
+    {
+        PlayerNode->setAnimationEndCallback(nullptr);
+        PlayerNode->setLoopMode(true);
+        PlayerNode->setFrameLoop(0, 13);
+        PlayerNode->setCurrentFrame(7);
+        PlayerNode->setAnimationSpeed(24);
     }
 }
