@@ -51,13 +51,16 @@ namespace Confus
 
     void Player::handleInput(EventManager& a_EventManager)
     {
-        if(a_EventManager.IsRightMouseDown())
+        if(!m_Attacking)
         {
-            startHeavyAttack();
-        }
-        else if(a_EventManager.IsLeftMouseDown())
-        {
-            startAttack();
+            if(a_EventManager.IsRightMouseDown())
+            {
+                startHeavyAttack();
+            }
+            else if(a_EventManager.IsLeftMouseDown())
+            {
+                startAttack();
+            }
         }
     }
 
@@ -76,6 +79,7 @@ namespace Confus
         PlayerNode->setCurrentFrame(38);
         PlayerNode->setAnimationEndCallback(this);
         PlayerNode->setAnimationSpeed(10);
+        m_Attacking = true;
     }
 
     void Player::startHeavyAttack()
@@ -85,11 +89,13 @@ namespace Confus
         PlayerNode->setCurrentFrame(60);
         PlayerNode->setAnimationEndCallback(this);
         PlayerNode->setAnimationSpeed(10);
+        m_Attacking = true;
     }
 
     void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node)
     {
         PlayerNode->setAnimationEndCallback(nullptr);
+        m_Attacking = false;
         startWalking();
     }
 }

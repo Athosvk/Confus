@@ -16,6 +16,7 @@ namespace Confus
         irr::scene::ICameraSceneNode* CameraNode;
     private:
         Weapon m_Weapon;
+        bool m_Attacking = false;
 
     public:
         Player(irr::IrrlichtDevice* a_Device);
