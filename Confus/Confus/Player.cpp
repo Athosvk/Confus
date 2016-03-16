@@ -56,6 +56,10 @@ namespace Confus
         {
             startHeavyAttack();
         }
+        else if(a_EventManager.IsLeftMouseDown())
+        {
+            startAttack();
+        }
     }
 
     void Player::startWalking()
@@ -63,6 +67,14 @@ namespace Confus
         PlayerNode->setLoopMode(true);
         PlayerNode->setFrameLoop(0, 13);
         PlayerNode->setCurrentFrame(7);
+    }
+
+    void Player::startAttack()
+    {
+        PlayerNode->setLoopMode(false);
+        PlayerNode->setFrameLoop(38, 41);
+        PlayerNode->setCurrentFrame(38);
+        PlayerNode->setAnimationEndCallback(this);
     }
 
     void Player::startHeavyAttack()
