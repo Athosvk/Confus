@@ -53,7 +53,7 @@ namespace Confus
 
     void Player::handleInput(EventManager& a_EventManager)
     {
-        if(a_EventManager.IsLeftMouseDown())
+        if(a_EventManager.IsRightMouseDown())
         {
             PlayerNode->setFrameLoop(60, 68);
             PlayerNode->setCurrentFrame(60);
