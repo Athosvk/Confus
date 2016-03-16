@@ -8,12 +8,12 @@ namespace Confus
     class Weapon
     {
     private:
-        irr::scene::IAnimatedMeshSceneNode* m_MeshNode = nullptr;
         std::unique_ptr<Collider> m_Collider = nullptr;
         irr::scene::ITriangleSelector* m_TriangleSelector;
+        irr::scene::ISceneNode* m_Node;
 
     public:
-        Weapon(irr::scene::ISceneManager* a_Device);
+        Weapon(irr::scene::ISceneNode* a_ParentNode, irr::scene::ISceneManager* a_SceneManager);
         
         /// <summary>
         /// Enables the collider.of the weapon, making it possible to damage players
@@ -34,10 +34,5 @@ namespace Confus
         /// </summary>
         /// <remarks> Triggered as callback on collision </remarks>
         void damagePlayer() const;
-        /// <summary>
-        /// Loads the mesh.
-        /// </summary>
-        /// <param name="a_SceneManager">The a_ scene manager.</param>
-        void loadMesh(irr::scene::ISceneManager* a_SceneManager);
     };
 }
