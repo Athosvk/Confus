@@ -21,7 +21,6 @@ namespace Confus
         PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
         PlayerNode->setPosition(irr::core::vector3df(0, -7.0f, -1.5f));
 
-        PlayerNode->setAnimationSpeed(24);
         startWalking();
 
         m_KeyMap[1].Action = irr::EKA_MOVE_FORWARD;
@@ -67,6 +66,7 @@ namespace Confus
         PlayerNode->setLoopMode(true);
         PlayerNode->setFrameLoop(0, 13);
         PlayerNode->setCurrentFrame(7);
+        PlayerNode->setAnimationSpeed(24);
     }
 
     void Player::startAttack()
@@ -75,6 +75,7 @@ namespace Confus
         PlayerNode->setFrameLoop(38, 41);
         PlayerNode->setCurrentFrame(38);
         PlayerNode->setAnimationEndCallback(this);
+        PlayerNode->setAnimationSpeed(10);
     }
 
     void Player::startHeavyAttack()
@@ -83,6 +84,7 @@ namespace Confus
         PlayerNode->setFrameLoop(60, 68);
         PlayerNode->setCurrentFrame(60);
         PlayerNode->setAnimationEndCallback(this);
+        PlayerNode->setAnimationSpeed(10);
     }
 
     void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node)
