@@ -13,7 +13,8 @@ namespace Confus
         irr::scene::ISceneNode* m_Node;
 
     public:
-        Weapon(irr::scene::ISceneNode* a_ParentNode, irr::scene::ISceneManager* a_SceneManager);
+        Weapon(irr::scene::ISceneNode* a_ParentNode, irr::scene::ISceneManager* a_SceneManager,
+            irr::core::vector3df a_Dimensions);
         
         /// <summary>
         /// Enables the collider.of the weapon, making it possible to damage players
