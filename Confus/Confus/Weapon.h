@@ -7,7 +7,7 @@ namespace Confus
 {
     class Weapon
     {
-    private:        
+    private:
         /// <summary> The collider instance used for collision callbacks </summary>
         std::unique_ptr<Collider> m_Collider = nullptr;
 
