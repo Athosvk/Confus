@@ -4,7 +4,10 @@
 
 namespace Confus
 {
+    const irr::u32 Player::WeaponJointIndex = 14u;
+
     Player::Player(irr::IrrlichtDevice* a_Device)
+        : m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f))
     {
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
@@ -43,6 +46,8 @@ namespace Confus
 
         auto collisionBox = sceneManager->addCubeSceneNode(1.0f, PlayerNode, -1, irr::core::vector3d<float>(0.0f, 5.0f, 0.0f), irr::core::vector3d<float>(0.0f, 0.0f, 0.0f), irr::core::vector3d<float>(2.5f, 10.0f, 2.0f));
         collisionBox->setVisible(false);
+
+        m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
     }
 
     void Player::fixedUpdate()

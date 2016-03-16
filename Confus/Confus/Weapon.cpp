@@ -4,10 +4,9 @@
 
 namespace Confus
 {
-    Weapon::Weapon(irr::scene::ISceneNode* a_ParentNode, irr::scene::ISceneManager* a_SceneManager,
-        irr::core::vector3df a_Dimensions)
+    Weapon::Weapon(irr::scene::ISceneManager* a_SceneManager, irr::core::vector3df a_Dimensions)
     {
-        m_Node = a_SceneManager->addCubeSceneNode(1.0f, a_ParentNode, -1, irr::core::vector3df(), irr::core::vector3df(),
+        m_Node = a_SceneManager->addCubeSceneNode(1.0f, nullptr, -1, irr::core::vector3df(), irr::core::vector3df(),
             a_Dimensions);
         m_Node->setVisible(false);
 
@@ -38,5 +37,10 @@ namespace Confus
     void Weapon::disableCollider()
     {
         m_Node->setTriangleSelector(nullptr);
+    }
+
+    void Weapon::setParent(irr::scene::ISceneNode* a_Parent)
+    {
+        m_Node->setParent(a_Parent);
     }
 }
