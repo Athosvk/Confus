@@ -10,9 +10,7 @@ namespace Confus
     class Player : irr::scene::IAnimationEndCallBack
     {
     private:
-        /// <summary>
-        /// The weapon joint index
-        /// </summary>
+        /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
     public:
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
@@ -22,9 +20,7 @@ namespace Confus
         /// The player's weapon
         /// </summary>
         Weapon m_Weapon;
-        /// <summary>
-        /// Whether the player is currently attacking or not
-        /// </summary>
+        /// <summary> Whether the player is currently attacking or not </summary>
         bool m_Attacking = false;
 
     public:
@@ -35,18 +31,19 @@ namespace Confus
         void handleInput(EventManager& a_EventManager);
     private:
         /// <summary> Starts the walking animation, which is the default animation </summary>
-        void startWalking();
+        void startWalking() const;
+        
+        /// <summary> Initializes the shared attack variables </summary>
+        void initializeAttack();
 
-        /// <summary> Starts the regular attack </summary>
-        void startAttack();
+        /// <summary> Starts the light attack, dealing normal damage </summary>
+        void startLightAttack();
 
         /// <summary> Starts the heavy attack, which deals more damage </summary>
         void startHeavyAttack();
 
-        /// <summary>
-        /// Called when the animation finishes
+        /// <summary> Called when the animation finishes </summary>
         /// <remarks> Generally used for the attack animations only </remarks>
-        /// </summary>
         /// <param name="node">The node whoms animation finished</param>
         virtual void OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node) override;
         irr::SKeyMap m_KeyMap[5];

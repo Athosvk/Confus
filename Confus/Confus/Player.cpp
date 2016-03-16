@@ -60,12 +60,12 @@ namespace Confus
             }
             else if(a_EventManager.IsLeftMouseDown())
             {
-                startAttack();
+                startLightAttack();
             }
         }
     }
 
-    void Player::startWalking()
+    void Player::startWalking() const
     {
         PlayerNode->setAnimationEndCallback(nullptr);
         PlayerNode->setLoopMode(true);
@@ -74,11 +74,9 @@ namespace Confus
         PlayerNode->setAnimationSpeed(24);
     }
 
-    void Player::startAttack()
+    void Player::initializeAttack()
     {
         PlayerNode->setLoopMode(false);
-        PlayerNode->setFrameLoop(38, 41);
-        PlayerNode->setCurrentFrame(38);
         PlayerNode->setAnimationEndCallback(this);
         PlayerNode->setAnimationSpeed(10);
         m_Attacking = true;
@@ -86,16 +84,18 @@ namespace Confus
         m_Weapon.resetCollider();
     }
 
+    void Player::startLightAttack()
+    {
+        PlayerNode->setFrameLoop(38, 41);
+        PlayerNode->setCurrentFrame(38);
+        initializeAttack();
+    }
+
     void Player::startHeavyAttack()
     {
-        PlayerNode->setLoopMode(false);
         PlayerNode->setFrameLoop(60, 68);
         PlayerNode->setCurrentFrame(60);
-        PlayerNode->setAnimationEndCallback(this);
-        PlayerNode->setAnimationSpeed(10);
-        m_Attacking = true;
-        m_Weapon.enableCollider();
-        m_Weapon.resetCollider();
+        initializeAttack();
     }
 
     void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node)
