@@ -18,6 +18,7 @@ namespace Confus
         m_Collider->setCallback([this](irr::scene::ISceneNode* a_CollidedNode)
         {
             damagePlayer();
+            return true;
         });
     }
 
