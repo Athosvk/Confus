@@ -10,7 +10,7 @@ namespace Confus
     private:        
         /// <summary> The collider instance used for collision callbacks </summary>
         std::unique_ptr<Collider> m_Collider = nullptr;
-        
+
         /// <summary> The triangle selector used for collision </summary>
         /// <remarks> Stored so that we can temporarily disable it </remarks>
         irr::scene::ITriangleSelector* m_TriangleSelector;
@@ -24,7 +24,7 @@ namespace Confus
 
     public:
         Weapon(irr::scene::ISceneManager* a_SceneManager, irr::core::vector3df a_Dimensions);
-        
+
         /// <summary> Enables the collider.of the weapon, making it possible to damage players </summary>
         /// <remarks> 
         /// This is to allow the enclosing class to play attack animations, so that it
@@ -41,7 +41,7 @@ namespace Confus
         /// </summary>
         /// <remarks> Used so prevent from dealing damage twice during the same attack </remarks>
         void resetCollider();
-                
+
         /// <summary> Sets the parent transformation node </summary>
         /// <remarks> Used to bind the weapon to a joint, so that it can be used for animations </remarks>
         /// <param name="a_Parent">The new parent </param>
