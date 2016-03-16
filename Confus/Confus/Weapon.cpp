@@ -11,15 +11,19 @@ namespace Confus
         m_Node->setVisible(false);
 
         m_TriangleSelector = a_SceneManager->createTriangleSelectorFromBoundingBox(m_Node);
+        m_Node->setTriangleSelector(m_TriangleSelector);
 
-        const irr::core::aabbox3df& boundingBox = m_Node->getBoundingBox();
         auto responseAnimator = a_SceneManager->createCollisionResponseAnimator(m_TriangleSelector, m_Node,
             a_Dimensions, irr::core::vector3df());
         m_Collider = std::make_unique<Collider>(responseAnimator);
 
         m_Collider->setCallback([this](irr::scene::ISceneNode* a_CollidedNode)
         {
-            damagePlayer();
+            if(!m_Collided)
+            {
+                m_Collided = true;
+                damagePlayer();
+            }
             return true;
         });
     }
@@ -37,6 +41,11 @@ namespace Confus
     void Weapon::disableCollider()
     {
         m_Node->setTriangleSelector(nullptr);
+    }
+
+    void Weapon::resetCollider()
+    {
+        m_Collided = false;
     }
 
     void Weapon::setParent(irr::scene::ISceneNode* a_Parent)

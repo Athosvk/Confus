@@ -11,6 +11,7 @@ namespace Confus
         std::unique_ptr<Collider> m_Collider = nullptr;
         irr::scene::ITriangleSelector* m_TriangleSelector;
         irr::scene::ISceneNode* m_Node;
+        bool m_Collided;
 
     public:
         Weapon(irr::scene::ISceneManager* a_SceneManager, irr::core::vector3df a_Dimensions);
@@ -28,6 +29,7 @@ namespace Confus
         /// </summary>
         /// <remarks> <see cref="enableCollider"> </remarks>
         void disableCollider();
+        void resetCollider();
         void setParent(irr::scene::ISceneNode* a_Parent);
     private:
         /// <summary>
