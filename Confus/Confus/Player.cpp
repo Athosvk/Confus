@@ -66,6 +66,7 @@ namespace Confus
 
     void Player::startWalking()
     {
+        PlayerNode->setAnimationEndCallback(nullptr);
         PlayerNode->setLoopMode(true);
         PlayerNode->setFrameLoop(0, 13);
         PlayerNode->setCurrentFrame(7);
@@ -94,8 +95,10 @@ namespace Confus
 
     void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node)
     {
-        PlayerNode->setAnimationEndCallback(nullptr);
-        m_Attacking = false;
-        startWalking();
+        if(m_Attacking)
+        {
+            m_Attacking = false;
+            startWalking();
+        }
     }
 }
