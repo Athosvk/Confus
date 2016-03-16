@@ -22,8 +22,7 @@ namespace Confus
         PlayerNode->setPosition(irr::core::vector3df(0, -7.0f, -1.5f));
 
         PlayerNode->setAnimationSpeed(24);
-        PlayerNode->setFrameLoop(0, 13);
-        PlayerNode->setCurrentFrame(7);
+        startWalking();
 
         m_KeyMap[1].Action = irr::EKA_MOVE_FORWARD;
         m_KeyMap[1].KeyCode = irr::KEY_KEY_W;
@@ -55,19 +54,28 @@ namespace Confus
     {
         if(a_EventManager.IsRightMouseDown())
         {
-            PlayerNode->setFrameLoop(60, 68);
-            PlayerNode->setCurrentFrame(60);
-            PlayerNode->setLoopMode(false);
-            PlayerNode->setAnimationEndCallback(this);
+            startHeavyAttack();
         }
+    }
+
+    void Player::startWalking()
+    {
+        PlayerNode->setLoopMode(true);
+        PlayerNode->setFrameLoop(0, 13);
+        PlayerNode->setCurrentFrame(7);
+    }
+
+    void Player::startHeavyAttack()
+    {
+        PlayerNode->setLoopMode(false);
+        PlayerNode->setFrameLoop(60, 68);
+        PlayerNode->setCurrentFrame(60);
+        PlayerNode->setAnimationEndCallback(this);
     }
 
     void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node)
     {
         PlayerNode->setAnimationEndCallback(nullptr);
-        PlayerNode->setLoopMode(true);
-        PlayerNode->setFrameLoop(0, 13);
-        PlayerNode->setCurrentFrame(7);
-        PlayerNode->setAnimationSpeed(24);
+        startWalking();
     }
 }
