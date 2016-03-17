@@ -3,7 +3,7 @@
 
 #include "Game.h"
 #include "Player.h"
-#include "MazeGenerator.h"
+#include "EventManager.h"
 
 namespace Confus
 {
@@ -13,16 +13,17 @@ namespace Confus
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
         m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f))
+        m_PlayerNode(m_Device)
     {
     }
     void Game::run()
     {
         auto sceneManager = m_Device->getSceneManager();
         sceneManager->loadScene("Media/IrrlichtScenes/Bases.irr");
-        auto camera = sceneManager->addCameraSceneNodeFPS();
         m_Device->getCursorControl()->setVisible(false);
 
-        auto player = Player(m_Device);
+        m_Device->setEventReceiver(&m_EventManager);
+
         while(m_Device->run())
         {
             handleInput();
@@ -34,6 +35,7 @@ namespace Confus
 
     void Game::handleInput()
     {
+        m_PlayerNode.handleInput(m_EventManager);
     }
 
     void Game::update()

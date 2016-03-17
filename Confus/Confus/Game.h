@@ -2,6 +2,8 @@
 #include <Irrlicht/irrlicht.h>
 
 #include "MazeGenerator.h"
+#include "Player.h"
+#include "EventManager.h"
 
 namespace Confus
 {
@@ -26,6 +28,8 @@ namespace Confus
         /// MazeGenerator that hasa accesible maze
         /// </summary>
         MazeGenerator m_MazeGenerator;
+        EventManager m_EventManager;
+        Player m_PlayerNode;
         /// <summary>
         /// The delay between the last and future fixed update
         /// </summary>
