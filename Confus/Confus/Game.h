@@ -1,7 +1,7 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
 
-#include "MoveableWall.h"
+#include "MazeGenerator.h"
 #include "Player.h"
 #include "EventManager.h"
 
@@ -21,12 +21,13 @@ namespace Confus
 
         /// <summary>
         /// The instance of the IrrlichtDevice
+		/// Statics are avoided to make code clearer, hence this is not a static
         /// </summary>
         irr::IrrlichtDevice* m_Device;
         /// <summary>
-        /// The MoveableWall as test object
+        /// MazeGenerator that hasa accesible maze
         /// </summary>
-        MoveableWall m_MoveableWall;
+        MazeGenerator m_MazeGenerator;
         EventManager m_EventManager;
         Player m_PlayerNode;
         /// <summary>

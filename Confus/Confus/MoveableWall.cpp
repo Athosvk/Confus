@@ -8,7 +8,7 @@ namespace Confus
     MoveableWall::MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition,
         irr::core::vector3df a_HiddenPosition)
         : m_RegularPosition(a_RegularPosition),
-        m_HiddenPosition(a_HiddenPosition)
+        HiddenPosition(a_HiddenPosition)
     {
         loadMesh(a_Device->getSceneManager());
         loadTextures(a_Device->getVideoDriver());
@@ -18,29 +18,30 @@ namespace Confus
 
     MoveableWall::~MoveableWall()
     {
-        m_MeshNode->drop();
-        m_TriangleSelector->drop();
-        m_RegularTexture->drop();
-        m_TransparentTexture->drop();
+        //m_MeshNode->drop();
+        //m_TriangleSelector->drop();
+        //m_RegularTexture->drop();
+        //m_TransparentTexture->drop();
     }
 
     void MoveableWall::loadTextures(irr::video::IVideoDriver* a_VideoDriver)
     {
-        m_RegularTexture = a_VideoDriver->getTexture("Media/Moveable wall/Concrete.png");
-        m_TransparentTexture = a_VideoDriver->getTexture("Media/Moveable wall/Transparent.png");
+        m_RegularTexture = a_VideoDriver->getTexture("Media/Textures/Concrete.png");
+        m_TransparentTexture = a_VideoDriver->getTexture("Media/Textures/Transparent.png");
     }
 
     void MoveableWall::loadMesh(irr::scene::ISceneManager* a_SceneManager)
     {
         IrrAssimp importer(a_SceneManager);
-        m_MeshNode = a_SceneManager->addAnimatedMeshSceneNode(importer.getMesh("Media/Moveable wall/Moveable wall.3DS"));
+        m_MeshNode = a_SceneManager->addAnimatedMeshSceneNode(importer.getMesh("Media/Meshes/Moveable Wall.3DS"));
+		m_MeshNode->setScale(irr::core::vector3df(0.018f, 0.022f, 0.015f));
         m_MeshNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_TRANSPARENT_ALPHA_CHANNEL);
         m_TriangleSelector = a_SceneManager->createTriangleSelector(m_MeshNode);
     }
 
     void MoveableWall::hide()
     {
-        m_TargetPosition = m_HiddenPosition;
+        m_TargetPosition = HiddenPosition;
         m_Transitioning = true;
     }
 
@@ -61,8 +62,8 @@ namespace Confus
 
     void MoveableWall::updateTransparency()
     {
-        auto distance = (m_HiddenPosition - m_MeshNode->getPosition()).getLength();
-        auto deltaDistance = distance / (m_HiddenPosition - m_RegularPosition).getLength();
+        auto distance = (HiddenPosition - m_MeshNode->getPosition()).getLength();
+        auto deltaDistance = distance / (HiddenPosition - m_RegularPosition).getLength();
         if(deltaDistance >= SolifyPoint)
         {
             solidify();

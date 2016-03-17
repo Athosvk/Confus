@@ -19,6 +19,11 @@ namespace Confus
         /// <remarks> Measured as difference from the hidden position to the current position </remarks>
         /// </summary>
         float SolifyPoint = 0.2f;
+
+		/// <summary>
+		/// The position at which the wall is transparent and not visible within the maze
+		/// </summary>
+		irr::core::vector3d<float> HiddenPosition;
     private:        
         /// <summary>
         /// The scenenode to represent the wall in Irrlicht
@@ -28,10 +33,6 @@ namespace Confus
         /// The position at which the wall is solid and present in the maze
         /// </summary>
         irr::core::vector3d<float> m_RegularPosition;
-        /// <summary>
-        /// The position at which the wall is transparent and not visible within the maze
-        /// </summary>
-        irr::core::vector3d<float> m_HiddenPosition;
         /// <summary>
         /// The position to which the wall is currently transitioning
         /// <remarks> Usually equal to the current position of the wall if 
@@ -75,6 +76,8 @@ namespace Confus
         /// <summary>
         /// Starts the rising up transition, for moving into the maze
         /// </summary>
+		const irr::scene::IAnimatedMeshSceneNode* getMeshNode() const { return m_MeshNode; }
+		
         void rise();     
         /// <summary>
         /// The fixed update used to update the state of the wall
