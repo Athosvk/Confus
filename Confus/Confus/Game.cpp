@@ -14,7 +14,6 @@ namespace Confus
         m_MoveableWall(m_Device, irr::core::vector3df(-30.0f, 0.0f, 0.0f),
             irr::core::vector3df(-30.f, -200.f, 0.0f)),
         m_PlayerNode(m_Device)
-
     {
     }
     void Game::run()
@@ -25,13 +24,7 @@ namespace Confus
         m_Device->getCursorControl()->setVisible(false);
         
         m_Device->setEventReceiver(&m_EventManager);
-        //Create listener.
-        OpenALListener* listener = new OpenALListener();
-        listener->init();
-        listener->setPosition(camera->getAbsolutePosition());
-            
-        m_Player = new Player(m_Device);
-
+      
         while(m_Device->run())
         {
             handleInput();
@@ -59,7 +52,7 @@ namespace Confus
         m_CurrentTicks = m_Device->getTimer()->getTime();
         m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
 
-        m_Player->update();
+        m_PlayerNode.update();
     }
 
     void Game::processFixedUpdates()
