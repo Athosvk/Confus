@@ -162,10 +162,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="DFSBacktracking.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Flag.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Maze.cpp" />
+    <ClCompile Include="MazeGenerator.cpp" />
+    <ClCompile Include="MazeTile.cpp" />
     <ClCompile Include="MoveableWall.cpp" />
     <ClCompile Include="OpenAL\Framework\aldlist.cpp" />
     <ClCompile Include="OpenAL\Framework\CWaves.cpp" />
@@ -175,13 +179,18 @@
     <ClCompile Include="OpenAL\OpenALSource.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="StaticWall.cpp" />
+    <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collider.h" />
+    <ClInclude Include="DFSBacktracking.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Flag.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Maze.h" />
+    <ClInclude Include="MazeGenerator.h" />
+    <ClInclude Include="MazeTile.h" />
     <ClInclude Include="MoveableWall.h" />
     <ClInclude Include="OpenAL\Framework\aldlist.h" />
     <ClInclude Include="OpenAL\Framework\CWaves.h" />
@@ -191,6 +200,7 @@
     <ClInclude Include="OpenAL\OpenALSource.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="StaticWall.h" />
+    <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
