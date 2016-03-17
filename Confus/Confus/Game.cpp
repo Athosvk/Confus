@@ -2,7 +2,6 @@
 #include <sstream>
 
 #include "Game.h"
-#include "Player.h"
 #include "EventManager.h"
 
 namespace Confus
@@ -15,17 +14,17 @@ namespace Confus
         m_MoveableWall(m_Device, irr::core::vector3df(-30.0f, 0.0f, 0.0f),
             irr::core::vector3df(-30.f, -200.f, 0.0f)),
         m_PlayerNode(m_Device)
-
     {
     }
     void Game::run()
     {
         auto sceneManager = m_Device->getSceneManager();
         sceneManager->loadScene("Media/IrrlichtScenes/Bases.irr");
+        auto camera = sceneManager->addCameraSceneNodeFPS();
         m_Device->getCursorControl()->setVisible(false);
-
+        
         m_Device->setEventReceiver(&m_EventManager);
-
+      
         while(m_Device->run())
         {
             handleInput();
@@ -45,6 +44,8 @@ namespace Confus
         m_PreviousTicks = m_CurrentTicks;
         m_CurrentTicks = m_Device->getTimer()->getTime();
         m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
+
+        m_PlayerNode.update();
     }
 
     void Game::processFixedUpdates()

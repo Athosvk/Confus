@@ -46,6 +46,7 @@ namespace Confus
         auto collisionBox = sceneManager->addCubeSceneNode(1.0f, PlayerNode, -1, irr::core::vector3d<float>(0.0f, 5.0f, 0.0f), irr::core::vector3d<float>(0.0f, 0.0f, 0.0f), irr::core::vector3d<float>(2.5f, 10.0f, 2.0f));
         collisionBox->setVisible(false);
 
+        createAudioEmitter();
         startWalking();
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
@@ -110,5 +111,21 @@ namespace Confus
             m_Weapon.disableCollider();
             startWalking();
         }
+    }
+
+    void Player::update()
+    {
+        m_FootstepSoundEmitter->updatePosition();
+
+        int frameNumber = static_cast<int>(PlayerNode->getFrameNr());
+        if(frameNumber == 0 || frameNumber == 6)
+        {
+            m_FootstepSoundEmitter->playFootStepSound();
+        }
+    }
+
+    void Player::createAudioEmitter()
+    {
+        m_FootstepSoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
     }
 }

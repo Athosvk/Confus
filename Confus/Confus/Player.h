@@ -1,15 +1,23 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
 
+#include "Audio\PlayerAudioEmitter.h"
 #include "Weapon.h"
 
 namespace Confus
 {
+    namespace Audio {
+        class PlayerAudioEmitter;
+    }
     class EventManager;
 
     class Player : irr::scene::IAnimationEndCallBack
+    
     {
     private:
+        Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
+
+        void createAudioEmitter();
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
         static const unsigned LightAttackDamage;
@@ -26,6 +34,8 @@ namespace Confus
 
     public:
         Player(irr::IrrlichtDevice* a_Device);
+        void fixedUpdate();
+        void update();
 
         /// <summary> Handles the input based actions </summary>
         /// <param name="a_EventManager">The current event manager</param>
