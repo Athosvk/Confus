@@ -7,6 +7,7 @@ namespace Confus
         PlayerAudioEmitter::PlayerAudioEmitter(irr::scene::IAnimatedMeshSceneNode* a_AttachedPlayer) : m_AttachedPlayer(a_AttachedPlayer)
         {
             createAudioSources();
+            playAttackSound();
         }
 
         PlayerAudioEmitter::~PlayerAudioEmitter()
@@ -14,6 +15,12 @@ namespace Confus
             delete(m_AudioSourceFootstep1);
             delete(m_AudioSourceFootstep2);
             delete(m_AudioSourceFootstep3);
+            delete(m_AudioSourceGrunt1);
+            delete(m_AudioSourceGrunt2);
+            delete(m_AudioSourceSwordSwosh1);
+            delete(m_AudioSourceSwordSwosh2);
+            delete(m_AudioSourceSwordSwosh3);
+            delete(m_AudioSourceSwordSwosh4);
             delete(m_AttachedPlayer);
         }
 
@@ -33,6 +40,54 @@ namespace Confus
             }
         }
 
+        void PlayerAudioEmitter::playAttackSound()
+        {
+            playRandomGrunt();
+            playRandomSwordSwosh();
+        }
+
+        void PlayerAudioEmitter::playRandomGrunt()
+        {
+            std::srand(static_cast<int>(time(NULL)));
+            auto randomNumber = std::rand() % 2;
+
+            switch(randomNumber)
+            {
+            case 0:
+                m_AudioSourceGrunt1->play();
+                break;
+            case 1:
+                m_AudioSourceGrunt2->play();
+                break;
+            default:
+                break;
+            }
+        }
+
+        void PlayerAudioEmitter::playRandomSwordSwosh()
+        {
+            std::srand(static_cast<int>(time(NULL)));
+            auto randomNumber = std::rand() % 4;
+
+            switch(randomNumber)
+            {
+            case 0:
+                m_AudioSourceSwordSwosh1->play();
+                break;
+            case 1:
+                m_AudioSourceSwordSwosh2->play();
+                break;
+            case 2:
+                m_AudioSourceSwordSwosh3->play();
+                break;
+            case 3:
+                m_AudioSourceSwordSwosh4->play();
+                break;
+            default:
+                break;
+            }
+        }
+
         void PlayerAudioEmitter::updatePosition()
         {
             m_AudioSourceFootstep1->setPosition(m_AttachedPlayer->getAbsolutePosition());
@@ -45,6 +100,17 @@ namespace Confus
             m_AudioSourceFootstep1 = new OpenALSource("Footstep1_Concrete.wav");
             m_AudioSourceFootstep2 = new OpenALSource("Footstep2_Concrete.wav");
             m_AudioSourceFootstep3 = new OpenALSource("Footstep3_Concrete.wav");
+
+            m_AudioSourceGrunt1 = new OpenALSource("Grunt1.wav");
+            m_AudioSourceGrunt2 = new OpenALSource("Grunt2.wav");
+            m_AudioSourceGrunt1->setVolume(0.1f);
+            m_AudioSourceGrunt2->setVolume(0.1f);
+
+
+            m_AudioSourceSwordSwosh1 = new OpenALSource("Sword_swing_1.wav");
+            m_AudioSourceSwordSwosh2 = new OpenALSource("Sword_swing_2.wav");
+            m_AudioSourceSwordSwosh3 = new OpenALSource("Sword_swing_3.wav");
+            m_AudioSourceSwordSwosh4 = new OpenALSource("Sword_swing_4.wav");
         }
     }
 }
