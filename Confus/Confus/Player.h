@@ -3,13 +3,13 @@
 
 namespace Confus
 {
-    enum class TeamIdentifier;
-    enum class FlagEnum;
+    enum class ETeamIdentifier;
+    enum class EFlagEnum;
     class Player
     {
     public:
-        TeamIdentifier m_TeamIdentifier;
-        FlagEnum m_CarryingFlag;
+        ETeamIdentifier TeamIdentifier;
+        EFlagEnum CarryingFlag;
     public:
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
         Player(irr::IrrlichtDevice* a_Device);

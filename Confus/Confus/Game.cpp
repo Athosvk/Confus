@@ -19,13 +19,12 @@ namespace Confus
     void Game::run()
     {
         auto sceneManager = m_Device->getSceneManager();
-        sceneManager->loadScene("Media/IrrlichtScenes/Bases.irr");
-        auto camera = sceneManager->addCameraSceneNodeFPS();
+		sceneManager->loadScene("Media/IrrlichtScenes/Bases.irr");
         m_Device->getCursorControl()->setVisible(false);
 
         auto player = Player(m_Device);
-        auto greenFlag = Flag(m_Device, TeamIdentifier::TEAM_BLUE);
-        auto redFlag = Flag(m_Device, TeamIdentifier::TEAM_RED);
+        auto greenFlag = Flag(m_Device, ETeamIdentifier::TEAM_BLUE);
+        auto redFlag = Flag(m_Device, ETeamIdentifier::TEAM_RED);
 
         while(m_Device->run())
         {
