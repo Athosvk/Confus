@@ -69,7 +69,7 @@ namespace Confus
         auto triangleSelector = a_SceneManager->createTriangleSelectorFromBoundingBox(PlayerNode);
         CameraNode->setTriangleSelector(triangleSelector);
         CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level,
-            CameraNode, PlayerNode->getBoundingBox().getExtent() / 2));
+            CameraNode, PlayerNode->getBoundingBox().getExtent() / 10));
         triangleSelector->drop();
     }
 
