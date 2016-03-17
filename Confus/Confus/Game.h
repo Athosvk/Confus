@@ -46,6 +46,8 @@ namespace Confus
         /// </summary>
         irr::u32 m_CurrentTicks = 0;
 
+        irr::scene::ISceneNode* m_LevelRootNode;
+
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
@@ -61,6 +63,10 @@ namespace Confus
         /// </summary>
         void run();
     private:
+        /// <summary>
+        /// Processes the triangle selectors.
+        /// </summary>
+        void processTriangleSelectors();
         /// <summary>
         /// Processes the input data
         /// </summary>

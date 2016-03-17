@@ -21,7 +21,15 @@ namespace Confus
     void Game::run()
     {
         auto sceneManager = m_Device->getSceneManager();
-        sceneManager->loadScene("Media/IrrlichtScenes/Bases.irr");
+        m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
+        m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
+
+        sceneManager->loadScene("Media/IrrlichtScenes/Bases.irr", nullptr, m_LevelRootNode);
+        m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
+        m_LevelRootNode->setVisible(true);
+        processTriangleSelectors();
+
+        m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_Device->getCursorControl()->setVisible(false);
 
         m_Device->setEventReceiver(&m_EventManager);
@@ -33,6 +41,47 @@ namespace Confus
             processFixedUpdates();
             render();
         }
+    }
+
+    void Game::processTriangleSelectors()
+    {
+        auto sceneManager = m_Device->getSceneManager();
+        auto metatriangleSelector = sceneManager->createMetaTriangleSelector();
+        
+        irr::core::array<irr::scene::ISceneNode*> nodes;
+        sceneManager->getSceneNodesFromType(irr::scene::ESNT_ANY, nodes, m_LevelRootNode);
+        for(irr::u32 i = 0; i < nodes.size(); ++i)
+        {
+            irr::scene::ISceneNode* node = nodes[i];
+            irr::scene::ITriangleSelector* selector = nullptr;
+
+            switch(node->getType())
+            {
+            case irr::scene::ESNT_CUBE:
+            case irr::scene::ESNT_ANIMATED_MESH:
+                selector = m_Device->getSceneManager()->createTriangleSelectorFromBoundingBox(node);
+                break;
+            case irr::scene::ESNT_MESH:
+            case irr::scene::ESNT_SPHERE:
+                selector = sceneManager->createTriangleSelector(((irr::scene::IMeshSceneNode*)node)->getMesh(), node);
+                break;
+            case irr::scene::ESNT_TERRAIN:
+                selector = sceneManager->createTerrainTriangleSelector((irr::scene::ITerrainSceneNode*)node);
+                break;
+            case irr::scene::ESNT_OCTREE:
+                selector = sceneManager->createOctreeTriangleSelector(((irr::scene::IMeshSceneNode*)node)->getMesh(), node);
+                break;
+            default:
+                break;
+            }
+
+            if(selector)
+            {
+                metatriangleSelector->addTriangleSelector(selector);
+                selector->drop();
+            }
+        }
+        m_LevelRootNode->setTriangleSelector(metatriangleSelector);
     }
 
     void Game::handleInput()
