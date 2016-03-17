@@ -9,6 +9,7 @@ namespace Confus
 		irr::core::vector2df offset = irr::core::vector2df(30,-7);
 		for (int x = 0; x < MazeSizeX; x++)
 		{
+			srand( 19 + 20 + 21 + 22 + 23 + 24);
 			std::vector<MazeTile> tempVector;
 			MazeTiles.push_back(tempVector);
 			for (int y = 0; y < MazeSizeY-1; y++)
