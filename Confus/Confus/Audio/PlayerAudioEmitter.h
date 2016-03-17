@@ -21,6 +21,7 @@ namespace Confus
 
             OpenALSource* m_AudioSourceGrunt1;
             OpenALSource* m_AudioSourceGrunt2;
+            OpenALSource* m_AudioSourceGrunt3;
 
             OpenALSource* m_AudioSourceSwordSwosh1;
             OpenALSource* m_AudioSourceSwordSwosh2;
@@ -45,7 +46,8 @@ namespace Confus
             /// <summary>
             /// Plays a random attack sound.
             /// </summary>
-            void playAttackSound();            
+            /// <param name="a_HeavyAttack">Is it a heavy attack?</param>
+            void playAttackSound(bool a_HeavyAttack);
             /// <summary>
             /// Plays a random grunt.
             /// </summary>

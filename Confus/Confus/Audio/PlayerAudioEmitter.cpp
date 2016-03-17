@@ -7,7 +7,6 @@ namespace Confus
         PlayerAudioEmitter::PlayerAudioEmitter(irr::scene::IAnimatedMeshSceneNode* a_AttachedPlayer) : m_AttachedPlayer(a_AttachedPlayer)
         {
             createAudioSources();
-            playAttackSound();
         }
 
         PlayerAudioEmitter::~PlayerAudioEmitter()
@@ -40,9 +39,17 @@ namespace Confus
             }
         }
 
-        void PlayerAudioEmitter::playAttackSound()
+
+        void PlayerAudioEmitter::playAttackSound(bool a_HeavyAttack)
         {
-            playRandomGrunt();
+            if(!a_HeavyAttack) 
+            {
+                playRandomGrunt();
+            }
+            else
+            {
+                m_AudioSourceGrunt3->play();
+            }
             playRandomSwordSwosh();
         }
 
@@ -103,8 +110,10 @@ namespace Confus
 
             m_AudioSourceGrunt1 = new OpenALSource("Grunt1.wav");
             m_AudioSourceGrunt2 = new OpenALSource("Grunt2.wav");
+            m_AudioSourceGrunt3 = new OpenALSource("GruntHeavy.wav");
             m_AudioSourceGrunt1->setVolume(0.1f);
             m_AudioSourceGrunt2->setVolume(0.1f);
+            m_AudioSourceGrunt3->setVolume(0.1f);
 
 
             m_AudioSourceSwordSwosh1 = new OpenALSource("Sword_swing_1.wav");

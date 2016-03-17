@@ -15,7 +15,7 @@ namespace Confus
     
     {
     private:
-        Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
+        Audio::PlayerAudioEmitter* m_SoundEmitter;
 
         void createAudioEmitter();
         /// <summary> The weapon bone index of the animation for the weapon </summary>
