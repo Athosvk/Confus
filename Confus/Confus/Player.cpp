@@ -112,4 +112,20 @@ namespace Confus
             startWalking();
         }
     }
+
+    void Player::update()
+    {
+        m_FootstepSoundEmitter->updatePosition();
+
+        int frameNumber = static_cast<int>(PlayerNode->getFrameNr());
+        if(frameNumber == 0 || frameNumber == 6)
+        {
+            m_FootstepSoundEmitter->playFootStepSound();
+        }
+    }
+
+    void Player::createAudioEmitter()
+    {
+        m_FootstepSoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
+    }
 }
