@@ -36,14 +36,7 @@ namespace Confus
 
     void Game::handleInput()
     {
-        if(m_EventManager.IsLeftMouseDown())
-        {
-            //LMB stuff
-        }
-        else if(m_EventManager.IsRightMouseDown())
-        {
-            //RMB stuff
-        }
+        m_PlayerNode.handleInput(m_EventManager);
     }
 
     void Game::update()
