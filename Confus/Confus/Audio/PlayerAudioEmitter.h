@@ -31,7 +31,11 @@ namespace Confus
             /// <summary>
             /// Plays a random footstep sound.
             /// </summary>
-            void playFootStepSound();
+            void playFootStepSound();            
+            /// <summary>
+            /// Plays a random attack sound.
+            /// </summary>
+            void playAttackSound();
             /// <summary>
             /// Updates the position of this instance.
             /// </summary>
