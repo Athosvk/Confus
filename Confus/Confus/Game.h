@@ -1,8 +1,8 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
 
+#include "MazeGenerator.h"
 #include "OpenAL\OpenALListener.h"
-#include "MoveableWall.h"
 #include "Player.h"
 #include "Audio\PlayerAudioEmitter.h"
 #include "EventManager.h"
@@ -23,12 +23,13 @@ namespace Confus
 
         /// <summary>
         /// The instance of the IrrlichtDevice
+		/// Statics are avoided to make code clearer, hence this is not a static
         /// </summary>
         irr::IrrlichtDevice* m_Device;
         /// <summary>
-        /// The MoveableWall as test object
+        /// MazeGenerator that hasa accesible maze
         /// </summary>
-        MoveableWall m_MoveableWall;       
+        MazeGenerator m_MazeGenerator;
         /// <summary>
         /// The OpenAL listener that is attached to the camera.
         /// </summary>
@@ -55,6 +56,8 @@ namespace Confus
         /// </summary>
         irr::u32 m_CurrentTicks = 0;
 
+        irr::scene::ISceneNode* m_LevelRootNode;
+
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
@@ -70,6 +73,10 @@ namespace Confus
         /// </summary>
         void run();
     private:
+        /// <summary>
+        /// Processes the triangle selectors.
+        /// </summary>
+        void processTriangleSelectors();
         /// <summary>
         /// Processes the input data
         /// </summary>

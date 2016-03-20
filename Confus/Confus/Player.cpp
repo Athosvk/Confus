@@ -38,14 +38,10 @@ namespace Confus
         m_KeyMap[5].Action = irr::EKA_JUMP_UP;
         m_KeyMap[5].KeyCode = irr::KEY_SPACE;
 
-        CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.5f, -1, m_KeyMap, 5, true, 100.0f, false);
-        CameraNode->setPosition(irr::core::vector3df(0, 7.0f, 0));
+        CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, -1, m_KeyMap, 5, true, 100.0f, false);
+        CameraNode->setPosition(irr::core::vector3df(0.0f, 150.0f, -15.0f));
 
         PlayerNode->setParent(CameraNode);
-
-        auto collisionBox = sceneManager->addCubeSceneNode(1.0f, PlayerNode, -1, irr::core::vector3d<float>(0.0f, 5.0f, 0.0f), irr::core::vector3d<float>(0.0f, 0.0f, 0.0f), irr::core::vector3d<float>(2.5f, 10.0f, 2.0f));
-        collisionBox->setVisible(false);
-
         createAudioEmitter();
         startWalking();
 
@@ -66,6 +62,16 @@ namespace Confus
                 startLightAttack();
             }
         }
+    }
+
+    void Player::setLevelCollider(irr::scene::ISceneManager* a_SceneManager,
+        irr::scene::ITriangleSelector* a_Level)
+    {
+        auto triangleSelector = a_SceneManager->createTriangleSelectorFromBoundingBox(PlayerNode);
+        CameraNode->setTriangleSelector(triangleSelector);
+        CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level,
+            CameraNode, PlayerNode->getBoundingBox().getExtent() / 10));
+        triangleSelector->drop();
     }
 
     void Player::startWalking() const
@@ -97,7 +103,7 @@ namespace Confus
 
     void Player::startHeavyAttack()
     {
-        PlayerNode->setFrameLoop(60, 68);
+        PlayerNode->setFrameLoop(60, 66);
         PlayerNode->setCurrentFrame(60);
         m_Weapon.Damage = HeavyAttackDamage;
         initializeAttack();
