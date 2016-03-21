@@ -14,6 +14,7 @@ namespace Confus
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
         m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f)),
         m_PlayerNode(m_Device)
+
     {
     }
     void Game::run()
@@ -29,9 +30,9 @@ namespace Confus
 
         m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_Device->getCursorControl()->setVisible(false);
-
+        
         m_Device->setEventReceiver(&m_EventManager);
-
+      
         while(m_Device->run())
         {
             handleInput();
@@ -92,6 +93,8 @@ namespace Confus
         m_PreviousTicks = m_CurrentTicks;
         m_CurrentTicks = m_Device->getTimer()->getTime();
         m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
+
+        m_PlayerNode.update();
     }
 
     void Game::processFixedUpdates()

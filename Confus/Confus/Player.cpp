@@ -42,6 +42,7 @@ namespace Confus
         CameraNode->setPosition(irr::core::vector3df(0.0f, 150.0f, -15.0f));
 
         PlayerNode->setParent(CameraNode);
+        createAudioEmitter();
         startWalking();
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
@@ -116,5 +117,21 @@ namespace Confus
             m_Weapon.disableCollider();
             startWalking();
         }
+    }
+
+    void Player::update()
+    {
+        m_FootstepSoundEmitter->updatePosition();
+
+        int frameNumber = static_cast<int>(PlayerNode->getFrameNr());
+        if(frameNumber == 0 || frameNumber == 6)
+        {
+            m_FootstepSoundEmitter->playFootStepSound();
+        }
+    }
+
+    void Player::createAudioEmitter()
+    {
+        m_FootstepSoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
     }
 }
