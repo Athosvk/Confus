@@ -1,9 +1,8 @@
 #include <Irrlicht/irrlicht.h>
-#include <sstream>
 
 #include "Game.h"
 #include "Player.h"
-#include "EventManager.h"
+#include "Flag.h"
 
 namespace Confus
 {
@@ -12,8 +11,8 @@ namespace Confus
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
-        m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f)),
-        m_PlayerNode(m_Device)
+		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f)),
+		m_PlayerNode(m_Device)
 
     {
     }
@@ -31,7 +30,8 @@ namespace Confus
         m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_Device->getCursorControl()->setVisible(false);
         
-        m_Device->setEventReceiver(&m_EventManager);
+        auto greenFlag = Flag(m_Device, ETeamIdentifier::TEAM_BLUE);
+        auto redFlag = Flag(m_Device, ETeamIdentifier::TEAM_RED);
       
         while(m_Device->run())
         {
@@ -110,7 +110,7 @@ namespace Confus
 
     void Game::fixedUpdate()
     {
-		m_MazeGenerator.fixedUpdate();
+        m_MazeGenerator.fixedUpdate();
     }
 
     void Game::render()

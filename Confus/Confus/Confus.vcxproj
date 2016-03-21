@@ -165,6 +165,7 @@
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="DFSBacktracking.cpp" />
     <ClCompile Include="EventManager.cpp" />
+    <ClCompile Include="Flag.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Maze.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="DFSBacktracking.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="Flag.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="MazeGenerator.h" />

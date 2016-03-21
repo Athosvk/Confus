@@ -1,5 +1,5 @@
 #include <IrrAssimp/IrrAssimp.h>
-
+#include "Audio\PlayerAudioEmitter.h"
 #include "Player.h"
 #include "EventManager.h"
 
@@ -8,7 +8,6 @@ namespace Confus
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-
     Player::Player(irr::IrrlichtDevice* a_Device)
         : m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f))
     {
