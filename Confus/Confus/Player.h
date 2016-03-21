@@ -1,10 +1,8 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
-<<<<<<< HEAD
 
 #include "Health.h"
-=======
->>>>>>> refs/remotes/origin/develop
+
 #include "Weapon.h"
 
 namespace Confus {
@@ -32,12 +30,12 @@ namespace Confus {
     public:
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
         irr::scene::ICameraSceneNode* CameraNode;
-<<<<<<< HEAD
+
 		Health m_PlayerHealth;
-=======
+
 		EFlagEnum CarryingFlag;
 		ETeamIdentifier TeamIdentifier;
->>>>>>> refs/remotes/origin/develop
+
     private:
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
