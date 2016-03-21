@@ -97,6 +97,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -178,6 +179,7 @@
     <ClCompile Include="OpenAL\OpenALListener.cpp" />
     <ClCompile Include="OpenAL\OpenALSource.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Audio\PlayerAudioEmitter.cpp" />
     <ClCompile Include="StaticWall.cpp" />
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
@@ -199,6 +201,7 @@
     <ClInclude Include="OpenAL\OpenALListener.h" />
     <ClInclude Include="OpenAL\OpenALSource.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Audio\PlayerAudioEmitter.h" />
     <ClInclude Include="StaticWall.h" />
     <ClInclude Include="Weapon.h" />
   </ItemGroup>

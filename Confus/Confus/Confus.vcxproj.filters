@@ -54,6 +54,9 @@
     <ClCompile Include="Collider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Audio\PlayerAudioEmitter.cpp">
+    <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="DFSBacktracking.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
