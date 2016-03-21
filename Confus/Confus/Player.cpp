@@ -1,5 +1,5 @@
 #include <IrrAssimp/IrrAssimp.h>
-
+#include "Audio\PlayerAudioEmitter.h"
 #include "Player.h"
 #include "EventManager.h"
 

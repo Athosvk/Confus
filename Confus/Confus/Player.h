@@ -1,20 +1,21 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
-
-#include "Audio\PlayerAudioEmitter.h"
 #include "Weapon.h"
 
 namespace Confus {
+
+	namespace Audio {
+		class PlayerAudioEmitter;
+	}
+
     enum class EFlagEnum;
 	enum class ETeamIdentifier;
-        class PlayerAudioEmitter;
-    }
     class EventManager;
 
     class Player : irr::scene::IAnimationEndCallBack
-    
     {
-    private:
+    
+	private:
         Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
 
         void createAudioEmitter();
