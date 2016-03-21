@@ -20,6 +20,7 @@ namespace Confus {
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
         irr::scene::ICameraSceneNode* CameraNode;
 		EFlagEnum CarryingFlag;
+		ETeamIdentifier TeamIdentifier;
     private:
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
