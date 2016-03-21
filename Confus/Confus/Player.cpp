@@ -1,5 +1,5 @@
 #include <IrrAssimp/IrrAssimp.h>
-
+#include "Audio\PlayerAudioEmitter.h"
 #include "Player.h"
 #include "EventManager.h"
 
@@ -8,7 +8,6 @@ namespace Confus
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-
     Player::Player(irr::IrrlichtDevice* a_Device)
         : m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f))
     {
@@ -42,6 +41,7 @@ namespace Confus
         CameraNode->setPosition(irr::core::vector3df(0.0f, 150.0f, -15.0f));
 
         PlayerNode->setParent(CameraNode);
+        createAudioEmitter();
         startWalking();
 
 		m_PlayerHealth.setHealth(100);
@@ -118,5 +118,21 @@ namespace Confus
             m_Weapon.disableCollider();
             startWalking();
         }
+    }
+
+    void Player::update()
+    {
+        m_FootstepSoundEmitter->updatePosition();
+
+        int frameNumber = static_cast<int>(PlayerNode->getFrameNr());
+        if(frameNumber == 0 || frameNumber == 6)
+        {
+            m_FootstepSoundEmitter->playFootStepSound();
+        }
+    }
+
+    void Player::createAudioEmitter()
+    {
+        m_FootstepSoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
     }
 }

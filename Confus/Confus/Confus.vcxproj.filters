@@ -54,6 +54,9 @@
     <ClCompile Include="Collider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Audio\PlayerAudioEmitter.cpp">
+    <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="DFSBacktracking.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -69,7 +72,11 @@
     <ClCompile Include="Weapon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Health.cpp">
+=======
+    <ClCompile Include="Flag.cpp">
+>>>>>>> refs/remotes/origin/develop
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -116,6 +123,21 @@
     <ClInclude Include="Collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EventManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveableWall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticWall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="DFSBacktracking.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -131,7 +153,11 @@
     <ClInclude Include="Weapon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="Health.h">
+=======
+    <ClInclude Include="Flag.h">
+>>>>>>> refs/remotes/origin/develop
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

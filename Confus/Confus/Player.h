@@ -1,16 +1,29 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
+<<<<<<< HEAD
 
 #include "Health.h"
+=======
+>>>>>>> refs/remotes/origin/develop
 #include "Weapon.h"
 
-namespace Confus
-{
+namespace Confus {
+
+	namespace Audio {
+		class PlayerAudioEmitter;
+	}
+
+    enum class EFlagEnum;
+	enum class ETeamIdentifier;
     class EventManager;
 
     class Player : irr::scene::IAnimationEndCallBack
     {
-    private:
+    
+	private:
+        Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
+
+        void createAudioEmitter();
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
         static const unsigned LightAttackDamage;
@@ -19,15 +32,21 @@ namespace Confus
     public:
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
         irr::scene::ICameraSceneNode* CameraNode;
+<<<<<<< HEAD
 		Health m_PlayerHealth;
+=======
+		EFlagEnum CarryingFlag;
+		ETeamIdentifier TeamIdentifier;
+>>>>>>> refs/remotes/origin/develop
     private:
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
         /// <summary> Whether the player is currently attacking or not </summary>
         bool m_Attacking = false;
-
     public:
         Player(irr::IrrlichtDevice* a_Device);
+        void fixedUpdate();
+        void update();
 
         /// <summary> Handles the input based actions </summary>
         /// <param name="a_EventManager">The current event manager</param>
