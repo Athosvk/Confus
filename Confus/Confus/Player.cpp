@@ -44,6 +44,8 @@ namespace Confus
         PlayerNode->setParent(CameraNode);
         startWalking();
 
+		m_PlayerHealth.setHealth(100);
+
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
     }
