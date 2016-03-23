@@ -39,8 +39,10 @@ enum class EFlagEnum
 	/// Flag class with status and team id
 	class Flag 
     {
+    public:
+        irr::scene::IAnimatedMeshSceneNode* FlagNode;
     private:
-		irr::scene::IAnimatedMeshSceneNode* m_FlagNode;
+		
 		irr::core::vector3df* m_StartPosition;
 		irr::core::vector3df* m_StartRotation;
 		EFlagEnum* m_FlagStatus;
@@ -62,7 +64,8 @@ enum class EFlagEnum
         void setStartRotation(irr::core::vector3df a_Position);
 		void drop(Player* a_PlayerObject);
 		void returnToStartPos();
-		void score(Player* a_PlayerObject);;
+		void score(Player* a_PlayerObject);
+        void setCollisionTriangleSelector(irr::scene::IMetaTriangleSelector* a_MetaTriangleSelector);
 
     private:
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);

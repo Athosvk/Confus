@@ -43,6 +43,7 @@ namespace Confus {
         /// <param name="a_EventManager">The current event manager</param>
         void handleInput(EventManager& a_EventManager);
         void setLevelCollider(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_Level);
+        void setFlagCollider(irr::scene::ISceneManager* a_SceneManager, irr::scene::IMetaTriangleSelector* a_Flags);
     private:
         /// <summary> Starts the walking animation, which is the default animation </summary>
         void startWalking() const;

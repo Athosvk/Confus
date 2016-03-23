@@ -2,6 +2,7 @@
 #include "Audio\PlayerAudioEmitter.h"
 #include "Player.h"
 #include "EventManager.h"
+#include "Flag.h"
 
 namespace Confus
 {
@@ -38,7 +39,7 @@ namespace Confus
         m_KeyMap[5].KeyCode = irr::KEY_SPACE;
 
         CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, -1, m_KeyMap, 5, true, 100.0f, false);
-        CameraNode->setPosition(irr::core::vector3df(0.0f, 150.0f, -15.0f));
+        CameraNode->setPosition(irr::core::vector3df(2.5f, 150.0f, 5.0f));
 
         PlayerNode->setParent(CameraNode);
         createAudioEmitter();
@@ -71,6 +72,27 @@ namespace Confus
         CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level,
             CameraNode, PlayerNode->getBoundingBox().getExtent() / 10));
         triangleSelector->drop();
+    }
+
+    void Player::setFlagCollider(irr::scene::ISceneManager* a_SceneManager, irr::scene::IMetaTriangleSelector* a_Flags) {
+        auto anim = a_SceneManager->createCollisionResponseAnimator(a_Flags, PlayerNode);
+        Collider col(anim);
+        col.setCallback([this](irr::scene::ISceneNode* a_CollidedNode)
+        {
+            auto name = a_CollidedNode->getName();
+            //TODO Search correct flag and capture that flag
+            if(a_CollidedNode->getID() == static_cast<int>(ETeamIdentifier::TEAM_RED))
+            {
+                //TODO captureFlag(this);
+                return true;
+            }
+            else if(a_CollidedNode->getID() == static_cast<int>(ETeamIdentifier::TEAM_BLUE))
+            {
+                //TODO captureFlag(this);
+                return true;
+            }
+            return false;
+        });
     }
 
     void Player::startWalking() const

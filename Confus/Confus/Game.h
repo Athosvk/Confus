@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Audio\PlayerAudioEmitter.h"
 #include "EventManager.h"
+#include "Flag.h"
 
 namespace Confus
 {
@@ -40,8 +41,17 @@ namespace Confus
         /// </summary>
         Player m_PlayerNode;
         /// <summary>
+        /// The Blue Flag.
+        /// </summary>
+        Flag m_BlueFlag;
+        /// <summary>
+        /// The Red Flag.
+        /// </summary>
+        Flag m_RedFlag;
+        /// <summary>
         /// The delay between the last and future fixed update
         /// </summary>
+        irr::scene::IMetaTriangleSelector* m_FlagTriangleSelector;
         double m_FixedUpdateTimer = 0.0;
         /// <summary>
 		/// The time interval between the last update and the second-last

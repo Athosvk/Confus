@@ -11,9 +11,10 @@ namespace Confus
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
-		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f)),
-		m_PlayerNode(m_Device)
-
+        m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f)),
+        m_PlayerNode(m_Device),
+        m_BlueFlag(m_Device, ETeamIdentifier::TEAM_BLUE),
+        m_RedFlag(m_Device, ETeamIdentifier::TEAM_RED)
     {
     }
     void Game::run()
@@ -25,13 +26,15 @@ namespace Confus
         sceneManager->loadScene("Media/IrrlichtScenes/Bases.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
-        processTriangleSelectors();
 
-        m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-        m_Device->getCursorControl()->setVisible(false);
         
-        auto greenFlag = Flag(m_Device, ETeamIdentifier::TEAM_BLUE);
-        auto redFlag = Flag(m_Device, ETeamIdentifier::TEAM_RED);
+        processTriangleSelectors();
+        m_FlagTriangleSelector = sceneManager->createMetaTriangleSelector();
+        m_FlagTriangleSelector->addTriangleSelector(m_BlueFlag.FlagNode->getTriangleSelector());
+        m_FlagTriangleSelector->addTriangleSelector(m_RedFlag.FlagNode->getTriangleSelector());
+        m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+        m_PlayerNode.setFlagCollider(m_Device->getSceneManager(), m_FlagTriangleSelector);
+        m_Device->getCursorControl()->setVisible(false);
       
         while(m_Device->run())
         {
@@ -40,6 +43,8 @@ namespace Confus
             processFixedUpdates();
             render();
         }
+
+        m_FlagTriangleSelector->drop();
     }
 
     void Game::processTriangleSelectors()
