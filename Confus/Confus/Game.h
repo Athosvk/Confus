@@ -2,7 +2,9 @@
 #include <Irrlicht/irrlicht.h>
 
 #include "MazeGenerator.h"
+#include "OpenAL\OpenALListener.h"
 #include "Player.h"
+#include "Audio\PlayerAudioEmitter.h"
 #include "EventManager.h"
 
 namespace Confus
@@ -28,7 +30,14 @@ namespace Confus
         /// MazeGenerator that hasa accesible maze
         /// </summary>
         MazeGenerator m_MazeGenerator;
+        /// <summary>
+        /// The OpenAL listener that is attached to the camera.
+        /// </summary>
+        OpenALListener m_Listener;
         EventManager m_EventManager;
+        /// <summary>
+        /// The Player to test with.
+        /// </summary>
         Player m_PlayerNode;
         /// <summary>
         /// The delay between the last and future fixed update
@@ -47,6 +56,8 @@ namespace Confus
         /// </summary>
         irr::u32 m_CurrentTicks = 0;
 
+        irr::scene::ISceneNode* m_LevelRootNode;
+
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
@@ -62,6 +73,10 @@ namespace Confus
         /// </summary>
         void run();
     private:
+        /// <summary>
+        /// Processes the triangle selectors.
+        /// </summary>
+        void processTriangleSelectors();
         /// <summary>
         /// Processes the input data
         /// </summary>

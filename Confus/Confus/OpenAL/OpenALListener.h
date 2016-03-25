@@ -6,7 +6,11 @@
 
 namespace Confus {
 	class OpenALListener {
-	public:
+	public:        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OpenALListener"/> class.
+        /// </summary>
+        OpenALListener();
 		/// <summary> 
         /// Set the position of the sound listener.
 		/// </summary>

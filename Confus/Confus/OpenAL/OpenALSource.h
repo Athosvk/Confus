@@ -11,9 +11,9 @@ namespace Confus {
 	/// </summary>
 	class OpenALSource {
     private:
-        ALuint m_Buffer;
-        ALuint m_Source;
-        ALint m_PlayingState;
+        ALuint* m_Buffer;
+        ALuint* m_Source;
+        ALint* m_PlayingState;
         std::string m_WaveFileString;
 	private:
         /// <summary>
