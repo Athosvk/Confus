@@ -4,7 +4,7 @@ namespace Confus
 {
 
 	Maze::Maze(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_StartPosition)
-		:MazeSizeX(60), MazeSizeY(60)
+		:MazeSizeX(123), MazeSizeY(80)
 	{
 		irr::core::vector2df offset = irr::core::vector2df(30,-7);
 		for (int x = 0; x < MazeSizeX; x++)
@@ -14,7 +14,7 @@ namespace Confus
 			MazeTiles.push_back(tempVector);
 			for (int y = 0; y < MazeSizeY-1; y++)
 			{
-				MazeTile mazeTile(a_Device,irr::core::vector3df(static_cast<float>(-x + offset.X),0.0f, static_cast<float>(-y + offset.Y)), irr::core::vector3df(static_cast<float>(-x + offset.X),0.0f, static_cast<float>(-y + offset.Y)));
+				MazeTile mazeTile(a_Device,irr::core::vector3df(static_cast<float>(-x + offset.X),0.5f, static_cast<float>(-y + offset.Y)), irr::core::vector3df(static_cast<float>(-x + offset.X),0.5f, static_cast<float>(-y + offset.Y)));
 				const irr::scene::IAnimatedMeshSceneNode* wallMeshNode = mazeTile.Wall.getMeshNode();
 				irr::core::vector3df boundingBox = wallMeshNode->getBoundingBox().getExtent();
 				mazeTile.Wall.HiddenPosition = irr::core::vector3df(mazeTile.Wall.HiddenPosition.X, -boundingBox.Y * wallMeshNode->getScale().Y, mazeTile.Wall.HiddenPosition.Z);

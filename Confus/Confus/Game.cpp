@@ -58,6 +58,12 @@ namespace Confus
 
     void Game::fixedUpdate()
     {
+		static float timer = 0.0f;
+		timer += m_DeltaTime;
+		if (timer >= 9.0f)
+		{
+			timer = 0.0f;
+		}
 		m_MazeGenerator.fixedUpdate();
     }
 
