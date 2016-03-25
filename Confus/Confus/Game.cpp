@@ -59,7 +59,7 @@ namespace Confus
     void Game::fixedUpdate()
     {
 		static float timer = 0.0f;
-		timer += m_DeltaTime;
+		timer += static_cast<float>(m_DeltaTime);
 		if (timer >= 9.0f)
 		{
 			timer = 0.0f;
