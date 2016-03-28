@@ -34,7 +34,6 @@ namespace Confus
     {
         IrrAssimp importer(a_SceneManager);
         m_MeshNode = a_SceneManager->addAnimatedMeshSceneNode(a_SceneManager->getMesh("Media/Meshes/WallMeshSquare.irrmesh"));
-		//m_MeshNode->setScale(irr::core::vector3df(0.018f, 0.022f, 0.015f));
         m_TriangleSelector = a_SceneManager->createTriangleSelector(m_MeshNode);
     }
 
@@ -49,6 +48,7 @@ namespace Confus
     {
         m_TargetPosition = m_RegularPosition;
         m_Transitioning = true;
+		m_MeshNode->setVisible(true);
     }
 
     void MoveableWall::fixedUpdate()
@@ -105,10 +105,17 @@ namespace Confus
             auto velocity = ((m_TargetPosition - m_MeshNode->getPosition()) / distance) * clampedSpeed;
             m_MeshNode->setPosition(m_MeshNode->getPosition() + velocity);
         }
-        else
+        else if(Raised)
         {
             m_Transitioning = false;
 			m_MeshNode->setVisible(false);
+			Raised = false;
         }
+		else if (!Raised)
+		{
+			Raised = true;
+			m_Transitioning = false;
+			m_MeshNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_SOLID);
+		}
     }
 }

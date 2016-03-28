@@ -9,7 +9,8 @@ namespace Confus
     /// </summary>
     class MoveableWall
     {
-    public:        
+    public:
+		bool Raised = true;
         /// <summary>
         /// The, maximum, speed at which the wall transitions
         /// </summary>

@@ -14,7 +14,7 @@ namespace Confus
 	public:
 		MazeTile();
 		virtual void fixedUpdate();
-		MoveableWall* getWall();
+		virtual MoveableWall* getWall();
 		~MazeTile();
 	};
 }

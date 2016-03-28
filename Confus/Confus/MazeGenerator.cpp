@@ -22,15 +22,41 @@ namespace Confus
 	void MazeGenerator::refillMainMaze(int a_Seed)
 	{
 		generateMaze(ReplacementMaze.MazeTiles, a_Seed);
-		MainMaze = ReplacementMaze;
+		replaceMainMaze();
 		ReplacementMaze.resetMaze(irr::core::vector2df(30,-7),false);
+	}
+
+	void MazeGenerator::replaceMainMaze()
+	{
+		for (int x = 0; x < MainMaze.MazeSizeX; x++)
+		{
+			for (int y = 0; y < MainMaze.MazeSizeY - 1; y++)
+			{
+				if (ReplacementMaze.MazeTiles[x][y]->Raised)
+				{
+					if (!MainMaze.MazeTiles[x][y]->Raised)
+					{
+						MainMaze.MazeTiles[x][y]->Raised = true;
+						MainMaze.MazeTiles[x][y]->getWall()->rise();
+					}
+				}
+				else
+				{
+					if (MainMaze.MazeTiles[x][y]->Raised)
+					{
+						MainMaze.MazeTiles[x][y]->Raised = false;
+						MainMaze.MazeTiles[x][y]->getWall()->hide();
+					}
+				}
+			}
+		}
 	}
 
 	void MazeGenerator::generateMaze(std::vector<std::vector<std::shared_ptr<MazeTile>>> &  a_Maze, int a_Seed)
 	{
 		//setup globals & variables
 		srand(a_Seed);
-		MoveableWall* wall = 0;
+		MoveableWall* wall = nullptr;
 		std::shared_ptr<MazeTile> CurrentTile = a_Maze[0][0];
 
 		//Startcell must be set to visited, add to visitedcount

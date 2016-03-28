@@ -20,6 +20,7 @@ namespace Confus
 	private:
 		std::vector<std::shared_ptr<MazeTile>> getNeighbours(std::vector<std::vector<std::shared_ptr<MazeTile>>> & a_Maze, MazeTile& a_Tile);
 		void generateMaze(std::vector<std::vector<std::shared_ptr<MazeTile>>> &  a_Maze, int a_Seed);
+		void replaceMainMaze();
 	};
 }
 
