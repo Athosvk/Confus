@@ -72,11 +72,10 @@
     <ClCompile Include="Weapon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="Health.cpp">
-=======
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Flag.cpp">
->>>>>>> refs/remotes/origin/develop
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -153,11 +152,10 @@
     <ClInclude Include="Weapon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="Health.h">
-=======
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Flag.h">
->>>>>>> refs/remotes/origin/develop
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
