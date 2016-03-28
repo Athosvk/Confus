@@ -28,13 +28,12 @@ enum class EFlagEnum
 	/// Flag class with status and team id
 	class Flag 
     {
-    public:
-        irr::scene::IAnimatedMeshSceneNode* FlagNode;
     private:		
 		irr::core::vector3df* m_StartPosition;
 		irr::core::vector3df* m_StartRotation;
 		EFlagEnum* m_FlagStatus;
         ETeamIdentifier* m_TeamIdentifier;
+        irr::scene::IAnimatedMeshSceneNode* m_FlagNode;
     public: 
         /// <summary> Flag class constructor. </summary>
         /// <param name="a_SceneManager"> The game's scene manager. </param>

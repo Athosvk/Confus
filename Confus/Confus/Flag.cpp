@@ -21,22 +21,22 @@ namespace Confus {
         //Load model
         IrrAssimp irrAssimp(sceneManager);
         irr::scene::IAnimatedMesh* mesh = sceneManager->getMesh("Media/Meshes/Flag.3ds");
-        FlagNode = sceneManager->addAnimatedMeshSceneNode(mesh);
-        FlagNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
-        FlagNode->setScale({ 2, 2, 2 });
+        m_FlagNode = sceneManager->addAnimatedMeshSceneNode(mesh);
+        m_FlagNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
+        m_FlagNode->setScale({ 2, 2, 2 });
 
         //Set Color
 		setColor(videoDriver);
 
         //Add colission box and particle system
-        auto collisionBox = sceneManager->addCubeSceneNode(1.0f, FlagNode, 2, irr::core::vector3d<float>(1.f, 2.0f, 0.0f), irr::core::vector3d<float>(0.0f, 0.0f, 0.0f), irr::core::vector3d<float>(2.0f, 4.0f, 1.0f));
+        auto collisionBox = sceneManager->addCubeSceneNode(1.0f, m_FlagNode, 2, irr::core::vector3d<float>(1.f, 2.0f, 0.0f), irr::core::vector3d<float>(0.0f, 0.0f, 0.0f), irr::core::vector3d<float>(2.0f, 4.0f, 1.0f));
         collisionBox->setVisible(false);
         initParticleSystem(sceneManager);
 	}
 
     void Flag::setCollisionTriangleSelector(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_TriangleSelector) 
     {
-        auto anim = a_SceneManager->createCollisionResponseAnimator(a_TriangleSelector, FlagNode);
+        auto anim = a_SceneManager->createCollisionResponseAnimator(a_TriangleSelector, m_FlagNode);
         Collider col(anim);
         col.setCallback([this](irr::scene::ISceneNode* a_CollidedNode)
         {
@@ -55,13 +55,13 @@ namespace Confus {
 		switch (*m_TeamIdentifier)
 		{
 		case ETeamIdentifier::TeamBlue:
-			FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_BLUE.png"));
+            m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_BLUE.png"));
 			m_StartPosition->set({ -2.5f, 3.5f, -2.f });
 			m_StartRotation->set({ 0.f, 0.f, 0.f });
 			returnToStartPosition();
 			break;
 		case ETeamIdentifier::TeamRed:
-			FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_RED.png"));
+            m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_RED.png"));
 			m_StartPosition->set({ 3.5f, 3.5f, -72.f });
 			m_StartRotation->set({ 0.f, 180.f, 0.f });
             returnToStartPosition();
@@ -96,7 +96,7 @@ namespace Confus {
         particleSystem->setMaterialFlag(irr::video::EMF_LIGHTING, false);
         particleSystem->setMaterialFlag(irr::video::EMF_ZWRITE_ENABLE, false);
         particleSystem->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
-        particleSystem->setParent(FlagNode);
+        particleSystem->setParent(m_FlagNode);
         particleSystem->setPosition({ 1.0f, 0, 0 });
 
         //Drop systems after setting them
@@ -129,14 +129,14 @@ namespace Confus {
 		if (a_PlayerObject->TeamIdentifier != *m_TeamIdentifier) 
         {
 			//Capture Flag
-			FlagNode->setParent(a_PlayerObject->PlayerNode);
+            m_FlagNode->setParent(a_PlayerObject->PlayerNode);
 		}
 		else if (a_PlayerObject->TeamIdentifier == *m_TeamIdentifier) 
         {
 			//If flag has been dropped return flag to base
 			if (*m_FlagStatus == EFlagEnum::FlagDropped) 
             {
-				FlagNode->setParent(NULL);
+                m_FlagNode->setParent(NULL);
                 returnToStartPosition();
 			}
 			//If flag is at base and player is carrying a flag
@@ -173,8 +173,8 @@ namespace Confus {
     }
 
     void Flag::returnToStartPosition() {
-        FlagNode->setPosition(*m_StartPosition);
-        FlagNode->setRotation(*m_StartRotation);
+        m_FlagNode->setPosition(*m_StartPosition);
+        m_FlagNode->setRotation(*m_StartRotation);
 		*m_FlagStatus = EFlagEnum::FlagBase;
     }
 
@@ -182,6 +182,6 @@ namespace Confus {
 		delete(m_FlagStatus);
 		delete(m_StartPosition);
 		delete(m_StartRotation);
-		delete(FlagNode);
+		delete(m_FlagNode);
 	}
 }
