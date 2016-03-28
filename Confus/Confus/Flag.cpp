@@ -14,7 +14,7 @@ namespace Confus {
         auto videoDriver = a_Device->getVideoDriver();
 
 		//Flags
-		m_FlagStatus = new EFlagEnum(EFlagEnum::FLAG_BASE);
+		m_FlagStatus = new EFlagEnum(EFlagEnum::FlagBase);
 		m_StartPosition = new irr::core::vector3df();
 		m_StartRotation = new irr::core::vector3df();
 
@@ -22,10 +22,6 @@ namespace Confus {
         IrrAssimp irrAssimp(sceneManager);
         irr::scene::IAnimatedMesh* mesh = sceneManager->getMesh("Media/Meshes/Flag.3ds");
         FlagNode = sceneManager->addAnimatedMeshSceneNode(mesh);
-        if(a_TeamIdentifier == ETeamIdentifier::TEAM_BLUE)
-            FlagNode->setName("Red Flag");
-        else
-            FlagNode->setName("Blue Flag");
         FlagNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
         FlagNode->setScale({ 2, 2, 2 });
 
@@ -38,23 +34,37 @@ namespace Confus {
         initParticleSystem(sceneManager);
 	}
 
+    void Flag::setCollisionTriangleSelector(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_TriangleSelector) 
+    {
+        auto anim = a_SceneManager->createCollisionResponseAnimator(a_TriangleSelector, FlagNode);
+        Collider col(anim);
+        col.setCallback([this](irr::scene::ISceneNode* a_CollidedNode)
+        {
+            if(Player* player = dynamic_cast<Player*>(a_CollidedNode)) 
+            {
+                captureFlag(player);
+                return true;
+            }
+            return false;
+        });
+    }
 
 	//Set color & position based on color of flag
 	void Flag::setColor(irr::video::IVideoDriver* a_VideoDriver) 
 	{
 		switch (*m_TeamIdentifier)
 		{
-		case ETeamIdentifier::TEAM_BLUE:
+		case ETeamIdentifier::TeamBlue:
 			FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_BLUE.png"));
 			m_StartPosition->set({ -2.5f, 3.5f, -2.f });
 			m_StartRotation->set({ 0.f, 0.f, 0.f });
-			returnToStartPos();
+			returnToStartPosition();
 			break;
-		case ETeamIdentifier::TEAM_RED:
+		case ETeamIdentifier::TeamRed:
 			FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_RED.png"));
 			m_StartPosition->set({ 3.5f, 3.5f, -72.f });
 			m_StartRotation->set({ 0.f, 180.f, 0.f });
-			returnToStartPos();
+            returnToStartPosition();
 			break;
 		default:
 			m_StartPosition->set({ 0, 0, 0 });
@@ -63,7 +73,8 @@ namespace Confus {
 		}
 	}
 
-    void Flag::initParticleSystem(irr::scene::ISceneManager* a_SceneManager) {
+    void Flag::initParticleSystem(irr::scene::ISceneManager* a_SceneManager) 
+    {
         //Create Particle System
         irr::scene::IParticleSystemSceneNode* particleSystem = a_SceneManager->addParticleSystemSceneNode(false);
         auto colDark = getColor();
@@ -95,12 +106,13 @@ namespace Confus {
         particleAffector->drop();
     }
 
-    irr::video::SColor Flag::getColor() {
+    irr::video::SColor Flag::getColor() 
+    {
         switch(*m_TeamIdentifier)
         {
-        case ETeamIdentifier::TEAM_BLUE:
+        case ETeamIdentifier::TeamBlue:
             return { 255, 0, 0, 255 };
-        case ETeamIdentifier::TEAM_RED:
+        case ETeamIdentifier::TeamRed:
             return { 255, 255, 0, 0 };
         default:
             return { 255, 255, 255, 255 };
@@ -108,52 +120,62 @@ namespace Confus {
     }
 
 	//This class handles what to do on collision
-	void Flag::captureFlag(Player* a_PlayerObject) {
+	void Flag::captureFlag(Player* a_PlayerObject) 
+    {
 		//Somebody is already carrying the flag
-		if (*m_FlagStatus == EFlagEnum::FLAG_TAKEN)
+		if (*m_FlagStatus == EFlagEnum::FlagTaken)
 			return;
 
-		if (a_PlayerObject->TeamIdentifier != *m_TeamIdentifier) {
+		if (a_PlayerObject->TeamIdentifier != *m_TeamIdentifier) 
+        {
 			//Capture Flag
 			FlagNode->setParent(a_PlayerObject->PlayerNode);
 		}
-		else if (a_PlayerObject->TeamIdentifier == *m_TeamIdentifier) {
+		else if (a_PlayerObject->TeamIdentifier == *m_TeamIdentifier) 
+        {
 			//If flag has been dropped return flag to base
-			if (*m_FlagStatus == EFlagEnum::FLAG_DROPPED) {
+			if (*m_FlagStatus == EFlagEnum::FlagDropped) 
+            {
 				FlagNode->setParent(NULL);
-				returnToStartPos();
+                returnToStartPosition();
 			}
 			//If flag is at base and player is carrying a flag
-			else if (*m_FlagStatus == EFlagEnum::FLAG_BASE) {
-				if (a_PlayerObject->CarryingFlag == EFlagEnum::FLAG_TAKEN) {
+			else if (*m_FlagStatus == EFlagEnum::FlagBase) 
+            {
+				if (a_PlayerObject->CarryingFlag == EFlagEnum::FlagTaken) 
+                {
 					score(a_PlayerObject);
 				}
 			}
 		}
 	}
 
-	///Score points to team of a_PlayerObject
-	void Flag::score(Player* a_PlayerObject) {
+	//TODO Score points to team of a_PlayerObject
+	void Flag::score(Player* a_PlayerObject) 
+    {
 		
 	}
 
-	///Drop Flag at position of player
-	void Flag::drop(Player* a_PlayerObject) {
+	//TODO Drop Flag at position of player
+	void Flag::drop(Player* a_PlayerObject) 
+    {
 		
 	}
 
-    void Flag::setStartPosition(irr::core::vector3df a_Position) {
+    void Flag::setStartPosition(irr::core::vector3df a_Position) 
+    {
         m_StartPosition->set(a_Position);
     }
 
-    void Flag::setStartRotation(irr::core::vector3df a_Rotation) {
+    void Flag::setStartRotation(irr::core::vector3df a_Rotation) 
+    {
         m_StartRotation->set(a_Rotation);
     }
 
-    void Flag::returnToStartPos() {
+    void Flag::returnToStartPosition() {
         FlagNode->setPosition(*m_StartPosition);
         FlagNode->setRotation(*m_StartRotation);
-		*m_FlagStatus = EFlagEnum::FLAG_BASE;
+		*m_FlagStatus = EFlagEnum::FlagBase;
     }
 
 	Flag::~Flag() {

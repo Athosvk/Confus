@@ -74,27 +74,6 @@ namespace Confus
         triangleSelector->drop();
     }
 
-    void Player::setFlagCollider(irr::scene::ISceneManager* a_SceneManager, irr::scene::IMetaTriangleSelector* a_Flags) {
-        auto anim = a_SceneManager->createCollisionResponseAnimator(a_Flags, PlayerNode);
-        Collider col(anim);
-        col.setCallback([this](irr::scene::ISceneNode* a_CollidedNode)
-        {
-            auto name = a_CollidedNode->getName();
-            //TODO Search correct flag and capture that flag
-            if(a_CollidedNode->getID() == static_cast<int>(ETeamIdentifier::TEAM_RED))
-            {
-                //TODO captureFlag(this);
-                return true;
-            }
-            else if(a_CollidedNode->getID() == static_cast<int>(ETeamIdentifier::TEAM_BLUE))
-            {
-                //TODO captureFlag(this);
-                return true;
-            }
-            return false;
-        });
-    }
-
     void Player::startWalking() const
     {
         PlayerNode->setAnimationEndCallback(nullptr);
