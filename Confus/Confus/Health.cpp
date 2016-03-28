@@ -2,6 +2,11 @@
 
 namespace Confus
 {
+	Health::Health()
+	{
+		m_Health = 100;
+	}
+	
 	void Health::damage(int a_Damage)
 	{
 		if (a_Damage > 0)
@@ -12,18 +17,14 @@ namespace Confus
 				m_Health = 0;
 				m_DeathCallback(m_AttachedNode);
 			}
-			else if (m_Health <= 50)
-			{
-
-			}
 		}
 	}
 
-	void Health::heal(int a_Heal)
+	void Health::heal(int a_Health)
 	{
-		if (a_Heal > 0)
+		if (a_Health > 0)
 		{
-			m_Health += a_Heal;
+			m_Health += a_Health;
 			if (m_Health > 100)
 			{
 				m_Health = 100;
@@ -34,11 +35,6 @@ namespace Confus
 	void Health::setDeathCallback(const std::function<bool(irr::scene::ISceneNode* a_DamageNode)>& a_DeathCallback)
 	{
 		m_DeathCallback = a_DeathCallback;
-	}
-
-	void Health::setHealth(int a_Health)
-	{
-		m_Health = a_Health;
 	}
 
 	int Health::getHealth()
