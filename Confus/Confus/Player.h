@@ -28,7 +28,7 @@ namespace Confus {
     public:
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
         irr::scene::ICameraSceneNode* CameraNode;
-	Health m_PlayerHealth;
+	Health PlayerHealth;
 	EFlagEnum CarryingFlag;
 	ETeamIdentifier TeamIdentifier;
     private:
