@@ -105,15 +105,15 @@ namespace Confus
             auto velocity = ((m_TargetPosition - m_MeshNode->getPosition()) / distance) * clampedSpeed;
             m_MeshNode->setPosition(m_MeshNode->getPosition() + velocity);
         }
-        else if(Raised)
+        else if(m_raised)
         {
             m_Transitioning = false;
 			m_MeshNode->setVisible(false);
-			Raised = false;
+			m_raised = false;
         }
-		else if (!Raised)
+		else if (!m_raised)
 		{
-			Raised = true;
+			m_raised = true;
 			m_Transitioning = false;
 			m_MeshNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_SOLID);
 		}
