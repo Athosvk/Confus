@@ -51,7 +51,6 @@ namespace Confus
         /// <summary>
         /// The delay between the last and future fixed update
         /// </summary>
-        irr::scene::IMetaTriangleSelector* m_FlagTriangleSelector;
         double m_FixedUpdateTimer = 0.0;
         /// <summary>
 		/// The time interval between the last update and the second-last

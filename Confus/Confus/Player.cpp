@@ -23,23 +23,23 @@ namespace Confus
         PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
         PlayerNode->setPosition(irr::core::vector3df(0, -7.0f, -1.5f));
 
-        m_KeyMap[1].Action = irr::EKA_MOVE_FORWARD;
-        m_KeyMap[1].KeyCode = irr::KEY_KEY_W;
+        m_KeyMap[0].Action = irr::EKA_MOVE_FORWARD;
+        m_KeyMap[0].KeyCode = irr::KEY_KEY_W;
 
-        m_KeyMap[2].Action = irr::EKA_MOVE_BACKWARD;
-        m_KeyMap[2].KeyCode = irr::KEY_KEY_S;
+        m_KeyMap[1].Action = irr::EKA_MOVE_BACKWARD;
+        m_KeyMap[1].KeyCode = irr::KEY_KEY_S;
 
-        m_KeyMap[3].Action = irr::EKA_STRAFE_LEFT;
-        m_KeyMap[3].KeyCode = irr::KEY_KEY_A;
+        m_KeyMap[2].Action = irr::EKA_STRAFE_LEFT;
+        m_KeyMap[2].KeyCode = irr::KEY_KEY_A;
 
-        m_KeyMap[4].Action = irr::EKA_STRAFE_RIGHT;
-        m_KeyMap[4].KeyCode = irr::KEY_KEY_D;
+        m_KeyMap[3].Action = irr::EKA_STRAFE_RIGHT;
+        m_KeyMap[3].KeyCode = irr::KEY_KEY_D;
 
-        m_KeyMap[5].Action = irr::EKA_JUMP_UP;
-        m_KeyMap[5].KeyCode = irr::KEY_SPACE;
+        m_KeyMap[4].Action = irr::EKA_JUMP_UP;
+        m_KeyMap[4].KeyCode = irr::KEY_SPACE;
 
-        CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, -1, m_KeyMap, 5, true, 100.0f, false);
-        CameraNode->setPosition(irr::core::vector3df(2.5f, 150.0f, 5.0f));
+        CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, -1, m_KeyMap, 5, true, 0.15f, false);
+        CameraNode->setPosition(irr::core::vector3df(2.5f, 10.0f, -15.0f));
 
         PlayerNode->setParent(CameraNode);
         createAudioEmitter();
@@ -67,11 +67,8 @@ namespace Confus
     void Player::setLevelCollider(irr::scene::ISceneManager* a_SceneManager,
         irr::scene::ITriangleSelector* a_Level)
     {
-        auto triangleSelector = a_SceneManager->createTriangleSelectorFromBoundingBox(PlayerNode);
-        CameraNode->setTriangleSelector(triangleSelector);
-        CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level,
-            CameraNode, PlayerNode->getBoundingBox().getExtent() / 10));
-        triangleSelector->drop();
+       CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level,
+           CameraNode, PlayerNode->getBoundingBox().getExtent() / 10, {0, -1, 0}));
     }
 
     void Player::startWalking() const

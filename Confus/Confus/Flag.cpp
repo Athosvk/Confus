@@ -29,16 +29,17 @@ namespace Confus {
 		setColor(videoDriver);
 
         //Add colission box and particle system
-        auto collisionBox = sceneManager->addCubeSceneNode(1.0f, m_FlagNode, 2, irr::core::vector3d<float>(1.f, 2.0f, 0.0f), irr::core::vector3d<float>(0.0f, 0.0f, 0.0f), irr::core::vector3d<float>(2.0f, 4.0f, 1.0f));
-        collisionBox->setVisible(false);
         initParticleSystem(sceneManager);
 	}
 
+   
+
     void Flag::setCollisionTriangleSelector(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_TriangleSelector) 
     {
-        auto anim = a_SceneManager->createCollisionResponseAnimator(a_TriangleSelector, m_FlagNode);
-        Collider col(anim);
-        col.setCallback([this](irr::scene::ISceneNode* a_CollidedNode)
+        m_Animator = a_SceneManager->createCollisionResponseAnimator(a_TriangleSelector, m_FlagNode);
+
+        Collider collisionCallback(m_Animator);
+        collisionCallback.setCallback([this](irr::scene::ISceneNode* a_CollidedNode)
         {
             if(Player* player = dynamic_cast<Player*>(a_CollidedNode)) 
             {
@@ -47,6 +48,8 @@ namespace Confus {
             }
             return false;
         });
+        m_Animator->setCollisionCallback(&collisionCallback);
+        m_FlagNode->addAnimator(m_Animator);
     }
 
 	//Set color & position based on color of flag
@@ -56,7 +59,7 @@ namespace Confus {
 		{
 		case ETeamIdentifier::TeamBlue:
             m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_BLUE.png"));
-			m_StartPosition->set({ -2.5f, 3.5f, -2.f });
+			m_StartPosition->set({ 0, 0, -20 });
 			m_StartRotation->set({ 0.f, 0.f, 0.f });
 			returnToStartPosition();
 			break;
@@ -153,7 +156,6 @@ namespace Confus {
 	//TODO Score points to team of a_PlayerObject
 	void Flag::score(Player* a_PlayerObject) 
     {
-		
 	}
 
 	//TODO Drop Flag at position of player
@@ -183,5 +185,6 @@ namespace Confus {
 		delete(m_StartPosition);
 		delete(m_StartRotation);
 		delete(m_FlagNode);
+        delete(m_Animator);
 	}
 }

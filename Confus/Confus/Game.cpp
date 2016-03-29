@@ -21,18 +21,17 @@ namespace Confus
     {
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
-        m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
 
+        m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         sceneManager->loadScene("Media/IrrlichtScenes/Bases.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
-
         
         processTriangleSelectors();
-        m_FlagTriangleSelector = sceneManager->createMetaTriangleSelector();
         m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-        m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-        m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+        m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_PlayerNode.PlayerNode->getTriangleSelector());
+        m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_PlayerNode.PlayerNode->getTriangleSelector());
+
         m_Device->getCursorControl()->setVisible(false);
       
         while(m_Device->run())
@@ -42,8 +41,6 @@ namespace Confus
             processFixedUpdates();
             render();
         }
-
-        m_FlagTriangleSelector->drop();
     }
 
     void Game::processTriangleSelectors()
@@ -52,7 +49,7 @@ namespace Confus
         auto metatriangleSelector = sceneManager->createMetaTriangleSelector();
         
         irr::core::array<irr::scene::ISceneNode*> nodes;
-        sceneManager->getSceneNodesFromType(irr::scene::ESNT_ANY, nodes, m_LevelRootNode);
+        sceneManager->getSceneNodesFromType(irr::scene::ESNT_ANY, nodes);
         for(irr::u32 i = 0; i < nodes.size(); ++i)
         {
             irr::scene::ISceneNode* node = nodes[i];

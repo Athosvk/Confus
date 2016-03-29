@@ -34,6 +34,7 @@ enum class EFlagEnum
 		EFlagEnum* m_FlagStatus;
         ETeamIdentifier* m_TeamIdentifier;
         irr::scene::IAnimatedMeshSceneNode* m_FlagNode;
+        irr::scene::ISceneNodeAnimatorCollisionResponse* m_Animator;
     public: 
         /// <summary> Flag class constructor. </summary>
         /// <param name="a_SceneManager"> The game's scene manager. </param>
