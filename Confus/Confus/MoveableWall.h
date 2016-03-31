@@ -66,7 +66,7 @@ namespace Confus
 		/// <summary>
 		/// If the wall is raised or lowered
 		/// </summary>
-		bool m_raised = true;
+		bool m_Raised = true;
 
     public:        
         /// <summary>
