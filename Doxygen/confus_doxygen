@@ -466,16 +466,19 @@ EXTRACT_ANON_NSPACES   = NO
 # members will be included in the various overviews, but no documentation
 # section is generated. This option has no effect if EXTRACT_ALL is enabled.
 # The default value is: NO.
+# Non-default, motivation: Preferably, all members are documented, but to avoid any kind of undocumented, external source code that was used,
+# we hide these.
 
-HIDE_UNDOC_MEMBERS     = NO
+HIDE_UNDOC_MEMBERS     = YES
 
 # If the HIDE_UNDOC_CLASSES tag is set to YES, doxygen will hide all
 # undocumented classes that are normally visible in the class hierarchy. If set
 # to NO, these classes will be included in the various overviews. This option
 # has no effect if EXTRACT_ALL is enabled.
 # The default value is: NO.
+# Non-default, motivation: see 'HIDE_UNDOC_MEMBERS'
 
-HIDE_UNDOC_CLASSES     = NO
+HIDE_UNDOC_CLASSES     = YES
 
 # If the HIDE_FRIEND_COMPOUNDS tag is set to YES, doxygen will hide all friend
 # (class|struct|union) declarations. If set to NO, these declarations will be
@@ -720,8 +723,11 @@ WARNINGS               = YES
 # warnings for undocumented members. If EXTRACT_ALL is set to YES then this flag
 # will automatically be disabled.
 # The default value is: YES.
+# Non-default, motivation: see 'HIDE_UNDOC_MEMBERS'. In short, some files are external and thus, undocumented.
+# While we do try to prevent this, we do not want to generate warnings for such files in general and thus
+# assume documentation of our own code.
 
-WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_UNDOCUMENTED   = NO
 
 # If the WARN_IF_DOC_ERROR tag is set to YES, doxygen will generate warnings for
 # potential errors in the documentation, such as not documenting some parameters
