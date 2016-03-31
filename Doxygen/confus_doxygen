@@ -31,6 +31,7 @@ DOXYFILE_ENCODING      = UTF-8
 # project for which the documentation is generated. This name is used in the
 # title of most generated pages and in a few other places.
 # The default value is: My Project.
+# Non-default
 
 PROJECT_NAME           = "Confus"
 
@@ -435,8 +436,10 @@ EXTRACT_PACKAGE        = NO
 # If the EXTRACT_STATIC tag is set to YES, all static members of a file will be
 # included in the documentation.
 # The default value is: NO.
+# Non-default, motivation: Static members are just as important as any variables,
+# so there is no reason to exclude them from the generated HTML
 
-EXTRACT_STATIC         = NO
+EXTRACT_STATIC         = YES
 
 # If the EXTRACT_LOCAL_CLASSES tag is set to YES, classes (and structs) defined
 # locally in source files will be included in the documentation. If set to NO,
@@ -782,6 +785,7 @@ WARN_LOGFILE           = "log.txt"
 # directories like /usr/src/myproject. Separate the files or directories with
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
+# Non-default
 
 INPUT                  = ../Confus/
 
@@ -807,12 +811,16 @@ INPUT_ENCODING         = UTF-8
 # *.hh, *.hxx, *.hpp, *.h++, *.cs, *.d, *.php, *.php4, *.php5, *.phtml, *.inc,
 # *.m, *.markdown, *.md, *.mm, *.dox, *.py, *.pyw, *.f90, *.f, *.for, *.tcl,
 # *.vhd, *.vhdl, *.ucf, *.qsf, *.as and *.js.
+# Non-default
 
 FILE_PATTERNS          = *.h
 
 # The RECURSIVE tag can be used to specify whether or not subdirectories should
 # be searched for input files as well.
 # The default value is: NO.
+# Non-default, motivation: Some of our code is split up in directories, as
+# per the coding guidelines as well. Doxygen needs to search for these files
+# as well
 
 RECURSIVE              = YES
 
