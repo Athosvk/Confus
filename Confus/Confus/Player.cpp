@@ -18,10 +18,11 @@ namespace Confus
         IrrAssimp irrAssimp(sceneManager);
         irr::scene::IAnimatedMesh* mesh = sceneManager->getMesh("Media/ninja.b3d");
 
-        PlayerNode = sceneManager->addAnimatedMeshSceneNode(mesh);
+        PlayerNode = sceneManager->addAnimatedMeshSceneNode(mesh, 0, 1);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
         PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
         PlayerNode->setPosition(irr::core::vector3df(0, -7.0f, -1.5f));
+        PlayerNode->setName({"Player"});
 
         m_KeyMap[0].Action = irr::EKA_MOVE_FORWARD;
         m_KeyMap[0].KeyCode = irr::KEY_KEY_W;
@@ -38,9 +39,9 @@ namespace Confus
         m_KeyMap[4].Action = irr::EKA_JUMP_UP;
         m_KeyMap[4].KeyCode = irr::KEY_SPACE;
 
-        CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, -1, m_KeyMap, 5, true, 0.15f, false);
-        CameraNode->setPosition(irr::core::vector3df(2.5f, 10.0f, -15.0f));
-
+        CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.15f, false);
+        CameraNode->setPosition(irr::core::vector3df(2.5f, 5.f, -30.0f));
+        CameraNode->setName({ "Camera" });
         PlayerNode->setParent(CameraNode);
         createAudioEmitter();
         startWalking();
@@ -67,8 +68,8 @@ namespace Confus
     void Player::setLevelCollider(irr::scene::ISceneManager* a_SceneManager,
         irr::scene::ITriangleSelector* a_Level)
     {
-       CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level,
-           CameraNode, PlayerNode->getBoundingBox().getExtent() / 10, {0, -1, 0}));
+        CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level,
+            CameraNode, PlayerNode->getBoundingBox().getExtent() / 10, {0, -1, 0}));
     }
 
     void Player::startWalking() const

@@ -16,9 +16,15 @@ namespace Confus
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed)
     {
+        m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
+        m_Device->getSceneManager()->drawAll();
+        m_Device->getGUIEnvironment()->drawAll();
+        m_Device->getVideoDriver()->endScene();
     }
     void Game::run()
     {
+
+
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
@@ -28,9 +34,10 @@ namespace Confus
         m_LevelRootNode->setVisible(true);
         
         processTriangleSelectors();
+
+        m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+        m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-        m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_PlayerNode.PlayerNode->getTriangleSelector());
-        m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_PlayerNode.PlayerNode->getTriangleSelector());
 
         m_Device->getCursorControl()->setVisible(false);
       
@@ -62,6 +69,8 @@ namespace Confus
                 selector = m_Device->getSceneManager()->createTriangleSelectorFromBoundingBox(node);
                 break;
             case irr::scene::ESNT_MESH:
+                selector = m_Device->getSceneManager()->createTriangleSelectorFromBoundingBox(node);
+                break;
             case irr::scene::ESNT_SPHERE:
                 selector = sceneManager->createTriangleSelector(((irr::scene::IMeshSceneNode*)node)->getMesh(), node);
                 break;

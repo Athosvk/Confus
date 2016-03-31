@@ -3,6 +3,7 @@
 namespace Confus 
 {
 class Player;
+class Collider;
 // Team Identifier
 /// <summary>
 /// The Team's Identifier. A player has a team, flag has a team, ui has a team, etc.
@@ -28,13 +29,17 @@ enum class EFlagEnum
 	/// Flag class with status and team id
 	class Flag 
     {
+    public: 
+        irr::ILogger* Logger;
+        int* count;
     private:		
 		irr::core::vector3df* m_StartPosition;
 		irr::core::vector3df* m_StartRotation;
 		EFlagEnum* m_FlagStatus;
         ETeamIdentifier* m_TeamIdentifier;
-        irr::scene::IAnimatedMeshSceneNode* m_FlagNode;
-        irr::scene::ISceneNodeAnimatorCollisionResponse* m_Animator;
+        irr::scene::IMeshSceneNode* m_FlagNode;
+        Collider* m_Collider;
+
     public: 
         /// <summary> Flag class constructor. </summary>
         /// <param name="a_SceneManager"> The game's scene manager. </param>

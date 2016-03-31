@@ -1,5 +1,7 @@
 #include <irrlicht/irrlicht.h>
 #include <IrrAssimp/IrrAssimp.h>
+//TODO remove string namespace
+#include <string>
 
 #include "Flag.h"
 #include "Player.h"
@@ -21,7 +23,7 @@ namespace Confus {
         //Load model
         IrrAssimp irrAssimp(sceneManager);
         irr::scene::IAnimatedMesh* mesh = sceneManager->getMesh("Media/Meshes/Flag.3ds");
-        m_FlagNode = sceneManager->addAnimatedMeshSceneNode(mesh);
+        m_FlagNode = sceneManager->addMeshSceneNode(mesh, 0, 2);
         m_FlagNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
         m_FlagNode->setScale({ 2, 2, 2 });
 
@@ -30,26 +32,35 @@ namespace Confus {
 
         //Add colission box and particle system
         initParticleSystem(sceneManager);
+        
+        Logger = a_Device->getLogger();
 	}
-
-   
 
     void Flag::setCollisionTriangleSelector(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_TriangleSelector) 
     {
-        m_Animator = a_SceneManager->createCollisionResponseAnimator(a_TriangleSelector, m_FlagNode);
-
-        Collider collisionCallback(m_Animator);
-        collisionCallback.setCallback([this](irr::scene::ISceneNode* a_CollidedNode)
+        auto animator = a_SceneManager->createCollisionResponseAnimator(a_TriangleSelector, m_FlagNode);
+        m_Collider = new Collider(animator);
+        count = new int(0);
+        m_Collider->setCallback([this](irr::scene::ISceneNode* a_CollidedNode)
         {
             if(Player* player = dynamic_cast<Player*>(a_CollidedNode)) 
             {
+                //TODO remove logger
+                Logger->log("Hit a player and was able to cast to player");
                 captureFlag(player);
                 return true;
             }
-            return false;
+            else if(a_CollidedNode->getID() == 1) {
+                //TODO remove logger
+                Logger->log((L"Hit a player but was unable to cast " + std::to_wstring(++*count)).c_str());
+                return true;
+            }
+            else {
+                return false;
+            }
         });
-        m_Animator->setCollisionCallback(&collisionCallback);
-        m_FlagNode->addAnimator(m_Animator);
+        animator->setCollisionCallback(m_Collider);
+        m_FlagNode->addAnimator(animator);
     }
 
 	//Set color & position based on color of flag
@@ -59,7 +70,7 @@ namespace Confus {
 		{
 		case ETeamIdentifier::TeamBlue:
             m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_BLUE.png"));
-			m_StartPosition->set({ 0, 0, -20 });
+			m_StartPosition->set({ 0.f, .5f, -20.f });
 			m_StartRotation->set({ 0.f, 0.f, 0.f });
 			returnToStartPosition();
 			break;
@@ -183,8 +194,7 @@ namespace Confus {
 	Flag::~Flag() {
 		delete(m_FlagStatus);
 		delete(m_StartPosition);
-		delete(m_StartRotation);
+        delete(m_StartRotation);
 		delete(m_FlagNode);
-        delete(m_Animator);
 	}
 }
