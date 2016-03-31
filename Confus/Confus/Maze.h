@@ -20,28 +20,28 @@ namespace Confus
 		/// <summary>
 		/// The current IrrlichtDevice. Needed to pass to created MazeTiles.
 		/// </summary>
-		irr::IrrlichtDevice* m_irrDevice;
+		irr::IrrlichtDevice* m_IrrDevice;
 
 		/// <summary>
 		/// the X size of the maze
 		/// </summary>
-		int m_mazeSizeX;
+		int m_MazeSizeX;
 
 		/// <summary>
 		/// The Y size of the maze
 		/// </summary>
-		int m_mazeSizeY;
+		int m_MazeSizeY;
 
 	public:
 		/// <summary>
 		/// Gets the current X size of the maze
 		/// </summary>
-		int const& MazeSizeX() const;
+		int const& mazeSizeX() const;
 
 		/// <summary>
 		/// Gets the current Y size of the maze
 		/// </summary>
-		int const& MazeSizeY() const;
+		int const& mazeSizeY() const;
 
 		/// <summary>
 		/// Constructor for this class

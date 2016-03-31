@@ -7,43 +7,43 @@ namespace Confus
 {
 
 	MazeGenerator::MazeGenerator(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_StartPosition, int a_InitialSeed)
-		: m_mainMaze(a_Device, a_StartPosition,true), m_replacementMaze(a_Device, a_StartPosition, false), m_seed(a_InitialSeed)
+		: m_MainMaze(a_Device, a_StartPosition,true), m_ReplacementMaze(a_Device, a_StartPosition, false), m_Seed(a_InitialSeed)
 	{
-		generateMaze(m_mainMaze.MazeTiles, a_InitialSeed);
+		generateMaze(m_MainMaze.MazeTiles, a_InitialSeed);
 	}
 
 	void MazeGenerator::fixedUpdate()
 	{
-		m_mainMaze.fixedUpdate();
+		m_MainMaze.fixedUpdate();
 	}
 
 	void MazeGenerator::refillMainMaze(int a_Seed)
 	{
-		generateMaze(m_replacementMaze.MazeTiles, a_Seed);
+		generateMaze(m_ReplacementMaze.MazeTiles, a_Seed);
 		replaceMainMaze();
-		m_replacementMaze.resetMaze(irr::core::vector2df(30,-7),false);
+		m_ReplacementMaze.resetMaze(irr::core::vector2df(30,-7),false);
 	}
 
 	void MazeGenerator::replaceMainMaze()
 	{
-		for (int x = 0; x < m_mainMaze.MazeSizeX(); x++)
+		for (int x = 0; x < m_MainMaze.mazeSizeX(); x++)
 		{
-			for (int y = 0; y < m_mainMaze.MazeSizeY() - 1; y++)
+			for (int y = 0; y < m_MainMaze.mazeSizeY() - 1; y++)
 			{
-				if (m_replacementMaze.MazeTiles[x][y]->Raised)
+				if (m_ReplacementMaze.MazeTiles[x][y]->Raised)
 				{
-					if (!m_mainMaze.MazeTiles[x][y]->Raised)
+					if (!m_MainMaze.MazeTiles[x][y]->Raised)
 					{
-						m_mainMaze.MazeTiles[x][y]->Raised = true;
-						m_mainMaze.MazeTiles[x][y]->getWall()->rise();
+						m_MainMaze.MazeTiles[x][y]->Raised = true;
+						m_MainMaze.MazeTiles[x][y]->getWall()->rise();
 					}
 				}
 				else
 				{
-					if (m_mainMaze.MazeTiles[x][y]->Raised)
+					if (m_MainMaze.MazeTiles[x][y]->Raised)
 					{
-						m_mainMaze.MazeTiles[x][y]->Raised = false;
-						m_mainMaze.MazeTiles[x][y]->getWall()->hide();
+						m_MainMaze.MazeTiles[x][y]->Raised = false;
+						m_MainMaze.MazeTiles[x][y]->getWall()->hide();
 					}
 				}
 			}
@@ -71,7 +71,7 @@ namespace Confus
 			std::vector<std::shared_ptr<MazeTile>> Neighbours = getNeighbours(a_Maze,*currentTile);
 			if (Neighbours.size() != 0)
 			{
-				m_tileStack.push(currentTile);
+				m_TileStack.push(currentTile);
 				std::shared_ptr<MazeTile> tile = Neighbours[rand() % Neighbours.size()];
 				int xmovement = (tile->XPos - currentTile->XPos) / 2;
 				int ymovement = (tile->YPos - currentTile->YPos) / 2;
@@ -107,13 +107,13 @@ namespace Confus
 					wall->hide();
 				}
 			}
-			else if (m_tileStack.size() != 0)
+			else if (m_TileStack.size() != 0)
 			{
-				currentTile = m_tileStack.top();
-				m_tileStack.pop();
+				currentTile = m_TileStack.top();
+				m_TileStack.pop();
 			}
 
-		} while (m_tileStack.size() != 0);
+		} while (m_TileStack.size() != 0);
 	}
 
 	std::vector<std::shared_ptr<MazeTile>> MazeGenerator::getNeighbours(std::vector<std::vector<std::shared_ptr<MazeTile>>> & a_Maze, MazeTile& a_Tile)

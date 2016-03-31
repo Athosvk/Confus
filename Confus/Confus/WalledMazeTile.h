@@ -12,7 +12,7 @@ namespace Confus
 		/// <summary>
 		/// The MoveableWall this tile contains
 		/// </summary>
-		MoveableWall m_wall;
+		MoveableWall m_Wall;
 	public:
 		/// <summary>
 		/// Constructor that creates a moveableWall in a mazeTile

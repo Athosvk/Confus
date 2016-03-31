@@ -4,24 +4,24 @@
 namespace Confus
 {
 	Maze::Maze(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_StartPosition, bool a_NeedRender)
-		:m_mazeSizeX(123), m_mazeSizeY(80)
+		:m_MazeSizeX(123), m_MazeSizeY(80)
 	{
-		m_irrDevice = a_Device;
+		m_IrrDevice = a_Device;
 		resetMaze(irr::core::vector2df(30, -7), a_NeedRender);
 	}
 
 	void Maze::resetMaze(irr::core::vector2df a_Offset, bool a_NeedRender)
 	{
 		MazeTiles.clear();
-		for (int x = 0; x < m_mazeSizeX; x++)
+		for (int x = 0; x < m_MazeSizeX; x++)
 		{
 			std::vector<std::shared_ptr<MazeTile>> tempVector;
 			MazeTiles.push_back(tempVector);
-			for (int y = 0; y < m_mazeSizeY - 1; y++)
+			for (int y = 0; y < m_MazeSizeY - 1; y++)
 			{
 				if (a_NeedRender)
 				{
-					std::shared_ptr<WalledMazeTile> mazeTile = std::make_shared<WalledMazeTile>(m_irrDevice, irr::core::vector3df(static_cast<float>(-x + a_Offset.X), 0.5f, static_cast<float>(-y + a_Offset.Y)),
+					std::shared_ptr<WalledMazeTile> mazeTile = std::make_shared<WalledMazeTile>(m_IrrDevice, irr::core::vector3df(static_cast<float>(-x + a_Offset.X), 0.5f, static_cast<float>(-y + a_Offset.Y)),
 															 irr::core::vector3df(static_cast<float>(-x + a_Offset.X), 0.5f, static_cast<float>(-y + a_Offset.Y)));
 					const irr::scene::IAnimatedMeshSceneNode* wallMeshNode = mazeTile->getWall()->getMeshNode();
 					irr::core::vector3df boundingBox = wallMeshNode->getBoundingBox().getExtent();
@@ -51,14 +51,14 @@ namespace Confus
 		}
 	}
 
-	int const & Maze::MazeSizeY() const
+	int const & Maze::mazeSizeY() const
 	{
-		return m_mazeSizeY;
+		return m_MazeSizeY;
 	}
 
-	int const & Maze::MazeSizeX() const
+	int const & Maze::mazeSizeX() const
 	{
-		return m_mazeSizeX;
+		return m_MazeSizeX;
 	}
 
 

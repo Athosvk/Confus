@@ -13,23 +13,23 @@ namespace Confus
 		/// <summary>
 		/// The maze that the players walk in.
 		/// </summary>
-		Maze m_mainMaze;
+		Maze m_MainMaze;
 
 		/// <summary>
 		/// The maze that is used to generate a new maze. The main maze is steadely replaced by this one.
 		/// Does not render walls.
 		/// </summary>
-		Maze m_replacementMaze;
+		Maze m_ReplacementMaze;
 
 		/// <summary>
 		/// This stack is used by the maze generating algorithm to keep track of mazeTiles that might still have neighbours that can be accesed
 		/// </summary>
-		std::stack<MazeTile, std::vector<std::shared_ptr<MazeTile>>> m_tileStack;
+		std::stack<MazeTile, std::vector<std::shared_ptr<MazeTile>>> m_TileStack;
 
 		/// <summary>
 		/// The seed used to randomly chose an available neighbour and thus the seed that determines the layout of the maze.
 		/// </summary>
-		int m_seed;
+		int m_Seed;
 	public:
 		/// <summary>
 		/// Loads the necessary textures
