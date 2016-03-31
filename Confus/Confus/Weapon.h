@@ -39,7 +39,10 @@ namespace Confus
         void enableCollider();
 
         /// <summary> Disables the collider of the weapon, preventing it from damaging players </summary>
-        /// <remarks> <see cref="enableCollider"> </remarks>
+        /// <remarks> 
+		/// This is to allow the enclosing class to play attack animations, so that it
+        /// cannot hit other entities when not supposed to. 
+		/// </remarks>
         void disableCollider();       
 
         /// <summary>
