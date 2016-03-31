@@ -768,8 +768,10 @@ WARN_FORMAT            = "$file:$line: $text"
 # The WARN_LOGFILE tag can be used to specify a file to which warning and error
 # messages should be written. If left blank the output is written to standard
 # error (stderr).
+# Non-default, motivation: This can make it easier to read the output of doxygens errors,
+# since it produces a lot of general output as well, making it harder to read
 
-WARN_LOGFILE           =
+WARN_LOGFILE           = "log.txt"
 
 #---------------------------------------------------------------------------
 # Configuration options related to the input files
