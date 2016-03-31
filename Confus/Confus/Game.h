@@ -8,7 +8,12 @@
 #include "EventManager.h"
 
 namespace Confus
-{
+{    
+    /// <summary> 
+    /// The Game instance itself, running the game loop. It ties the objects in
+    /// the Game to the Irrlicht instance, so that these can communicate through this
+    /// with the active Irrlicht instance 
+    /// </summary>
     class Game
     {
     private:

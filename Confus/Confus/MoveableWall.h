@@ -5,7 +5,6 @@ namespace Confus
 {    
     /// <summary>
     /// Represents a wall that transitions into and out of the maze
-    /// <remarks> 
     /// </summary>
     class MoveableWall
     {
