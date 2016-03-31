@@ -1,5 +1,3 @@
-#include<iostream>
-
 #include "MazeGenerator.h"
 #include "WalledMazeTile.h"
 
