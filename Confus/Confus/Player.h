@@ -4,7 +4,8 @@
 
 namespace Confus {
 
-	namespace Audio {
+	namespace Audio 
+    {
 		class PlayerAudioEmitter;
 	}
 
@@ -12,7 +13,7 @@ namespace Confus {
 	enum class ETeamIdentifier;
     class EventManager;
 
-    class Player : irr::scene::IAnimationEndCallBack
+    class Player : irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
     {
     
 	private:
@@ -25,7 +26,9 @@ namespace Confus {
         static const unsigned HeavyAttackDamage;
 
     public:
+		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
+		/// <summary> The player's camera </summary>
         irr::scene::ICameraSceneNode* CameraNode;
 		EFlagEnum CarryingFlag;
 		ETeamIdentifier TeamIdentifier;
@@ -34,10 +37,15 @@ namespace Confus {
         Weapon m_Weapon;
         /// <summary> Whether the player is currently attacking or not </summary>
         bool m_Attacking = false;
+		/// <summary> The player's mesh </summary>
+        irr::scene::IAnimatedMesh* m_Mesh;
     public:
-        Player(irr::IrrlichtDevice* a_Device);
+        Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id);
         void fixedUpdate();
         void update();
+        virtual void render();
+		/// <summary> Returns the bounding box of the player's mesh </summary>
+        virtual const irr::core::aabbox3d<irr::f32> & getBoundingBox() const;
 
         /// <summary> Handles the input based actions </summary>
         /// <param name="a_EventManager">The current event manager</param>

@@ -24,7 +24,7 @@ enum class ETeamIdentifier
 	NONE,
 	/// <summary>This object has a red team identifier.</summary>
 	TEAM_RED,
-	/// <summary>This object has a green team identifier.</summary>
+	/// <summary>This object has a blue team identifier.</summary>
 	TEAM_BLUE
 };
 enum class EFlagEnum

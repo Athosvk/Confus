@@ -12,7 +12,7 @@ namespace Confus
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
 		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f)),
-		m_PlayerNode(m_Device)
+		m_PlayerNode(m_Device, 1337)
 
     {
     }

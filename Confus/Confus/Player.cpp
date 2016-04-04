@@ -8,16 +8,17 @@ namespace Confus
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-    Player::Player(irr::IrrlichtDevice* a_Device)
-        : m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f))
+    Player::Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id)
+        : m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
+        irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), a_id)
     {
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
 
         IrrAssimp irrAssimp(sceneManager);
-        irr::scene::IAnimatedMesh* mesh = sceneManager->getMesh("Media/ninja.b3d");
+        m_Mesh = sceneManager->getMesh("Media/ninja.b3d");
 
-        PlayerNode = sceneManager->addAnimatedMeshSceneNode(mesh);
+        PlayerNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
         PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
         PlayerNode->setPosition(irr::core::vector3df(0, -7.0f, -1.5f));
@@ -46,6 +47,16 @@ namespace Confus
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
+    }
+
+    void Player::render()
+    {
+
+    }
+
+    const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const
+    {
+        return m_Mesh->getBoundingBox();
     }
 
     void Player::handleInput(EventManager& a_EventManager)
