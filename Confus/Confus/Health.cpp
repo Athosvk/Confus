@@ -4,7 +4,7 @@ namespace Confus
 {
 	Health::Health()
 	{
-		m_Health = 100;
+		m_Health = m_MaxHealth;
 	}
 	
 	void Health::damage(int a_Damage)
@@ -25,9 +25,9 @@ namespace Confus
 		if (a_Health > 0)
 		{
 			m_Health += a_Health;
-			if (m_Health > 100)
+			if (m_Health > m_MaxHealth)
 			{
-				m_Health = 100;
+				m_Health = m_MaxHealth;
 			}
 		}
 	}

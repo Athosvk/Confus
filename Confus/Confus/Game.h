@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Audio\PlayerAudioEmitter.h"
 #include "EventManager.h"
+#include "GUI.h"
 
 namespace Confus
 {
@@ -35,6 +36,10 @@ namespace Confus
         /// </summary>
         OpenALListener m_Listener;
         EventManager m_EventManager;
+		/// <summary>
+		/// The GUI for the Player
+		/// </summary>
+		GUI m_GUI;
         /// <summary>
         /// The Player to test with.
         /// </summary>
