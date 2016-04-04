@@ -39,7 +39,7 @@ namespace Confus
         m_KeyMap[5].KeyCode = irr::KEY_SPACE;
 
         CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, -1, m_KeyMap, 5, true, 100.0f, false);
-        CameraNode->setPosition(irr::core::vector3df(0.0f, 150.0f, -15.0f));
+        CameraNode->setPosition(irr::core::vector3df(0.0f, 50.0f, -15.0f));
 
         PlayerNode->setParent(CameraNode);
         createAudioEmitter();
@@ -80,7 +80,7 @@ namespace Confus
         auto triangleSelector = a_SceneManager->createTriangleSelectorFromBoundingBox(PlayerNode);
         CameraNode->setTriangleSelector(triangleSelector);
         CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level,
-            CameraNode, PlayerNode->getBoundingBox().getExtent() / 10));
+            CameraNode, PlayerNode->getBoundingBox().getExtent() / 10,irr::core::vector3df(0.0f,0.0f,0.0f)));
         triangleSelector->drop();
     }
 

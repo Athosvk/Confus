@@ -26,21 +26,20 @@ namespace Confus
 
     void MoveableWall::loadTextures(irr::video::IVideoDriver* a_VideoDriver)
     {
-        m_RegularTexture = a_VideoDriver->getTexture("Media/Textures/Concrete.png");
-        m_TransparentTexture = a_VideoDriver->getTexture("Media/Textures/Transparent.png");
+        m_RegularTexture = a_VideoDriver->getTexture("Media/Textures/SquareWall.jpg");
+        m_TransparentTexture = a_VideoDriver->getTexture("Media/Textures/SquareWallTransparent.png");
     }
 
     void MoveableWall::loadMesh(irr::scene::ISceneManager* a_SceneManager)
     {
         IrrAssimp importer(a_SceneManager);
-        m_MeshNode = a_SceneManager->addAnimatedMeshSceneNode(importer.getMesh("Media/Meshes/Moveable Wall.3DS"));
-		m_MeshNode->setScale(irr::core::vector3df(0.018f, 0.022f, 0.015f));
-        m_MeshNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_TRANSPARENT_ALPHA_CHANNEL);
+        m_MeshNode = a_SceneManager->addAnimatedMeshSceneNode(a_SceneManager->getMesh("Media/Meshes/WallMeshSquare.irrmesh"));
         m_TriangleSelector = a_SceneManager->createTriangleSelector(m_MeshNode);
     }
 
     void MoveableWall::hide()
     {
+		m_MeshNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_TRANSPARENT_ALPHA_CHANNEL);
         m_TargetPosition = HiddenPosition;
         m_Transitioning = true;
     }
@@ -49,6 +48,7 @@ namespace Confus
     {
         m_TargetPosition = m_RegularPosition;
         m_Transitioning = true;
+		m_MeshNode->setVisible(true);
     }
 
     void MoveableWall::fixedUpdate()
@@ -105,9 +105,17 @@ namespace Confus
             auto velocity = ((m_TargetPosition - m_MeshNode->getPosition()) / distance) * clampedSpeed;
             m_MeshNode->setPosition(m_MeshNode->getPosition() + velocity);
         }
-        else
+        else if(m_Raised)
         {
             m_Transitioning = false;
+			m_MeshNode->setVisible(false);
+			m_Raised = false;
         }
+		else if (!m_Raised)
+		{
+			m_Raised = true;
+			m_Transitioning = false;
+			m_MeshNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_SOLID);
+		}
     }
 }
