@@ -2,13 +2,14 @@
 #include "Audio\PlayerAudioEmitter.h"
 #include "Player.h"
 #include "EventManager.h"
+#include "Flag.h"
 
 namespace Confus
 {
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-    Player::Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id)
+    Player::Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier)
         : m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
         irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), a_id)
     {
@@ -20,7 +21,14 @@ namespace Confus
 
         PlayerNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
-        PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
+
+        if(a_TeamIdentifier == ETeamIdentifier::TEAM_BLUE) {
+            PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
+        }
+        else if(a_TeamIdentifier == ETeamIdentifier::TEAM_RED) {
+            PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
+        }
+
         PlayerNode->setPosition(irr::core::vector3df(0, -7.0f, -1.5f));
 
         m_KeyMap[1].Action = irr::EKA_MOVE_FORWARD;

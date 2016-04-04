@@ -42,7 +42,7 @@ namespace Confus {
 		/// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
     public:
-        Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id);
+        Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier);
         void fixedUpdate();
         void update();
         virtual void render();
@@ -70,6 +70,6 @@ namespace Confus {
         /// <remarks> Generally used for the attack animations only </remarks>
         /// <param name="node">The node whoms animation finished</param>
         virtual void OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node) override;
-        irr::SKeyMap m_KeyMap[5];
+        irr::SKeyMap m_KeyMap[6];
     };
 }
