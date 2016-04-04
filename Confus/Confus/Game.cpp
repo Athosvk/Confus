@@ -1,9 +1,9 @@
 #include <Irrlicht/irrlicht.h>
-#include <sstream>
+#include <time.h>
 
 #include "Game.h"
 #include "Player.h"
-#include "EventManager.h"
+#include "Flag.h"
 
 namespace Confus
 {
@@ -12,8 +12,9 @@ namespace Confus
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
-        m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f)),
-        m_PlayerNode(m_Device)
+		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+		m_PlayerNode(m_Device),
+		m_GUI(m_Device, &m_PlayerNode)
     {
     }
     void Game::run()
@@ -29,9 +30,10 @@ namespace Confus
 
         m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_Device->getCursorControl()->setVisible(false);
-
-        m_Device->setEventReceiver(&m_EventManager);
-
+        
+        auto greenFlag = Flag(m_Device, ETeamIdentifier::TEAM_BLUE);
+        auto redFlag = Flag(m_Device, ETeamIdentifier::TEAM_RED);
+      
         while(m_Device->run())
         {
             handleInput();
@@ -92,6 +94,9 @@ namespace Confus
         m_PreviousTicks = m_CurrentTicks;
         m_CurrentTicks = m_Device->getTimer()->getTime();
         m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
+
+        m_PlayerNode.update();
+		m_GUI.update();
     }
 
     void Game::processFixedUpdates()
@@ -107,6 +112,13 @@ namespace Confus
 
     void Game::fixedUpdate()
     {
+		static float timer = 0.0f;
+		timer += static_cast<float>(m_DeltaTime);
+		if (timer >= 9.0f)
+		{
+			timer = 0.0f;
+			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
+		}
 		m_MazeGenerator.fixedUpdate();
     }
 

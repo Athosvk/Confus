@@ -1,5 +1,5 @@
 #include <IrrAssimp/IrrAssimp.h>
-
+#include "Audio\PlayerAudioEmitter.h"
 #include "Player.h"
 #include "EventManager.h"
 
@@ -8,7 +8,6 @@ namespace Confus
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-
     Player::Player(irr::IrrlichtDevice* a_Device)
         : m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f))
     {
@@ -39,9 +38,10 @@ namespace Confus
         m_KeyMap[5].KeyCode = irr::KEY_SPACE;
 
         CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, -1, m_KeyMap, 5, true, 100.0f, false);
-        CameraNode->setPosition(irr::core::vector3df(0.0f, 150.0f, -15.0f));
+        CameraNode->setPosition(irr::core::vector3df(0.0f, 50.0f, -15.0f));
 
         PlayerNode->setParent(CameraNode);
+        createAudioEmitter();
         startWalking();
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
@@ -69,7 +69,7 @@ namespace Confus
         auto triangleSelector = a_SceneManager->createTriangleSelectorFromBoundingBox(PlayerNode);
         CameraNode->setTriangleSelector(triangleSelector);
         CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level,
-            CameraNode, PlayerNode->getBoundingBox().getExtent() / 10));
+            CameraNode, PlayerNode->getBoundingBox().getExtent() / 10,irr::core::vector3df(0.0f,0.0f,0.0f)));
         triangleSelector->drop();
     }
 
@@ -116,5 +116,21 @@ namespace Confus
             m_Weapon.disableCollider();
             startWalking();
         }
+    }
+
+    void Player::update()
+    {
+        m_FootstepSoundEmitter->updatePosition();
+
+        int frameNumber = static_cast<int>(PlayerNode->getFrameNr());
+        if(frameNumber == 0 || frameNumber == 6)
+        {
+            m_FootstepSoundEmitter->playFootStepSound();
+        }
+    }
+
+    void Player::createAudioEmitter()
+    {
+        m_FootstepSoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
     }
 }

@@ -2,8 +2,11 @@
 #include <Irrlicht/irrlicht.h>
 
 #include "MazeGenerator.h"
+#include "OpenAL\OpenALListener.h"
 #include "Player.h"
+#include "Audio\PlayerAudioEmitter.h"
 #include "EventManager.h"
+#include "GUI.h"
 
 namespace Confus
 {
@@ -28,7 +31,18 @@ namespace Confus
         /// MazeGenerator that hasa accesible maze
         /// </summary>
         MazeGenerator m_MazeGenerator;
+        /// <summary>
+        /// The OpenAL listener that is attached to the camera.
+        /// </summary>
+        OpenALListener m_Listener;
         EventManager m_EventManager;
+		/// <summary>
+		/// The GUI for the Player
+		/// </summary>
+		GUI m_GUI;
+        /// <summary>
+        /// The Player to test with.
+        /// </summary>
         Player m_PlayerNode;
         /// <summary>
         /// The delay between the last and future fixed update
