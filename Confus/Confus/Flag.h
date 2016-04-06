@@ -29,9 +29,6 @@ enum class EFlagEnum
 	/// Flag class with status and team id
 	class Flag 
     {
-    public: 
-        irr::ILogger* Logger;
-        int* count;
     private:		
 		irr::core::vector3df* m_StartPosition;
 		irr::core::vector3df* m_StartRotation;
@@ -39,6 +36,7 @@ enum class EFlagEnum
         ETeamIdentifier* m_TeamIdentifier;
         irr::scene::IMeshSceneNode* m_FlagNode;
         Collider* m_Collider;
+        irr::scene::ISceneNode* m_FlagOldParent;
 
     public: 
         /// <summary> Flag class constructor. </summary>
@@ -56,6 +54,7 @@ enum class EFlagEnum
 		void score(Player* a_PlayerObject);
         void setCollisionTriangleSelector(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_TriangleSelector);
 
+        irr::ILogger* MyLogger;
     private:
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
 		void setColor(irr::video::IVideoDriver* a_VideoDriver);

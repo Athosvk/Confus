@@ -86,6 +86,7 @@ namespace Confus
         /// Processes the triangle selectors.
         /// </summary>
         void processTriangleSelectors();
+        irr::scene::IMetaTriangleSelector* processLevelMetaTriangles();
         /// <summary>
         /// Processes the input data
         /// </summary>

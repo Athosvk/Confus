@@ -12,19 +12,15 @@ namespace Confus
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
         m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f)),
-        m_PlayerNode(m_Device),
+        m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamRed),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed)
     {
-        m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
-        m_Device->getSceneManager()->drawAll();
-        m_Device->getGUIEnvironment()->drawAll();
-        m_Device->getVideoDriver()->endScene();
+        render();
     }
+
     void Game::run()
     {
-
-
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
@@ -35,9 +31,9 @@ namespace Confus
         
         processTriangleSelectors();
 
+        m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-        m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
 
         m_Device->getCursorControl()->setVisible(false);
       
@@ -69,7 +65,12 @@ namespace Confus
                 selector = m_Device->getSceneManager()->createTriangleSelectorFromBoundingBox(node);
                 break;
             case irr::scene::ESNT_MESH:
-                selector = m_Device->getSceneManager()->createTriangleSelectorFromBoundingBox(node);
+                if(node->getID() == 2) {
+                    selector = m_Device->getSceneManager()->createTriangleSelectorFromBoundingBox(node);
+                }
+                else {
+                    selector = sceneManager->createTriangleSelector(((irr::scene::IMeshSceneNode*)node)->getMesh(), node);
+                }
                 break;
             case irr::scene::ESNT_SPHERE:
                 selector = sceneManager->createTriangleSelector(((irr::scene::IMeshSceneNode*)node)->getMesh(), node);
@@ -105,6 +106,16 @@ namespace Confus
         m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
 
         m_PlayerNode.update();
+        m_Listener.setPosition(m_PlayerNode.getAbsolutePosition());
+
+        auto rot = m_PlayerNode.CameraNode->getRotation();
+        irr::core::quaternion playerRotation(rot);
+
+
+        //Todo: Fix rotations
+        irr::core::vector3df upVector = playerRotation * irr::core::vector3df( 0, 1, 0 );
+        irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
+        m_Listener.setDirection(forwardVector, upVector);     
     }
 
     void Game::processFixedUpdates()
