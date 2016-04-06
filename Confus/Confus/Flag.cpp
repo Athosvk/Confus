@@ -23,7 +23,9 @@ namespace Confus {
         irr::scene::IAnimatedMesh* mesh = sceneManager->getMesh("Media/Meshes/Flag.3ds");
         m_FlagNode = sceneManager->addMeshSceneNode(mesh, 0, 2);
         m_FlagNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
-        m_FlagNode->setScale({ 2, 2, 2 });
+        m_FlagNode->setScale({ 1.5f, 1.5f, 1.5f });
+
+        m_FlagNode->setDebugDataVisible(irr::scene::EDS_BBOX_ALL);
 
         m_FlagOldParent = m_FlagNode->getParent();
 
@@ -39,8 +41,7 @@ namespace Confus {
 
     void Flag::setCollisionTriangleSelector(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_TriangleSelector) 
     {
-        auto animator = a_SceneManager->createCollisionResponseAnimator(a_TriangleSelector, m_FlagNode, { 3.f, 2.f, 3.f },
-                        { 0, -1, 0 }, {0, -2.25f, 0});
+        auto animator = a_SceneManager->createCollisionResponseAnimator(a_TriangleSelector, m_FlagNode, { 1.25f, 1.f, 1.25f });
         m_Collider = new Collider(animator);
         m_Collider->setCallback([this](irr::scene::ISceneNode* a_CollidedNode)
         {
@@ -66,13 +67,13 @@ namespace Confus {
 		{
 		case ETeamIdentifier::TeamBlue:
             m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_BLUE.png"));
-			m_StartPosition->set({ 0.f, 5.5f, -20.f });
+			m_StartPosition->set({ -2.0f, 15.f, -2.f });
 			m_StartRotation->set({ 0.f, 0.f, 0.f });
 			returnToStartPosition();
 			break;
 		case ETeamIdentifier::TeamRed:
             m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_RED.png"));
-			m_StartPosition->set({ 3.5f, 5.5f, -50.f });
+			m_StartPosition->set({ 1.5f, 15.f, -72.f });
 			m_StartRotation->set({ 0.f, 180.f, 0.f });
             returnToStartPosition();
 			break;
@@ -95,7 +96,7 @@ namespace Confus {
         irr::scene::IParticleEmitter* particleEmitter = particleSystem->createBoxEmitter(
             irr::core::aabbox3d<irr::f32>(-7, 0, -7, 7, 1, 7),      // emitter size
             irr::core::vector3df(0.0f, 0.06f, 0.0f),                // initial direction
-            40, 50,                                                 // emit rate
+            40, 80,                                                 // emit rate
             colDark, colBright,                                     // dark en bright color
             400, 1000, 0,                                           // min and max age, angle
             { 0.5f, 0.5f }, { 1.f, 1.f });                          //min and max size

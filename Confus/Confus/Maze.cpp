@@ -4,7 +4,7 @@ namespace Confus
 {
 
 	Maze::Maze(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_StartPosition)
-		:MazeSizeX(60), MazeSizeY(60)
+		:MazeSizeX(4), MazeSizeY(4)
 	{
 		irr::core::vector2df offset = irr::core::vector2df(30,-7);
 		for (int x = 0; x < MazeSizeX; x++)

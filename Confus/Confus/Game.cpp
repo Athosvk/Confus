@@ -25,7 +25,7 @@ namespace Confus
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
         m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
-        sceneManager->loadScene("Media/IrrlichtScenes/Bases.irr", nullptr, m_LevelRootNode);
+        sceneManager->loadScene("Media/IrrlichtScenes/Bases 2.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
         
@@ -57,6 +57,7 @@ namespace Confus
         {
             irr::scene::ISceneNode* node = nodes[i];
             irr::scene::ITriangleSelector* selector = nullptr;
+            node->setDebugDataVisible(irr::scene::EDS_BBOX_ALL);
 
             switch(node->getType())
             {
@@ -66,7 +67,7 @@ namespace Confus
                 break;
             case irr::scene::ESNT_MESH:
                 if(node->getID() == 2) {
-                    selector = m_Device->getSceneManager()->createTriangleSelectorFromBoundingBox(node);
+                    selector = sceneManager->createTriangleSelector(((irr::scene::IMeshSceneNode*)node)->getMesh(), node);
                 }
                 else {
                     selector = sceneManager->createTriangleSelector(((irr::scene::IMeshSceneNode*)node)->getMesh(), node);
