@@ -37,9 +37,10 @@ namespace Confus
         OpenALListener m_Listener;
         EventManager m_EventManager;
         /// <summary>
-        /// The Player to test with.
+        /// The Players to test with.
         /// </summary>
         Player m_PlayerNode;
+		Player m_SecondPlayerNode;
         /// <summary>
         /// The Blue Flag.
         /// </summary>

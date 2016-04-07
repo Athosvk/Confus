@@ -5,7 +5,8 @@
 
 namespace Confus {
 
-	namespace Audio {
+	namespace Audio 
+    {
 		class PlayerAudioEmitter;
 	}
 
@@ -17,8 +18,9 @@ namespace Confus {
     class Player : irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
     {   
     public:
+		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
-        irr::scene::ICameraSceneNode* CameraNode;
+        irr::scene::ICameraSceneNode* CameraNode = nullptr;
 		EFlagEnum* CarryingFlag;
 		ETeamIdentifier* TeamIdentifier;    
         Flag* FlagPointer;
@@ -30,7 +32,7 @@ namespace Confus {
         static const irr::u32 WeaponJointIndex;
         static const unsigned LightAttackDamage;
         static const unsigned HeavyAttackDamage;
-	Health PlayerHealth;
+	    Health PlayerHealth;
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
         /// <summary> Whether the player is currently attacking or not </summary>
@@ -38,7 +40,7 @@ namespace Confus {
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
     public:
-        Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier);
+        Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
 		~Player();
         void fixedUpdate();
         void update();
@@ -66,6 +68,6 @@ namespace Confus {
         /// <remarks> Generally used for the attack animations only </remarks>
         /// <param name="node">The node whoms animation finished</param>
         virtual void OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node) override;
-        irr::SKeyMap m_KeyMap[5];
+        irr::SKeyMap m_KeyMap[6];
     };
 }
