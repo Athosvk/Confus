@@ -30,10 +30,10 @@ namespace Confus {
 		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
 		/// <summary> The player's camera </summary>
-        irr::scene::ICameraSceneNode* CameraNode;
-	Health PlayerHealth;
-	EFlagEnum CarryingFlag;
-	ETeamIdentifier TeamIdentifier;
+        irr::scene::ICameraSceneNode* CameraNode = nullptr;
+	    Health PlayerHealth;
+	    EFlagEnum CarryingFlag;
+	    ETeamIdentifier TeamIdentifier;
     private:
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
@@ -42,7 +42,7 @@ namespace Confus {
 		/// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
     public:
-        Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier);
+        Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
         void fixedUpdate();
         void update();
         virtual void render();

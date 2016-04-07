@@ -13,7 +13,8 @@ namespace Confus
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
 		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-		m_PlayerNode(m_Device, 1337, ETeamIdentifier::TEAM_RED)
+		m_PlayerNode(m_Device, 1337, ETeamIdentifier::TEAM_BLUE, true),
+		m_SecondPlayerNode(m_Device, 1338, ETeamIdentifier::TEAM_RED, false)
 
     {
     }
@@ -29,6 +30,8 @@ namespace Confus
         processTriangleSelectors();
 
         m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+		m_SecondPlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+
         m_Device->getCursorControl()->setVisible(false);
         
         auto greenFlag = Flag(m_Device, ETeamIdentifier::TEAM_BLUE);
@@ -96,6 +99,7 @@ namespace Confus
         m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
 
         m_PlayerNode.update();
+		m_SecondPlayerNode.update();
     }
 
     void Game::processFixedUpdates()
