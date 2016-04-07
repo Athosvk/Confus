@@ -22,11 +22,13 @@ namespace Confus
         PlayerNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
 
-        if(a_TeamIdentifier == ETeamIdentifier::TEAM_BLUE) 
+        TeamIdentifier = a_TeamIdentifier;
+
+        if(TeamIdentifier == ETeamIdentifier::TEAM_BLUE)
 		{
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
         }
-        else if(a_TeamIdentifier == ETeamIdentifier::TEAM_RED) 
+        else if(TeamIdentifier == ETeamIdentifier::TEAM_RED)
 		{
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
         }
@@ -159,6 +161,22 @@ namespace Confus
         if(frameNumber == 0 || frameNumber == 6)
         {
             m_FootstepSoundEmitter->playFootStepSound();
+        }
+
+        if(PlayerHealth.getHealth() <= 0) {
+            respawn();
+        }
+    }
+
+    void Player::respawn()
+    {
+        if(TeamIdentifier == ETeamIdentifier::TEAM_BLUE)
+        {
+            PlayerNode->setPosition(irr::core::vector3df(-2.5f, 3.5f, -2.f));
+        }
+        else if(TeamIdentifier == ETeamIdentifier::TEAM_RED)
+        {
+            PlayerNode->setPosition(irr::core::vector3df(3.5f, 3.5f, -72.f));
         }
     }
 
