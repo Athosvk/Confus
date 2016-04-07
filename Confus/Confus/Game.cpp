@@ -66,13 +66,6 @@ namespace Confus
                 selector = m_Device->getSceneManager()->createTriangleSelectorFromBoundingBox(node);
                 break;
             case irr::scene::ESNT_MESH:
-                if(node->getID() == 2) {
-                    selector = sceneManager->createTriangleSelector(((irr::scene::IMeshSceneNode*)node)->getMesh(), node);
-                }
-                else {
-                    selector = sceneManager->createTriangleSelector(((irr::scene::IMeshSceneNode*)node)->getMesh(), node);
-                }
-                break;
             case irr::scene::ESNT_SPHERE:
                 selector = sceneManager->createTriangleSelector(((irr::scene::IMeshSceneNode*)node)->getMesh(), node);
                 break;
@@ -107,11 +100,8 @@ namespace Confus
         m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
 
         m_PlayerNode.update();
-        m_Listener.setPosition(m_PlayerNode.getAbsolutePosition());
-
-        auto rot = m_PlayerNode.CameraNode->getRotation();
-        irr::core::quaternion playerRotation(rot);
-
+        m_Listener.setPosition(m_PlayerNode.CameraNode->getAbsolutePosition());
+        irr::core::quaternion playerRotation(m_PlayerNode.CameraNode->getRotation());
 
         //Todo: Fix rotations
         irr::core::vector3df upVector = playerRotation * irr::core::vector3df( 0, 1, 0 );
