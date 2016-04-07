@@ -1,4 +1,5 @@
 #include <Irrlicht/irrlicht.h>
+#include <time.h>
 
 #include "Game.h"
 #include "Player.h"
@@ -11,7 +12,7 @@ namespace Confus
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
-        m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f)),
+		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
         m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamRed),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed)
@@ -122,7 +123,14 @@ namespace Confus
 
     void Game::fixedUpdate()
     {
-        m_MazeGenerator.fixedUpdate();
+		static float timer = 0.0f;
+		timer += static_cast<float>(m_DeltaTime);
+		if (timer >= 9.0f)
+		{
+			timer = 0.0f;
+			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
+		}
+		m_MazeGenerator.fixedUpdate();
     }
 
     void Game::render()
