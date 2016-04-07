@@ -38,8 +38,8 @@ enum class EFlagEnum
 
     public: 
         /// <summary> Flag class constructor. </summary>
-        /// <param name="a_SceneManager"> The game's scene manager. </param>
-        /// <param name="a_TeamIdentifier"> The team's identifier the flag should have. </param>
+        /// <param name="a_Device">The active Irrlicht Device.</param>
+        /// <param name="a_TeamIdentifier">The team's identifier the flag should have.</param>
         Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier);
         /// <summary> Flag class destructor </summary>
         ~Flag();
