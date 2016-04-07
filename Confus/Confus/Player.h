@@ -37,6 +37,7 @@ namespace Confus {
         irr::scene::IAnimatedMesh* m_Mesh;
     public:
         Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier);
+		~Player();
         void fixedUpdate();
         void update();
         virtual void render();
