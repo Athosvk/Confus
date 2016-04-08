@@ -24,7 +24,7 @@ enum class ETeamIdentifier
 	NONE,
 	/// <summary>This object has a red team identifier.</summary>
 	TEAM_RED,
-	/// <summary>This object has a green team identifier.</summary>
+	/// <summary>This object has a blue team identifier.</summary>
 	TEAM_BLUE
 };
 enum class EFlagEnum
@@ -49,7 +49,7 @@ enum class EFlagEnum
         /// <summary>
         /// Flag class constructor
         /// </summary>
-        /// <param name="a_SceneManager">The game's scene manager.</param>
+        /// <param name="a_Device">The active Irrlicht Device.</param>
         /// <param name="a_TeamIdentifier">The team's identifier the flag should have.</param>
         Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier);
         /// <summary>
