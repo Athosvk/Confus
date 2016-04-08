@@ -60,7 +60,6 @@ namespace Confus
         {
             irr::scene::ISceneNode* node = nodes[i];
             irr::scene::ITriangleSelector* selector = nullptr;
-            node->setDebugDataVisible(irr::scene::EDS_BBOX_ALL);
 
             switch(node->getType())
             {
