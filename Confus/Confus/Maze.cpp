@@ -4,7 +4,7 @@
 namespace Confus
 {
 	Maze::Maze(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_StartPosition, bool a_NeedRender)
-		:m_MazeSizeX(123), m_MazeSizeY(80)
+		:m_MazeSizeX(60), m_MazeSizeY(60)
 	{
 		m_IrrDevice = a_Device;
 		resetMaze(irr::core::vector2df(30, -7), a_NeedRender);
