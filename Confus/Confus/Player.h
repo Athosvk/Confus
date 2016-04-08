@@ -13,10 +13,17 @@ namespace Confus {
     enum class EFlagEnum;
 	enum class ETeamIdentifier;
     class EventManager;
+    class Flag;
 
     class Player : irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
-    {
-    
+    {   
+    public:
+		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
+        irr::scene::IAnimatedMeshSceneNode* PlayerNode;
+        irr::scene::ICameraSceneNode* CameraNode = nullptr;
+		EFlagEnum* CarryingFlag;
+		ETeamIdentifier* TeamIdentifier;    
+        Flag* FlagPointer;
 	private:
         Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
 
@@ -25,30 +32,21 @@ namespace Confus {
         static const irr::u32 WeaponJointIndex;
         static const unsigned LightAttackDamage;
         static const unsigned HeavyAttackDamage;
-
-    public:
-		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
-        irr::scene::IAnimatedMeshSceneNode* PlayerNode;
-		/// <summary> The player's camera </summary>
-        irr::scene::ICameraSceneNode* CameraNode = nullptr;
 	    Health PlayerHealth;
-	    EFlagEnum CarryingFlag;
-	    ETeamIdentifier TeamIdentifier;
-    private:
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
         /// <summary> Whether the player is currently attacking or not </summary>
         bool m_Attacking = false;
-		/// <summary> The player's mesh </summary>
+        /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
     public:
         Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
+		~Player();
         void fixedUpdate();
         void update();
         virtual void render();
-		/// <summary> Returns the bounding box of the player's mesh </summary>
+        /// <summary> Returns the bounding box of the player's mesh </summary>
         virtual const irr::core::aabbox3d<irr::f32> & getBoundingBox() const;
-
         /// <summary> Handles the input based actions </summary>
         /// <param name="a_EventManager">The current event manager</param>
         void handleInput(EventManager& a_EventManager);
