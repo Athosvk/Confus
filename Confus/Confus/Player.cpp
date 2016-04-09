@@ -172,6 +172,7 @@ namespace Confus
     {
         if(TeamIdentifier == ETeamIdentifier::TEAM_BLUE)
         {
+            //TODO: determine exact position of the respawn chamber for both teams
             PlayerNode->setPosition(irr::core::vector3df(-2.5f, 3.5f, -2.f));
         }
         else if(TeamIdentifier == ETeamIdentifier::TEAM_RED)

@@ -32,6 +32,7 @@ namespace Confus
         m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
 		m_SecondPlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
 
+        m_Device->setEventReceiver(&m_EventManager);
         m_Device->getCursorControl()->setVisible(false);
         
         auto greenFlag = Flag(m_Device, ETeamIdentifier::TEAM_BLUE);
