@@ -6,9 +6,15 @@
 #include "Player.h"
 #include "Audio\PlayerAudioEmitter.h"
 #include "EventManager.h"
+#include "Flag.h"
 
 namespace Confus
-{
+{    
+    /// <summary> 
+    /// The Game instance itself, running the game loop. It ties the objects in
+    /// the Game to the Irrlicht instance, so that these can communicate through this
+    /// with the active Irrlicht instance 
+    /// </summary>
     class Game
     {
     private:
@@ -40,6 +46,14 @@ namespace Confus
         /// </summary>
         Player m_PlayerNode;
 		Player m_SecondPlayerNode;
+        /// <summary>
+        /// The Blue Flag.
+        /// </summary>
+        Flag m_BlueFlag;
+        /// <summary>
+        /// The Red Flag.
+        /// </summary>
+        Flag m_RedFlag;
         /// <summary>
         /// The delay between the last and future fixed update
         /// </summary>
@@ -78,6 +92,7 @@ namespace Confus
         /// Processes the triangle selectors.
         /// </summary>
         void processTriangleSelectors();
+        irr::scene::IMetaTriangleSelector* processLevelMetaTriangles();
         /// <summary>
         /// Processes the input data
         /// </summary>
