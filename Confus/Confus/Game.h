@@ -1,6 +1,7 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
 
+#include "Networking/ClientConnection.h"
 #include "MazeGenerator.h"
 #include "OpenAL\OpenALListener.h"
 #include "Player.h"
@@ -72,6 +73,7 @@ namespace Confus
         irr::u32 m_CurrentTicks = 0;
 
         irr::scene::ISceneNode* m_LevelRootNode;
+        std::unique_ptr<Networking::ClientConnection> m_Connection;
 
     public:
         /// <summary>
@@ -92,7 +94,11 @@ namespace Confus
         /// Processes the triangle selectors.
         /// </summary>
         void processTriangleSelectors();
-        irr::scene::IMetaTriangleSelector* processLevelMetaTriangles();
+        irr::scene::IMetaTriangleSelector* processLevelMetaTriangles();        
+        /// <summary>
+        /// Initializes the connection to the server.
+        /// </summary>
+        void initializeConnection();
         /// <summary>
         /// Processes the input data
         /// </summary>

@@ -1,9 +1,12 @@
 #include <Irrlicht/irrlicht.h>
 #include <time.h>
+#include <iostream>
 
 #include "Game.h"
 #include "Player.h"
 #include "Flag.h"
+#define DEBUG_CONSOLE
+#include "Debug.h"
 
 namespace Confus
 {
@@ -18,12 +21,12 @@ namespace Confus
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed)
     {
-        render();
     }
 
     void Game::run()
     {
-        auto sceneManager = m_Device->getSceneManager();
+        initializeConnection();
+        /*auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
         m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
@@ -38,14 +41,14 @@ namespace Confus
         m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
 
-        m_Device->getCursorControl()->setVisible(false);
+        m_Device->getCursorControl()->setVisible(false);*/
       
         while(m_Device->run())
         {
-            handleInput();
-            update();
-            processFixedUpdates();
-            render();
+            //handleInput();
+            //update();
+            //processFixedUpdates();
+            //render();
         }
     }
 
@@ -89,6 +92,19 @@ namespace Confus
             }
         }
         m_LevelRootNode->setTriangleSelector(metatriangleSelector);
+    }
+
+    void Game::initializeConnection()
+    {
+        std::string serverIP;
+        std::cout << "Enter the server's ip address: ";
+        std::cin >> serverIP;
+
+        std::string serverPort;
+        std::cout << "Enter the server's port: ";
+        std::cin >> serverPort;
+
+        m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
     }
 
     void Game::handleInput()

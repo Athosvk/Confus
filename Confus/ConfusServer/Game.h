@@ -1,6 +1,7 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
 
+#include "Networking/Connection.h"
 #include "MazeGenerator.h"
 #include "OpenAL\OpenALListener.h"
 #include "Player.h"
@@ -70,7 +71,8 @@ namespace ConfusServer
         /// The total elapsed game ticks in the current frame
         /// </summary>
         irr::u32 m_CurrentTicks = 0;
-
+        /// <summary> The connection to the clients of this server</summary>
+        std::unique_ptr<Networking::Connection> m_Connection;
         irr::scene::ISceneNode* m_LevelRootNode;
 
     public:
@@ -88,6 +90,10 @@ namespace ConfusServer
         /// </summary>
         void run();
     private:
+        /// <summary>
+        /// Opens the connections for clients.
+        /// </summary>
+        void initializeConnection();
         /// <summary>
         /// Processes the triangle selectors.
         /// </summary>

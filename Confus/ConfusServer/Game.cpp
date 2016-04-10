@@ -18,35 +18,40 @@ namespace ConfusServer
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed)
     {
-        render();
     }
 
     void Game::run()
     {
-        auto sceneManager = m_Device->getSceneManager();
-        m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
+        initializeConnection();
+        //auto sceneManager = m_Device->getSceneManager();
+        //m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
-        m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
-        sceneManager->loadScene("Media/IrrlichtScenes/Bases 2.irr", nullptr, m_LevelRootNode);
-        m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
-        m_LevelRootNode->setVisible(true);
-        
-        processTriangleSelectors();
+        //m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
+        //sceneManager->loadScene("Media/IrrlichtScenes/Bases 2.irr", nullptr, m_LevelRootNode);
+        //m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
+        //m_LevelRootNode->setVisible(true);
+        //
+        //processTriangleSelectors();
 
-        m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-        m_SecondPlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-        m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-        m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+        //m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+        //m_SecondPlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+        //m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+        //m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
 
-        m_Device->getCursorControl()->setVisible(false);
+        //m_Device->getCursorControl()->setVisible(false);
       
         while(m_Device->run())
         {
-            handleInput();
-            update();
-            processFixedUpdates();
-            render();
+            //handleInput();
+            //update();
+            //processFixedUpdates();
+            //render();
         }
+    }
+
+    void Game::initializeConnection()
+    {
+        m_Connection = std::make_unique<Networking::Connection>();
     }
 
     void Game::processTriangleSelectors()
