@@ -8,7 +8,7 @@
 
 using namespace std;
 
-namespace Confus {
+namespace ConfusServer {
 	namespace OpenAL {
 
 		typedef struct

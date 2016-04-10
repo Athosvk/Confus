@@ -1,7 +1,7 @@
 #include "Maze.h"
 #include "WalledMazeTile.h"
 
-namespace Confus
+namespace ConfusServer
 {
 	Maze::Maze(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_StartPosition, bool a_NeedRender)
 		:m_MazeSizeX(60), m_MazeSizeY(60)

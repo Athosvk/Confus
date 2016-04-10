@@ -2,7 +2,7 @@
 
 #include "OpenALListener.h"
 
-namespace Confus {
+namespace ConfusServer {
 
     OpenALListener::OpenALListener()
     {

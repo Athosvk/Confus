@@ -2,7 +2,7 @@
 #include <stack>
 
 #include "Maze.h"
-namespace Confus
+namespace ConfusServer
 {
 	/// <summary>
 	/// Generates the maze

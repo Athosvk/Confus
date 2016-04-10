@@ -1,7 +1,7 @@
 #include "MazeTile.h"
 
 
-namespace Confus
+namespace ConfusServer
 {
 
 	MazeTile::MazeTile()

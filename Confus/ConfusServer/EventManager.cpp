@@ -2,7 +2,7 @@
 
 #include "EventManager.h"
 
-namespace Confus
+namespace ConfusServer
 {
     EventManager::EventManager()
     {

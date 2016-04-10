@@ -1,7 +1,7 @@
 #include "MazeGenerator.h"
 #include "WalledMazeTile.h"
 
-namespace Confus
+namespace ConfusServer
 {
 
 	MazeGenerator::MazeGenerator(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_StartPosition, int a_InitialSeed)

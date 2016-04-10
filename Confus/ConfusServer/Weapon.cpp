@@ -3,7 +3,7 @@
 
 #include "Weapon.h"
 
-namespace Confus
+namespace ConfusServer
 {
     Weapon::Weapon(irr::scene::ISceneManager* a_SceneManager, irr::core::vector3df a_Dimensions)
     {

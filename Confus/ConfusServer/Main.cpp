@@ -2,7 +2,7 @@
 
 int main()
 {
-    Confus::Game game;
+    ConfusServer::Game game;
     game.run();
 
     return 0;

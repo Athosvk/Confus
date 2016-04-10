@@ -1,6 +1,6 @@
 #include "WalledMazeTile.h"
 
-namespace Confus
+namespace ConfusServer
 {
 
 	WalledMazeTile::WalledMazeTile(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RealPosition, irr::core::vector3df a_HiddenPosition)

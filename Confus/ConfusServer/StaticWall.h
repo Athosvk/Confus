@@ -1,7 +1,7 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
 
-namespace Confus 
+namespace ConfusServer
 {
     /// <summary>
     /// Class StaticWall places a mesh with a collider the player cannot go through. 

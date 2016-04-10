@@ -3,7 +3,7 @@
 
 #include "OpenALSource.h"
 
-namespace Confus {
+namespace ConfusServer {
 
     OpenALSource::OpenALSource(std::string a_WaveFileString) : m_WaveFileString(a_WaveFileString) {
         init(a_WaveFileString);

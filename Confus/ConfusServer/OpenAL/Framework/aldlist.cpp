@@ -26,7 +26,7 @@
 #include <windows.h>
 #include<OpenAL\alc.h>
 
-namespace Confus {
+namespace ConfusServer {
 	namespace OpenAL {
 
 

@@ -25,7 +25,7 @@
 #include "windows.h"
 #include "loadoal.h"
 
-namespace Confus {
+namespace ConfusServer {
 	namespace OpenAL {
 
 		HINSTANCE g_hOpenALDLL = NULL;

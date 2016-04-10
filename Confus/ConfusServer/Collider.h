@@ -2,7 +2,7 @@
 #include <Irrlicht/irrlicht.h>
 #include <functional>
 
-namespace Confus
+namespace ConfusServer
 {    
     /// <summary>
     /// Registers a callback for when a collision triggers on the given animated collision response

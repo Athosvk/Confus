@@ -3,7 +3,7 @@
 #include "Health.h"
 #include "Weapon.h"
 
-namespace Confus {
+namespace ConfusServer {
 
 	namespace Audio 
     {

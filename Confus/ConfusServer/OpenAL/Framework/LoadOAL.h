@@ -17,7 +17,7 @@
 #define ALCchar char
 #endif
 
-namespace Confus {
+namespace ConfusServer {
 	namespace OpenAL {
 
 		// Complete list of functions available in AL 1.0 implementations

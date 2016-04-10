@@ -3,7 +3,7 @@
 
 #include "Collider.h"
 
-namespace Confus
+namespace ConfusServer
 {    
     /// <summary> The weapon used by the player in order to deal damage to others </summary>
     /// <remarks> 

@@ -1,6 +1,6 @@
 #include "Collider.h"
 
-namespace Confus
+namespace ConfusServer
 {
     Collider::Collider(irr::scene::ISceneNodeAnimatorCollisionResponse* a_AttachedNode)
     {

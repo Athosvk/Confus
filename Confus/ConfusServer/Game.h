@@ -8,7 +8,7 @@
 #include "EventManager.h"
 #include "Flag.h"
 
-namespace Confus
+namespace ConfusServer
 {    
     /// <summary> 
     /// The Game instance itself, running the game loop. It ties the objects in

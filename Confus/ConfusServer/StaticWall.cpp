@@ -2,7 +2,7 @@
 
 #include "StaticWall.h"
 
-namespace Confus
+namespace ConfusServer
 {
     StaticWall::StaticWall(irr::IrrlichtDevice* a_Device, irr::core::vector3d<float> a_Position, irr::core::vector3d<float> a_Rotation, irr::scene::ICameraSceneNode* a_Camera)
     {

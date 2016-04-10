@@ -5,7 +5,7 @@
 #include "Player.h"
 #include "Flag.h"
 
-namespace Confus
+namespace ConfusServer
 {
     const double Game::FixedUpdateInterval = 0.02;
     const double Game::MaxFixedUpdateInterval = 0.1;

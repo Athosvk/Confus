@@ -1,7 +1,7 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
 
-namespace Confus
+namespace ConfusServer
 {    
     /// <summary>
     /// Represents a wall that transitions into and out of the maze

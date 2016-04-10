@@ -6,7 +6,7 @@
 #include "Collider.h"
 
 
-namespace Confus {
+namespace ConfusServer {
 
 	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier) : m_TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
 				m_FlagStatus(new EFlagEnum(EFlagEnum::FlagBase)) {

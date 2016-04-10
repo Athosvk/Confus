@@ -3,7 +3,7 @@
 #include "MoveableWall.h"
 #include "Game.h"
 
-namespace Confus
+namespace ConfusServer
 {
     MoveableWall::MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition,
         irr::core::vector3df a_HiddenPosition)

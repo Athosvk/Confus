@@ -1,27 +1,27 @@
 #pragma once
 
-namespace Confus 
+namespace ConfusServer 
 {
-class Player;
-class Collider;
+    class Player;
+    class Collider;
 
-/// <summary> The Team's Identifier. A player has a team, flag has a team, ui has a team, etc. </summary>
-enum class ETeamIdentifier 
-{
+    /// <summary> The Team's Identifier. A player has a team, flag has a team, ui has a team, etc. </summary>
+    enum class ETeamIdentifier 
+    {
 	
-	None, ///< This object doesn't have a team identifier.
-	TeamRed, ///< This object has a red team identifier.
-	TeamBlue ///< This object has a blue team identifier.
-};
+	    None, ///< This object doesn't have a team identifier.
+	    TeamRed, ///< This object has a red team identifier.
+	    TeamBlue ///< This object has a blue team identifier.
+    };
 
-/// <summary> The Flag's status. A player can have flagtaken or no flag. A flag can be taken, dropped or at base. </summary>
-enum class EFlagEnum
-{ 
-    None, ///< Player is carrying nothing		  
-	FlagBase, ///< Flag is at the base
-    FlagTaken, ///< The flag is taken. / A player is carrying a flag.
-    FlagDropped ///< The flag is dropped.
-};
+    /// <summary> The Flag's status. A player can have flagtaken or no flag. A flag can be taken, dropped or at base. </summary>
+    enum class EFlagEnum
+    { 
+        None, ///< Player is carrying nothing		  
+	    FlagBase, ///< Flag is at the base
+        FlagTaken, ///< The flag is taken. / A player is carrying a flag.
+        FlagDropped ///< The flag is dropped.
+    };
 
 	///Flag Class, every flag should have this class, contains info about a flag
 	/// Flag class with status and team id

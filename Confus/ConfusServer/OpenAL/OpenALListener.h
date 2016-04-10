@@ -4,7 +4,7 @@
 #include "Framework/Framework.h"
 
 
-namespace Confus {
+namespace ConfusServer {
 	class OpenALListener {
 	public:        
         /// <summary>

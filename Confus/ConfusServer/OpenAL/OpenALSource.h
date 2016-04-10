@@ -4,7 +4,7 @@
 #include "Framework/Framework.h"
 #include <string>
 
-namespace Confus {
+namespace ConfusServer {
 	/// <summary>
 	/// OpenAL Sound Source class.
 	/// Needs the init() function to load a wave file.

@@ -1,6 +1,6 @@
 #include "PlayerAudioEmitter.h"
 
-namespace Confus
+namespace ConfusServer
 {
     namespace Audio
     {

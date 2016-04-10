@@ -3,7 +3,7 @@
 
 #include "MazeTile.h"
 
-namespace Confus
+namespace ConfusServer
 {
 	/// <summary>
 	/// Contains a 2D Vector of mazeTiles, forms the Maze

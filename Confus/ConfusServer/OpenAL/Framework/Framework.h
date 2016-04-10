@@ -13,7 +13,7 @@
 #include<OpenAL\efx-creative.h>
 #include<OpenAL\xram.h>
 
-namespace Confus {
+namespace ConfusServer {
 	namespace OpenAL {
 
 		// Initialization and shutdown

@@ -31,7 +31,7 @@
 #include "CWaves.h"
 #include "aldlist.h"
 
-namespace Confus {
+namespace ConfusServer {
 	namespace OpenAL {
 		static CWaves *g_pWaveLoader = NULL;
 

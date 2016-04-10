@@ -2,7 +2,7 @@
 #include <Irrlicht/irrlicht.h>
 #include <functional>
 
-namespace Confus
+namespace ConfusServer
 {
 	class Health
 	{

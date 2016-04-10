@@ -4,7 +4,7 @@
 #include "EventManager.h"
 #include "Flag.h"
 
-namespace Confus
+namespace ConfusServer
 {
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
