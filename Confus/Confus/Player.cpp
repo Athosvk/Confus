@@ -21,17 +21,8 @@ namespace Confus
         IrrAssimp irrAssimp(sceneManager);
         m_Mesh = sceneManager->getMesh("Media/ninja.b3d");
 
-        PlayerNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh, 0, 1);
+        PlayerNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh, nullptr);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
-
-        if(a_TeamIdentifier == ETeamIdentifier::TeamBlue) 
-		{
-			PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
-        }
-        else if(a_TeamIdentifier == ETeamIdentifier::TeamRed) 
-		{
-            PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
-        }
 
         PlayerNode->setPosition(irr::core::vector3df(0, -7.0f, -1.5f));
         PlayerNode->setName({"Player"});
@@ -179,12 +170,12 @@ namespace Confus
 
     void Player::respawn()
     {
-        if(TeamIdentifier == ETeamIdentifier::TEAM_BLUE)
+        if(*TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
             //TODO: determine exact position of the respawn chamber for both teams
             PlayerNode->setPosition(irr::core::vector3df(-2.5f, 3.5f, -2.f));
         }
-        else if(TeamIdentifier == ETeamIdentifier::TEAM_RED)
+        else if(*TeamIdentifier == ETeamIdentifier::TeamRed)
         {
             PlayerNode->setPosition(irr::core::vector3df(3.5f, 3.5f, -72.f));
         }

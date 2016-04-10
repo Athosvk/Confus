@@ -13,10 +13,12 @@ namespace Confus
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
 		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-        m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, true),        
+        m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamBlue, true),        
         m_SecondPlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, false),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
-        m_RedFlag(m_Device, ETeamIdentifier::TeamRed)
+        m_RedFlag(m_Device, ETeamIdentifier::TeamRed),
+        m_RedRespawnFloor(m_Device),
+        m_BlueRespawnFloor(m_Device)
     {
         render();
     }
@@ -37,6 +39,10 @@ namespace Confus
         m_SecondPlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+
+        //TODO need to find correct positions for these!
+        m_BlueRespawnFloor.setPosition(irr::core::vector3df(-2.5f, 3.5f, -2.f));
+        m_RedRespawnFloor.setPosition(irr::core::vector3df(3.5f, 3.5f, -72.f));
 
         m_Device->setEventReceiver(&m_EventManager);
         m_Device->getCursorControl()->setVisible(false);
@@ -127,10 +133,17 @@ namespace Confus
     {
 		static float timer = 0.0f;
 		timer += static_cast<float>(m_DeltaTime);
+        if(timer >= 3.0f)
+        {
+            m_BlueRespawnFloor.enableCollision();
+            m_RedRespawnFloor.enableCollision();
+        }
 		if (timer >= 9.0f)
 		{
 			timer = 0.0f;
 			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
+            m_BlueRespawnFloor.disableCollision();
+            m_RedRespawnFloor.disableCollision();
 		}
 		m_MazeGenerator.fixedUpdate();
     }
