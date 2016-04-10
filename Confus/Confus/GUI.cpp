@@ -19,10 +19,7 @@ namespace Confus
 
 	void GUI::update()
 	{
-		m_HealthString = "";
-		m_HealthString += L"Health: ";
-		m_HealthString += m_PlayerNode->PlayerHealth.getHealth();
-		m_HealthString += L"%";
+		m_HealthString = (L"Health: " + std::to_wstring(m_PlayerNode->PlayerHealth.getHealth()) + L"%").c_str();
 		m_HealthTextBox->setText(m_HealthString.c_str());
 		drawBloodOverlay();
 		lowHealthAudio();
