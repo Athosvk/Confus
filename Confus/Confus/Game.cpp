@@ -26,7 +26,7 @@ namespace Confus
     void Game::run()
     {
         initializeConnection();
-        /*auto sceneManager = m_Device->getSceneManager();
+        auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
         m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
@@ -41,14 +41,15 @@ namespace Confus
         m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
 
-        m_Device->getCursorControl()->setVisible(false);*/
+        m_Device->getCursorControl()->setVisible(false);
       
         while(m_Device->run())
         {
-            //handleInput();
-            //update();
-            //processFixedUpdates();
-            //render();
+            m_Connection->processPackets();
+			handleInput();
+            update();
+            processFixedUpdates();
+            render();
         }
     }
 
@@ -100,7 +101,7 @@ namespace Confus
         std::cout << "Enter the server's ip address: ";
         std::cin >> serverIP;
 
-        std::string serverPort;
+        unsigned short serverPort;
         std::cout << "Enter the server's port: ";
         std::cin >> serverPort;
 

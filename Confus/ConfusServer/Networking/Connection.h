@@ -17,11 +17,28 @@ namespace ConfusServer
         class Connection
         {
         private:
+            /// <summary>
+            /// The RakNet interface for interacting with RakNet
+            /// </summary>
             RakNet::RakPeerInterface* m_Interface = RakNet::RakPeerInterface::GetInstance();
 
         public:
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Connection"/> class.
+            /// </summary>
             Connection();
+            /// <summary>
+            /// Finalizes an instance of the <see cref="Connection"/> class.
+            /// </summary>
             ~Connection();
+            /// <summary>
+            /// Processes the incoming packets from the clients to delegate them to the 
+            /// requesting services
+            /// </summary>
+            void processPackets();
+        private:
+            unsigned short getConnectionCount() const;
+            void closeAllConnections();
         };
     }
 }
