@@ -26,24 +26,27 @@ namespace Confus
             RakNet::RakPeerInterface* m_Interface = RakNet::RakPeerInterface::GetInstance();
 
         public:
-            /// <summary>
-            /// Initializes a new instance of the <see cref="ClientConnection"/> class.
-            /// </summary>
+            /// <summary> Initializes a new instance of the <see cref="ClientConnection"/> class. </summary>
             /// <param name="a_ServerIP">The ip address of the server to connect to.</param>
             /// <param name="a_ServerPort">The port oft the server to connect to.</param>
             ClientConnection(const std::string& a_ServerIP, unsigned short a_ServerPort = 60000);
-            /// <summary>
-            /// Finalizes an instance of the <see cref="ClientConnection"/> class.
-            /// </summary>
+            /// <summary> Finalizes an instance of the <see cref="ClientConnection"/> class. </summary>
             ~ClientConnection();
             /// <summary>
             /// Processes the incoming packets from the server to delegate them to the 
             /// requesting services
             /// </summary>
             void processPackets();
-        private:
-            unsigned short getConnectionCount() const;
-            void closeServerConnection();
+		private:
+			/// <summary> Gets the amount of clients connected to this server instance </summary>
+			/// <returns> The amount of clients connected </returns>
+			unsigned short getConnectionCount() const;
+			/// <summary> Closes the connection to the server gracefully </summary>
+			/// <remarks> 
+			/// This function assumes that there is at most one open connection at this time,
+			/// which means that there can be no connections to other servers or clients.
+			/// </remarks>
+			void closeServerConnection();
         };
     }
 }
