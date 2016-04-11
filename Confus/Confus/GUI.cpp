@@ -16,6 +16,11 @@ namespace Confus
 		m_HealthTextBox = m_GUIEnvironment->addStaticText(L"", irr::core::rect<irr::s32>(10, 10, 100, 25), false);
 		m_AudioSourceLowHealth = new OpenALSource("heartbeat.wav");
 	}
+	
+	GUI::~GUI()
+	{
+		delete(m_AudioSourceLowHealth);
+	}
 
 	void GUI::update()
 	{
