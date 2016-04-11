@@ -38,7 +38,7 @@ namespace Confus
             RakNet::Packet* packet = m_Interface->Receive();
             while(packet != nullptr)
             {
-				if(packet && packet->data[0] == ID_CONNECTION_REQUEST_ACCEPTED)
+				if(packet && packet->data != NULL && packet->data[0] == ID_CONNECTION_REQUEST_ACCEPTED)
 				{
 					std::cout << "Connected to the server!\n";
 					while(!m_StalledMessages.empty())
@@ -54,7 +54,10 @@ namespace Confus
 				}
 				else
 				{
-					std::cout << "Message has arrived " << std::endl;
+					if (packet->data != NULL) {
+						std::cout << "Message: \"" << packet->data  << " has arrived \"" << std::endl;
+					}
+					
 				}
                 m_Interface->DeallocatePacket(packet);
                 packet = m_Interface->Receive();

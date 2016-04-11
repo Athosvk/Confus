@@ -1,5 +1,6 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
+#include <RakNet/BitStream.h>
 
 #include "Networking/Connection.h"
 #include "MazeGenerator.h"
@@ -27,6 +28,10 @@ namespace ConfusServer
         /// The interval to clamp to if the delay between sequential fixed updates is too long
         /// </summary>
         static const double MaxFixedUpdateInterval;
+		/// <summary>
+		/// The interval at which packets queue before processed
+		/// </summary>
+		static const double ProcessPacketsInterval;
 
         /// <summary>
         /// The instance of the IrrlichtDevice
@@ -59,6 +64,10 @@ namespace ConfusServer
         /// The delay between the last and future fixed update
         /// </summary>
         double m_FixedUpdateTimer = 0.0;
+		/// <summary>
+		/// The delay between the last and future packet update
+		/// </summary>
+		double m_ConnectionUpdateTimer = 0.0;
         /// <summary>
 		/// The time interval between the last update and the second-last
         /// </summary>
@@ -74,7 +83,6 @@ namespace ConfusServer
         /// <summary> The connection to the clients of this server</summary>
         std::unique_ptr<Networking::Connection> m_Connection;
         irr::scene::ISceneNode* m_LevelRootNode;
-
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
@@ -119,5 +127,9 @@ namespace ConfusServer
         /// Renders the objects in the game
         /// </summary>
         void render();
+		/// <summary>
+		/// Processes the packets connection
+		/// </summary>
+		void processConnection();
     };
 }
