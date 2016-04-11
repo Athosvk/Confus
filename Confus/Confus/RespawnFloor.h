@@ -8,8 +8,9 @@ namespace Confus
     {
     private:
         irr::scene::IAnimatedMeshSceneNode* m_FloorNode;
-        irr::scene::IAnimatedMesh* m_Mesh;
         irr::scene::ITriangleSelector* m_TriangleSelector;
+        irr::video::ITexture* m_RegularTexture;
+        irr::video::ITexture* m_TransparentTexture;
     public:
         RespawnFloor(irr::IrrlichtDevice* a_Device);
         ~RespawnFloor();

@@ -7,13 +7,15 @@ namespace Confus
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
 
-        //TODO: Need floor model & textures (team colored?)
-        m_Mesh = sceneManager->getMesh("Media/ninja.b3d");
+        m_RegularTexture = videoDriver->getTexture("Media/Textures/SquareWall.jpg");
+        m_TransparentTexture = videoDriver->getTexture("Media/Textures/SquareWallTransparent.png");
 
-        m_FloorNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh, nullptr);
+        m_FloorNode = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh("Media/BaseGlassFloor.irrmesh"), nullptr);
         m_FloorNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_SOLID);
-        m_FloorNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
+        m_FloorNode->setMaterialTexture(0, m_RegularTexture);
+        m_FloorNode->setScale(irr::core::vector3df(5.5f, 0.1f, 10.f));
         m_TriangleSelector = sceneManager->createTriangleSelector(m_FloorNode);
+        m_FloorNode->setTriangleSelector(m_TriangleSelector);
     }
 
 
@@ -30,12 +32,14 @@ namespace Confus
     {
         m_FloorNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_SOLID);
         m_FloorNode->setTriangleSelector(m_TriangleSelector);
+        m_FloorNode->setMaterialTexture(0, m_RegularTexture);
     }
 
     void RespawnFloor::disableCollision()
     {
         m_FloorNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_TRANSPARENT_ALPHA_CHANNEL);
         m_FloorNode->setTriangleSelector(nullptr);
+        m_FloorNode->setMaterialTexture(0, m_TransparentTexture);
     }
 }
 

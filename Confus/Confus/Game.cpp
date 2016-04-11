@@ -40,9 +40,8 @@ namespace Confus
         m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
 
-        //TODO need to find correct positions for these!
-        m_BlueRespawnFloor.setPosition(irr::core::vector3df(-2.5f, 3.5f, -2.f));
-        m_RedRespawnFloor.setPosition(irr::core::vector3df(3.5f, 3.5f, -72.f));
+        m_BlueRespawnFloor.setPosition(irr::core::vector3df(0.f, 3.45f, 11.f));
+        m_RedRespawnFloor.setPosition(irr::core::vector3df(0.f, 3.45f, -83.f));
 
         m_Device->setEventReceiver(&m_EventManager);
         m_Device->getCursorControl()->setVisible(false);
@@ -87,7 +86,9 @@ namespace Confus
             default:
                 break;
             }
+            
 
+            node->setDebugDataVisible(32);
             if(selector)
             {
                 metatriangleSelector->addTriangleSelector(selector);
@@ -133,7 +134,7 @@ namespace Confus
     {
 		static float timer = 0.0f;
 		timer += static_cast<float>(m_DeltaTime);
-        if(timer >= 3.0f)
+        if(timer >= 3.0f && timer <= 8.0f)
         {
             m_BlueRespawnFloor.enableCollision();
             m_RedRespawnFloor.enableCollision();

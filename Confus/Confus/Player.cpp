@@ -23,8 +23,8 @@ namespace Confus
 
         PlayerNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh, nullptr);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
-
-        PlayerNode->setPosition(irr::core::vector3df(0, -7.0f, -1.5f));
+        PlayerNode->setScale(irr::core::vector3df(0.3f, 0.3f, 0.3f));
+        PlayerNode->setPosition(irr::core::vector3df(0.f, -2.f, -0.2f));
         PlayerNode->setName({"Player"});
 
         if(a_TeamIdentifier == ETeamIdentifier::TeamBlue) {
@@ -49,12 +49,26 @@ namespace Confus
         m_KeyMap[4].Action = irr::EKA_JUMP_UP;
         m_KeyMap[4].KeyCode = irr::KEY_SPACE;
 
-		if (a_MainPlayer) {
-			CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.15f, false);
-			CameraNode->setPosition(irr::core::vector3df(2.5f, 5.f, -30.0f));
-			PlayerNode->setParent(this);
-			setParent(CameraNode);
-		}
+        if(a_MainPlayer) 
+        {
+            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, true);
+            CameraNode->setFOV(70.f);
+            CameraNode->setNearValue(0.1f);
+        }
+        else 
+        {
+            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, false);
+        }
+        if(a_TeamIdentifier == ETeamIdentifier::TeamBlue)
+        {
+            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
+        }
+        else if(a_TeamIdentifier == ETeamIdentifier::TeamRed)
+        {
+            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
+        }
+	    PlayerNode->setParent(this);
+		setParent(CameraNode);
 
         createAudioEmitter();
         startWalking();
@@ -96,16 +110,7 @@ namespace Confus
     void Player::setLevelCollider(irr::scene::ISceneManager* a_SceneManager,
         irr::scene::ITriangleSelector* a_Level)
     {
-        if(CameraNode != nullptr) 
-        {
-            CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level, PlayerNode, {1, 1, 1}, { 0, -1, 0 }));
-        }
-        else 
-		{
-            PlayerNode->setTriangleSelector(a_Level);
-            PlayerNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level,
-            PlayerNode, PlayerNode->getBoundingBox().getExtent() / 10, irr::core::vector3df(0.0f, 0.0f, 0.0f)));
-        }
+        CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level, PlayerNode, {0.1f, 0.2f, 0.1f}, { 0, -1, 0 }));
     }
 
     void Player::startWalking() const
@@ -166,18 +171,34 @@ namespace Confus
         if(PlayerHealth.getHealth() <= 0) {
             respawn();
         }
+
+        if(CameraNode->getPosition().Y <= -10) {
+            respawn();
+        }
     }
 
     void Player::respawn()
     {
+        irr::scene::ISceneNodeAnimatorCollisionResponse * animator = 0;
+
+        irr::core::list<irr::scene::ISceneNodeAnimator*>::ConstIterator iterator = CameraNode->getAnimators().begin();
+
+        for(; iterator != CameraNode->getAnimators().end(); ++iterator)
+        {
+            animator = (irr::scene::ISceneNodeAnimatorCollisionResponse*)(*iterator);
+            if(animator->getType() == irr::scene::ESNAT_COLLISION_RESPONSE)
+                break;
+        }
+
         if(*TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
-            //TODO: determine exact position of the respawn chamber for both teams
-            PlayerNode->setPosition(irr::core::vector3df(-2.5f, 3.5f, -2.f));
+             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
+             animator->setTargetNode(CameraNode);
         }
         else if(*TeamIdentifier == ETeamIdentifier::TeamRed)
         {
-            PlayerNode->setPosition(irr::core::vector3df(3.5f, 3.5f, -72.f));
+            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
+            animator->setTargetNode(CameraNode);
         }
     }
 
