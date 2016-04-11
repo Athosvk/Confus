@@ -8,7 +8,7 @@ namespace Confus
     {
         PlayerAudioEmitter::PlayerAudioEmitter(irr::scene::IAnimatedMeshSceneNode* a_AttachedPlayer) : m_AttachedPlayer(a_AttachedPlayer)
         {
-createAudioSources();
+        createAudioSources();
         }
 
         PlayerAudioEmitter::~PlayerAudioEmitter()
