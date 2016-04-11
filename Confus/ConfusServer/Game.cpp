@@ -11,7 +11,7 @@
 namespace ConfusServer
 {
     const double Game::FixedUpdateInterval = 0.02;
-    const double Game::MaxFixedUpdateInterval = 0.7;
+    const double Game::MaxFixedUpdateInterval = 0.1;
 
 	const double Game::ProcessPacketsInterval = 0.03;
 
