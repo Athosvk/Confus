@@ -1,5 +1,6 @@
 #pragma once
 #include <RakNet/RakPeerInterface.h>
+#include <RakNet/RakNetTypes.h>
 
 namespace ConfusServer
 {
@@ -17,6 +18,11 @@ namespace ConfusServer
         class Connection
         {
         private:
+			enum class EPacketType
+			{
+				Message = 1
+			};
+
             /// <summary> The RakNet interface for interacting with RakNet </summary>
             RakNet::RakPeerInterface* m_Interface = RakNet::RakPeerInterface::GetInstance();
 
@@ -38,6 +44,7 @@ namespace ConfusServer
 			/// Gracefully closes all the connections to the clients this server is connected to
 			/// </summary>
 			void closeAllConnections();
+			void handlePacket(RakNet::Packet* a_Packet);
         };
     }
 }

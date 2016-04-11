@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <string>
+#include <RakNet/BitStream.h>
 
 #include "Connection.h"
 
@@ -10,7 +12,12 @@ namespace ConfusServer
         Connection::Connection()
         {
             RakNet::SocketDescriptor socketDescriptor(60000, nullptr);
-            m_Interface->Startup(5, &socketDescriptor, 1);
+            auto result = m_Interface->Startup(5, &socketDescriptor, 1);
+			if(result != RakNet::StartupResult::RAKNET_STARTED)
+			{
+				throw std::logic_error("Could not start RakNet, errorcode " +
+					std::to_string(result));
+			}
             //Use 10 as a general case for a 5 vs 5 matchup
             m_Interface->SetMaximumIncomingConnections(10);
         }
@@ -26,7 +33,7 @@ namespace ConfusServer
             RakNet::Packet* packet = m_Interface->Receive();
             while(packet != nullptr)
             {
-                std::cout << "Message has arrived " << std::endl;
+				handlePacket(packet);
                 m_Interface->DeallocatePacket(packet);
                 packet = m_Interface->Receive();
             }
@@ -52,5 +59,23 @@ namespace ConfusServer
                 m_Interface->CloseConnection(openConnections[i], true);
             }
         }
+
+		void Connection::handlePacket(RakNet::Packet* a_Packet)
+		{
+			if(a_Packet->data == nullptr)
+			{
+				return;
+			}
+			switch(static_cast<unsigned char>(a_Packet->data[0]))
+			{
+			case static_cast<unsigned char>(EPacketType::Message):
+				RakNet::RakString contents;
+				RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
+				inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+				inputStream.Read(contents);
+				std::cout << "Message received: " << contents;
+				break;
+			}
+		}
     }
 }

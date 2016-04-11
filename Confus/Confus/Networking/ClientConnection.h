@@ -1,6 +1,7 @@
 #pragma once
 #include <RakNet/RakPeerInterface.h>
 #include <string>
+#include <queue>
 
 namespace Confus
 {
@@ -20,8 +21,15 @@ namespace Confus
         class ClientConnection
         {
         private:
+			enum class EPacketType : unsigned
+			{
+				Message = 1
+			};
+
             /// <summary> The RakNet interface for interacting with RakNet </summary>
             RakNet::RakPeerInterface* m_Interface = RakNet::RakPeerInterface::GetInstance();
+			std::queue<std::string> m_StalledMessages;
+			bool m_Connected = false;
 
         public:
             /// <summary> Initializes a new instance of the <see cref="ClientConnection"/> class. </summary>
@@ -34,7 +42,12 @@ namespace Confus
             /// Processes the incoming packets from the server to delegate them to the 
             /// requesting services
             /// </summary>
-            void processPackets();
+			void processPackets();
+			/// <summary>
+			/// Sends a message to the server
+			/// </summary>
+			/// <param name="a_Message">The message contents</param>
+			void sendMessage(const std::string& a_Message);
 		private:
 			/// <summary> Gets the amount of clients connected to this server instance </summary>
 			/// <returns> The amount of clients connected </returns>
@@ -44,7 +57,7 @@ namespace Confus
 			/// This function assumes that there is at most one open connection at this time,
 			/// which means that there can be no connections to other servers or clients.
 			/// </remarks>
-			void closeServerConnection();
+			RakNet::SystemAddress getServerAddress() const;
         };
     }
 }
