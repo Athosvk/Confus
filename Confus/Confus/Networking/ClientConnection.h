@@ -11,18 +11,16 @@ namespace Confus
         /// A game should only have one of these, since a client will only connect to one
         /// server at a time. The networking library also does not allow for multiple
         /// instances, either.
+		/// </summary>
         /// <remarks> 
         /// This header must be included before Windows.h is ever included, due to the nature
         /// of the operating system libraries. This may form an exception to the coding
         /// guidelines that state the order of file inclusion
         /// </remarks>
-        /// </summary>
         class ClientConnection
         {
         private:
-            /// <summary>
-            /// The RakNet interface for interacting with RakNet
-            /// </summary>
+            /// <summary> The RakNet interface for interacting with RakNet </summary>
             RakNet::RakPeerInterface* m_Interface = RakNet::RakPeerInterface::GetInstance();
 
         public:
