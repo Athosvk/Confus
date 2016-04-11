@@ -22,6 +22,11 @@ namespace Confus
 		delete(m_AudioSourceLowHealth);
 	}
 
+	GUI::~GUI()
+	{
+		delete(m_AudioSourceLowHealth);
+	}
+
 	void GUI::update()
 	{
 		m_HealthString = (L"Health: " + std::to_wstring(m_PlayerNode->PlayerHealth.getHealth()) + L"%").c_str();
