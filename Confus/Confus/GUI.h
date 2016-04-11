@@ -20,6 +20,7 @@ namespace Confus
 
 	public:
 		GUI(irr::IrrlichtDevice* a_Device, Player* a_Player);
+		~GUI();
 		void update();
 		void drawBloodOverlay();
 		void lowHealthAudio();
