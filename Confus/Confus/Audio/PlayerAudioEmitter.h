@@ -1,9 +1,7 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
-#include <memory>
-#include <time.h> 
+#include <vector>
 
-#include "..\Player.h"
 #include "..\OpenAL\OpenALSource.h"
 
 namespace Confus
@@ -42,24 +40,24 @@ namespace Confus
             /// <summary>
             /// Plays a random footstep sound.
             /// </summary>
-            void playFootStepSound();            
+            void playFootStepSound() const;            
             /// <summary>
             /// Plays a random attack sound.
             /// </summary>
             /// <param name="a_HeavyAttack">Is it a heavy attack?</param>
-            void playAttackSound(bool a_HeavyAttack);
+            void playAttackSound(bool a_HeavyAttack) const;
             /// <summary>
             /// Plays a random grunt.
             /// </summary>
-            void playRandomGrunt();            
+            void playRandomGrunt() const;            
             /// <summary>
             /// Plays a random sword swosh.
             /// </summary>
-            void playRandomSwordSwosh();
+            void playRandomSwordSwosh() const;
             /// <summary>
             /// Updates the position of this instance.
             /// </summary>
-            void updatePosition();            
+            void updatePosition() const;            
             /// <summary>
             /// Creates the audio sources.
             /// </summary>

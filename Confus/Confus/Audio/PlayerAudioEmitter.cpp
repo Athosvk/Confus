@@ -1,3 +1,5 @@
+#include <time.h> 
+
 #include "PlayerAudioEmitter.h"
 
 namespace Confus
@@ -16,14 +18,14 @@ namespace Confus
             delete(m_AudioSourceFootstep3);
             delete(m_AudioSourceGrunt1);
             delete(m_AudioSourceGrunt2);
+            delete(m_AudioSourceGrunt3);
             delete(m_AudioSourceSwordSwosh1);
             delete(m_AudioSourceSwordSwosh2);
             delete(m_AudioSourceSwordSwosh3);
             delete(m_AudioSourceSwordSwosh4);
-            delete(m_AttachedPlayer);
         }
 
-        void PlayerAudioEmitter::playFootStepSound()
+        void PlayerAudioEmitter::playFootStepSound() const
         {
             if(!m_AudioSourceFootstep1->isPlaying())
             {
@@ -40,7 +42,7 @@ namespace Confus
         }
 
 
-        void PlayerAudioEmitter::playAttackSound(bool a_HeavyAttack)
+        void PlayerAudioEmitter::playAttackSound(bool a_HeavyAttack) const
         {
             if(!a_HeavyAttack) 
             {
@@ -53,7 +55,7 @@ namespace Confus
             playRandomSwordSwosh();
         }
 
-        void PlayerAudioEmitter::playRandomGrunt()
+        void PlayerAudioEmitter::playRandomGrunt() const
         {
             std::srand(static_cast<int>(time(NULL)));
             auto randomNumber = std::rand() % 2;
@@ -71,7 +73,7 @@ namespace Confus
             }
         }
 
-        void PlayerAudioEmitter::playRandomSwordSwosh()
+        void PlayerAudioEmitter::playRandomSwordSwosh() const
         {
             std::srand(static_cast<int>(time(NULL)));
             auto randomNumber = std::rand() % 4;
@@ -95,7 +97,7 @@ namespace Confus
             }
         }
 
-        void PlayerAudioEmitter::updatePosition()
+        void PlayerAudioEmitter::updatePosition() const
         {
             m_AudioSourceFootstep1->setPosition(m_AttachedPlayer->getAbsolutePosition());
             m_AudioSourceFootstep2->setPosition(m_AttachedPlayer->getAbsolutePosition());
