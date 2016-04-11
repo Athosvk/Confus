@@ -36,9 +36,16 @@ namespace ConfusServer
             /// requesting services
             /// </summary>
             void processPackets();
-        private:
-            unsigned short getConnectionCount() const;
-            void closeAllConnections();
+		private:
+			/// <summary>
+			/// Gets the amount of clients connected to this server instance
+			/// </summary>
+			/// <returns>The amount of clients connected</returns>
+			unsigned short getConnectionCount() const;
+			/// <summary>
+			/// Gracefully closes all the connections to the clients this server is connected to
+			/// </summary>
+			void closeAllConnections();
         };
     }
 }

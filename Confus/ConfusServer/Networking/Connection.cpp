@@ -26,7 +26,7 @@ namespace ConfusServer
             RakNet::Packet* packet = m_Interface->Receive();
             while(packet != nullptr)
             {
-                std::cout << "Message has arrived, identifier: " << std::endl;
+                std::cout << "Message has arrived " << std::endl;
                 m_Interface->DeallocatePacket(packet);
                 packet = m_Interface->Receive();
             }
@@ -49,7 +49,6 @@ namespace ConfusServer
 
             for(unsigned short i = 0u; i < connectionCount; ++i)
             {
-                //We assume there is at most one connection
                 m_Interface->CloseConnection(openConnections[i], true);
             }
         }

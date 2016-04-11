@@ -71,9 +71,11 @@ namespace Confus
         /// The total elapsed game ticks in the current frame
         /// </summary>
         irr::u32 m_CurrentTicks = 0;
-
         irr::scene::ISceneNode* m_LevelRootNode;
-        std::unique_ptr<Networking::ClientConnection> m_Connection;
+		/// <summary>
+		/// The connection as a client to the server that we are currently connected to
+		/// </summary>
+		std::unique_ptr<Networking::ClientConnection> m_Connection;
 
     public:
         /// <summary>
