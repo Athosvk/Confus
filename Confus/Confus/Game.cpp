@@ -87,8 +87,6 @@ namespace Confus
                 break;
             }
             
-
-            node->setDebugDataVisible(32);
             if(selector)
             {
                 metatriangleSelector->addTriangleSelector(selector);
