@@ -78,6 +78,9 @@
     <ClCompile Include="WalledMazeTile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RespawnFloor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Networking\ClientConnection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -164,6 +167,7 @@
     <ClInclude Include="WalledMazeTile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RespawnFloor.h">
     <ClInclude Include="Networking\ClientConnection.h">
       <Filter>Header Files</Filter>
     </ClInclude>

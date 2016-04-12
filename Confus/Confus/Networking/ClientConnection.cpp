@@ -38,7 +38,7 @@ namespace Confus
             RakNet::Packet* packet = m_Interface->Receive();
             while(packet != nullptr)
             {
-				if(packet && packet->data[0] == ID_CONNECTION_REQUEST_ACCEPTED)
+				if(packet->data[0] == ID_CONNECTION_REQUEST_ACCEPTED)
 				{
 					std::cout << "Connected to the server!\n";
 					while(!m_StalledMessages.empty())
@@ -63,18 +63,18 @@ namespace Confus
 
 		void ClientConnection::sendMessage(const std::string& a_Message)
 		{
-			//if(m_Connected)
-			//{
-			//	RakNet::BitStream stream;
-			//	stream.Write(static_cast<RakNet::MessageID>(EPacketType::Message));
-			//	stream.Write(a_Message.c_str());
-			//	m_Interface->Send(&stream, PacketPriority::HIGH_PRIORITY,
-			//		PacketReliability::RELIABLE_ORDERED, 0, getServerAddress(), false);
-			//}
-			//else
-			//{
-			//	m_StalledMessages.push(a_Message);
-			//}
+			if(m_Connected)
+			{
+				RakNet::BitStream stream;
+				stream.Write(static_cast<RakNet::MessageID>(EPacketType::Message));
+				stream.Write(a_Message.c_str());
+				m_Interface->Send(&stream, PacketPriority::HIGH_PRIORITY,
+					PacketReliability::RELIABLE_ORDERED, 0, getServerAddress(), false);
+			}
+			else
+			{
+				m_StalledMessages.push(a_Message);
+			}
 		}
 
 		unsigned short ClientConnection::getConnectionCount() const

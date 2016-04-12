@@ -62,10 +62,6 @@ namespace ConfusServer
 
 		void Connection::handlePacket(RakNet::Packet* a_Packet)
 		{
-			if(a_Packet->data == nullptr)
-			{
-				return;
-			}
 			switch(static_cast<unsigned char>(a_Packet->data[0]))
 			{
 			case static_cast<unsigned char>(EPacketType::Message):

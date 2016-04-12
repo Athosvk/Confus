@@ -8,6 +8,7 @@
 #include "Audio\PlayerAudioEmitter.h"
 #include "EventManager.h"
 #include "Flag.h"
+#include "RespawnFloor.h"
 
 namespace Confus
 {    
@@ -47,6 +48,8 @@ namespace Confus
         /// </summary>
         Player m_PlayerNode;
 		Player m_SecondPlayerNode;
+        RespawnFloor m_RedRespawnFloor;
+        RespawnFloor m_BlueRespawnFloor;
         /// <summary>
         /// The Blue Flag.
         /// </summary>
