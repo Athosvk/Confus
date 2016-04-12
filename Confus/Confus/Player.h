@@ -5,7 +5,8 @@
 #include "Health.h"
 #include "Weapon.h"
 
-namespace Confus {
+namespace Confus 
+{
 
 	namespace Audio 
     {
@@ -46,6 +47,8 @@ namespace Confus {
 		~Player();
         void fixedUpdate();
         void update();
+        ///<summary> Respawns the player to their base, public so round resets etc. can call this </summary>
+        void respawn();
         virtual void render();
         /// <summary> Returns the bounding box of the player's mesh </summary>
         virtual const irr::core::aabbox3d<irr::f32> & getBoundingBox() const;
