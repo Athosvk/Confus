@@ -141,7 +141,9 @@ namespace Confus
         PlayerNode->setFrameLoop(38, 41);
         PlayerNode->setCurrentFrame(38);
         m_Weapon.Damage = LightAttackDamage;
+        m_SoundEmitter->playAttackSound(false);
         initializeAttack();
+
     }
 
     void Player::startHeavyAttack()
@@ -149,6 +151,7 @@ namespace Confus
         PlayerNode->setFrameLoop(60, 66);
         PlayerNode->setCurrentFrame(60);
         m_Weapon.Damage = HeavyAttackDamage;
+        m_SoundEmitter->playAttackSound(true);
         initializeAttack();
     }
 
@@ -164,17 +167,17 @@ namespace Confus
 
     void Player::update()
     {
-        m_FootstepSoundEmitter->updatePosition();
+        m_SoundEmitter->updatePosition();
 
         int frameNumber = static_cast<int>(PlayerNode->getFrameNr());
         if(frameNumber == 0 || frameNumber == 6)
         {
-            m_FootstepSoundEmitter->playFootStepSound();
+            m_SoundEmitter->playFootStepSound();
         }
     }
 
     void Player::createAudioEmitter()
     {
-        m_FootstepSoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
+        m_SoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
     }
 }

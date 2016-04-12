@@ -1,5 +1,7 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
+
+#include "Audio\PlayerAudioEmitter.h"
 #include "Health.h"
 #include "Weapon.h"
 
@@ -25,7 +27,7 @@ namespace Confus {
 		ETeamIdentifier* TeamIdentifier;    
         Flag* FlagPointer;
 	private:
-        Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
+        Audio::PlayerAudioEmitter* m_SoundEmitter;
 
         void createAudioEmitter();
         /// <summary> The weapon bone index of the animation for the weapon </summary>
