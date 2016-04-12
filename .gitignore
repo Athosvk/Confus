@@ -234,3 +234,4 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+Confus/Confus/Player.cpp.orig

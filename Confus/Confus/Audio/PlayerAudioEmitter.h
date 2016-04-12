@@ -1,8 +1,7 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
-#include <memory>
+#include <vector>
 
-#include "..\Player.h"
 #include "..\OpenAL\OpenALSource.h"
 
 namespace Confus
@@ -14,9 +13,10 @@ namespace Confus
         /// </summary>
         class PlayerAudioEmitter
         {
-            OpenALSource* m_AudioSourceFootstep1;
-            OpenALSource* m_AudioSourceFootstep2;
-            OpenALSource* m_AudioSourceFootstep3;
+            OpenALSource* m_AudioSourceFootsteps[3];
+            OpenALSource* m_AudioSourceGrunts[3];
+            OpenALSource* m_AudioSourceSwordSwoshes[4];
+            
             irr::scene::IAnimatedMeshSceneNode* m_AttachedPlayer;
         public:            
             /// <summary>
@@ -31,11 +31,24 @@ namespace Confus
             /// <summary>
             /// Plays a random footstep sound.
             /// </summary>
-            void playFootStepSound();
+            void playFootStepSound() const;            
+            /// <summary>
+            /// Plays a random attack sound.
+            /// </summary>
+            /// <param name="a_HeavyAttack">Is it a heavy attack?</param>
+            void playAttackSound(bool a_HeavyAttack) const;
+            /// <summary>
+            /// Plays a random grunt.
+            /// </summary>
+            void playRandomGrunt() const;            
+            /// <summary>
+            /// Plays a random sword swosh.
+            /// </summary>
+            void playRandomSwordSwosh() const;
             /// <summary>
             /// Updates the position of this instance.
             /// </summary>
-            void updatePosition();            
+            void updatePosition() const;            
             /// <summary>
             /// Creates the audio sources.
             /// </summary>

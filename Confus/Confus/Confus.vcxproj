@@ -112,7 +112,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib;RakNet.lib;ws2_32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\Lansenou\Desktop\Confus\Libraries\32 bit\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -151,7 +151,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib;RakNet.lib;ws2_32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -193,6 +193,7 @@
     <ClCompile Include="OpenAL\OpenALSource.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Audio\PlayerAudioEmitter.cpp" />
+    <ClCompile Include="RespawnFloor.cpp" />
     <ClCompile Include="StaticWall.cpp" />
     <ClCompile Include="WalledMazeTile.cpp" />
     <ClCompile Include="Weapon.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="OpenAL\OpenALSource.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Audio\PlayerAudioEmitter.h" />
+    <ClInclude Include="RespawnFloor.h" />
     <ClInclude Include="StaticWall.h" />
     <ClInclude Include="WalledMazeTile.h" />
     <ClInclude Include="Weapon.h" />
