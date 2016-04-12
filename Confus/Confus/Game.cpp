@@ -18,7 +18,8 @@ namespace Confus
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed),
         m_RedRespawnFloor(m_Device),
-        m_BlueRespawnFloor(m_Device)
+        m_BlueRespawnFloor(m_Device),
+		m_GUI(m_Device, &m_PlayerNode)
     {
         render();
     }
@@ -108,6 +109,7 @@ namespace Confus
         m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
 
         m_PlayerNode.update();
+		m_GUI.update();
         m_Listener.setPosition(m_PlayerNode.CameraNode->getAbsolutePosition());
         irr::core::quaternion playerRotation(m_PlayerNode.CameraNode->getRotation());
 

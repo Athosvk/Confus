@@ -8,6 +8,7 @@
 #include "EventManager.h"
 #include "Flag.h"
 #include "RespawnFloor.h"
+#include "GUI.h"
 
 namespace Confus
 {    
@@ -42,6 +43,10 @@ namespace Confus
         /// </summary>
         OpenALListener m_Listener;
         EventManager m_EventManager;
+		/// <summary>
+		/// The GUI for the Player
+		/// </summary>
+		GUI m_GUI;
         /// <summary>
         /// The Players to test with.
         /// </summary>
