@@ -14,5 +14,6 @@ namespace ConfusTest
 			Assert::AreEqual(1, 1);
 		}
 
+
 	};
 }
