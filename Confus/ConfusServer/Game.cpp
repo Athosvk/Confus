@@ -1,5 +1,6 @@
 #include <Irrlicht/irrlicht.h>
 #include <time.h>
+#include <iostream>
 
 #include "Game.h"
 #include "Player.h"
@@ -11,6 +12,8 @@ namespace ConfusServer
 {
     const double Game::FixedUpdateInterval = 0.02;
     const double Game::MaxFixedUpdateInterval = 0.1;
+
+	const double Game::ProcessPacketsInterval = 0.03;
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),
@@ -44,11 +47,11 @@ namespace ConfusServer
       
         while(m_Device->run())
         {
+			processConnection();
             handleInput();
             update();
             processFixedUpdates();
             render();
-            m_Connection->processPackets();
         }
     }
 
@@ -56,6 +59,16 @@ namespace ConfusServer
     {
         m_Connection = std::make_unique<Networking::Connection>();
     }
+
+	void Game::processConnection()
+	{
+		m_ConnectionUpdateTimer += m_DeltaTime;
+		if (m_ConnectionUpdateTimer >= ProcessPacketsInterval)
+		{
+			m_ConnectionUpdateTimer = 0;
+			m_Connection->processPackets();
+		}
+	}
 
     void Game::processTriangleSelectors()
     {
@@ -147,7 +160,7 @@ namespace ConfusServer
     {
         m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
         m_Device->getSceneManager()->drawAll();
-        m_Device->getGUIEnvironment()->drawAll();
+        //m_Device->getGUIEnvironment()->drawAll();
         m_Device->getVideoDriver()->endScene();
     }
 }

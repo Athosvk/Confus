@@ -168,6 +168,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RespawnFloor.h">
+    	<Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Networking\ClientConnection.h">
       <Filter>Header Files</Filter>
     </ClInclude>

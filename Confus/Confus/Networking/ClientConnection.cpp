@@ -54,7 +54,10 @@ namespace Confus
 				}
 				else
 				{
-					std::cout << "Message has arrived " << std::endl;
+					if (packet->data != NULL) {
+						std::cout << "Message: \"" << packet->data  << " has arrived \"" << std::endl;
+					}
+					
 				}
                 m_Interface->DeallocatePacket(packet);
                 packet = m_Interface->Receive();
