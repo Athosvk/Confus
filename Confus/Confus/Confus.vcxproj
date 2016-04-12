@@ -185,6 +185,7 @@
     <ClCompile Include="MazeGenerator.cpp" />
     <ClCompile Include="MazeTile.cpp" />
     <ClCompile Include="MoveableWall.cpp" />
+    <ClCompile Include="Networking\ClientConnection.cpp" />
     <ClCompile Include="OpenAL\Framework\aldlist.cpp" />
     <ClCompile Include="OpenAL\Framework\CWaves.cpp" />
     <ClCompile Include="OpenAL\Framework\Framework.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="MazeGenerator.h" />
     <ClInclude Include="MazeTile.h" />
     <ClInclude Include="MoveableWall.h" />
+    <ClInclude Include="Networking\ClientConnection.h" />
     <ClInclude Include="OpenAL\Framework\aldlist.h" />
     <ClInclude Include="OpenAL\Framework\CWaves.h" />
     <ClInclude Include="OpenAL\Framework\Framework.h" />

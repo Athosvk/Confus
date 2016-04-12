@@ -1,14 +1,19 @@
 #include <Irrlicht/irrlicht.h>
 #include <time.h>
+#include <iostream>
 
 #include "Game.h"
 #include "Player.h"
 #include "Flag.h"
+#define DEBUG_CONSOLE
+#include "Debug.h"
 
 namespace ConfusServer
 {
     const double Game::FixedUpdateInterval = 0.02;
     const double Game::MaxFixedUpdateInterval = 0.1;
+
+	const double Game::ProcessPacketsInterval = 0.03;
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),
@@ -18,11 +23,11 @@ namespace ConfusServer
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed)
     {
-        render();
     }
 
     void Game::run()
     {
+        initializeConnection();
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
@@ -42,12 +47,28 @@ namespace ConfusServer
       
         while(m_Device->run())
         {
+			processConnection();
             handleInput();
             update();
             processFixedUpdates();
             render();
         }
     }
+
+    void Game::initializeConnection()
+    {
+        m_Connection = std::make_unique<Networking::Connection>();
+    }
+
+	void Game::processConnection()
+	{
+		m_ConnectionUpdateTimer += m_DeltaTime;
+		if (m_ConnectionUpdateTimer >= ProcessPacketsInterval)
+		{
+			m_ConnectionUpdateTimer = 0;
+			m_Connection->processPackets();
+		}
+	}
 
     void Game::processTriangleSelectors()
     {
@@ -139,7 +160,7 @@ namespace ConfusServer
     {
         m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
         m_Device->getSceneManager()->drawAll();
-        m_Device->getGUIEnvironment()->drawAll();
+        //m_Device->getGUIEnvironment()->drawAll();
         m_Device->getVideoDriver()->endScene();
     }
 }
