@@ -48,7 +48,7 @@ enum class EFlagEnum
 		void captureFlag(Player* a_PlayerObject);
 		/// <summary> Set the starting position of the flag that it will reset to. </summary>
 		/// <param name="a_Position"> The position the flag will reset to. </param>
-        void setStartPosition(irr::core::vector3df a_Rotation);
+        void setStartPosition(irr::core::vector3df a_Position);
 		/// <summary> Set the starting rotation of the flag that it will reset to. </summary>
 		/// <param name="a_Rotation"> The rotation the flag will reset to. </param>
         void setStartRotation(irr::core::vector3df a_Rotation);

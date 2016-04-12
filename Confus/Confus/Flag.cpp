@@ -25,8 +25,6 @@ namespace Confus {
         m_FlagNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
         m_FlagNode->setScale({ 1.5f, 1.5f, 1.5f });
 
-        m_FlagNode->setDebugDataVisible(irr::scene::EDS_BBOX_ALL);
-
         m_FlagOldParent = m_FlagNode->getParent();
 
         //Set Color
