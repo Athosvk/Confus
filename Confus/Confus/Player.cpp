@@ -173,10 +173,16 @@ namespace Confus
 
         if(PlayerHealth.getHealth() <= 0) {
             respawn();
+			if (FlagPointer != nullptr) {
+				FlagPointer->drop(this);
+			}
         }
 
         if(CameraNode->getPosition().Y <= -10) {
             respawn();
+			if (FlagPointer != nullptr) {
+				FlagPointer->returnToStartPosition();
+			}
         }
     }
 

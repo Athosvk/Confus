@@ -180,7 +180,7 @@ namespace ConfusServer {
         *a_PlayerObject->CarryingFlag = EFlagEnum::None;
 	}
 
-	//TODO Drop Flag at position of player
+
 	void Flag::drop(Player* a_PlayerObject) 
     {
         m_FlagNode->setParent(m_FlagOldParent);
