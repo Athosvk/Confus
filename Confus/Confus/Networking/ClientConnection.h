@@ -58,7 +58,12 @@ namespace Confus
 			/// This function assumes that there is at most one open connection at this time,
 			/// which means that there can be no connections to other servers or clients.
 			/// </remarks>
-			RakNet::SystemAddress getServerAddress() const;
+			RakNet::SystemAddress getServerAddress() const;			
+			/// <summary>
+			/// Dispatches the messages that the connection was not able to send yet
+			/// due to waiting for the connection to be established
+			/// </summary>
+			void dispatchStalledMessages();
         };
     }
 }
