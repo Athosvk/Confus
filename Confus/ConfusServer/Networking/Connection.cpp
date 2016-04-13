@@ -42,6 +42,7 @@ namespace ConfusServer
         unsigned short Connection::getConnectionCount() const
         {
             unsigned short openConnections = 0;
+			//Passing nullptr allows us to get the amount of open connections
             m_Interface->GetConnectionList(nullptr, &openConnections);
             return openConnections;
         }
@@ -62,20 +63,23 @@ namespace ConfusServer
 
 		void Connection::handlePacket(RakNet::Packet* a_Packet)
 		{
-			if(a_Packet->data == nullptr)
-			{
-				return;
-			}
 			switch(static_cast<unsigned char>(a_Packet->data[0]))
 			{
-			case static_cast<unsigned char>(EPacketType::Message):
-				RakNet::RakString contents;
-				RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
-				inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
-				inputStream.Read(contents);
-				std::cout << "Message received: " << contents;
+			case static_cast<unsigned char>(EPacketType::Message) :
+				printMessage(RakNet::BitStream(a_Packet->data, a_Packet->length, false));
 				break;
+			default:
+				std::cout << "Message arrived with id " << static_cast<int>(a_Packet->data[0])
+					<< std::endl;
 			}
+		}
+
+		void Connection::printMessage(RakNet::BitStream& a_InputStream)
+		{
+			RakNet::RakString contents;
+			a_InputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+			a_InputStream.Read(contents);
+			std::cout << "Message received: " << contents << std::endl;
 		}
     }
 }
