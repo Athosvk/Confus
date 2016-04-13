@@ -42,6 +42,7 @@ namespace ConfusServer
         unsigned short Connection::getConnectionCount() const
         {
             unsigned short openConnections = 0;
+			//Passing nullptr allows us to get the amount of open connections
             m_Interface->GetConnectionList(nullptr, &openConnections);
             return openConnections;
         }
