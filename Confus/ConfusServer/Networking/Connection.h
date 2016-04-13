@@ -18,7 +18,8 @@ namespace ConfusServer
         /// </remarks>
         class Connection
         {
-        private:
+		private:
+			/// <summary> The type of packet </summary>
 			enum class EPacketType : unsigned char
 			{
 				Message = 1 + ID_USER_PACKET_ENUM

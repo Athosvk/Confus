@@ -21,15 +21,18 @@ namespace Confus
         /// </remarks>
         class ClientConnection
         {
-        private:
+		private:
+			/// <summary> The type of packet </summary>
 			enum class EPacketType : unsigned char
 			{
 				Message = 1 + ID_USER_PACKET_ENUM
 			};
 
             /// <summary> The RakNet interface for interacting with RakNet </summary>
-            RakNet::RakPeerInterface* m_Interface = RakNet::RakPeerInterface::GetInstance();
+			RakNet::RakPeerInterface* m_Interface = RakNet::RakPeerInterface::GetInstance();
+			/// <summary> The messages it was not able to send yet due to not having a connection established </summary>
 			std::queue<std::string> m_StalledMessages;
+			/// <summary> Whether we are connected to a server</summary>
 			bool m_Connected = false;
 
         public:
