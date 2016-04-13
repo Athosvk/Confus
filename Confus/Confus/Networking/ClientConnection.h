@@ -1,5 +1,6 @@
 #pragma once
 #include <RakNet/RakPeerInterface.h>
+#include <RakNet/MessageIdentifiers.h>
 #include <string>
 #include <queue>
 
@@ -21,9 +22,9 @@ namespace Confus
         class ClientConnection
         {
         private:
-			enum class EPacketType : unsigned
+			enum class EPacketType : unsigned char
 			{
-				Message = 1
+				Message = 1 + ID_USER_PACKET_ENUM
 			};
 
             /// <summary> The RakNet interface for interacting with RakNet </summary>

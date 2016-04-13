@@ -1,6 +1,7 @@
 #pragma once
 #include <RakNet/RakPeerInterface.h>
 #include <RakNet/RakNetTypes.h>
+#include <RakNet/MessageIdentifiers.h>
 
 namespace ConfusServer
 {
@@ -18,9 +19,9 @@ namespace ConfusServer
         class Connection
         {
         private:
-			enum class EPacketType
+			enum class EPacketType : unsigned char
 			{
-				Message = 1
+				Message = 1 + ID_USER_PACKET_ENUM
 			};
 
             /// <summary> The RakNet interface for interacting with RakNet </summary>
@@ -43,8 +44,17 @@ namespace ConfusServer
 			/// <summary>
 			/// Gracefully closes all the connections to the clients this server is connected to
 			/// </summary>
-			void closeAllConnections();
-			void handlePacket(RakNet::Packet* a_Packet);
+			void closeAllConnections();			
+			/// <summary>
+			/// Handles the incoming packet
+			/// </summary>
+			/// <param name="a_Packet">The packet.</param>
+			void handlePacket(RakNet::Packet* a_Packet);			
+			/// <summary>
+			/// Prints the message.
+			/// </summary>
+			/// <param name="a_Message">The a_ message.</param>
+			void printMessage(RakNet::BitStream& a_InputStream);
         };
     }
 }
