@@ -4,6 +4,11 @@
 
 namespace Confus {
 
+    OpenALListener::OpenALListener()
+    {
+        init();
+    }
+
     void OpenALListener::init()
     {
         OpenAL::ALFWInit();

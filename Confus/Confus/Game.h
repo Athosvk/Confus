@@ -1,12 +1,23 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
 
+#include "Networking/ClientConnection.h"
 #include "MazeGenerator.h"
+#include "OpenAL\OpenALListener.h"
 #include "Player.h"
+#include "Audio\PlayerAudioEmitter.h"
 #include "EventManager.h"
+#include "Flag.h"
+#include "RespawnFloor.h"
+#include "GUI.h"
 
 namespace Confus
-{
+{    
+    /// <summary> 
+    /// The Game instance itself, running the game loop. It ties the objects in
+    /// the Game to the Irrlicht instance, so that these can communicate through this
+    /// with the active Irrlicht instance 
+    /// </summary>
     class Game
     {
     private:
@@ -28,8 +39,30 @@ namespace Confus
         /// MazeGenerator that hasa accesible maze
         /// </summary>
         MazeGenerator m_MazeGenerator;
+        /// <summary>
+        /// The OpenAL listener that is attached to the camera.
+        /// </summary>
+        OpenALListener m_Listener;
         EventManager m_EventManager;
+		/// <summary>
+		/// The GUI for the Player
+		/// </summary>
+		GUI m_GUI;
+        /// <summary>
+        /// The Players to test with.
+        /// </summary>
         Player m_PlayerNode;
+		Player m_SecondPlayerNode;
+        RespawnFloor m_RedRespawnFloor;
+        RespawnFloor m_BlueRespawnFloor;
+        /// <summary>
+        /// The Blue Flag.
+        /// </summary>
+        Flag m_BlueFlag;
+        /// <summary>
+        /// The Red Flag.
+        /// </summary>
+        Flag m_RedFlag;
         /// <summary>
         /// The delay between the last and future fixed update
         /// </summary>
@@ -46,8 +79,11 @@ namespace Confus
         /// The total elapsed game ticks in the current frame
         /// </summary>
         irr::u32 m_CurrentTicks = 0;
-
         irr::scene::ISceneNode* m_LevelRootNode;
+		/// <summary>
+		/// The connection as a client to the server that we are currently connected to
+		/// </summary>
+		std::unique_ptr<Networking::ClientConnection> m_Connection;
 
     public:
         /// <summary>
@@ -68,6 +104,11 @@ namespace Confus
         /// Processes the triangle selectors.
         /// </summary>
         void processTriangleSelectors();
+        irr::scene::IMetaTriangleSelector* processLevelMetaTriangles();        
+        /// <summary>
+        /// Initializes the connection to the server.
+        /// </summary>
+        void initializeConnection();
         /// <summary>
         /// Processes the input data
         /// </summary>

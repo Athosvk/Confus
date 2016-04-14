@@ -1,9 +1,12 @@
 #include <Irrlicht/irrlicht.h>
-#include <sstream>
+#include <time.h>
+#include <iostream>
 
 #include "Game.h"
 #include "Player.h"
-#include "EventManager.h"
+#include "Flag.h"
+#define DEBUG_CONSOLE
+#include "Debug.h"
 
 namespace Confus
 {
@@ -12,29 +15,45 @@ namespace Confus
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
-        m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f)),
-        m_PlayerNode(m_Device)
+		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+        m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamBlue, true),
+        m_SecondPlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, false),
+        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
+        m_RedFlag(m_Device, ETeamIdentifier::TeamRed),
+        m_RedRespawnFloor(m_Device),
+        m_BlueRespawnFloor(m_Device),
+		m_GUI(m_Device, &m_PlayerNode)
     {
     }
+
     void Game::run()
     {
+        initializeConnection();
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
-        m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
 
-        sceneManager->loadScene("Media/IrrlichtScenes/Bases.irr", nullptr, m_LevelRootNode);
+        m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
+        sceneManager->loadScene("Media/IrrlichtScenes/Bases 2.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
+        
         processTriangleSelectors();
 
         m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-        m_Device->getCursorControl()->setVisible(false);
+        m_SecondPlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+        m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+        m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+
+        m_BlueRespawnFloor.setPosition(irr::core::vector3df(0.f, 3.45f, 11.f));
+        m_RedRespawnFloor.setPosition(irr::core::vector3df(0.f, 3.45f, -83.f));
 
         m_Device->setEventReceiver(&m_EventManager);
-
+        m_Device->getCursorControl()->setVisible(false);
+      
         while(m_Device->run())
         {
-            handleInput();
+            m_Connection->processPackets();
+			handleInput();
             update();
             processFixedUpdates();
             render();
@@ -47,7 +66,7 @@ namespace Confus
         auto metatriangleSelector = sceneManager->createMetaTriangleSelector();
         
         irr::core::array<irr::scene::ISceneNode*> nodes;
-        sceneManager->getSceneNodesFromType(irr::scene::ESNT_ANY, nodes, m_LevelRootNode);
+        sceneManager->getSceneNodesFromType(irr::scene::ESNT_ANY, nodes);
         for(irr::u32 i = 0; i < nodes.size(); ++i)
         {
             irr::scene::ISceneNode* node = nodes[i];
@@ -72,7 +91,7 @@ namespace Confus
             default:
                 break;
             }
-
+            
             if(selector)
             {
                 metatriangleSelector->addTriangleSelector(selector);
@@ -80,6 +99,19 @@ namespace Confus
             }
         }
         m_LevelRootNode->setTriangleSelector(metatriangleSelector);
+    }
+
+    void Game::initializeConnection()
+    {
+        std::string serverIP;
+        std::cout << "Enter the server's ip address: ";
+        std::cin >> serverIP;
+
+        unsigned short serverPort;
+        std::cout << "Enter the server's port: ";
+        std::cin >> serverPort;
+
+        m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
     }
 
     void Game::handleInput()
@@ -92,6 +124,16 @@ namespace Confus
         m_PreviousTicks = m_CurrentTicks;
         m_CurrentTicks = m_Device->getTimer()->getTime();
         m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
+
+        m_PlayerNode.update();
+		m_GUI.update();
+        m_Listener.setPosition(m_PlayerNode.CameraNode->getAbsolutePosition());
+        irr::core::quaternion playerRotation(m_PlayerNode.CameraNode->getRotation());
+
+        //Todo: Fix rotations
+        irr::core::vector3df upVector = playerRotation * irr::core::vector3df( 0, 1, 0 );
+        irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
+        m_Listener.setDirection(forwardVector, upVector);     
     }
 
     void Game::processFixedUpdates()
@@ -107,6 +149,20 @@ namespace Confus
 
     void Game::fixedUpdate()
     {
+		static float timer = 0.0f;
+		timer += static_cast<float>(m_DeltaTime);
+        if(timer >= 3.0f && timer <= 8.0f)
+        {
+            m_BlueRespawnFloor.enableCollision();
+            m_RedRespawnFloor.enableCollision();
+        }
+		if (timer >= 9.0f)
+		{
+			timer = 0.0f;
+			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
+            m_BlueRespawnFloor.disableCollision();
+            m_RedRespawnFloor.disableCollision();
+		}
 		m_MazeGenerator.fixedUpdate();
     }
 
