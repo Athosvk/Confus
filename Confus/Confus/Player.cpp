@@ -4,7 +4,6 @@
 #include "EventManager.h"
 #include "Flag.h"
 
-
 namespace Confus
 {
     const irr::u32 Player::WeaponJointIndex = 14u;
@@ -113,7 +112,7 @@ namespace Confus
     {
         CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level, PlayerNode, {0.1f, 0.2f, 0.1f}, { 0, -1, 0 }, {0, 1.5f, 0}));
         
-        irr::scene::ITriangleSelector* selector = 0;
+        irr::scene::ITriangleSelector* selector = nullptr;
         selector = a_SceneManager->createTriangleSelector(PlayerNode);
         CameraNode->setTriangleSelector(selector);
         selector->drop();
