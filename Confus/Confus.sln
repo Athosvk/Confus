@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Confus", "Confus\Confus.vcxproj", "{05E5AC88-DBAE-4714-8D00-92A2FB90BB08}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConfusServer", "ConfusServer\ConfusServer.vcxproj", "{B53DEE96-598D-4B50-ACAA-7B1465D44AC1}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConfusTest", "ConfusTest\ConfusTest.vcxproj", "{8875FB28-0038-4F38-892A-FC42CD4CA70E}"
 EndProject
 Global
