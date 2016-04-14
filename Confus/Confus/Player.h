@@ -26,7 +26,7 @@ namespace Confus
         irr::scene::ICameraSceneNode* CameraNode = nullptr;
 		EFlagEnum* CarryingFlag;
 		ETeamIdentifier* TeamIdentifier;    
-        Flag* FlagPointer;
+        Flag* FlagPointer = nullptr;
 		Health PlayerHealth;
 	private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
