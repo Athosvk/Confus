@@ -1,4 +1,5 @@
 #include <IrrAssimp/IrrAssimp.h>
+#include <RakNet/MessageIdentifiers.h>
 #include "Audio\PlayerAudioEmitter.h"
 #include "Player.h"
 #include "EventManager.h"
@@ -222,8 +223,21 @@ namespace Confus
         m_SoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
     }
 
-    // void Player::setConnection(Networking::ClientConnection* a_Connection)
-	//{
-       // m_Connection = a_Connection;
-	//}
+     void Player::setConnection(Networking::ClientConnection* a_Connection)
+	{
+        m_Connection = a_Connection;
+        
+        #pragma pack(push, 1)
+        struct PlayerAttackPacket
+        {
+            unsigned char typeId = ID_PLAYER_ATTACK; 
+            boolean heavyAttack = false;           
+        };
+        #pragma pack(pop)
+
+       /* PlayerAttackPacket* packet = new PlayerAttackPacket();
+        m_Connection->sendMessage(&packet);
+        delete(packet);*/
+        m_Connection->sendMessage("ID_PLAYER_ATTACK");
+	}
 }

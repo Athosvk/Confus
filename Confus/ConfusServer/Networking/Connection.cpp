@@ -68,6 +68,10 @@ namespace ConfusServer
 			case static_cast<unsigned char>(EPacketType::Message) :
 				printMessage(RakNet::BitStream(a_Packet->data, a_Packet->length, false));
 				break;
+            //case ID_PLAYER_ATTACK:
+            //     std::cout << "Player pressed attack button";
+            //     Call method here.
+            //     break;
 			default:
 				std::cout << "Message arrived with id " << static_cast<int>(a_Packet->data[0])
 					<< std::endl;

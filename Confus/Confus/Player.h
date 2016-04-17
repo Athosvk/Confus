@@ -8,11 +8,6 @@
 
 namespace Confus 
 {
-	namespace Audio 
-    {
-		class PlayerAudioEmitter;
-	}
-
     enum class EFlagEnum;
 	enum class ETeamIdentifier;
     class EventManager;
@@ -58,6 +53,8 @@ namespace Confus
         /// <param name="a_EventManager">The current event manager</param>
         void handleInput(EventManager& a_EventManager);
         void setLevelCollider(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_Level);
+        /// <summary> Sets the connection to the server. </summary>
+        void setConnection(Networking::ClientConnection* a_Connection);
     private:
         /// <summary> Starts the walking animation, which is the default animation </summary>
         void startWalking() const;
@@ -70,9 +67,6 @@ namespace Confus
 
         /// <summary> Starts the heavy attack, which deals more damage </summary>
         void startHeavyAttack();
-
-        /// <summary> Sets the connection to the server. </summary>
-      //  void setConnection(Networking::ClientConnection* a_Connection);
 
         /// <summary> Called when the animation finishes </summary>
         /// <remarks> Generally used for the attack animations only </remarks>
