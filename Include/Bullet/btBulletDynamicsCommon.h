@@ -19,28 +19,28 @@ subject to the following restrictions:
 ///Common headerfile includes for Bullet Dynamics, including Collision Detection
 #include "btBulletCollisionCommon.h"
 
-#include "BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h"
+#include "Dynamics/Dynamics/btDiscreteDynamicsWorld.h"
 
-#include "BulletDynamics/Dynamics/btSimpleDynamicsWorld.h"
-#include "BulletDynamics/Dynamics/btRigidBody.h"
+#include "Dynamics/Dynamics/btSimpleDynamicsWorld.h"
+#include "Dynamics/Dynamics/btRigidBody.h"
 
-#include "BulletDynamics/ConstraintSolver/btPoint2PointConstraint.h"
-#include "BulletDynamics/ConstraintSolver/btHingeConstraint.h"
-#include "BulletDynamics/ConstraintSolver/btConeTwistConstraint.h"
-#include "BulletDynamics/ConstraintSolver/btGeneric6DofConstraint.h"
-#include "BulletDynamics/ConstraintSolver/btSliderConstraint.h"
-#include "BulletDynamics/ConstraintSolver/btGeneric6DofSpringConstraint.h"
-#include "BulletDynamics/ConstraintSolver/btUniversalConstraint.h"
-#include "BulletDynamics/ConstraintSolver/btHinge2Constraint.h"
-#include "BulletDynamics/ConstraintSolver/btGearConstraint.h"
-#include "BulletDynamics/ConstraintSolver/btFixedConstraint.h"
+#include "Dynamics/ConstraintSolver/btPoint2PointConstraint.h"
+#include "Dynamics/ConstraintSolver/btHingeConstraint.h"
+#include "Dynamics/ConstraintSolver/btConeTwistConstraint.h"
+#include "Dynamics/ConstraintSolver/btGeneric6DofConstraint.h"
+#include "Dynamics/ConstraintSolver/btSliderConstraint.h"
+#include "Dynamics/ConstraintSolver/btGeneric6DofSpringConstraint.h"
+#include "Dynamics/ConstraintSolver/btUniversalConstraint.h"
+#include "Dynamics/ConstraintSolver/btHinge2Constraint.h"
+#include "Dynamics/ConstraintSolver/btGearConstraint.h"
+#include "Dynamics/ConstraintSolver/btFixedConstraint.h"
 
 
-#include "BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h"
+#include "Dynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h"
 
 
 ///Vehicle simulation, with wheel contact simulated by raycasts
-#include "BulletDynamics/Vehicle/btRaycastVehicle.h"
+#include "Dynamics/Vehicle/btRaycastVehicle.h"
 
 
 
