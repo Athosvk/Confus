@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <RakNet/RakPeerInterface.h>
 #include <RakNet/BitStream.h>
 #include <RakNet/MessageIdentifiers.h>
 
@@ -12,6 +13,7 @@ namespace Confus
         ClientConnection::ClientConnection(const std::string& a_ServerIP,
             unsigned short a_Port)
         {
+            m_Interface = RakNet::RakPeerInterface::GetInstance();
             RakNet::SocketDescriptor socketDescriptor;
             m_Interface->Startup(1, &socketDescriptor, 1);
             //There won't be a password for the server, which is why we pass nullptr

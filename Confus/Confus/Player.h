@@ -1,13 +1,13 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
 
+#include "Networking\ClientConnection.h"
 #include "Audio\PlayerAudioEmitter.h"
 #include "Health.h"
 #include "Weapon.h"
 
 namespace Confus 
 {
-
 	namespace Audio 
     {
 		class PlayerAudioEmitter;
