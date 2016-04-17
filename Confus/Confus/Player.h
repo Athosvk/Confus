@@ -17,12 +17,15 @@ namespace Confus
 	enum class ETeamIdentifier;
     class EventManager;
     class Flag;
-
+    /// <summary> 
+    /// Player class
+    /// </summary>
     class Player : irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
     {   
     public:
 		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
+        /// <summary> The ICameraSceneNode for the player </summary>
         irr::scene::ICameraSceneNode* CameraNode = nullptr;
 		EFlagEnum* CarryingFlag;
 		ETeamIdentifier* TeamIdentifier;    
@@ -43,12 +46,19 @@ namespace Confus
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
     public:
-        Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
+        /// <summary> Player class constructor. </summary>
+        /// <param name="a_Device">The active Irrlicht Device.</param>
+        /// <param name="a_ID">The ID of the scenenode.</param>
+        /// <param name="a_TeamIdentifier">The team's identifier the player should have.</param>
+        /// <param name="a_MainPlayer">A boolean to identify the player the user controls.</param>
+        Player(irr::IrrlichtDevice* a_Device, irr::s32 a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
+        /// <summary> Player class destructor. </summary>
 		~Player();
-        void fixedUpdate();
+        /// <summary> Update function, any tasks that need to be done every frame go here. </summary>
         void update();
         ///<summary> Respawns the player to their base, public so round resets etc. can call this </summary>
         void respawn();
+        /// <summary> Required render function for the ISceneNode, does nothing as we render in the Game.cpp </summary>
         virtual void render();
         /// <summary> Returns the bounding box of the player's mesh </summary>
         virtual const irr::core::aabbox3d<irr::f32> & getBoundingBox() const;
@@ -73,6 +83,7 @@ namespace Confus
         /// <remarks> Generally used for the attack animations only </remarks>
         /// <param name="node">The node whoms animation finished</param>
         virtual void OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node) override;
+        /// <summary> KeyMap used for the controls of the player </summary>
         irr::SKeyMap m_KeyMap[6];
     };
 }

@@ -9,9 +9,9 @@ namespace Confus
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-	Player::Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
+	Player::Player(irr::IrrlichtDevice* a_Device, irr::s32 a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
 		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
-		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), a_id),
+		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), a_ID),
 		TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
 		CarryingFlag(new EFlagEnum(EFlagEnum::None))
     {
@@ -75,17 +75,15 @@ namespace Confus
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
+
+        delete(videoDriver);
+        delete(sceneManager);
     }
 
 	Player::~Player() {
 		delete(CarryingFlag);
 		delete(TeamIdentifier);
 	}
-
-    const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const
-    {
-        return m_Mesh->getBoundingBox();
-    }
 
     void Player::handleInput(EventManager& a_EventManager)
     {
@@ -105,6 +103,11 @@ namespace Confus
     void Player::render()
     {
 
+    }
+
+    const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const
+    {
+        return m_Mesh->getBoundingBox();
     }
 
     void Player::setLevelCollider(irr::scene::ISceneManager* a_SceneManager,
