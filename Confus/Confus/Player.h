@@ -42,6 +42,9 @@ namespace Confus
         bool m_Attacking = false;
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
+        /// <summary> Pointer to the connection between the server and client. </summary>
+     //   Networking::ClientConnection* m_Connection;
+
     public:
         Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
 		~Player();
@@ -68,6 +71,9 @@ namespace Confus
 
         /// <summary> Starts the heavy attack, which deals more damage </summary>
         void startHeavyAttack();
+
+        /// <summary> Sets the connection to the server. </summary>
+      //  void setConnection(Networking::ClientConnection* a_Connection);
 
         /// <summary> Called when the animation finishes </summary>
         /// <remarks> Generally used for the attack animations only </remarks>

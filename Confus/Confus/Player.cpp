@@ -220,4 +220,9 @@ namespace Confus
     {
         m_SoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
     }
+
+    // void Player::setConnection(Networking::ClientConnection* a_Connection)
+	//{
+       // m_Connection = a_Connection;
+	//}
 }
