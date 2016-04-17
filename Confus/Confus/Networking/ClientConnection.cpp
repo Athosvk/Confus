@@ -44,6 +44,10 @@ namespace Confus
 					dispatchStalledMessages();
 					m_Connected = true;
 				}
+                else if(packet->data[0] == ID_PLAYER_ATTACK)
+                {
+                    std::cout << "Player pressed attack button";
+                }
 				else
 				{
 					std::cout << "Message: \"" << packet->data  << " has arrived \"" << std::endl;					

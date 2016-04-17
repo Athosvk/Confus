@@ -4,6 +4,7 @@
 #include "Audio\PlayerAudioEmitter.h"
 #include "Health.h"
 #include "Weapon.h"
+#include "Networking\ClientConnection.h"
 
 namespace Confus 
 {
@@ -30,7 +31,7 @@ namespace Confus
 		Health PlayerHealth;
 	private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
-
+        
         void createAudioEmitter();
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
@@ -42,6 +43,8 @@ namespace Confus
         bool m_Attacking = false;
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
+        /// <summary> The connection with the server. </summary>
+        Networking::ClientConnection* m_Connection;
     public:
         Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
 		~Player();
@@ -55,7 +58,10 @@ namespace Confus
         /// <summary> Handles the input based actions </summary>
         /// <param name="a_EventManager">The current event manager</param>
         void handleInput(EventManager& a_EventManager);
+        /// <summary> Creates the collision between the player and the level. </summary>
         void setLevelCollider(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_Level);
+        /// <summary> Sets the connection with the server so we can send messages. </summary>
+        void setConnection(Networking::ClientConnection* a_Connection);
     private:
         /// <summary> Starts the walking animation, which is the default animation </summary>
         void startWalking() const;
