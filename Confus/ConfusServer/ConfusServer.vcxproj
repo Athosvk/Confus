@@ -195,6 +195,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Audio\PlayerAudioEmitter.cpp" />
     <ClCompile Include="StaticWall.cpp" />
+    <ClCompile Include="TeamScore.cpp" />
     <ClCompile Include="WalledMazeTile.cpp" />
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
@@ -219,6 +220,8 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Audio\PlayerAudioEmitter.h" />
     <ClInclude Include="StaticWall.h" />
+    <ClInclude Include="TeamIdentifier.h" />
+    <ClInclude Include="TeamScore.h" />
     <ClInclude Include="WalledMazeTile.h" />
     <ClInclude Include="Weapon.h" />
   </ItemGroup>

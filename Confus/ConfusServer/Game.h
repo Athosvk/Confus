@@ -9,9 +9,10 @@
 #include "Audio\PlayerAudioEmitter.h"
 #include "EventManager.h"
 #include "Flag.h"
+#include "TeamScore.h"
 
 namespace ConfusServer
-{    
+{ 
     /// <summary> 
     /// The Game instance itself, running the game loop. It ties the objects in
     /// the Game to the Irrlicht instance, so that these can communicate through this
@@ -83,6 +84,8 @@ namespace ConfusServer
         /// <summary> The connection to the clients of this server</summary>
         std::unique_ptr<Networking::Connection> m_Connection;
         irr::scene::ISceneNode* m_LevelRootNode;
+        /// <summary> Team Score Manager </summary>
+        TeamScore m_TeamScoreManager;
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.

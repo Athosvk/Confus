@@ -20,14 +20,15 @@ namespace ConfusServer
 		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
         m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, true),        
         m_SecondPlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, false),
-        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
-        m_RedFlag(m_Device, ETeamIdentifier::TeamRed)
+        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_TeamScoreManager),
+        m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_TeamScoreManager)
     {
     }
 
     void Game::run()
     {
         initializeConnection();
+
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
@@ -58,6 +59,7 @@ namespace ConfusServer
     void Game::initializeConnection()
     {
         m_Connection = std::make_unique<Networking::Connection>();
+        m_TeamScoreManager.setConnection(m_Connection.get());
     }
 
 	void Game::processConnection()
@@ -152,6 +154,7 @@ namespace ConfusServer
 		{
 			timer = 0.0f;
 			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
+            m_TeamScoreManager.teamScoredPoint(ETeamIdentifier::TeamBlue);
 		}
 		m_MazeGenerator.fixedUpdate();
     }

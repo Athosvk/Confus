@@ -1,9 +1,15 @@
+#include <RakNet/RakPeerInterface.h>
+#include <RakNet/RakNetTypes.h>
+#include <RakNet/MessageIdentifiers.h>
+#include <RakNet/BitStream.h>
 #include <iostream>
 #include <vector>
 #include <string>
-#include <RakNet/BitStream.h>
 
 #include "Connection.h"
+#include "../Debug.h"
+
+#define DEBUG_CONSOLE
 
 namespace ConfusServer
 {
@@ -11,6 +17,7 @@ namespace ConfusServer
     {
         Connection::Connection()
         {
+            m_Interface = RakNet::RakPeerInterface::GetInstance();
             RakNet::SocketDescriptor socketDescriptor(60000, nullptr);
             auto result = m_Interface->Startup(5, &socketDescriptor, 1);
 			if(result != RakNet::StartupResult::RAKNET_STARTED)
@@ -42,8 +49,10 @@ namespace ConfusServer
         unsigned short Connection::getConnectionCount() const
         {
             unsigned short openConnections = 0;
-			//Passing nullptr allows us to get the amount of open connections
+
+            //Passing nullptr allows us to get the amount of open connections
             m_Interface->GetConnectionList(nullptr, &openConnections);
+
             return openConnections;
         }
 
@@ -81,5 +90,21 @@ namespace ConfusServer
 			a_InputStream.Read(contents);
 			std::cout << "Message received: " << contents << std::endl;
 		}
+
+        void Connection::sendPacketToAllClients(unsigned char* a_Data, int a_Size)
+        {
+            auto connectionCount = getConnectionCount();
+            std::vector<RakNet::SystemAddress>
+                openConnections(static_cast<size_t>(connectionCount));
+            auto serverID = m_Interface->GetConnectionList(openConnections.data(),
+                &connectionCount);
+
+            RakNet::BitStream bitStream(a_Data, a_Size, true);
+
+            for(unsigned short i = 0u; i < connectionCount; ++i)
+            {
+                m_Interface->Send(&bitStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0, openConnections[i], false);
+            }
+        }
     }
 }

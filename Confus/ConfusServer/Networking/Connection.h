@@ -1,7 +1,10 @@
 #pragma once
-#include <RakNet/RakPeerInterface.h>
-#include <RakNet/RakNetTypes.h>
-#include <RakNet/MessageIdentifiers.h>
+namespace RakNet 
+{
+    struct Packet;
+    class BitStream;
+    class RakPeerInterface;
+}
 
 namespace ConfusServer
 {
@@ -22,11 +25,11 @@ namespace ConfusServer
 			/// <summary> The type of packet </summary>
 			enum class EPacketType : unsigned char
 			{
-				Message = 1 + ID_USER_PACKET_ENUM
+				Message = 1 + 134
 			};
 
             /// <summary> The RakNet interface for interacting with RakNet </summary>
-            RakNet::RakPeerInterface* m_Interface = RakNet::RakPeerInterface::GetInstance();
+            RakNet::RakPeerInterface* m_Interface;// = RakNet::RakPeerInterface::GetInstance();
 
         public:
             /// <summary> Initializes a new instance of the <see cref="Connection"/> class. </summary>
@@ -38,6 +41,10 @@ namespace ConfusServer
             /// requesting services
             /// </summary>
             void processPackets();
+            /// <summary> Send Package to all clients </summary>
+            /// <param name="a_Data">The packet to send.</param>.
+            /// <param name="a_Size">The size of the data.</param>
+            void sendPacketToAllClients(unsigned char* a_Data, int a_Size);
 		private:
 			/// <summary> Gets the amount of clients connected to this server instance </summary>
 			/// <returns>The amount of clients connected</returns>
