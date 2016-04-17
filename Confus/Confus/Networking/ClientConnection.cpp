@@ -62,7 +62,7 @@ namespace Confus
                 dispatchStalledMessages();
                 m_Connected = true;
                 break;
-            case static_cast<unsigned char>(EPacketType::Message) :
+            case static_cast<unsigned char>(EPacketType::Message) : //or ID_MESSAGE
                 printMessage(RakNet::BitStream(a_Packet->data, a_Packet->length, false));
                 break;
             case static_cast<unsigned char>(ID_SCORE_UPDATE) :
