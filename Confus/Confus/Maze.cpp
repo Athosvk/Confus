@@ -3,11 +3,12 @@
 
 namespace Confus
 {
-	Maze::Maze(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_StartPosition, bool a_NeedRender)
-		:m_MazeSizeX(60), m_MazeSizeY(60)
+	Maze::Maze(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_StartPosition,float a_PathScalar, bool a_NeedRender)
+		:m_MazeSizeX(60), m_MazeSizeY(60), m_PathScalar(a_PathScalar)
 	{
 		m_IrrDevice = a_Device;
 		resetMaze(irr::core::vector2df(30, -7), a_NeedRender);
+
 	}
 
 	void Maze::resetMaze(irr::core::vector2df a_Offset, bool a_NeedRender)
@@ -21,10 +22,12 @@ namespace Confus
 			{
 				if (a_NeedRender)
 				{
-					std::shared_ptr<WalledMazeTile> mazeTile = std::make_shared<WalledMazeTile>(m_IrrDevice, irr::core::vector3df(static_cast<float>(-x + a_Offset.X), 0.5f, static_cast<float>(-y + a_Offset.Y)),
-															 irr::core::vector3df(static_cast<float>(-x + a_Offset.X), 0.5f, static_cast<float>(-y + a_Offset.Y)));
-					const irr::scene::IAnimatedMeshSceneNode* wallMeshNode = mazeTile->getWall()->getMeshNode();
+					std::shared_ptr<WalledMazeTile> mazeTile = std::make_shared<WalledMazeTile>(m_IrrDevice, irr::core::vector3df(static_cast<float>(-x*m_PathScalar + a_Offset.X), 0.5f, static_cast<float>(-y*m_PathScalar + a_Offset.Y)),
+															 irr::core::vector3df(static_cast<float>(-x*m_PathScalar + a_Offset.X), 0.5f, static_cast<float>(-y*m_PathScalar + a_Offset.Y)));
+					irr::scene::IAnimatedMeshSceneNode* wallMeshNode = mazeTile->getWall()->getMeshNode();
 					irr::core::vector3df boundingBox = wallMeshNode->getBoundingBox().getExtent();
+					irr::core::vector3df scalar = irr::core::vector3df(m_PathScalar, 1., m_PathScalar);//do not want to raise the wall height
+					wallMeshNode->setScale(scalar);
 					mazeTile->getWall()->HiddenPosition = irr::core::vector3df(mazeTile->getWall()->HiddenPosition.X, -boundingBox.Y * wallMeshNode->getScale().Y, mazeTile->getWall()->HiddenPosition.Z);
 					mazeTile->getWall()->TransitionSpeed = 0.5f;
 					MazeTiles[x].push_back(mazeTile);
