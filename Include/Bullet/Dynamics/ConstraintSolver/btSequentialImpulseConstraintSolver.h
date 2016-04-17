@@ -20,12 +20,12 @@ class btIDebugDraw;
 class btPersistentManifold;
 class btDispatcher;
 class btCollisionObject;
-#include "BulletDynamics/ConstraintSolver/btTypedConstraint.h"
-#include "BulletDynamics/ConstraintSolver/btContactSolverInfo.h"
-#include "BulletDynamics/ConstraintSolver/btSolverBody.h"
-#include "BulletDynamics/ConstraintSolver/btSolverConstraint.h"
-#include "BulletCollision/NarrowPhaseCollision/btManifoldPoint.h"
-#include "BulletDynamics/ConstraintSolver/btConstraintSolver.h"
+#include "../../Dynamics/ConstraintSolver/btTypedConstraint.h"
+#include "../../Dynamics/ConstraintSolver/btContactSolverInfo.h"
+#include "../../Dynamics/ConstraintSolver/btSolverBody.h"
+#include "../../Dynamics/ConstraintSolver/btSolverConstraint.h"
+#include "../../Collision/NarrowPhaseCollision/btManifoldPoint.h"
+#include "../../Dynamics/ConstraintSolver/btConstraintSolver.h"
 
 typedef btSimdScalar(*btSingleConstraintRowSolver)(btSolverBody&, btSolverBody&, const btSolverConstraint&);
 

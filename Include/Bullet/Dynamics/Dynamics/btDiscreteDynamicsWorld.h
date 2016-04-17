@@ -28,8 +28,9 @@ class btActionInterface;
 class btPersistentManifold;
 class btIDebugDraw;
 struct InplaceSolverIslandCallback;
+class btContactSolverInfo;
 
-#include "LinearMath/btAlignedObjectArray.h"
+#include "../../LinearMath/btAlignedObjectArray.h"
 
 
 ///btDiscreteDynamicsWorld provides discrete rigid body simulation
