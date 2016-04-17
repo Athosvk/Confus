@@ -1,9 +1,12 @@
 #include <irrlicht/irrlicht.h>
 #include <IrrAssimp/IrrAssimp.h>
+#include <iostream>
 
 #include "Flag.h"
 #include "Player.h"
 #include "Collider.h"
+#include "Debug.h"
+#define Debug_Console
 
 
 namespace Confus {
@@ -47,7 +50,7 @@ namespace Confus {
             }
             else if(a_CollidedNode->getID() == 1) 
 			{
-                //Failed to get player class from attached node.
+				std::cout << "Failed to get player class from attached node.";
                 return true;
             }
             return false;
@@ -178,7 +181,6 @@ namespace Confus {
         *a_PlayerObject->CarryingFlag = EFlagEnum::None;
 	}
 
-	//TODO Drop Flag at position of player
 	void Flag::drop(Player* a_PlayerObject) 
     {
         m_FlagNode->setParent(m_FlagOldParent);
@@ -204,6 +206,10 @@ namespace Confus {
         m_FlagNode->setRotation(*m_StartRotation);
 		*m_FlagStatus = EFlagEnum::FlagBase;
     }
+
+	irr::scene::ITriangleSelector* Flag::GetTriangleSelector(irr::scene::ISceneManager* a_SceneManager) {
+		return a_SceneManager->createTriangleSelectorFromBoundingBox(m_FlagNode);
+	}
 
 	Flag::~Flag() {
         m_FlagNode->setParent(m_FlagOldParent);

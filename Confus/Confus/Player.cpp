@@ -24,7 +24,7 @@ namespace Confus
         PlayerNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh, nullptr);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
         PlayerNode->setScale(irr::core::vector3df(0.3f, 0.3f, 0.3f));
-        PlayerNode->setPosition(irr::core::vector3df(0.f, -2.f, -0.2f));
+        PlayerNode->setPosition(irr::core::vector3df(0.f, -2.0f, -0.2f));
         PlayerNode->setName({"Player"});
 
         if(a_TeamIdentifier == ETeamIdentifier::TeamBlue) {
@@ -113,7 +113,12 @@ namespace Confus
     void Player::setLevelCollider(irr::scene::ISceneManager* a_SceneManager,
         irr::scene::ITriangleSelector* a_Level)
     {
-        CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level, PlayerNode, {0.1f, 0.2f, 0.1f}, { 0, -1, 0 }));
+        CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level, PlayerNode, {0.1f, 0.2f, 0.1f}, { 0, -1, 0 }, {0, 1.5f, 0}));
+        
+        irr::scene::ITriangleSelector* selector = nullptr;
+        selector = a_SceneManager->createTriangleSelector(PlayerNode);
+        CameraNode->setTriangleSelector(selector);
+        selector->drop();
     }
 
     void Player::startWalking() const
@@ -176,10 +181,16 @@ namespace Confus
 
         if(PlayerHealth.getHealth() <= 0) {
             respawn();
+			if (FlagPointer != nullptr) {
+				FlagPointer->drop(this);
+			}
         }
 
         if(CameraNode->getPosition().Y <= -10) {
             respawn();
+			if (FlagPointer != nullptr) {
+				FlagPointer->returnToStartPosition();
+			}
         }
     }
 

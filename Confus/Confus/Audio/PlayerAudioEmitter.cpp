@@ -110,6 +110,11 @@ namespace Confus
             {
                 audioSource->setPosition(m_AttachedPlayer->getAbsolutePosition());
             }
+
+            for(auto audioSource : m_AudioSourceSwordSwoshes)
+            {
+                audioSource->setPosition(m_AttachedPlayer->getAbsolutePosition());
+            }
         }
 
         void PlayerAudioEmitter::createAudioSources()

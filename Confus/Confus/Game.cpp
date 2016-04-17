@@ -1,9 +1,12 @@
 #include <Irrlicht/irrlicht.h>
 #include <time.h>
+#include <iostream>
 
 #include "Game.h"
 #include "Player.h"
 #include "Flag.h"
+#define DEBUG_CONSOLE
+#include "Debug.h"
 
 namespace Confus
 {
@@ -13,18 +16,19 @@ namespace Confus
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
 		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-        m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamBlue, true),        
+        m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamBlue, true),
         m_SecondPlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, false),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed),
         m_RedRespawnFloor(m_Device),
-        m_BlueRespawnFloor(m_Device)
+        m_BlueRespawnFloor(m_Device),
+		m_GUI(m_Device, &m_PlayerNode)
     {
-        render();
     }
 
     void Game::run()
     {
+        initializeConnection();
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
@@ -48,7 +52,8 @@ namespace Confus
       
         while(m_Device->run())
         {
-            handleInput();
+            m_Connection->processPackets();
+			handleInput();
             update();
             processFixedUpdates();
             render();
@@ -96,6 +101,19 @@ namespace Confus
         m_LevelRootNode->setTriangleSelector(metatriangleSelector);
     }
 
+    void Game::initializeConnection()
+    {
+        std::string serverIP;
+        std::cout << "Enter the server's ip address: ";
+        std::cin >> serverIP;
+
+        unsigned short serverPort;
+        std::cout << "Enter the server's port: ";
+        std::cin >> serverPort;
+
+        m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
+    }
+
     void Game::handleInput()
     {
         m_PlayerNode.handleInput(m_EventManager);
@@ -108,6 +126,7 @@ namespace Confus
         m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
 
         m_PlayerNode.update();
+		m_GUI.update();
         m_Listener.setPosition(m_PlayerNode.CameraNode->getAbsolutePosition());
         irr::core::quaternion playerRotation(m_PlayerNode.CameraNode->getRotation());
 

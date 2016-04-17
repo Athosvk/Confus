@@ -1,6 +1,7 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
 
+#include "Networking/ClientConnection.h"
 #include "MazeGenerator.h"
 #include "OpenAL\OpenALListener.h"
 #include "Player.h"
@@ -8,6 +9,7 @@
 #include "EventManager.h"
 #include "Flag.h"
 #include "RespawnFloor.h"
+#include "GUI.h"
 
 namespace Confus
 {    
@@ -42,6 +44,10 @@ namespace Confus
         /// </summary>
         OpenALListener m_Listener;
         EventManager m_EventManager;
+		/// <summary>
+		/// The GUI for the Player
+		/// </summary>
+		GUI m_GUI;
         /// <summary>
         /// The Players to test with.
         /// </summary>
@@ -73,8 +79,11 @@ namespace Confus
         /// The total elapsed game ticks in the current frame
         /// </summary>
         irr::u32 m_CurrentTicks = 0;
-
         irr::scene::ISceneNode* m_LevelRootNode;
+		/// <summary>
+		/// The connection as a client to the server that we are currently connected to
+		/// </summary>
+		std::unique_ptr<Networking::ClientConnection> m_Connection;
 
     public:
         /// <summary>
@@ -95,7 +104,11 @@ namespace Confus
         /// Processes the triangle selectors.
         /// </summary>
         void processTriangleSelectors();
-        irr::scene::IMetaTriangleSelector* processLevelMetaTriangles();
+        irr::scene::IMetaTriangleSelector* processLevelMetaTriangles();        
+        /// <summary>
+        /// Initializes the connection to the server.
+        /// </summary>
+        void initializeConnection();
         /// <summary>
         /// Processes the input data
         /// </summary>

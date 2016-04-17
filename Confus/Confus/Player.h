@@ -29,7 +29,8 @@ namespace Confus
         irr::scene::ICameraSceneNode* CameraNode = nullptr;
 		EFlagEnum* CarryingFlag;
 		ETeamIdentifier* TeamIdentifier;    
-        Flag* FlagPointer;
+        Flag* FlagPointer = nullptr;
+		Health PlayerHealth;
 	private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
 
@@ -38,7 +39,6 @@ namespace Confus
         static const irr::u32 WeaponJointIndex;
         static const unsigned LightAttackDamage;
         static const unsigned HeavyAttackDamage;
-	    Health PlayerHealth;
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
         /// <summary> Whether the player is currently attacking or not </summary>
