@@ -1,5 +1,8 @@
 #include <iostream>
+#include <memory>
 #include <RakNet/BitStream.h>
+#include <RakNet\MessageIdentifiers.h>
+#include <string>
 
 #include "TeamScore.h"
 #include "Debug.h"
@@ -14,17 +17,13 @@ namespace ConfusServer
 
     void TeamScore::sendScore()
     {
-        //TODO: Send score to clients
-        std::unique_ptr<RakNet::Packet>packet = std::make_unique<RakNet::Packet>();
-
         RakNet::BitStream bitStream;
-        bitStream.Write(static_cast<RakNet::MessageID>(135U));
-        bitStream.Write("Test");
+        bitStream.Write(static_cast<RakNet::MessageID>(ID_SCORE_UPDATE));
 
-        unsigned char* data;
-        int size = bitStream.CopyData(&data);
+        std::string test = std::to_string(static_cast<int>(ETeamIdentifier::TeamRed)) + std::to_string(m_RedTeamScore) + std::to_string(static_cast<int>(ETeamIdentifier::TeamBlue)) + std::to_string(m_BlueTeamScore);
+        bitStream.Write(test.c_str());
 
-        m_Connection->sendPacketToAllClients(data, size);
+        m_Connection->sendPacketToAllClients(bitStream);
     }
 
     void TeamScore::sendWin()

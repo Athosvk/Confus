@@ -75,6 +75,7 @@
     <LibraryPath>$(SolutionDir)../Libraries/32 bit/Debug;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <SourcePath>$(SolutionDir)Common;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -175,6 +176,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Common\Networking\Connection.cpp" />
+    <ClCompile Include="..\Common\TeamScore.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Flag.cpp" />
@@ -185,7 +188,6 @@
     <ClCompile Include="MazeGenerator.cpp" />
     <ClCompile Include="MazeTile.cpp" />
     <ClCompile Include="MoveableWall.cpp" />
-    <ClCompile Include="Networking\Connection.cpp" />
     <ClCompile Include="OpenAL\Framework\aldlist.cpp" />
     <ClCompile Include="OpenAL\Framework\CWaves.cpp" />
     <ClCompile Include="OpenAL\Framework\Framework.cpp" />
@@ -195,14 +197,16 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Audio\PlayerAudioEmitter.cpp" />
     <ClCompile Include="StaticWall.cpp" />
-    <ClCompile Include="TeamScore.cpp" />
     <ClCompile Include="WalledMazeTile.cpp" />
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Common\Debug.h" />
+    <ClInclude Include="..\Common\Networking\Connection.h" />
+    <ClInclude Include="..\Common\TeamIdentifier.h" />
+    <ClInclude Include="..\Common\TeamScore.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="EventManager.h" />
-    <ClInclude Include="Debug.h" />
     <ClInclude Include="Flag.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Health.h" />
@@ -210,7 +214,6 @@
     <ClInclude Include="MazeGenerator.h" />
     <ClInclude Include="MazeTile.h" />
     <ClInclude Include="MoveableWall.h" />
-    <ClInclude Include="Networking\Connection.h" />
     <ClInclude Include="OpenAL\Framework\aldlist.h" />
     <ClInclude Include="OpenAL\Framework\CWaves.h" />
     <ClInclude Include="OpenAL\Framework\Framework.h" />
@@ -220,8 +223,6 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Audio\PlayerAudioEmitter.h" />
     <ClInclude Include="StaticWall.h" />
-    <ClInclude Include="TeamIdentifier.h" />
-    <ClInclude Include="TeamScore.h" />
     <ClInclude Include="WalledMazeTile.h" />
     <ClInclude Include="Weapon.h" />
   </ItemGroup>

@@ -25,7 +25,7 @@ namespace Confus
 			/// <summary> The type of packet </summary>
 			enum class EPacketType : unsigned char
 			{
-				Message = 1 + ID_USER_PACKET_ENUM
+				Message = ID_MESSAGE
 			};
 
             /// <summary> The RakNet interface for interacting with RakNet </summary>
@@ -47,6 +47,16 @@ namespace Confus
             /// requesting services
             /// </summary>
 			void processPackets();
+            /// <summary>
+            /// Prints the incoming packet
+            /// </summary>
+            /// <param name="a_InputStream">The packet.</param>
+            void printMessage(RakNet::BitStream& a_InputStream);
+            /// <summary>
+            /// Handles the incoming packet
+            /// </summary>
+            /// <param name="a_Packet">The packet.</param>
+            void handlePacket(RakNet::Packet* a_Packet);
 			/// <summary>
 			/// Sends a message to the server
 			/// </summary>

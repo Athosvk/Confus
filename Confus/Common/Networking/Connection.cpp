@@ -91,7 +91,7 @@ namespace ConfusServer
 			std::cout << "Message received: " << contents << std::endl;
 		}
 
-        void Connection::sendPacketToAllClients(unsigned char* a_Data, int a_Size)
+        void Connection::sendPacketToAllClients(RakNet::BitStream& a_BitStream)
         {
             auto connectionCount = getConnectionCount();
             std::vector<RakNet::SystemAddress>
@@ -99,11 +99,9 @@ namespace ConfusServer
             auto serverID = m_Interface->GetConnectionList(openConnections.data(),
                 &connectionCount);
 
-            RakNet::BitStream bitStream(a_Data, a_Size, true);
-
             for(unsigned short i = 0u; i < connectionCount; ++i)
             {
-                m_Interface->Send(&bitStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0, openConnections[i], false);
+                m_Interface->Send(&a_BitStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0, openConnections[i], false);
             }
         }
     }

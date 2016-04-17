@@ -42,9 +42,8 @@ namespace ConfusServer
             /// </summary>
             void processPackets();
             /// <summary> Send Package to all clients </summary>
-            /// <param name="a_Data">The packet to send.</param>.
-            /// <param name="a_Size">The size of the data.</param>
-            void sendPacketToAllClients(unsigned char* a_Data, int a_Size);
+            /// <param name="a_BitStream">The packet to send.</param>
+            void sendPacketToAllClients(RakNet::BitStream& a_BitStream);
 		private:
 			/// <summary> Gets the amount of clients connected to this server instance </summary>
 			/// <returns>The amount of clients connected</returns>
@@ -59,9 +58,9 @@ namespace ConfusServer
 			/// <param name="a_Packet">The packet.</param>
 			void handlePacket(RakNet::Packet* a_Packet);			
 			/// <summary>
-			/// Prints the message.
+			/// Prints the InputStream.
 			/// </summary>
-			/// <param name="a_Message">The a_ message.</param>
+			/// <param name="a_InputStream">The a_InputStream message.</param>
 			void printMessage(RakNet::BitStream& a_InputStream);
         };
     }

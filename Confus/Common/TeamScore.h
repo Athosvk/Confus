@@ -1,8 +1,6 @@
 #pragma once
-#include <memory>
-
 #include "TeamIdentifier.h"
-#include "Networking\Connection.h"
+#include "Networking/Connection.h"
 
 namespace ConfusServer 
 {

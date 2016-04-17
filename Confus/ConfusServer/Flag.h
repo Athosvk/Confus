@@ -1,6 +1,6 @@
 #pragma once
-#include "TeamIdentifier.h"
-#include "TeamScore.h"
+#include "../Common/TeamIdentifier.h"
+#include "../Common/TeamScore.h"
 
 namespace ConfusServer 
 {

@@ -175,6 +175,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Common\Networking\Connection.cpp" />
+    <ClCompile Include="..\Common\TeamScore.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Flag.cpp" />
@@ -201,9 +203,12 @@
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Common\Debug.h" />
+    <ClInclude Include="..\Common\Networking\Connection.h" />
+    <ClInclude Include="..\Common\TeamIdentifier.h" />
+    <ClInclude Include="..\Common\TeamScore.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="EventManager.h" />
-    <ClInclude Include="Debug.h" />
     <ClInclude Include="Flag.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GUI.h" />

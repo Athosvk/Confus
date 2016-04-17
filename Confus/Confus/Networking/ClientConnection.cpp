@@ -37,19 +37,40 @@ namespace Confus
         {
             RakNet::Packet* packet = m_Interface->Receive();
             while(packet != nullptr)
-            {
-				if(packet->data[0] == ID_CONNECTION_REQUEST_ACCEPTED)
-				{
-					std::cout << "Connected to the server!\n";
-					dispatchStalledMessages();
-					m_Connected = true;
-				}
-				else
-				{
-					std::cout << "Message: \"" << packet->data  << " has arrived \"" << std::endl;					
-				}
+            {				
+                handlePacket(packet);
                 m_Interface->DeallocatePacket(packet);
                 packet = m_Interface->Receive();
+            }
+        }
+
+        void ClientConnection::printMessage(RakNet::BitStream& a_InputStream)
+        {
+            RakNet::RakString contents;
+            a_InputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+            a_InputStream.Read(contents);
+            std::cout << "Message received: " << contents << std::endl;
+        }
+
+
+        void ClientConnection::handlePacket(RakNet::Packet* a_Packet)
+        {
+            switch(static_cast<unsigned char>(a_Packet->data[0]))
+            {
+            case static_cast<unsigned char>(ID_CONNECTION_REQUEST_ACCEPTED) :
+                std::cout << "Connected to the server!\n";
+                dispatchStalledMessages();
+                m_Connected = true;
+                break;
+            case static_cast<unsigned char>(EPacketType::Message) :
+                printMessage(RakNet::BitStream(a_Packet->data, a_Packet->length, false));
+                break;
+            case static_cast<unsigned char>(ID_SCORE_UPDATE) :
+                std::cout << "Score update, Red score: " << a_Packet->data[4] << ", Blue score: " << a_Packet->data[6] << a_Packet->data[7] << std::endl;
+                break;
+            default:
+                std::cout << "Message arrived with id " << static_cast<int>(a_Packet->data[0])
+                    << std::endl;
             }
         }
 

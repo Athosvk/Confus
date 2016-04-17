@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Shared Files">
+      <UniqueIdentifier>{f3d4395d-5eb0-42f1-a047-d2ab8c55948a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -78,11 +81,11 @@
     <ClCompile Include="WalledMazeTile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Networking\Connection.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\Common\TeamScore.cpp">
+      <Filter>Shared Files</Filter>
     </ClCompile>
-    <ClCompile Include="TeamScore.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\Common\Networking\Connection.cpp">
+      <Filter>Shared Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -105,9 +108,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OpenAL\Framework\LoadOAL.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
@@ -167,14 +167,17 @@
     <ClInclude Include="WalledMazeTile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Networking\Connection.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\Common\Debug.h">
+      <Filter>Shared Files</Filter>
     </ClInclude>
-    <ClInclude Include="TeamScore.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\Common\TeamIdentifier.h">
+      <Filter>Shared Files</Filter>
     </ClInclude>
-    <ClInclude Include="TeamIdentifier.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\Common\TeamScore.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Networking\Connection.h">
+      <Filter>Shared Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
