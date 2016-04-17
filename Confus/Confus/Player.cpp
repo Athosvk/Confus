@@ -1,3 +1,4 @@
+#include "Networking\ClientConnection.h"
 #include <IrrAssimp/IrrAssimp.h>
 #include "Audio\PlayerAudioEmitter.h"
 #include "Player.h"
@@ -6,6 +7,7 @@
 
 namespace Confus
 {
+    Networking::ClientConnection* m_Connection;
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;

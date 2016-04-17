@@ -42,8 +42,7 @@ namespace Confus
         bool m_Attacking = false;
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
-        /// <summary> Pointer to the connection between the server and client. </summary>
-     //   Networking::ClientConnection* m_Connection;
+        
 
     public:
         Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
