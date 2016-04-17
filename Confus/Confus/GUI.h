@@ -17,12 +17,12 @@ namespace Confus
 		irr::video::ITexture* m_BloodImage;
 		irr::gui::IGUIImage* m_BloodOverlay;
 		OpenALSource* m_AudioSourceLowHealth;
-
 	public:
 		GUI(irr::IrrlichtDevice* a_Device, Player* a_Player);
 		~GUI();
 		void update();
 		void drawBloodOverlay();
 		void lowHealthAudio();
+		static irr::core::position2d<int> CalculatePixelPosition(irr::core::vector2df a_Coordinates);
 	};
 }

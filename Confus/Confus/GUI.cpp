@@ -1,13 +1,13 @@
 #include <Irrlicht/irrlicht.h>
 
 #include "GUI.h"
+#include "Game.h"
 
 namespace Confus
 {
 	GUI::GUI(irr::IrrlichtDevice* a_Device, Player* a_Player)
 	{
 		m_GUIEnvironment = a_Device->getGUIEnvironment();
-
 		m_Driver = a_Device->getVideoDriver();
 		m_BloodImage = m_Driver->getTexture("Media/Textures/Blood.png");
 		m_BloodOverlay = m_GUIEnvironment->addImage(m_BloodImage, irr::core::position2d<int>(0, 0));
@@ -45,5 +45,13 @@ namespace Confus
 		{
 			m_AudioSourceLowHealth->stop();
 		}
+	}
+	irr::core::position2d<int> GUI::CalculatePixelPosition(irr::core::vector2df a_Coordinates)
+	{
+		irr::core::vector2df pixelCoords;
+		pixelCoords.X = Game::ScreenWidth * a_Coordinates.X;
+		pixelCoords.Y = Game::ScreenHeight * a_Coordinates.Y;
+
+		return irr::core::position2d<int>(pixelCoords.X,pixelCoords.Y);
 	}
 }
