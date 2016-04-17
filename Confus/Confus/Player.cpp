@@ -9,11 +9,11 @@ namespace Confus
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-    Player::Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
-        : m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
-        irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), a_id),
-        TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
-        CarryingFlag(new EFlagEnum(EFlagEnum::None))
+	Player::Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
+		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
+		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), a_id),
+		TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
+		CarryingFlag(new EFlagEnum(EFlagEnum::None))
     {
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
@@ -25,7 +25,7 @@ namespace Confus
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
         PlayerNode->setScale(irr::core::vector3df(0.3f, 0.3f, 0.3f));
         PlayerNode->setPosition(irr::core::vector3df(0.f, -2.0f, -0.2f));
-        PlayerNode->setName({ "Player" });
+        PlayerNode->setName({"Player"});
 
         if(a_TeamIdentifier == ETeamIdentifier::TeamBlue) {
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
@@ -49,13 +49,13 @@ namespace Confus
         m_KeyMap[4].Action = irr::EKA_JUMP_UP;
         m_KeyMap[4].KeyCode = irr::KEY_SPACE;
 
-        if(a_MainPlayer)
+        if(a_MainPlayer) 
         {
             CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, true);
             CameraNode->setFOV(70.f);
             CameraNode->setNearValue(0.1f);
         }
-        else
+        else 
         {
             CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, false);
         }
@@ -67,8 +67,8 @@ namespace Confus
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
         }
-        PlayerNode->setParent(this);
-        setParent(CameraNode);
+	    PlayerNode->setParent(this);
+		setParent(CameraNode);
 
         createAudioEmitter();
         startWalking();
@@ -77,10 +77,10 @@ namespace Confus
         m_Weapon.disableCollider();
     }
 
-    Player::~Player() {
-        delete(CarryingFlag);
-        delete(TeamIdentifier);
-    }
+	Player::~Player() {
+		delete(CarryingFlag);
+		delete(TeamIdentifier);
+	}
 
     const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const
     {
@@ -110,8 +110,8 @@ namespace Confus
     void Player::setLevelCollider(irr::scene::ISceneManager* a_SceneManager,
         irr::scene::ITriangleSelector* a_Level)
     {
-        CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level, PlayerNode, { 0.1f, 0.2f, 0.1f }, { 0, -1, 0 }, { 0, 1.5f, 0 }));
-
+        CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level, PlayerNode, {0.1f, 0.2f, 0.1f}, { 0, -1, 0 }, {0, 1.5f, 0}));
+        
         irr::scene::ITriangleSelector* selector = nullptr;
         selector = a_SceneManager->createTriangleSelector(PlayerNode);
         CameraNode->setTriangleSelector(selector);
@@ -144,6 +144,7 @@ namespace Confus
         m_Weapon.Damage = LightAttackDamage;
         m_SoundEmitter->playAttackSound(false);
         initializeAttack();
+
     }
 
     void Player::startHeavyAttack()
@@ -177,16 +178,16 @@ namespace Confus
 
         if(PlayerHealth.getHealth() <= 0) {
             respawn();
-            if(FlagPointer != nullptr) {
-                FlagPointer->drop(this);
-            }
+			if (FlagPointer != nullptr) {
+				FlagPointer->drop(this);
+			}
         }
 
         if(CameraNode->getPosition().Y <= -10) {
             respawn();
-            if(FlagPointer != nullptr) {
-                FlagPointer->returnToStartPosition();
-            }
+			if (FlagPointer != nullptr) {
+				FlagPointer->returnToStartPosition();
+			}
         }
     }
 
@@ -205,8 +206,8 @@ namespace Confus
 
         if(*TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
-            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
-            animator->setTargetNode(CameraNode);
+             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
+             animator->setTargetNode(CameraNode);
         }
         else if(*TeamIdentifier == ETeamIdentifier::TeamRed)
         {
@@ -218,10 +219,5 @@ namespace Confus
     void Player::createAudioEmitter()
     {
         m_SoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
-    }
-
-    void Player::setConnection(Networking::ClientConnection* a_Connection)
-    {
-        m_Connection = a_Connection;
     }
 }

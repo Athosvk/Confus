@@ -29,7 +29,6 @@ namespace Confus
     void Game::run()
     {
         initializeConnection();
-        m_PlayerNode.setConnection(m_Connection.get());
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
