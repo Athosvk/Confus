@@ -28,7 +28,7 @@ class btActionInterface;
 class btPersistentManifold;
 class btIDebugDraw;
 struct InplaceSolverIslandCallback;
-class btContactSolverInfo;
+struct btContactSolverInfo;
 
 #include "../../LinearMath/btAlignedObjectArray.h"
 
