@@ -54,7 +54,7 @@ namespace Confus
 		/// <param name="a_Device">The current Irrlicht device.</param>
 		/// <param name="a_StartPosition">Startposition is passed on in the constructor so we might be able to adjust the position where the maze is drawn</param>
 		/// <param name="a_NeedRender">Boolean that states if this maze needs to be rendered or not</param>
-		Maze(irr::IrrlichtDevice * a_Device, irr::core::vector3df a_StartPosition,float a_PathScalar = 1, bool a_NeedRender = false);
+		Maze(irr::IrrlichtDevice * a_Device,int a_MazeSizeX, int a_MazeSizeY, irr::core::vector3df a_StartPosition,float a_PathScalar = 1, bool a_NeedRender = false);
 
 		/// <summary>
 		/// Resets the 2d vector, raising all mazetiles in it or making it a rendered maze
