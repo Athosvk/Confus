@@ -57,7 +57,7 @@ namespace ConfusServer
 
     void Game::initializeConnection()
     {
-        m_Connection = std::make_unique<Networking::Connection>();
+        m_Connection = std::make_unique<Networking::Connection>(&m_PlayerNode);
     }
 
 	void Game::processConnection()

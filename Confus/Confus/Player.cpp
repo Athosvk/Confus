@@ -2,6 +2,7 @@
 #include <RakNet/MessageIdentifiers.h>
 #include <RakNet/BitStream.h>
 #include "Audio\PlayerAudioEmitter.h"
+#include "Networking/ClientConnection.h"
 #include "Player.h"
 #include "EventManager.h"
 #include "Flag.h"
@@ -235,9 +236,7 @@ namespace Confus
      void Player::sendAttackMessageToServer() const
 	{
         RakNet::BitStream bitStreamOut;
-        bitStreamOut.Write(static_cast<RakNet::MessageID>(ID_PLAYER_ATTACK));
-        bitStreamOut.Write("Player attacks");
-
+        bitStreamOut.Write(static_cast<RakNet::MessageID>(Networking::ClientConnection::EPacketType::Player));
         m_Connection->sendMessage(&bitStreamOut);
 	}
 }

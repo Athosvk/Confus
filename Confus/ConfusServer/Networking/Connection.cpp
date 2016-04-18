@@ -2,13 +2,14 @@
 #include <vector>
 #include <string>
 #include <RakNet/BitStream.h>
+
 #include "Connection.h"
 
 namespace ConfusServer
 {
     namespace Networking
     {
-        Connection::Connection()
+        Connection::Connection(Player* a_MainPlayer)
         {
             RakNet::SocketDescriptor socketDescriptor(60000, nullptr);
             auto result = m_Interface->Startup(5, &socketDescriptor, 1);
@@ -19,6 +20,7 @@ namespace ConfusServer
 			}
             //Use 10 as a general case for a 5 vs 5 matchup
             m_Interface->SetMaximumIncomingConnections(10);
+            m_MainPlayer = a_MainPlayer;
         }
 
         Connection::~Connection()
@@ -64,8 +66,9 @@ namespace ConfusServer
 		{
 			switch(static_cast<unsigned char>(a_Packet->data[0]))
 			{
-            case ID_PLAYER_ATTACK:
+            case (ID_USER_PACKET_ENUM + 3):
                  std::cout << "Player pressed attack button\n";
+                 m_MainPlayer->startLightAttack();
                  break;
 			default:
 				std::cout << "Message arrived with id " << static_cast<int>(a_Packet->data[0])

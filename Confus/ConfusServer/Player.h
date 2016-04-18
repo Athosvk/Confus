@@ -51,18 +51,17 @@ namespace ConfusServer {
         /// <param name="a_EventManager">The current event manager</param>
         void handleInput(EventManager& a_EventManager);
         void setLevelCollider(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_Level);
+        /// <summary> Starts the light attack, dealing normal damage </summary>
+        void startLightAttack();
+
+        /// <summary> Starts the heavy attack, which deals more damage </summary>
+        void startHeavyAttack();
     private:
         /// <summary> Starts the walking animation, which is the default animation </summary>
         void startWalking() const;
         
         /// <summary> Initializes the shared attack variables </summary>
         void initializeAttack();
-
-        /// <summary> Starts the light attack, dealing normal damage </summary>
-        void startLightAttack();
-
-        /// <summary> Starts the heavy attack, which deals more damage </summary>
-        void startHeavyAttack();
 
         /// <summary> Called when the animation finishes </summary>
         /// <remarks> Generally used for the attack animations only </remarks>
