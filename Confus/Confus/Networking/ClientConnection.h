@@ -1,5 +1,6 @@
 #pragma once
 #include <RakNet/MessageIdentifiers.h>
+#include <RakNet/BitStream.h>
 #include <string>
 #include <queue>
 
@@ -35,7 +36,7 @@ namespace Confus
 			};
             RakNet::RakPeerInterface* m_Interface;
 			/// <summary> The messages it was not able to send yet due to not having a connection established </summary>
-			std::queue<std::string> m_StalledMessages;
+			std::queue<RakNet::BitStream> m_StalledMessages;
 			/// <summary> Whether we are connected to a server</summary>
 			bool m_Connected = false;
 
@@ -54,8 +55,8 @@ namespace Confus
 			/// <summary>
 			/// Sends a message to the server
 			/// </summary>
-			/// <param name="a_Message">The message contents</param>
-			void sendMessage(const std::string& a_Message);
+			/// <param name="a_Stream">The Bitstream that needs to be send.</param>
+			void sendMessage(RakNet::BitStream* a_Stream) const;
 		private:
 			/// <summary> Gets the amount of clients connected to this server instance </summary>
 			/// <returns> The amount of clients connected </returns>

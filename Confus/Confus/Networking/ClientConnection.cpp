@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <RakNet/RakPeerInterface.h>
-#include <RakNet/BitStream.h>
 #include <RakNet/MessageIdentifiers.h>
 
 #include "ClientConnection.h"
@@ -55,19 +54,17 @@ namespace Confus
             }
         }
 
-		void ClientConnection::sendMessage(const std::string& a_Message)
+		void ClientConnection::sendMessage(RakNet::BitStream* a_Stream) const
 		{
 			if(m_Connected)
 			{
-				RakNet::BitStream stream;
-				stream.Write(static_cast<RakNet::MessageID>(EPacketType::Message));
-				stream.Write(a_Message.c_str());
-				m_Interface->Send(&stream, PacketPriority::HIGH_PRIORITY,
+				m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
 					PacketReliability::RELIABLE_ORDERED, 0, getServerAddress(), false);
 			}
 			else
 			{
-				m_StalledMessages.push(a_Message);
+               // TODO: Fix this. 
+               // m_StalledMessages.push(a_Stream);
 			}
 		}
 
@@ -101,7 +98,7 @@ namespace Confus
 			{
 				RakNet::BitStream stream;
 				stream.Write(static_cast<RakNet::MessageID>(EPacketType::Message));
-				stream.Write(m_StalledMessages.front().c_str());
+				stream.Write(m_StalledMessages.front());
 				m_Interface->Send(&stream, PacketPriority::HIGH_PRIORITY,
 					PacketReliability::RELIABLE_ORDERED, 0, getServerAddress(), false);
 				m_StalledMessages.pop();

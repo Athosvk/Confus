@@ -55,6 +55,9 @@ namespace Confus
         void setLevelCollider(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_Level);
         /// <summary> Sets the connection to the server. </summary>
         void setConnection(Networking::ClientConnection* a_Connection);
+        
+        /// <summary> Sets the connection to the server. </summary>
+        void sendAttackMessageToServer() const;
     private:
         /// <summary> Starts the walking animation, which is the default animation </summary>
         void startWalking() const;

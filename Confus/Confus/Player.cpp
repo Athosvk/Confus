@@ -1,9 +1,11 @@
 #include <IrrAssimp/IrrAssimp.h>
 #include <RakNet/MessageIdentifiers.h>
+#include <RakNet/BitStream.h>
 #include "Audio\PlayerAudioEmitter.h"
 #include "Player.h"
 #include "EventManager.h"
 #include "Flag.h"
+#include <RakNet/PacketPriority.h>
 
 namespace Confus
 {
@@ -131,6 +133,8 @@ namespace Confus
 
     void Player::initializeAttack()
     {
+        sendAttackMessageToServer();
+
         PlayerNode->setLoopMode(false);
         PlayerNode->setAnimationEndCallback(this);
         PlayerNode->setAnimationSpeed(10);
@@ -226,18 +230,14 @@ namespace Confus
      void Player::setConnection(Networking::ClientConnection* a_Connection)
 	{
         m_Connection = a_Connection;
-        
-        #pragma pack(push, 1)
-        struct PlayerAttackPacket
-        {
-            unsigned char typeId = ID_PLAYER_ATTACK; 
-            boolean heavyAttack = false;           
-        };
-        #pragma pack(pop)
+	}
 
-       /* PlayerAttackPacket* packet = new PlayerAttackPacket();
-        m_Connection->sendMessage(&packet);
-        delete(packet);*/
-        m_Connection->sendMessage("ID_PLAYER_ATTACK");
+     void Player::sendAttackMessageToServer() const
+	{
+        RakNet::BitStream bitStreamOut;
+        bitStreamOut.Write(static_cast<RakNet::MessageID>(ID_PLAYER_ATTACK));
+        bitStreamOut.Write("Player attacks");
+
+        m_Connection->sendMessage(&bitStreamOut);
 	}
 }

@@ -2,7 +2,6 @@
 #include <vector>
 #include <string>
 #include <RakNet/BitStream.h>
-
 #include "Connection.h"
 
 namespace ConfusServer
@@ -65,13 +64,9 @@ namespace ConfusServer
 		{
 			switch(static_cast<unsigned char>(a_Packet->data[0]))
 			{
-			case static_cast<unsigned char>(EPacketType::Message) :
-				printMessage(RakNet::BitStream(a_Packet->data, a_Packet->length, false));
-				break;
-            //case ID_PLAYER_ATTACK:
-            //     std::cout << "Player pressed attack button";
-            //     Call method here.
-            //     break;
+            case ID_PLAYER_ATTACK:
+                 std::cout << "Player pressed attack button\n";
+                 break;
 			default:
 				std::cout << "Message arrived with id " << static_cast<int>(a_Packet->data[0])
 					<< std::endl;
