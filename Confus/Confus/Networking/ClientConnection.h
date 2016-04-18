@@ -40,8 +40,7 @@ namespace Confus
             enum class EPacketType : unsigned char
             {
                 Message = 1 + ID_USER_PACKET_ENUM,
-                
-                Player = 3 + ID_USER_PACKET_ENUM
+                PlayerAttack = 3 + ID_USER_PACKET_ENUM
             };
             /// <summary> Initializes a new instance of the <see cref="ClientConnection"/> class. </summary>
             /// <param name="a_ServerIP">The ip address of the server to connect to.</param>

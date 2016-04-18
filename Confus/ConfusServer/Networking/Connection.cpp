@@ -64,12 +64,29 @@ namespace ConfusServer
 
 		void Connection::handlePacket(RakNet::Packet* a_Packet)
 		{
-			switch(static_cast<unsigned char>(a_Packet->data[0]))
+            switch(static_cast<unsigned char>(a_Packet->data[0]))
 			{
-            case (ID_USER_PACKET_ENUM + 3):
-                 std::cout << "Player pressed attack button\n";
-                 m_MainPlayer->startLightAttack();
-                 break;
+            // Player attack ID.
+            case (ID_USER_PACKET_ENUM + 3) :
+            {
+                RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
+                
+                bool isHeavyAttack;
+                inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+                inputStream.Read(isHeavyAttack);
+                if(isHeavyAttack)
+                {
+                    m_MainPlayer->startHeavyAttack();
+                } 
+                else
+                {
+                    m_MainPlayer->startLightAttack();
+                }
+                #ifdef DEBUG_CONSOLE
+                std::cout << "Player pressed attack button\n";
+                #endif
+            }
+            break;
 			default:
 				std::cout << "Message arrived with id " << static_cast<int>(a_Packet->data[0])
 					<< std::endl;

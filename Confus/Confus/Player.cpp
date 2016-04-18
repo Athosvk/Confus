@@ -134,8 +134,6 @@ namespace Confus
 
     void Player::initializeAttack()
     {
-        sendAttackMessageToServer();
-
         PlayerNode->setLoopMode(false);
         PlayerNode->setAnimationEndCallback(this);
         PlayerNode->setAnimationSpeed(10);
@@ -146,6 +144,8 @@ namespace Confus
 
     void Player::startLightAttack()
     {
+        sendAttackMessageToServer(false);
+
         PlayerNode->setFrameLoop(38, 41);
         PlayerNode->setCurrentFrame(38);
         m_Weapon.Damage = LightAttackDamage;
@@ -156,6 +156,8 @@ namespace Confus
 
     void Player::startHeavyAttack()
     {
+        sendAttackMessageToServer(true);
+
         PlayerNode->setFrameLoop(60, 66);
         PlayerNode->setCurrentFrame(60);
         m_Weapon.Damage = HeavyAttackDamage;
@@ -233,10 +235,19 @@ namespace Confus
         m_Connection = a_Connection;
 	}
 
-     void Player::sendAttackMessageToServer() const
+     void Player::sendAttackMessageToServer(bool a_IsHeavyAttack) const
 	{
         RakNet::BitStream bitStreamOut;
-        bitStreamOut.Write(static_cast<RakNet::MessageID>(Networking::ClientConnection::EPacketType::Player));
+        bitStreamOut.Write(static_cast<RakNet::MessageID>(Networking::ClientConnection::EPacketType::PlayerAttack));
+        if(a_IsHeavyAttack) 
+        {
+            bitStreamOut.Write(true);
+        } 
+        else
+        {
+            bitStreamOut.Write(false);
+        }
+
         m_Connection->sendMessage(&bitStreamOut);
 	}
 }

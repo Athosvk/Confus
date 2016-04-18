@@ -57,7 +57,7 @@ namespace Confus
         void setConnection(Networking::ClientConnection* a_Connection);
         
         /// <summary> Sets the connection to the server. </summary>
-        void sendAttackMessageToServer() const;
+        void sendAttackMessageToServer(bool a_IsHeavyAttack) const;
     private:
         /// <summary> Starts the walking animation, which is the default animation </summary>
         void startWalking() const;
