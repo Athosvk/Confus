@@ -25,7 +25,8 @@ namespace Confus
 			/// <summary> The type of packet </summary>
 			enum class EPacketType : unsigned char
 			{
-				Message = ID_MESSAGE
+				Message = ID_USER_PACKET_ENUM + 1,
+				ScoreUpdate = Message + 1
 			};
 
             /// <summary> The RakNet interface for interacting with RakNet </summary>

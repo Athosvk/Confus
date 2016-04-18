@@ -125,9 +125,6 @@
     <ClInclude Include="EventManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MoveableWall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -196,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="..\Common\Networking\Connection.h">
       <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientTeamScore.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

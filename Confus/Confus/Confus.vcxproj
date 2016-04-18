@@ -207,6 +207,7 @@
     <ClInclude Include="..\Common\Networking\Connection.h" />
     <ClInclude Include="..\Common\TeamIdentifier.h" />
     <ClInclude Include="..\Common\TeamScore.h" />
+    <ClInclude Include="ClientTeamScore.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="Flag.h" />

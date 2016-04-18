@@ -5,8 +5,8 @@
 #include <string>
 
 #include "TeamScore.h"
-#include "Debug.h"
 #define DEBUG_CONSOLE
+#include "Debug.h"
 
 namespace ConfusServer 
 {
@@ -15,13 +15,13 @@ namespace ConfusServer
         m_Connection = a_Connection;
     }
 
-    void TeamScore::sendScore()
+    void TeamScore::sendScoreToClients()
     {
         RakNet::BitStream bitStream;
-        bitStream.Write(static_cast<RakNet::MessageID>(ID_SCORE_UPDATE));
+        bitStream.Write(static_cast<RakNet::MessageID>(Networking::Connection::EPacketType::ScoreUpdate));
 
-        std::string test = std::to_string(static_cast<int>(ETeamIdentifier::TeamRed)) + std::to_string(m_RedTeamScore) + std::to_string(static_cast<int>(ETeamIdentifier::TeamBlue)) + std::to_string(m_BlueTeamScore);
-        bitStream.Write(test.c_str());
+        bitStream.Write(m_RedTeamScore);
+		bitStream.Write(m_BlueTeamScore);
 
         m_Connection->sendPacketToAllClients(bitStream);
     }
@@ -46,7 +46,7 @@ namespace ConfusServer
             std::cout << "Team " << static_cast<int>(a_TeamScored) << " was the winner!" << std::endl;
             sendWin();
         }
-        sendScore();
+        sendScoreToClients();
     }
 
     int TeamScore::getPointsOfTeam(ETeamIdentifier a_Team) 

@@ -2,7 +2,7 @@
 #include "TeamIdentifier.h"
 #include "Networking/Connection.h"
 
-namespace ConfusServer 
+namespace ConfusServer
 {
     /// <summary> Score class that keeps track the teams their score </summary>
     class TeamScore 
@@ -22,7 +22,7 @@ namespace ConfusServer
         /// <param name="a_Connection"> The Connection class instance to send the score with. </param>
         void setConnection(Networking::Connection* a_Connection);
         /// <summary> Send the score to all the clients. </summary>
-        void sendScore();
+        void sendScoreToClients();
         /// <summary> Send the win to all the clients. </summary>
         void sendWin();
         /// <summary >Update the score of a team that scored. </summary>

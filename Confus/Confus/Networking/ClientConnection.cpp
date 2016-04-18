@@ -4,6 +4,7 @@
 #include <RakNet/MessageIdentifiers.h>
 
 #include "ClientConnection.h"
+#include "../ClientTeamScore.h"
 
 namespace Confus
 {
@@ -65,9 +66,19 @@ namespace Confus
             case static_cast<unsigned char>(EPacketType::Message) : //or ID_MESSAGE
                 printMessage(RakNet::BitStream(a_Packet->data, a_Packet->length, false));
                 break;
-            case static_cast<unsigned char>(ID_SCORE_UPDATE) :
-                std::cout << "Score update, Red score: " << a_Packet->data[4] << ", Blue score: " << a_Packet->data[6] << a_Packet->data[7] << std::endl;
-                break;
+			case static_cast<unsigned char>(EPacketType::ScoreUpdate) :
+			{
+				int redScore, blueScore;
+				RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
+
+				inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+				inputStream.Read(redScore);
+				inputStream.Read(blueScore);
+				ClientTeamScore::RedTeamScore = redScore;
+				ClientTeamScore::BlueTeamScore = blueScore;
+				std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
+				break;
+			}
             default:
                 std::cout << "Message arrived with id " << static_cast<int>(a_Packet->data[0])
                     << std::endl;

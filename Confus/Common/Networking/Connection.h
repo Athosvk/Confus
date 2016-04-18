@@ -1,9 +1,11 @@
 #pragma once
+#include <RakNet/MessageIdentifiers.h>
+
 namespace RakNet 
 {
-    struct Packet;
-    class BitStream;
     class RakPeerInterface;
+	struct Packet;
+	class BitStream;
 }
 
 namespace ConfusServer
@@ -22,16 +24,17 @@ namespace ConfusServer
         class Connection
         {
 		private:
+
+            /// <summary> The RakNet interface for interacting with RakNet </summary>
+            RakNet::RakPeerInterface* m_Interface; 
+
+        public:
 			/// <summary> The type of packet </summary>
 			enum class EPacketType : unsigned char
 			{
-				Message = 1 + 134
+				Message = ID_USER_PACKET_ENUM + 1,
+				ScoreUpdate = Message + 1
 			};
-
-            /// <summary> The RakNet interface for interacting with RakNet </summary>
-            RakNet::RakPeerInterface* m_Interface;// = RakNet::RakPeerInterface::GetInstance();
-
-        public:
             /// <summary> Initializes a new instance of the <see cref="Connection"/> class. </summary>
             Connection();
             /// <summary> Finalizes an instance of the <see cref="Connection"/> class. </summary>

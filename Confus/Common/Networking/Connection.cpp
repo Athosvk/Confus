@@ -1,15 +1,16 @@
 #include <RakNet/RakPeerInterface.h>
 #include <RakNet/RakNetTypes.h>
-#include <RakNet/MessageIdentifiers.h>
 #include <RakNet/BitStream.h>
 #include <iostream>
 #include <vector>
 #include <string>
 
 #include "Connection.h"
-#include "../Debug.h"
 
 #define DEBUG_CONSOLE
+#include "../Debug.h"
+
+
 
 namespace ConfusServer
 {
