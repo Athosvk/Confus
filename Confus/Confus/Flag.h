@@ -26,7 +26,7 @@ enum class EFlagEnum
         ETeamIdentifier* m_TeamIdentifier;
         irr::scene::IMeshSceneNode* m_FlagNode;
         Collider* m_Collider;
-        irr::scene::ISceneNode* m_FlagOldParent;
+        irr::scene::ISceneNode* m_FlagOldParent = nullptr;
 
     public: 
         /// <summary> Flag class constructor. </summary>

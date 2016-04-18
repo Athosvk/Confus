@@ -27,7 +27,7 @@ namespace ConfusServer
         ETeamIdentifier* m_TeamIdentifier;
         irr::scene::IMeshSceneNode* m_FlagNode;
         Collider* m_Collider;
-        irr::scene::ISceneNode* m_FlagOldParent;
+        irr::scene::ISceneNode* m_FlagOldParent = nullptr;
         TeamScore m_TeamScore;
 
     public: 
