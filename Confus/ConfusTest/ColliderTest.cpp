@@ -1,4 +1,3 @@
-#pragma comment(lib, "Collider.obj")
 #include "stdafx.h"
 
 #include <Confus/Collider.h>

@@ -1,4 +1,3 @@
-#pragma comment(lib, "MoveableWall.obj")
 #include "stdafx.h"
 
 #include <Confus/MoveableWall.h>
