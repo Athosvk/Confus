@@ -1,5 +1,5 @@
 #pragma once
-#include "TeamIdentifier.h"
+#include "../Common/TeamIdentifier.h"
 #include "Networking/Connection.h"
 
 namespace ConfusServer
@@ -23,8 +23,6 @@ namespace ConfusServer
         void setConnection(Networking::Connection* a_Connection);
         /// <summary> Send the score to all the clients. </summary>
         void sendScoreToClients();
-        /// <summary> Send the win to all the clients. </summary>
-        void sendWin();
         /// <summary >Update the score of a team that scored. </summary>
         /// <param name="a_TeamScored"> The team that achieved a point. </param>
         /// <param name="a_IncreasementValue"> The amount of points the value will be increased with. </param>
@@ -38,14 +36,5 @@ namespace ConfusServer
         /// <returns> Returns if the team has enough points to win </returns>
         /// <param name="a_Team"> The team you want to know of if it has won. </param>
         bool teamHasWon(ETeamIdentifier a_Team);
-    };
-
-    struct ScoreMessage
-    {
-        /// <summary> The packet identifier for the teams. </summary>
-        /// <remarks> 0 = blue, 1 = red. </remarks>
-        int m_ScoreIdentifier; 
-        /// <summary> Score ranging from 0 to to max score the teams can achieve set at <see cref="TeamMaxScore"/>. </summary>
-        int m_ScoreAmount; 
     };
 }

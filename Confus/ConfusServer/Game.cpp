@@ -6,7 +6,8 @@
 #include "Player.h"
 #include "Flag.h"
 #define DEBUG_CONSOLE
-#include "Debug.h"
+#include "../Common/Debug.h"
+#include "../Common/TeamIdentifier.h"
 
 namespace ConfusServer
 {
@@ -33,7 +34,7 @@ namespace ConfusServer
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
         m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
-        sceneManager->loadScene("Media/IrrlichtScenes/Bases 2.irr", nullptr, m_LevelRootNode);
+        sceneManager->loadScene("Media/IrrlichtScenes/Bases2.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
         

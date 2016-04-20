@@ -2,6 +2,7 @@
 #include <irrlicht/irrlicht.h>
 #include "Health.h"
 #include "Weapon.h"
+#include "../Common/TeamIdentifier.h"
 
 namespace ConfusServer {
 
@@ -11,7 +12,6 @@ namespace ConfusServer {
 	}
 
     enum class EFlagEnum;
-	enum class ETeamIdentifier;
     class EventManager;
     class Flag;
 

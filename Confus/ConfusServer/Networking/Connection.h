@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <RakNet/MessageIdentifiers.h>
 
 namespace RakNet 
@@ -6,6 +7,7 @@ namespace RakNet
     class RakPeerInterface;
 	struct Packet;
 	class BitStream;
+    struct SystemAddress;
 }
 
 namespace ConfusServer
@@ -46,7 +48,7 @@ namespace ConfusServer
             void processPackets();
             /// <summary> Send Package to all clients </summary>
             /// <param name="a_BitStream">The packet to send.</param>
-            void sendPacketToAllClients(RakNet::BitStream& a_BitStream);
+            void broadcastBitstream(RakNet::BitStream& a_BitStream);
 		private:
 			/// <summary> Gets the amount of clients connected to this server instance </summary>
 			/// <returns>The amount of clients connected</returns>
@@ -65,6 +67,8 @@ namespace ConfusServer
 			/// </summary>
 			/// <param name="a_InputStream">The a_InputStream message.</param>
 			void printMessage(RakNet::BitStream& a_InputStream);
+            /// <summary> Get all the open connections in a vector </summary>
+            std::vector<RakNet::SystemAddress> getOpenConnections();
         };
     }
 }

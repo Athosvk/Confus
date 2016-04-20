@@ -6,7 +6,7 @@
 
 #include "TeamScore.h"
 #define DEBUG_CONSOLE
-#include "Debug.h"
+#include "../Common/Debug.h"
 
 namespace ConfusServer 
 {
@@ -23,12 +23,7 @@ namespace ConfusServer
         bitStream.Write(m_RedTeamScore);
 		bitStream.Write(m_BlueTeamScore);
 
-        m_Connection->sendPacketToAllClients(bitStream);
-    }
-
-    void TeamScore::sendWin()
-    {
-        //TODO: Send win to clients
+        m_Connection->broadcastBitstream(bitStream);
     }
 
     void TeamScore::teamScoredPoint(ETeamIdentifier a_TeamScored, int a_IncreasementValue)
@@ -44,7 +39,6 @@ namespace ConfusServer
         if(teamHasWon(a_TeamScored))
         {
             std::cout << "Team " << static_cast<int>(a_TeamScored) << " was the winner!" << std::endl;
-            sendWin();
         }
         sendScoreToClients();
     }
@@ -61,7 +55,7 @@ namespace ConfusServer
             scoreAmount = m_RedTeamScore;
             break;
         default:
-            std::cout << "Error: Team does not exist.";
+            throw new std::logic_error("Team does not exist");
             break;
         }
         return scoreAmount;

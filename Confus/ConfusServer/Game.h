@@ -2,14 +2,14 @@
 #include <Irrlicht/irrlicht.h>
 #include <RakNet/BitStream.h>
 
-#include "../Common/Networking/Connection.h"
+#include "Networking/Connection.h"
 #include "MazeGenerator.h"
 #include "OpenAL\OpenALListener.h"
 #include "Player.h"
 #include "Audio\PlayerAudioEmitter.h"
 #include "EventManager.h"
 #include "Flag.h"
-#include "../Common/TeamScore.h"
+#include "TeamScore.h"
 
 namespace ConfusServer
 { 

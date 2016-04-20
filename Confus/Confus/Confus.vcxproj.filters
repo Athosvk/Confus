@@ -90,11 +90,8 @@
     <ClCompile Include="GUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Common\TeamScore.cpp">
-      <Filter>Shared Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Networking\Connection.cpp">
-      <Filter>Shared Files</Filter>
+    <ClCompile Include="ClientTeamScore.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -135,9 +132,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EventManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MoveableWall.h">
@@ -186,12 +180,6 @@
       <Filter>Shared Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\TeamIdentifier.h">
-      <Filter>Shared Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\TeamScore.h">
-      <Filter>Shared Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Networking\Connection.h">
       <Filter>Shared Files</Filter>
     </ClInclude>
     <ClInclude Include="ClientTeamScore.h">

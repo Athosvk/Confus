@@ -8,16 +8,13 @@
 
 #define DEBUG_CONSOLE
 #include "../Common/Debug.h"
+#include "../Common/TeamIdentifier.h"
 
 
 namespace Confus
 {
     const double Game::FixedUpdateInterval = 0.02;
     const double Game::MaxFixedUpdateInterval = 0.1;
-
-	//Start score
-	int ClientTeamScore::RedTeamScore = 0;
-	int ClientTeamScore::BlueTeamScore = 0;
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),

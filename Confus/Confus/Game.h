@@ -12,7 +12,6 @@
 #include "GUI.h"
 #include "ClientTeamScore.h"
 
-
 namespace Confus
 {    
     /// <summary> 

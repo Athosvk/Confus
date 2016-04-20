@@ -81,11 +81,11 @@
     <ClCompile Include="WalledMazeTile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Common\TeamScore.cpp">
-      <Filter>Shared Files</Filter>
+    <ClCompile Include="TeamScore.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Common\Networking\Connection.cpp">
-      <Filter>Shared Files</Filter>
+    <ClCompile Include="Networking\Connection.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -114,9 +114,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EventManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MoveableWall.h">
@@ -173,11 +170,11 @@
     <ClInclude Include="..\Common\TeamIdentifier.h">
       <Filter>Shared Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\TeamScore.h">
-      <Filter>Shared Files</Filter>
+    <ClInclude Include="TeamScore.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Networking\Connection.h">
-      <Filter>Shared Files</Filter>
+    <ClInclude Include="Networking\Connection.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

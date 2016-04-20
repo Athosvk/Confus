@@ -6,11 +6,8 @@
 #include <string>
 
 #include "Connection.h"
-
 #define DEBUG_CONSOLE
-#include "../Debug.h"
-
-
+#include "../../Common/Debug.h"
 
 namespace ConfusServer
 {
@@ -47,25 +44,29 @@ namespace ConfusServer
             }
         }
 
-        unsigned short Connection::getConnectionCount() const
-        {
-            unsigned short openConnections = 0;
-
-            //Passing nullptr allows us to get the amount of open connections
-            m_Interface->GetConnectionList(nullptr, &openConnections);
-
-            return openConnections;
-        }
-
-        void Connection::closeAllConnections()
+        std::vector<RakNet::SystemAddress> Connection::getOpenConnections()
         {
             auto connectionCount = getConnectionCount();
             std::vector<RakNet::SystemAddress>
                 openConnections(static_cast<size_t>(connectionCount));
             auto serverID = m_Interface->GetConnectionList(openConnections.data(),
                 &connectionCount);
+            return openConnections;
+        }
 
-            for(unsigned short i = 0u; i < connectionCount; ++i)
+        unsigned short Connection::getConnectionCount() const
+        {
+            unsigned short openConnections = 0;
+            //Passing nullptr allows us to get the amount of open connections
+            m_Interface->GetConnectionList(nullptr, &openConnections);
+            return openConnections;
+        }
+
+        void Connection::closeAllConnections()
+        {
+            auto openConnections = getOpenConnections();
+
+            for(unsigned short i = 0u; i < openConnections.size(); ++i)
             {
                 m_Interface->CloseConnection(openConnections[i], true);
             }
@@ -92,15 +93,11 @@ namespace ConfusServer
 			std::cout << "Message received: " << contents << std::endl;
 		}
 
-        void Connection::sendPacketToAllClients(RakNet::BitStream& a_BitStream)
+        void Connection::broadcastBitstream(RakNet::BitStream& a_BitStream)
         {
-            auto connectionCount = getConnectionCount();
-            std::vector<RakNet::SystemAddress>
-                openConnections(static_cast<size_t>(connectionCount));
-            auto serverID = m_Interface->GetConnectionList(openConnections.data(),
-                &connectionCount);
+            auto openConnections = getOpenConnections();
 
-            for(unsigned short i = 0u; i < connectionCount; ++i)
+            for(unsigned short i = 0u; i < openConnections.size(); ++i)
             {
                 m_Interface->Send(&a_BitStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0, openConnections[i], false);
             }
