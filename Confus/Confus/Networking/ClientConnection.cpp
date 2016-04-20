@@ -2,42 +2,44 @@
 #include <vector>
 #include <RakNet/BitStream.h>
 #include <RakNet/MessageIdentifiers.h>
+#include <RakNet/RakPeerInterface.h>
 
 #include "ClientConnection.h"
 
 namespace Confus
 {
-    namespace Networking
-    {
-        ClientConnection::ClientConnection(const std::string& a_ServerIP,
-            unsigned short a_Port)
-        {
-            RakNet::SocketDescriptor socketDescriptor;
-            m_Interface->Startup(1, &socketDescriptor, 1);
-            //There won't be a password for the server, which is why we pass nullptr
-            RakNet::ConnectionAttemptResult result = 
+	namespace Networking
+	{
+		ClientConnection::ClientConnection(const std::string& a_ServerIP,
+			unsigned short a_Port)
+		{
+			m_Interface = RakNet::RakPeerInterface::GetInstance();
+			RakNet::SocketDescriptor socketDescriptor;
+			m_Interface->Startup(1, &socketDescriptor, 1);
+			//There won't be a password for the server, which is why we pass nullptr
+			RakNet::ConnectionAttemptResult result =
 				m_Interface->Connect(a_ServerIP.c_str(), a_Port, nullptr, 0);
-            if(result != RakNet::ConnectionAttemptResult::CONNECTION_ATTEMPT_STARTED)
-            {
-                //For now, we throw an exception, but it would more graceful to show a message
-                //to the user later on, if possible
-                throw std::logic_error("Could not connect to target server, errorcode: " 
-                    + std::to_string(result));
-            }
-        }
+			if(result != RakNet::ConnectionAttemptResult::CONNECTION_ATTEMPT_STARTED)
+			{
+				//For now, we throw an exception, but it would more graceful to show a message
+				//to the user later on, if possible
+				throw std::logic_error("Could not connect to target server, errorcode: "
+					+ std::to_string(result));
+			}
+		}
 
-        ClientConnection::~ClientConnection()
-        {
+		ClientConnection::~ClientConnection()
+		{
 			//True is sent to notify the server so we can exit gracefully
 			m_Interface->CloseConnection(getServerAddress(), true);
-            RakNet::RakPeerInterface::DestroyInstance(m_Interface);
-        }
+			RakNet::RakPeerInterface::DestroyInstance(m_Interface);
+		}
 
-        void ClientConnection::processPackets()
-        {
-            RakNet::Packet* packet = m_Interface->Receive();
-            while(packet != nullptr)
-            {
+		void ClientConnection::processPackets()
+		{
+			RakNet::Packet* packet = m_Interface->Receive();
+			while(packet != nullptr)
+			{
 				if(packet->data[0] == ID_CONNECTION_REQUEST_ACCEPTED)
 				{
 					std::cout << "Connected to the server!\n";
@@ -46,12 +48,12 @@ namespace Confus
 				}
 				else
 				{
-					std::cout << "Message: \"" << packet->data  << " has arrived \"" << std::endl;					
+					std::cout << "Message: \"" << packet->data << " has arrived \"" << std::endl;
 				}
-                m_Interface->DeallocatePacket(packet);
-                packet = m_Interface->Receive();
-            }
-        }
+				m_Interface->DeallocatePacket(packet);
+				packet = m_Interface->Receive();
+			}
+		}
 
 		void ClientConnection::sendMessage(const std::string& a_Message)
 		{
@@ -69,12 +71,26 @@ namespace Confus
 			}
 		}
 
+		void ClientConnection::sendOrientation(const float& a_OrientationX, const float& a_OrientationY, const float& a_OrientationZ)
+		{
+			if(m_Connected)
+			{
+				RakNet::BitStream stream;
+				stream.Write(static_cast<RakNet::MessageID>(EPacketType::Orientation));
+				stream.Write(a_OrientationX);
+				stream.Write(a_OrientationY);
+				stream.Write(a_OrientationZ);
+				m_Interface->Send(&stream, PacketPriority::HIGH_PRIORITY,
+					PacketReliability::RELIABLE_ORDERED, 0, getServerAddress(), false);
+			}
+		}
+
 		unsigned short ClientConnection::getConnectionCount() const
-        {
-            unsigned short openConnections = 0;
-            m_Interface->GetConnectionList(nullptr, &openConnections);
-            return openConnections;
-        }
+		{
+			unsigned short openConnections = 0;
+			m_Interface->GetConnectionList(nullptr, &openConnections);
+			return openConnections;
+		}
 
 		RakNet::SystemAddress ClientConnection::getServerAddress() const
 		{
@@ -105,5 +121,5 @@ namespace Confus
 				m_StalledMessages.pop();
 			}
 		}
-    }
+	}
 }

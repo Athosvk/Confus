@@ -68,18 +68,21 @@ namespace ConfusServer
 			case static_cast<unsigned char>(EPacketType::Message) :
 				printMessage(RakNet::BitStream(a_Packet->data, a_Packet->length, false));
 				break;
-			default:
-				std::cout << "Message arrived with id " << static_cast<int>(a_Packet->data[0])
-					<< std::endl;
+			case static_cast<unsigned char>(EPacketType::Orientation) :
+			{
+				RakNet::BitStream bitstream(a_Packet->data, a_Packet->length, false);
+				RakNet::RakString contents;
+				bitstream.IgnoreBytes(sizeof(RakNet::MessageID));
+				bitstream.Read(contents);
+				float x, y, z;
+				bitstream.Read(x);
+				bitstream.Read(y);
+				bitstream.Read(z);
 			}
-		}
-
-		void Connection::printMessage(RakNet::BitStream& a_InputStream)
-		{
-			RakNet::RakString contents;
-			a_InputStream.IgnoreBytes(sizeof(RakNet::MessageID));
-			a_InputStream.Read(contents);
-			std::cout << "Message received: " << contents << std::endl;
+			break;
+			default:
+				std::cout << "Message arrived with id " << static_cast<int>(a_Packet->data[0]) << std::endl;
+			}
 		}
     }
 }

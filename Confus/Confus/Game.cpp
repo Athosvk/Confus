@@ -1,3 +1,4 @@
+#include <RakNet/BitStream.h>
 #include <Irrlicht/irrlicht.h>
 #include <time.h>
 #include <iostream>
@@ -164,6 +165,10 @@ namespace Confus
             m_RedRespawnFloor.disableCollision();
 		}
 		m_MazeGenerator.fixedUpdate();
+
+		m_Connection->sendOrientation(static_cast<float>(m_PlayerNode.CameraNode->getRotation().X),
+			static_cast<float>(m_PlayerNode.CameraNode->getRotation().Y),
+			static_cast<float>(m_PlayerNode.CameraNode->getRotation().Z));
     }
 
     void Game::render()

@@ -22,7 +22,8 @@ namespace ConfusServer
 			/// <summary> The type of packet </summary>
 			enum class EPacketType : unsigned char
 			{
-				Message = 1 + ID_USER_PACKET_ENUM
+				Message = 1 + ID_USER_PACKET_ENUM,
+				Orientation = 2 + ID_USER_PACKET_ENUM
 			};
 
             /// <summary> The RakNet interface for interacting with RakNet </summary>
