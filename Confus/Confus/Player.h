@@ -31,6 +31,9 @@ namespace Confus
 		ETeamIdentifier* TeamIdentifier;    
         Flag* FlagPointer = nullptr;
 		Health PlayerHealth;
+        /// <summary> Determines if this player is this users player or not </summary>
+        bool MainPlayer = false;
+        irr::s32 ID;
 	private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
 
@@ -56,27 +59,33 @@ namespace Confus
 		~Player();
         /// <summary> Update function, any tasks that need to be done every frame go here. </summary>
         void update();
-        ///<summary> Respawns the player to their base, public so round resets etc. can call this </summary>
+        ///<summary> Respawns the player to their base, public so round resets etc. can call this. </summary>
         void respawn();
-        /// <summary> Required render function for the ISceneNode, does nothing as we render in the Game.cpp </summary>
+        ///<summary> Updates the rotation of this player.  </summary>
+        /// <param name="a_NewPosition">The new rotation for this player.</param>
+        void updateRotation(irr::core::vector3df a_NewRotation);
+        ///<summary> Updates the position of this player. </summary>
+        /// <param name="a_NewPosition">The new position for this player.</param>
+        void updatePosition(irr::core::vector3df a_NewPosition);
+        /// <summary> Required render function for the ISceneNode, does nothing as we render in the Game.cpp.</summary>
         virtual void render();
-        /// <summary> Returns the bounding box of the player's mesh </summary>
+        /// <summary> Returns the bounding box of the player's mesh. </summary>
         virtual const irr::core::aabbox3d<irr::f32> & getBoundingBox() const;
-        /// <summary> Handles the input based actions </summary>
-        /// <param name="a_EventManager">The current event manager</param>
+        /// <summary> Handles the input based actions. </summary>
+        /// <param name="a_EventManager">The current event manager. </param>
         void handleInput(EventManager& a_EventManager);
         void setLevelCollider(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_Level);
     private:
-        /// <summary> Starts the walking animation, which is the default animation </summary>
+        /// <summary> Starts the walking animation, which is the default animation. </summary>
         void startWalking() const;
         
-        /// <summary> Initializes the shared attack variables </summary>
+        /// <summary> Initializes the shared attack variables. </summary>
         void initializeAttack();
 
-        /// <summary> Starts the light attack, dealing normal damage </summary>
+        /// <summary> Starts the light attack, dealing normal damage. </summary>
         void startLightAttack();
 
-        /// <summary> Starts the heavy attack, which deals more damage </summary>
+        /// <summary> Starts the heavy attack, which deals more damage. </summary>
         void startHeavyAttack();
 
         /// <summary> Called when the animation finishes </summary>

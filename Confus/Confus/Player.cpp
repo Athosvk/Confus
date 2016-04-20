@@ -20,6 +20,8 @@ namespace Confus
 
         IrrAssimp irrAssimp(sceneManager);
         m_Mesh = sceneManager->getMesh("Media/ninja.b3d");
+        MainPlayer = a_MainPlayer;
+        ID = a_ID;
 
         PlayerNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh, nullptr);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
@@ -75,9 +77,6 @@ namespace Confus
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
-
-        delete(videoDriver);
-        delete(sceneManager);
     }
 
 	Player::~Player() {
@@ -217,6 +216,16 @@ namespace Confus
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
             animator->setTargetNode(CameraNode);
         }
+    }
+
+    void Player::updatePosition(irr::core::vector3df a_NewPosition)
+    {
+        CameraNode->setPosition(a_NewPosition);
+    }
+
+    void Player::updateRotation(irr::core::vector3df a_NewRotation)
+    {
+        CameraNode->setRotation(a_NewRotation);
     }
 
     void Player::createAudioEmitter()

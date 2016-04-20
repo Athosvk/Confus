@@ -55,6 +55,8 @@ namespace Confus
 		Player m_SecondPlayerNode;
         RespawnFloor m_RedRespawnFloor;
         RespawnFloor m_BlueRespawnFloor;
+
+        //std::array<Player, 2> m_PlayerArray;
         /// <summary>
         /// The Blue Flag.
         /// </summary>
@@ -129,5 +131,7 @@ namespace Confus
         /// Renders the objects in the game
         /// </summary>
         void render();
+
+        void updateOtherPlayers();
     };
 }
