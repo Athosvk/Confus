@@ -23,7 +23,8 @@ namespace Confus
 		ETeamIdentifier* TeamIdentifier;    
         Flag* FlagPointer = nullptr;
 		Health PlayerHealth;
-	private:
+       
+    private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
 
         void createAudioEmitter();
@@ -35,6 +36,8 @@ namespace Confus
         Weapon m_Weapon;
         /// <summary> Whether the player is currently attacking or not </summary>
         bool m_Attacking = false;
+        /// <summary> Is this the main player? </summary>
+        bool m_IsMainPlayer = false;
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
         
@@ -57,7 +60,7 @@ namespace Confus
         void setConnection(Networking::ClientConnection* a_Connection);
         
         /// <summary> Sets the connection to the server. </summary>
-        void sendAttackMessageToServer(bool a_IsHeavyAttack) const;
+        void sendAttackMessageToServer(bool a_IsHeavyAttack, bool a_IsMainPlayer) const;
     private:
         /// <summary> Starts the walking animation, which is the default animation </summary>
         void startWalking() const;

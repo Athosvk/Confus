@@ -32,9 +32,12 @@ namespace ConfusServer
 
             /// <summary> A pointer to the main player. </summary>
             Player* m_MainPlayer;
+
+            /// <summary> A pointer to the second player. </summary>
+            Player* m_SecondPlayer;
         public:
             /// <summary> Initializes a new instance of the <see cref="Connection"/> class. </summary>
-            Connection(Player* a_MainPlayer);
+            Connection(Player* a_MainPlayer, Player* a_SecondPlayer);
             /// <summary> Finalizes an instance of the <see cref="Connection"/> class. </summary>
             ~Connection();
             /// <summary>
@@ -60,6 +63,11 @@ namespace ConfusServer
 			/// </summary>
 			/// <param name="a_Message">The a_ message.</param>
 			void printMessage(RakNet::BitStream& a_InputStream);
+            /// <summary>
+            /// Processes the player packet: calls methods based on inputstream.
+            /// </summary>
+            /// <param name="a_Message">The inputstream.</param>
+            void processPlayerPacket(RakNet::BitStream& a_InputStream);
         };
     }
 }

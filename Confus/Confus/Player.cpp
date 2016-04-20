@@ -59,6 +59,7 @@ namespace Confus
             CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, true);
             CameraNode->setFOV(70.f);
             CameraNode->setNearValue(0.1f);
+            m_IsMainPlayer = true;
         }
         else 
         {
@@ -144,7 +145,7 @@ namespace Confus
 
     void Player::startLightAttack()
     {
-        sendAttackMessageToServer(false);
+        sendAttackMessageToServer(false, m_IsMainPlayer);
 
         PlayerNode->setFrameLoop(38, 41);
         PlayerNode->setCurrentFrame(38);
@@ -156,7 +157,7 @@ namespace Confus
 
     void Player::startHeavyAttack()
     {
-        sendAttackMessageToServer(true);
+        sendAttackMessageToServer(true, m_IsMainPlayer);
 
         PlayerNode->setFrameLoop(60, 66);
         PlayerNode->setCurrentFrame(60);
@@ -235,19 +236,13 @@ namespace Confus
         m_Connection = a_Connection;
 	}
 
-     void Player::sendAttackMessageToServer(bool a_IsHeavyAttack) const
+     void Player::sendAttackMessageToServer(bool a_IsHeavyAttack, bool a_IsMainPlayer) const
 	{
-        RakNet::BitStream bitStreamOut;
-        bitStreamOut.Write(static_cast<RakNet::MessageID>(Networking::ClientConnection::EPacketType::PlayerAttack));
-        if(a_IsHeavyAttack) 
-        {
-            bitStreamOut.Write(true);
-        } 
-        else
-        {
-            bitStreamOut.Write(false);
-        }
-
-        m_Connection->sendMessage(&bitStreamOut);
+        std::unique_ptr<RakNet::BitStream> bitStreamOut = std::make_unique<RakNet::BitStream>();
+        bitStreamOut->Write(static_cast<RakNet::MessageID>(Networking::ClientConnection::EPacketType::PlayerAttack));
+        a_IsHeavyAttack ? bitStreamOut->Write(true) : bitStreamOut->Write(false);
+        a_IsMainPlayer ? bitStreamOut->Write(true) : bitStreamOut->Write(false);
+        
+        m_Connection->sendMessage(bitStreamOut.get());
 	}
 }

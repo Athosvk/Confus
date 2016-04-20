@@ -54,7 +54,7 @@ namespace Confus
             }
         }
 
-		void ClientConnection::sendMessage(RakNet::BitStream* a_Stream) const
+		void ClientConnection::sendMessage(RakNet::BitStream* a_Stream) 
 		{
 			if(m_Connected)
 			{
@@ -63,8 +63,8 @@ namespace Confus
 			}
 			else
 			{
-               // TODO: Fix this. 
-               // m_StalledMessages.push(a_Stream);
+                //TODO: Make this work with bitstreams. 
+                //m_StalledMessages.emplace(std::move(a_Stream));
 			}
 		}
 
@@ -74,7 +74,7 @@ namespace Confus
             m_Interface->GetConnectionList(nullptr, &openConnections);
             return openConnections;
         }
-
+        
 		RakNet::SystemAddress ClientConnection::getServerAddress() const
 		{
 			auto connectionCount = getConnectionCount();

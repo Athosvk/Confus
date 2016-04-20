@@ -57,7 +57,7 @@ namespace Confus
 			/// Sends a message to the server
 			/// </summary>
 			/// <param name="a_Stream">The Bitstream that needs to be send.</param>
-			void sendMessage(RakNet::BitStream* a_Stream) const;
+			void sendMessage(RakNet::BitStream* a_Stream);
 		private:
 			/// <summary> Gets the amount of clients connected to this server instance </summary>
 			/// <returns> The amount of clients connected </returns>

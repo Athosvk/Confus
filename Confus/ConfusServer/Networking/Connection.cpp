@@ -9,7 +9,7 @@ namespace ConfusServer
 {
     namespace Networking
     {
-        Connection::Connection(Player* a_MainPlayer)
+        Connection::Connection(Player* a_MainPlayer, Player* a_SecondPlayer)
         {
             RakNet::SocketDescriptor socketDescriptor(60000, nullptr);
             auto result = m_Interface->Startup(5, &socketDescriptor, 1);
@@ -21,6 +21,7 @@ namespace ConfusServer
             //Use 10 as a general case for a 5 vs 5 matchup
             m_Interface->SetMaximumIncomingConnections(10);
             m_MainPlayer = a_MainPlayer;
+            m_SecondPlayer = a_SecondPlayer;
         }
 
         Connection::~Connection()
@@ -70,21 +71,7 @@ namespace ConfusServer
             case (ID_USER_PACKET_ENUM + 3) :
             {
                 RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
-                
-                bool isHeavyAttack;
-                inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
-                inputStream.Read(isHeavyAttack);
-                if(isHeavyAttack)
-                {
-                    m_MainPlayer->startHeavyAttack();
-                } 
-                else
-                {
-                    m_MainPlayer->startLightAttack();
-                }
-                #ifdef DEBUG_CONSOLE
-                std::cout << "Player pressed attack button\n";
-                #endif
+                processPlayerPacket(inputStream);
             }
             break;
 			default:
@@ -100,5 +87,24 @@ namespace ConfusServer
 			a_InputStream.Read(contents);
 			std::cout << "Message received: " << contents << std::endl;
 		}
+
+        void Connection::processPlayerPacket(RakNet::BitStream& a_InputStream)
+        {
+            bool isHeavyAttack, isMainPlayer;
+            a_InputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+            a_InputStream.Read(isHeavyAttack);
+            a_InputStream.Read(isMainPlayer);
+            if(isHeavyAttack)
+            {
+                isMainPlayer ? m_MainPlayer->startHeavyAttack() : m_SecondPlayer->startHeavyAttack();
+            }
+            else
+            {
+                isMainPlayer ? m_MainPlayer->startLightAttack() : m_SecondPlayer->startLightAttack();
+            }
+            #ifdef _DEBUG
+            std::cout << "Player pressed attack button\n";
+            #endif
+        }
     }
 }
