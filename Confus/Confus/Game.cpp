@@ -115,6 +115,7 @@ namespace Confus
         std::cin >> serverPort;
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
+        m_Connection->MazeGeneratorReference = &m_MazeGenerator;
     }
 
     void Game::handleInput()
@@ -162,7 +163,6 @@ namespace Confus
 		if (timer >= 9.0f)
 		{
 			timer = 0.0f;
-			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
             m_BlueRespawnFloor.disableCollision();
             m_RedRespawnFloor.disableCollision();
 		}

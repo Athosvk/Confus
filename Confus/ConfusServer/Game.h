@@ -33,6 +33,15 @@ namespace ConfusServer
 		/// The interval at which packets queue before processed
 		/// </summary>
 		static const double ProcessPacketsInterval;
+        /// <summary>
+        /// The interval at which packets queue before processed
+        /// </summary>
+        static const double MazeChangeInterval;
+        /// <summary>
+        /// The delay the maze has before it changes after broadcasting
+        /// </summary>
+        static const double MazeDelay;
+
 
         /// <summary>
         /// The instance of the IrrlichtDevice
@@ -73,6 +82,10 @@ namespace ConfusServer
 		/// The time interval between the last update and the second-last
         /// </summary>
         double m_DeltaTime = 0.0;
+        /// <summary>
+        /// The time interval between the last update and the new maze update.
+        /// </summary>
+        double m_MazeTimer = 0.0;
         /// <summary>
 		/// The total elapsed game ticks in milliseconds in the last frame
         /// </summary>
@@ -134,5 +147,9 @@ namespace ConfusServer
 		/// Processes the packets connection
 		/// </summary>
 		void processConnection();
+        /// <summary>
+        /// Broadcast a maze change
+        /// </summary>
+        void broadcastMazeChange(int a_Seed);
     };
 }

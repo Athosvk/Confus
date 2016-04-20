@@ -2,9 +2,11 @@
 #include <vector>
 #include <RakNet/BitStream.h>
 #include <RakNet/MessageIdentifiers.h>
+#include <time.h>
 
 #include "ClientConnection.h"
 #include "../ClientTeamScore.h"
+#include "../MazeGenerator.h"
 
 namespace Confus
 {
@@ -70,7 +72,6 @@ namespace Confus
 			{
 				int redScore, blueScore;
 				RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
-
 				inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
 				inputStream.Read(redScore);
 				inputStream.Read(blueScore);
@@ -79,6 +80,21 @@ namespace Confus
 				std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
 				break;
 			}
+            case static_cast<unsigned char>(EPacketType::MazeChange) :
+            {
+                int timeMazeChanges, mazeSeed;
+                RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
+                inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+                inputStream.Read(timeMazeChanges);
+                inputStream.Read(mazeSeed);
+                std::cout << "Update is in " << timeMazeChanges - static_cast<int>(time(0))  << " seconds, the seed is:\t" << mazeSeed << std::endl;
+                if(MazeGeneratorReference == nullptr)
+                {
+                    throw std::logic_error("Maze reference generator is a nullptr");
+                }
+                MazeGeneratorReference->refillMainMaze(mazeSeed);
+                break;
+            }
             default:
                 std::cout << "Message arrived with id " << static_cast<int>(a_Packet->data[0])
                     << std::endl;

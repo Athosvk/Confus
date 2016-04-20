@@ -13,8 +13,9 @@ namespace ConfusServer
 {
     const double Game::FixedUpdateInterval = 0.02;
     const double Game::MaxFixedUpdateInterval = 0.1;
-
 	const double Game::ProcessPacketsInterval = 0.03;
+    const double Game::MazeDelay = 2.0;
+    const double Game::MazeChangeInterval = 5.0 - MazeDelay;
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),
@@ -128,12 +129,31 @@ namespace ConfusServer
 
         m_PlayerNode.update();
         m_Listener.setPosition(m_PlayerNode.CameraNode->getAbsolutePosition());
-        irr::core::quaternion playerRotation(m_PlayerNode.CameraNode->getRotation());
 
-        //Todo: Fix rotations
+        irr::core::quaternion playerRotation(m_PlayerNode.CameraNode->getRotation());
         irr::core::vector3df upVector = playerRotation * irr::core::vector3df( 0, 1, 0 );
         irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
-        m_Listener.setDirection(forwardVector, upVector);     
+        m_Listener.setDirection(forwardVector, upVector);
+
+        static float currentDelay = 0.0f;
+        static int currentSeed;
+        m_MazeTimer += m_DeltaTime;
+        if(m_MazeTimer >= MazeChangeInterval)
+        {
+            if(currentDelay >= MazeDelay)
+            {
+                m_MazeGenerator.refillMainMaze(currentSeed);
+                m_MazeTimer = 0.0f;
+                currentDelay = 0.0f;
+            }
+            if(currentDelay == 0.0f)
+            {
+                currentSeed = static_cast<int>(time(0));
+                broadcastMazeChange(currentSeed);
+            }
+            currentDelay += static_cast<float>(m_DeltaTime);
+        }
+
     }
 
     void Game::processFixedUpdates()
@@ -149,15 +169,19 @@ namespace ConfusServer
 
     void Game::fixedUpdate()
     {
-		static float timer = 0.0f;
-		timer += static_cast<float>(m_DeltaTime);
-		if (timer >= 9.0f)
-		{
-			timer = 0.0f;
-			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
-            m_TeamScoreManager.teamScoredPoint(ETeamIdentifier::TeamBlue);
-		}
 		m_MazeGenerator.fixedUpdate();
+    }
+
+    void Game::broadcastMazeChange(int a_Seed)
+    {
+        time_t currentTime = time(0);
+        int newTime = static_cast<int>(currentTime) + static_cast<int>(MazeDelay);
+
+        RakNet::BitStream bitStream;
+        bitStream.Write(static_cast<RakNet::MessageID>(Networking::Connection::EPacketType::MazeChange));
+        bitStream.Write(newTime);
+        bitStream.Write(a_Seed);
+        m_Connection->broadcastBitstream(bitStream);
     }
 
     void Game::render()

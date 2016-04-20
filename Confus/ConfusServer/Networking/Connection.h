@@ -34,8 +34,10 @@ namespace ConfusServer
 			/// <summary> The type of packet </summary>
 			enum class EPacketType : unsigned char
 			{
-				Message = ID_USER_PACKET_ENUM + 1,
-				ScoreUpdate = Message + 1
+                Message = ID_USER_PACKET_ENUM + 1,
+                ScoreUpdate = Message + 1,
+                PlayerAttack = ScoreUpdate + 1,
+                MazeChange = PlayerAttack + 1
 			};
             /// <summary> Initializes a new instance of the <see cref="Connection"/> class. </summary>
             Connection();

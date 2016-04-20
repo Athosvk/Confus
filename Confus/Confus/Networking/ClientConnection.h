@@ -4,6 +4,8 @@
 #include <string>
 #include <queue>
 
+#include "../MazeGenerator.h"
+
 namespace Confus
 {
     namespace Networking
@@ -26,7 +28,9 @@ namespace Confus
 			enum class EPacketType : unsigned char
 			{
 				Message = ID_USER_PACKET_ENUM + 1,
-				ScoreUpdate = Message + 1
+				ScoreUpdate = Message + 1,
+                PlayerAttack = ScoreUpdate + 1,
+                MazeChange = PlayerAttack + 1
 			};
 
             /// <summary> The RakNet interface for interacting with RakNet </summary>
@@ -63,6 +67,8 @@ namespace Confus
 			/// </summary>
 			/// <param name="a_Message">The message contents</param>
 			void sendMessage(const std::string& a_Message);
+            ///<summary> Reference to the maze generator </summary>
+            MazeGenerator* MazeGeneratorReference = nullptr;
 		private:
 			/// <summary> Gets the amount of clients connected to this server instance </summary>
 			/// <returns> The amount of clients connected </returns>
