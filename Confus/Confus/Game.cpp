@@ -49,7 +49,7 @@ namespace Confus
 
         m_Device->setEventReceiver(&m_EventManager);
         m_Device->getCursorControl()->setVisible(false);
-      
+		m_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.5f), m_PlayerNode.getParent());
         while(m_Device->run())
         {
             m_Connection->processPackets();
@@ -164,6 +164,7 @@ namespace Confus
             m_RedRespawnFloor.disableCollision();
 		}
 		m_MazeGenerator.fixedUpdate();
+		m_PhysicsWorld.physicsUpdate(FixedUpdateInterval);
     }
 
     void Game::render()

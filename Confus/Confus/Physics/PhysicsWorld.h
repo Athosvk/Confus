@@ -37,14 +37,14 @@ namespace Confus
 
 			void createBoxCollider(irr::core::vector3df a_Extents, 
 				irr::scene::ISceneNode* a_AttachedNode);
+			void physicsUpdate(float a_DeltaTime);
+			static btVector3 toBulletVector(const irr::core::vector3d<float>& a_Vector);
+			static irr::core::vector3df toIrrlichtVector(const btVector3& a_Vector);
 		private:
-			btVector3 toBulletVector(irr::core::vector3d<float> a_Vector) const
-			{
-				return btVector3(static_cast<btScalar>(a_Vector.X),
-					static_cast<btScalar>(a_Vector.Y),
-					static_cast<btScalar>(a_Vector.Z));
-			};
-			std::unique_ptr<RigidBody> createRigidBody(btCollisionShape* a_Shape) const;
+			void prePhysicsUpdate();
+			void synchronizeTransforms();
+			std::unique_ptr<RigidBody> createRigidBody(btCollisionShape* a_Shape,
+				irr::scene::ISceneNode* a_AttachedNode) const;
 		};
 	}
 }

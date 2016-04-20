@@ -2,6 +2,14 @@
 #include <Bullet/btBulletCollisionCommon.h>
 #include <memory>
 
+namespace irr
+{
+	namespace scene
+	{
+		class ISceneNode;
+	}
+}
+
 namespace Confus
 {
 	namespace Physics
@@ -10,9 +18,16 @@ namespace Confus
 		{
 		private:
 			std::unique_ptr<btRigidBody> m_Body;
+			irr::scene::ISceneNode* m_AttachedNode;
 
 		public:
-			RigidBody(std::unique_ptr<btRigidBody>&& a_RigidBody);
+			RigidBody(std::unique_ptr<btRigidBody>&& a_RigidBody, irr::scene::ISceneNode* a_AttachedNode);
+
+			void onPrePhysicsUpdate();
+			void synchronizeTransform();
+			irr::scene::ISceneNode* getAttachedNode() const;
+		private:
+			void setAbsoluteTransformation(irr::core::vector3df a_Position);
 		};
 	}
 }
