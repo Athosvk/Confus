@@ -1,6 +1,7 @@
 #include <Irrlicht/irrlicht.h>
 #include <time.h>
 #include <iostream>
+#include <RakNet\GetTime.h>
 
 #include "Game.h"
 #include "Player.h"
@@ -15,7 +16,7 @@ namespace ConfusServer
     const double Game::MaxFixedUpdateInterval = 0.1;
 	const double Game::ProcessPacketsInterval = 0.03;
     const double Game::MazeDelay = 2.0;
-    const double Game::MazeChangeInterval = 5.0 - MazeDelay;
+    const double Game::MazeChangeInterval = 10.0 - MazeDelay;
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),
@@ -153,7 +154,6 @@ namespace ConfusServer
             }
             currentDelay += static_cast<float>(m_DeltaTime);
         }
-
     }
 
     void Game::processFixedUpdates()
@@ -175,7 +175,10 @@ namespace ConfusServer
     void Game::broadcastMazeChange(int a_Seed)
     {
         time_t currentTime = time(0);
-        int newTime = static_cast<int>(currentTime) + static_cast<int>(MazeDelay);
+        struct tm buffer;
+        gmtime_s(&buffer, &currentTime);
+
+        int newTime = static_cast<int>(RakNet::GetTimeMS()) + (static_cast<int>(MazeDelay * 1000));
 
         RakNet::BitStream bitStream;
         bitStream.Write(static_cast<RakNet::MessageID>(Networking::Connection::EPacketType::MazeChange));

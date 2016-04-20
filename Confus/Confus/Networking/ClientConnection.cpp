@@ -2,7 +2,7 @@
 #include <vector>
 #include <RakNet/BitStream.h>
 #include <RakNet/MessageIdentifiers.h>
-#include <time.h>
+#include <RakNet/GetTime.h>
 
 #include "ClientConnection.h"
 #include "../ClientTeamScore.h"
@@ -87,12 +87,12 @@ namespace Confus
                 inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
                 inputStream.Read(timeMazeChanges);
                 inputStream.Read(mazeSeed);
-                std::cout << "Update is in " << timeMazeChanges - static_cast<int>(time(0))  << " seconds, the seed is:\t" << mazeSeed << std::endl;
+                std::cout << "Update is in " << (timeMazeChanges - static_cast<int>(RakNet::GetTimeMS()))  << " ms, the seed is:\t" << mazeSeed << std::endl;
                 if(MazeGeneratorReference == nullptr)
                 {
                     throw std::logic_error("Maze reference generator is a nullptr");
                 }
-                MazeGeneratorReference->refillMainMaze(mazeSeed);
+                MazeGeneratorReference->refillMainMazeRequest(mazeSeed, timeMazeChanges);
                 break;
             }
             default:

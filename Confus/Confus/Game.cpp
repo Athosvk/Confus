@@ -1,5 +1,4 @@
 #include <Irrlicht/irrlicht.h>
-#include <time.h>
 #include <iostream>
 
 #include "Game.h"
