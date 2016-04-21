@@ -179,7 +179,6 @@
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Flag.cpp" />
     <ClCompile Include="FlagGUI.cpp" />
-    <ClCompile Include="FlagStatus.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="Health.cpp" />

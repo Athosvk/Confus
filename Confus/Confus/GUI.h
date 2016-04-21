@@ -20,7 +20,6 @@ namespace Confus
 		irr::video::ITexture* m_BloodImage;
 		irr::gui::IGUIImage* m_BloodOverlay;
 		OpenALSource* m_AudioSourceLowHealth;
-
 		std::vector<std::unique_ptr<IUIElement>> m_Elements;
 		
 	public:

@@ -87,9 +87,6 @@
     <ClCompile Include="GUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FlagStatus.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FlagGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

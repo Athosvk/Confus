@@ -1,6 +1,7 @@
 #include <Irrlicht/irrlicht.h>
 
 #include "GUI.h"
+#include "Game.h"
 
 namespace Confus
 {
@@ -24,9 +25,9 @@ namespace Confus
 	void GUI::update()
 	{
 
-		for (auto& hoi : m_Elements)
+		for (auto& uiElement : m_Elements)
 		{
-			hoi->update();
+			uiElement->update();
 		}
 		m_HealthString = (L"Health: " + std::to_wstring(m_PlayerNode->PlayerHealth.getHealth()) + L"%").c_str();
 		m_HealthTextBox->setText(m_HealthString.c_str());
@@ -49,6 +50,14 @@ namespace Confus
 		{
 			m_AudioSourceLowHealth->stop();
 		}
+	}
+	irr::core::position2d<int> GUI::CalculatePixelPosition(irr::core::vector2df a_Coordinates)
+	{
+		irr::core::vector2df pixelCoords;
+		pixelCoords.X = Game::ScreenWidth * a_Coordinates.X;
+		pixelCoords.Y = Game::ScreenHeight * a_Coordinates.Y;
+
+		return irr::core::position2d<int>(pixelCoords.X,pixelCoords.Y);
 	}
 	irr::core::position2d<int> GUI::calculatePixelPosition(irr::core::vector2df a_Coordinates, irr::core::dimension2d<irr::u32> a_CurrentResolution)
 	{
