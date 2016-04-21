@@ -178,6 +178,8 @@
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Flag.cpp" />
+    <ClCompile Include="FlagGUI.cpp" />
+    <ClCompile Include="FlagStatus.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="Health.cpp" />
@@ -205,9 +207,12 @@
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Flag.h" />
+    <ClInclude Include="FlagGUI.h" />
+    <ClInclude Include="FlagStatus.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Health.h" />
+    <ClInclude Include="IUIElement.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="MazeGenerator.h" />
     <ClInclude Include="MazeTile.h" />

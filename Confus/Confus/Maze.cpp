@@ -8,7 +8,6 @@ namespace Confus
 	{
 		m_IrrDevice = a_Device;
 		resetMaze(irr::core::vector2df(30, -7), a_NeedRender);
-
 	}
 
 	void Maze::resetMaze(irr::core::vector2df a_Offset, bool a_NeedRender)

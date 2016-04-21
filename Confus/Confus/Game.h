@@ -89,7 +89,7 @@ namespace Confus
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
         /// </summary>
-        Game();
+        Game(irr::core::dimension2d<irr::u32> a_Resolution);
         /// <summary>
         /// Finalizes an instance of the <see cref="Game"/> class.
         /// </summary>

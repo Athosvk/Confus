@@ -87,6 +87,12 @@
     <ClCompile Include="GUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FlagStatus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FlagGUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -171,12 +177,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RespawnFloor.h">
-    	<Filter>Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Networking\ClientConnection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FlagStatus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IUIElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FlagGUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -116,7 +116,7 @@ namespace Confus {
         particleAffector->drop();
     }
 
-    irr::video::SColor Flag::getColor() 
+     const irr::video::SColor Flag::getColor() const
     {
         switch(*m_TeamIdentifier)
         {
