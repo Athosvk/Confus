@@ -25,13 +25,13 @@ namespace Confus
         m_BlueRespawnFloor(m_Device),
 		m_GUI(m_Device, &m_PlayerNode)
     {
-		ScreenWidth = a_Resolution.Width;
-		ScreenHeight = a_Resolution.Height;
+
 		auto videoDriver = m_Device->getVideoDriver();
 		m_GUI.addElement<FlagGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(50, 50),
 					videoDriver->getTexture("Media/Textures/FlagUIImage.png"),
 					videoDriver->getTexture("Media/Textures/ExclamationMark.png"),
 					irr::core::vector2df(0.44f, 0.0f), false);
+
 		m_GUI.addElement<FlagGUI>(m_Device, &m_RedFlag, irr::core::dimension2du(50, 50),
 			videoDriver->getTexture("Media/Textures/MirroredFlagUIImage.png"),
 			videoDriver->getTexture("Media/Textures/MirroredExclamationMark.png"),

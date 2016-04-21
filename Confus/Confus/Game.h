@@ -20,9 +20,6 @@ namespace Confus
     /// </summary>
     class Game
     {
-	public:
-		static int ScreenWidth;
-		static int ScreenHeight;
     private:
         /// <summary>
         /// The rate at which fixed updates are carried out

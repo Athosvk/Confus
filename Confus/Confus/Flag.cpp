@@ -129,6 +129,11 @@ namespace Confus {
         }
     }
 
+	 const EFlagEnum * Flag::getFlagStatus() const
+	 {
+		 return m_FlagStatus;
+	 }
+
 	//This class handles what to do on collision
 	void Flag::captureFlag(Player* a_PlayerObject) 
     {

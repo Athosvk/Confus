@@ -182,9 +182,6 @@
     <ClInclude Include="GUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FlagStatus.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IUIElement.h">
       <Filter>Header Files</Filter>
     </ClInclude>

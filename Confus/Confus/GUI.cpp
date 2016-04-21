@@ -51,14 +51,7 @@ namespace Confus
 			m_AudioSourceLowHealth->stop();
 		}
 	}
-	irr::core::position2d<int> GUI::CalculatePixelPosition(irr::core::vector2df a_Coordinates)
-	{
-		irr::core::vector2df pixelCoords;
-		pixelCoords.X = Game::ScreenWidth * a_Coordinates.X;
-		pixelCoords.Y = Game::ScreenHeight * a_Coordinates.Y;
 
-		return irr::core::position2d<int>(pixelCoords.X,pixelCoords.Y);
-	}
 	irr::core::position2d<int> GUI::calculatePixelPosition(irr::core::vector2df a_Coordinates, irr::core::dimension2d<irr::u32> a_CurrentResolution)
 	{
 		irr::core::vector2df pixelCoords;
