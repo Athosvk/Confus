@@ -24,7 +24,6 @@ namespace Confus
 
 	void GUI::update()
 	{
-
 		for (auto& uiElement : m_Elements)
 		{
 			uiElement->update();
