@@ -54,12 +54,12 @@ namespace Confus
             }
         }
 
-		void ClientConnection::sendMessage(RakNet::BitStream* a_Stream) 
+		void ClientConnection::sendMessage(const RakNet::BitStream& a_Stream, PacketReliability a_Reliability) 
 		{
 			if(m_Connected)
 			{
-				m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
-					PacketReliability::RELIABLE_ORDERED, 0, getServerAddress(), false);
+				m_Interface->Send(&a_Stream, PacketPriority::HIGH_PRIORITY,
+					a_Reliability, 0, getServerAddress(), false);
 			}
 			else
 			{

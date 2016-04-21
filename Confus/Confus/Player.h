@@ -12,6 +12,10 @@ namespace Confus
 	enum class ETeamIdentifier;
     class EventManager;
     class Flag;
+    enum class EPlayerState : unsigned char
+    {
+        ALIVE, CARRYINGFLAG, ATTACKING, DEAD
+    };
 
     class Player : irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
     {   
@@ -40,7 +44,12 @@ namespace Confus
         bool m_IsMainPlayer = false;
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
-        
+        /// <summary> The player's unique ID. </summary>
+        unsigned int m_PlayerID = 0;
+        /// <summary> The player's active state. </summary>
+        EPlayerState m_PlayerState = EPlayerState::ALIVE;
+        /// <summary> The player's health, ranging from 127 to -127. </summary>
+        int8_t m_PlayerHealth = 100;
 
     public:
         Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
@@ -60,7 +69,8 @@ namespace Confus
         void setConnection(Networking::ClientConnection* a_Connection);
         
         /// <summary> Sets the connection to the server. </summary>
-        void sendAttackMessageToServer(bool a_IsHeavyAttack, bool a_IsMainPlayer) const;
+        void sendMessageToServer() const;
+
     private:
         /// <summary> Starts the walking animation, which is the default animation </summary>
         void startWalking() const;

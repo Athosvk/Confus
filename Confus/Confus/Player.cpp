@@ -10,6 +10,20 @@
 
 namespace Confus
 {
+    #pragma pack(push, 1)
+    struct PlayerPacket
+    {
+        RakNet::MessageID messageType;
+        unsigned int playerID;
+        unsigned char playerState;
+        boolean isAttacking;
+        int8_t playerHealth;
+        irr::core::vector3df playerPosition;
+        irr::core::vector3df playerRotation;
+    };
+    #pragma pack(pop)
+
+
     Networking::ClientConnection* m_Connection;
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
@@ -145,8 +159,6 @@ namespace Confus
 
     void Player::startLightAttack()
     {
-        sendAttackMessageToServer(false, m_IsMainPlayer);
-
         PlayerNode->setFrameLoop(38, 41);
         PlayerNode->setCurrentFrame(38);
         m_Weapon.Damage = LightAttackDamage;
@@ -157,8 +169,6 @@ namespace Confus
 
     void Player::startHeavyAttack()
     {
-        sendAttackMessageToServer(true, m_IsMainPlayer);
-
         PlayerNode->setFrameLoop(60, 66);
         PlayerNode->setCurrentFrame(60);
         m_Weapon.Damage = HeavyAttackDamage;
@@ -201,6 +211,12 @@ namespace Confus
         }
     }
 
+    void Player::fixedUpdate()
+    {
+        sendMessageToServer();
+    }
+
+
     void Player::respawn()
     {
         irr::scene::ISceneNodeAnimatorCollisionResponse * animator = 0;
@@ -236,13 +252,17 @@ namespace Confus
         m_Connection = a_Connection;
 	}
 
-     void Player::sendAttackMessageToServer(bool a_IsHeavyAttack, bool a_IsMainPlayer) const
+     void Player::sendMessageToServer() const
 	{
-        std::unique_ptr<RakNet::BitStream> bitStreamOut = std::make_unique<RakNet::BitStream>();
-        bitStreamOut->Write(static_cast<RakNet::MessageID>(Networking::ClientConnection::EPacketType::PlayerAttack));
-        a_IsHeavyAttack ? bitStreamOut->Write(true) : bitStreamOut->Write(false);
-        a_IsMainPlayer ? bitStreamOut->Write(true) : bitStreamOut->Write(false);
+        PlayerPacket packet;
+        packet.messageType = static_cast<RakNet::MessageID>(Networking::ClientConnection::EPacketType::Player);
+        packet.playerID = static_cast<unsigned int>(m_PlayerID);
+        packet.playerState = static_cast<unsigned char>(m_PlayerState);
+        packet.isAttacking = static_cast<boolean>(m_Attacking);
+        packet.playerHealth = static_cast<int8_t>(m_PlayerHealth);
+        packet.playerPosition = static_cast<irr::core::vector3df>(CameraNode->getAbsolutePosition());
+        packet.playerRotation = static_cast<irr::core::vector3df>(CameraNode->getRotation());
         
-        m_Connection->sendMessage(bitStreamOut.get());
+        m_Connection->sendMessage(packet, PacketReliability::RELIABLE);
 	}
 }

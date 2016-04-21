@@ -40,7 +40,7 @@ namespace Confus
             enum class EPacketType : unsigned char
             {
                 Message = 1 + ID_USER_PACKET_ENUM,
-                PlayerAttack = 3 + ID_USER_PACKET_ENUM
+                Player = 3 + ID_USER_PACKET_ENUM
             };
             /// <summary> Initializes a new instance of the <see cref="ClientConnection"/> class. </summary>
             /// <param name="a_ServerIP">The ip address of the server to connect to.</param>
@@ -57,7 +57,7 @@ namespace Confus
 			/// Sends a message to the server
 			/// </summary>
 			/// <param name="a_Stream">The Bitstream that needs to be send.</param>
-			void sendMessage(RakNet::BitStream* a_Stream);
+			void sendMessage(const RakNet::BitStream& a_Stream, PacketReliability a_Reliability);
 		private:
 			/// <summary> Gets the amount of clients connected to this server instance </summary>
 			/// <returns> The amount of clients connected </returns>
