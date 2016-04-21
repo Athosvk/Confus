@@ -27,8 +27,6 @@ enum class EFlagEnum
 	/// Flag class with status and team id
 	class Flag 
     {
-	public:
-		
     private:		
 		irr::core::vector3df* m_StartPosition;
 		irr::core::vector3df* m_StartRotation;
