@@ -25,7 +25,6 @@ namespace Confus
         m_BlueRespawnFloor(m_Device),
 		m_GUI(m_Device, &m_PlayerNode)
     {
-
 		auto videoDriver = m_Device->getVideoDriver();
 		m_GUI.addElement<FlagGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(50, 50),
 					videoDriver->getTexture("Media/Textures/FlagUIImage.png"),
