@@ -164,7 +164,7 @@ namespace Confus
             m_RedRespawnFloor.disableCollision();
 		}
 		m_MazeGenerator.fixedUpdate();
-		m_PhysicsWorld.physicsUpdate(static_cast<float>(FixedUpdateInterval));
+		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
     }
 
     void Game::render()
