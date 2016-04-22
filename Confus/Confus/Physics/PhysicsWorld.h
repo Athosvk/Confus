@@ -34,16 +34,16 @@ namespace Confus
 			};
 
 			/// <summary> The configuration settings for the physics world </summary>
-			btCollisionConfiguration* m_Configuration = new btDefaultCollisionConfiguration();			
-			/// <summary> The collision dispatcher used by the physics engine</summary>
-			btCollisionDispatcher* m_Dispatcher = new btCollisionDispatcher(m_Configuration);			
+			btDefaultCollisionConfiguration m_Configuration = btDefaultCollisionConfiguration();
+			/// <summary> The collision dispatcher used by the physics engine </summary>
+			btCollisionDispatcher m_Dispatcher = btCollisionDispatcher(&m_Configuration);
 			/// <summary> The broadphase collision handler </summary>
-			btBroadphaseInterface* m_BroadPhaseInterface = new btDbvtBroadphase();			
+			btDbvtBroadphase m_BroadPhaseInterface;
 			/// <summary> The constraint solver for the physics world </summary>
-			btSequentialImpulseConstraintSolver* m_Solver = new btSequentialImpulseConstraintSolver;
+			btSequentialImpulseConstraintSolver m_Solver;
 			/// <summary> The internal, rigid body, simulation world of the physics engine </summary>
-			btDiscreteDynamicsWorld* m_World = new btDiscreteDynamicsWorld(m_Dispatcher, m_BroadPhaseInterface, 
-				m_Solver, m_Configuration);			
+			btDiscreteDynamicsWorld m_World = btDiscreteDynamicsWorld(&m_Dispatcher, &m_BroadPhaseInterface,
+				&m_Solver, &m_Configuration);
 			/// <summary> The collider - rigid body pairs that are currently instantiated in the physics world </summary>
 			std::vector<ColliderPair> m_Colliders;
 		public:
@@ -60,7 +60,7 @@ namespace Confus
 			/// The time with which to advance the physics simulation usually equal to the interval between two 
 			/// fixed/physics updates
 			/// </param>
-			void stepSimulation(float a_DeltaTime) const;
+			void stepSimulation(float a_DeltaTime);
 
 			/// <summary> Converts the given Irrlicht typed vector to a Bullet vector </summary>
 			/// <param name="a_Vector">The vector as Irrlichts type </param>
@@ -70,7 +70,7 @@ namespace Confus
 			/// <summary>
 			/// Converts the given Bullet typed vector to an Irrlicht vector
 			/// </summary>
-			/// <param name="a_Vector">The vector as Bullets type</param>
+			/// <param name="a_Vector"> The vector as Bullets type </param>
 			/// <returns> The vector as Irrlichts type </returns>
 			static irr::core::vector3df toIrrlichtVector(const btVector3& a_Vector);
 		private:			
@@ -90,7 +90,7 @@ namespace Confus
 			/// <param name="a_AttachedNode">The attached Irrlicht scenenode</param>
 			/// <returns> The created RigidBody </returns>
 			std::unique_ptr<RigidBody> createRigidBody(btCollisionShape* a_Shape,
-				irr::scene::ISceneNode* a_AttachedNode) const;
+				irr::scene::ISceneNode* a_AttachedNode);
 		};
 	}
 }

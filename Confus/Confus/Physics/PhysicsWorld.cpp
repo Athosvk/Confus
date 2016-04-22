@@ -15,13 +15,13 @@ namespace Confus
 
 		PhysicsWorld::PhysicsWorld()
 		{
-			m_World->setGravity(btVector3(0.0f, -9.81f, 0.0f));
+			m_World.setGravity(btVector3(0.0f, -9.81f, 0.0f));
 		}
 
-		void PhysicsWorld::stepSimulation(float a_DeltaTime) const
+		void PhysicsWorld::stepSimulation(float a_DeltaTime)
 		{
 			prePhysicsUpdate();
-			m_World->stepSimulation(a_DeltaTime);
+			m_World.stepSimulation(a_DeltaTime);
 			synchronizeTransforms();
 		}
 
@@ -65,12 +65,12 @@ namespace Confus
 		}
 
 		std::unique_ptr<RigidBody> PhysicsWorld::createRigidBody(btCollisionShape* a_Shape, 
-			irr::scene::ISceneNode* a_AttachedNode) const
+			irr::scene::ISceneNode* a_AttachedNode)
 		{
 			btRigidBody::btRigidBodyConstructionInfo rigidBodyInfo =
 				btRigidBody::btRigidBodyConstructionInfo(0.1f, nullptr, a_Shape);
 			auto rigidBody = std::make_unique<btRigidBody>(rigidBodyInfo);
-			m_World->addRigidBody(rigidBody.get());
+			m_World.addRigidBody(rigidBody.get());
 			return std::make_unique<RigidBody>(std::move(rigidBody), a_AttachedNode);
 		}
 	}
