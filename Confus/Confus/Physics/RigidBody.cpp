@@ -67,6 +67,18 @@ namespace Confus
 			m_Body->setMassProps(static_cast<btScalar>(0.0f), m_Body->getLocalInertia());
 		}
 
+		void RigidBody::enableTriggerState()
+		{
+			m_Trigger = true;
+			m_Body->setCollisionFlags(m_Body->getCollisionFlags() | btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
+		}
+
+		void RigidBody::disableTriggerState()
+		{
+			m_Trigger = true;
+			m_Body->setCollisionFlags(m_Body->getCollisionFlags() & ~btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
+		}
+
 		void RigidBody::setAbsolutePosition(irr::core::vector3df a_Position) const
 		{
 			if(m_AttachedNode->getParent() != nullptr)

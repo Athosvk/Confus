@@ -46,6 +46,9 @@ namespace Confus
 			
 			/// <summary> The type of Rigid Body </summary>
 			ERigidBodyType m_Type;
+			
+			/// <summary> Whether this object is influenced by and influences collision responses or not </summary>
+			bool m_Trigger = false;
 
 		public:
 			/// <summary> Initializes a new instance of the <see cref="RigidBody"/> class </summary>
@@ -73,6 +76,12 @@ namespace Confus
 			/// <summary> Makes the RigidBody kinematic, causing it to be uninfluenced by events in the Physics World </summary>
 			/// <remarks> Set mass can no longer be called as long as the object stays kinematic </remarks>
 			void makeKinematic();
+			
+			/// <summary> Makes this RigidBody a trigger collider, causing it to stop being influenced and stop influencing collision responses </summary>
+			void enableTriggerState();
+
+			/// <summary> Makes this RigidBody a regular collider, causing it to start being influenced and start influencing collision responses </summary>
+			void disableTriggerState();
 		private:
 			/// <summary>
 			/// Sets the position of the attached scene node in absolute/world terms
