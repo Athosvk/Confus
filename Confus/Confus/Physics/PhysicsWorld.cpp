@@ -18,7 +18,7 @@ namespace Confus
 			m_World->setGravity(btVector3(0.0f, -9.81f, 0.0f));
 		}
 
-		void PhysicsWorld::physicsUpdate(float a_DeltaTime) const
+		void PhysicsWorld::stepSimulation(float a_DeltaTime) const
 		{
 			prePhysicsUpdate();
 			m_World->stepSimulation(a_DeltaTime);
@@ -50,7 +50,7 @@ namespace Confus
 			m_Colliders.emplace_back(std::move(collider), std::move(rigidBody));
 		}
 
-		btVector3 PhysicsWorld::toBulletVector(const irr::core::vector3d<float>& a_Vector)
+		btVector3 PhysicsWorld::toBulletVector(const irr::core::vector3df& a_Vector)
 		{
 			return btVector3(static_cast<btScalar>(a_Vector.X),
 				static_cast<btScalar>(a_Vector.Y),
