@@ -86,6 +86,7 @@ namespace Confus
 			/// <param name="a_Shape">The shape/collider to create the RigidBody for/attach it to</param>
 			/// <param name="a_AttachedNode">The attached Irrlicht scenenode</param>
 			/// <returns> The created RigidBody </returns>
+			/// <remarks> The created Rigid Body has a mass of zero (and is therefore static) by default </remarks>
 			std::unique_ptr<RigidBody> createRigidBody(btCollisionShape* a_Shape,
 				irr::scene::ISceneNode* a_AttachedNode);
 		};
