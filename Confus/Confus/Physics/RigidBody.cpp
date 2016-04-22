@@ -40,16 +40,6 @@ namespace Confus
 			return m_AttachedNode;
 		}
 
-		void RigidBody::setMass(float a_Mass)
-		{
-			if(m_Type != ERigidBodyType::Dynamic)
-			{
-				throw std::logic_error("Mass can only be set for dynamic rigid bodies");
-			}
-			m_Mass = a_Mass;
-			m_Body->setMassProps(static_cast<btScalar>(m_Mass), m_Body->getLocalInertia());
-		}
-
 		void RigidBody::makeDynamic()
 		{
 			m_Type = ERigidBodyType::Dynamic;

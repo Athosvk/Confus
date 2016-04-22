@@ -59,10 +59,6 @@ namespace Confus
 			/// <returns> The associated/attached scene node </returns>
 			irr::scene::ISceneNode* getAttachedNode() const;
 
-			/// <summary> Sets the mass of the Rigid Body </summary>
-			/// <param name="a_Mass"> The new mass </param>
-			void setMass(float a_Mass);
-
 			/// <summary> Makes the RigidBody dynamic, causing it to be influenced by events in the Physics World </summary>
 			void makeDynamic();
 
