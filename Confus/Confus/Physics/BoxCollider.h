@@ -11,7 +11,7 @@ namespace Confus
 		class BoxCollider : public ICollider
 		{
 		private:
-			std::unique_ptr<btBoxShape> m_Shape; 
+			std::unique_ptr<btBoxShape> m_Shape;
 		public:
 			BoxCollider(std::unique_ptr<btBoxShape>&& a_Shape);
 		};

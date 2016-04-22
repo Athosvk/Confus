@@ -4,8 +4,5 @@ namespace Confus
 {
 	namespace Physics
 	{
-		ICollider::ICollider()
-		{
-		}
 	}
 }

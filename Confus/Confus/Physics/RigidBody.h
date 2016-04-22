@@ -23,11 +23,11 @@ namespace Confus
 		public:
 			RigidBody(std::unique_ptr<btRigidBody>&& a_RigidBody, irr::scene::ISceneNode* a_AttachedNode);
 
-			void onPrePhysicsUpdate();
-			void synchronizeTransform();
+			void onPrePhysicsUpdate() const;
+			void synchronizeTransform() const;
 			irr::scene::ISceneNode* getAttachedNode() const;
 		private:
-			void setAbsoluteTransformation(irr::core::vector3df a_Position);
+			void setAbsoluteTransformation(irr::core::vector3df a_Position) const;
 		};
 	}
 }

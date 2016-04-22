@@ -35,14 +35,13 @@ namespace Confus
 		public:
 			PhysicsWorld();
 
-			void createBoxCollider(irr::core::vector3df a_Extents, 
-				irr::scene::ISceneNode* a_AttachedNode);
-			void physicsUpdate(float a_DeltaTime);
+			void createBoxCollider(irr::core::vector3df a_Extents, irr::scene::ISceneNode* a_AttachedNode);
+			void physicsUpdate(float a_DeltaTime) const;
 			static btVector3 toBulletVector(const irr::core::vector3d<float>& a_Vector);
 			static irr::core::vector3df toIrrlichtVector(const btVector3& a_Vector);
 		private:
-			void prePhysicsUpdate();
-			void synchronizeTransforms();
+			void prePhysicsUpdate() const;
+			void synchronizeTransforms() const;
 			std::unique_ptr<RigidBody> createRigidBody(btCollisionShape* a_Shape,
 				irr::scene::ISceneNode* a_AttachedNode) const;
 		};

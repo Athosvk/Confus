@@ -14,7 +14,7 @@ namespace Confus
 		{
 		}
 
-		void RigidBody::onPrePhysicsUpdate()
+		void RigidBody::onPrePhysicsUpdate() const
 		{
 			btTransform transform = btTransform::getIdentity();
 			transform.setOrigin(PhysicsWorld::toBulletVector(m_AttachedNode->getAbsolutePosition()));
@@ -26,7 +26,7 @@ namespace Confus
 			m_Body->setWorldTransform(transform);
 		}
 
-		void RigidBody::synchronizeTransform()
+		void RigidBody::synchronizeTransform() const
 		{
 			auto transform = m_Body->getWorldTransform();
 			setAbsoluteTransformation(PhysicsWorld::toIrrlichtVector(transform.getOrigin()));
@@ -37,7 +37,7 @@ namespace Confus
 			return m_AttachedNode;
 		}
 
-		void RigidBody::setAbsoluteTransformation(irr::core::vector3df a_Position)
+		void RigidBody::setAbsoluteTransformation(irr::core::vector3df a_Position) const
 		{
 			if(m_AttachedNode->getParent() != nullptr)
 			{

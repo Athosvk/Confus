@@ -18,14 +18,14 @@ namespace Confus
 			m_World->setGravity(btVector3(0.0f, -9.81f, 0.0f));
 		}
 
-		void PhysicsWorld::physicsUpdate(float a_DeltaTime)
+		void PhysicsWorld::physicsUpdate(float a_DeltaTime) const
 		{
 			prePhysicsUpdate();
 			m_World->stepSimulation(a_DeltaTime);
 			synchronizeTransforms();
 		}
 
-		void PhysicsWorld::prePhysicsUpdate()
+		void PhysicsWorld::prePhysicsUpdate() const
 		{
 			for(auto& colliderPair : m_Colliders)
 			{
@@ -33,7 +33,7 @@ namespace Confus
 			}
 		}
 
-		void PhysicsWorld::synchronizeTransforms()
+		void PhysicsWorld::synchronizeTransforms() const
 		{
 			for(auto& colliderPair : m_Colliders)
 			{
