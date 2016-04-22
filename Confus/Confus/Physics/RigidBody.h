@@ -40,7 +40,7 @@ namespace Confus
 			void onPrePhysicsUpdate() const;
 
 			/// <summary> Syncs the transform, primarily position, after the physics update </summary>
-			void synchronizeTransform() const;
+			void onPostPhysicsUpdate() const;
 
 			/// <summary> Gets the associated/attached scene node </summary>
 			/// <returns> The associated/attached scene node </returns>

@@ -26,7 +26,7 @@ namespace Confus
 			m_Body->setWorldTransform(transform);
 		}
 
-		void RigidBody::synchronizeTransform() const
+		void RigidBody::onPostPhysicsUpdate() const
 		{
 			auto transform = m_Body->getWorldTransform();
 			setAbsolutePosition(PhysicsWorld::toIrrlichtVector(transform.getOrigin()));
