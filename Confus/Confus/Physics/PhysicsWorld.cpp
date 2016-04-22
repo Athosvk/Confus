@@ -41,13 +41,14 @@ namespace Confus
 			}
 		}
 
-		void PhysicsWorld::createBoxCollider(irr::core::vector3df a_Extents,
+		BoxCollider* PhysicsWorld::createBoxCollider(irr::core::vector3df a_Extents,
 			irr::scene::ISceneNode* a_AttachedNode)
 		{
 			auto shape = std::make_unique<btBoxShape>(toBulletVector(a_Extents / 2));
 			auto rigidBody = createRigidBody(shape.get(), a_AttachedNode);
 			auto collider = std::make_unique<BoxCollider>(std::move(shape));
 			m_Colliders.emplace_back(std::move(collider), std::move(rigidBody));
+			return static_cast<BoxCollider*>(m_Colliders.back().Shape.get());
 		}
 
 		btVector3 PhysicsWorld::toBulletVector(const irr::core::vector3df& a_Vector)
@@ -68,7 +69,7 @@ namespace Confus
 			irr::scene::ISceneNode* a_AttachedNode)
 		{
 			btRigidBody::btRigidBodyConstructionInfo rigidBodyInfo =
-				btRigidBody::btRigidBodyConstructionInfo(0.1f, nullptr, a_Shape);
+				btRigidBody::btRigidBodyConstructionInfo(1.0f, nullptr, a_Shape);
 			auto rigidBody = std::make_unique<btRigidBody>(rigidBodyInfo);
 			m_World.addRigidBody(rigidBody.get());
 			return std::make_unique<RigidBody>(std::move(rigidBody), a_AttachedNode);

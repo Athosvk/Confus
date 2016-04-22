@@ -53,7 +53,7 @@ namespace Confus
 			/// <summary> Creates and places a new box collider into the physics world for simulations </summary>
 			/// <param name="a_Extents">The extents/dimensions of the collider to be created </param>
 			/// <param name="a_AttachedNode">The node the collider is attached to </param>
-			void createBoxCollider(irr::core::vector3df a_Extents, irr::scene::ISceneNode* a_AttachedNode);
+			BoxCollider* createBoxCollider(irr::core::vector3df a_Extents, irr::scene::ISceneNode* a_AttachedNode);
 
 			/// <summary> Advanced the physics simulation based on the entered delta time value </summary>
 			/// <param name="a_DeltaTime"> 
@@ -86,7 +86,7 @@ namespace Confus
 			/// <param name="a_Shape">The shape/collider to create the RigidBody for/attach it to</param>
 			/// <param name="a_AttachedNode">The attached Irrlicht scenenode</param>
 			/// <returns> The created RigidBody </returns>
-			/// <remarks> The created Rigid Body has a mass of zero (and is therefore static) by default </remarks>
+			/// <remarks> The created Rigid Body has a mass of one and is dynamic by default </remarks>
 			std::unique_ptr<RigidBody> createRigidBody(btCollisionShape* a_Shape,
 				irr::scene::ISceneNode* a_AttachedNode);
 		};
