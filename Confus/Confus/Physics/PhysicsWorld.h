@@ -51,7 +51,7 @@ namespace Confus
 		public:
 			/// <summary> Initializes a new instance of the <see cref="PhysicsWorld"/> class </summary>
 			PhysicsWorld();
-
+			~PhysicsWorld();
 			/// <summary> Creates and places a new box collider into the physics world for simulations </summary>
 			/// <param name="a_Extents">The extents/dimensions of the collider to be created </param>
 			/// <param name="a_AttachedNode">The node the collider is attached to </param>

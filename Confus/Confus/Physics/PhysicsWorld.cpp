@@ -18,6 +18,15 @@ namespace Confus
 			m_World.setGravity(btVector3(0.0f, -9.81f, 0.0f));
 		}
 
+		PhysicsWorld::~PhysicsWorld()
+		{
+			auto collisionObjects = m_World.getCollisionObjectArray();
+			for(int i = 0; i < m_World.getNumCollisionObjects(); ++i)
+			{
+				m_World.removeCollisionObject(collisionObjects[i]);
+			}
+		}
+
 		void PhysicsWorld::stepSimulation(float a_DeltaTime)
 		{
 			prePhysicsUpdate();
