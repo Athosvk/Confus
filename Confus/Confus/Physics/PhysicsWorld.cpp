@@ -22,7 +22,7 @@ namespace Confus
 		{
 			prePhysicsUpdate();
 			m_World.stepSimulation(a_DeltaTime);
-			synchronizeTransforms();
+			postPhysicsUpdate();
 		}
 
 		void PhysicsWorld::prePhysicsUpdate() const
@@ -33,7 +33,7 @@ namespace Confus
 			}
 		}
 
-		void PhysicsWorld::synchronizeTransforms() const
+		void PhysicsWorld::postPhysicsUpdate() const
 		{
 			for(auto& colliderPair : m_Colliders)
 			{

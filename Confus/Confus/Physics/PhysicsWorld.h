@@ -74,14 +74,11 @@ namespace Confus
 			/// <returns> The vector as Irrlichts type </returns>
 			static irr::core::vector3df toIrrlichtVector(const btVector3& a_Vector);
 		private:			
-			/// <summary> Executes the operations necessary before the actual simulation forward </summary>
+			/// <summary> Executes the operations necessary before the actual simulation step occurs </summary>
 			void prePhysicsUpdate() const;	
 
-			/// <summary> 
-			/// Synchronizes the transforms of the scenenodes with those of the RigidBodys in the 
-			/// physics world 
-			/// </summary>
-			void synchronizeTransforms() const;
+			/// <summary> Executes the operations necessary after the simulation step has occurred </summary>
+			void postPhysicsUpdate() const;
 			
 			/// <summary>
 			/// Creates and places a RigidBody in the physics world

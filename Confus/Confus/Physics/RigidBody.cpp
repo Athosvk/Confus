@@ -29,7 +29,7 @@ namespace Confus
 		void RigidBody::synchronizeTransform() const
 		{
 			auto transform = m_Body->getWorldTransform();
-			setAbsoluteTransformation(PhysicsWorld::toIrrlichtVector(transform.getOrigin()));
+			setAbsolutePosition(PhysicsWorld::toIrrlichtVector(transform.getOrigin()));
 		}
 
 		irr::scene::ISceneNode* RigidBody::getAttachedNode() const
@@ -37,7 +37,7 @@ namespace Confus
 			return m_AttachedNode;
 		}
 
-		void RigidBody::setAbsoluteTransformation(irr::core::vector3df a_Position) const
+		void RigidBody::setAbsolutePosition(irr::core::vector3df a_Position) const
 		{
 			if(m_AttachedNode->getParent() != nullptr)
 			{
