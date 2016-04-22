@@ -15,10 +15,14 @@ namespace Confus
 {
 	namespace Physics
 	{
+		/// <summary> The type of RigidBody, depicting how it will be influenced how it will be influenced by the physics world </summary>
 		enum class ERigidBodyType
 		{
+			/// <summary> The Rigid Body is not updated or influenced by the physics world </summary>
 			Static,
+			/// <summary> The Rigid Body is influenced by all effects in the physics world </summary>
 			Dynamic,
+			/// <summary> The Rigid Body is only influenced by manually adjusting its properties </summary>
 			Kinematic
 		};
 
@@ -39,12 +43,12 @@ namespace Confus
 			/// <summary> The mass of the Rigid Body </summary>
 			/// <remarks> Mirrored to retain state of mass when body is changed to static/kinematic </remarks>
 			float m_Mass = 1.0f;
+			
+			/// <summary> The type of Rigid Body </summary>
 			ERigidBodyType m_Type;
 
 		public:
-			/// <summary>
-			/// Initializes a new instance of the <see cref="RigidBody"/> class.
-			/// </summary>
+			/// <summary> Initializes a new instance of the <see cref="RigidBody"/> class </summary>
 			/// <param name="a_RigidBody">The Bullet rigid body </param>
 			/// <param name="a_AttachedNode">The attached/associated scene node </param>
 			RigidBody(std::unique_ptr<btRigidBody>&& a_RigidBody, irr::scene::ISceneNode* a_AttachedNode);
