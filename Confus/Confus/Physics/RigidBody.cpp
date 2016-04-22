@@ -10,8 +10,11 @@ namespace Confus
 	{
 		RigidBody::RigidBody(std::unique_ptr<btRigidBody>&& a_RigidBody, irr::scene::ISceneNode* a_AttachedNode)
 			: m_Body(std::move(a_RigidBody)),
-			m_AttachedNode(a_AttachedNode)
+			m_AttachedNode(a_AttachedNode),
+			m_Mass(static_cast<btScalar>(1.0) / m_Body->getInvMass())
 		{
+			m_Type = m_Body->getInvMass() == static_cast<btScalar>(0.0) ? ERigidBodyType::Static :
+				ERigidBodyType::Dynamic;
 		}
 
 		void RigidBody::onPrePhysicsUpdate() const
@@ -35,6 +38,43 @@ namespace Confus
 		irr::scene::ISceneNode* RigidBody::getAttachedNode() const
 		{
 			return m_AttachedNode;
+		}
+
+		void RigidBody::setMass(float a_Mass)
+		{
+			if(m_Type != ERigidBodyType::Dynamic)
+			{
+				throw std::logic_error("Mass can only be set for dynamic rigid bodies");
+			}
+			m_Mass = a_Mass;
+			m_Body->setMassProps(static_cast<btScalar>(m_Mass), m_Body->getLocalInertia());
+		}
+
+		void RigidBody::makeDynamic()
+		{
+			m_Type = ERigidBodyType::Dynamic;
+			m_Body->setCollisionFlags(m_Body->getCollisionFlags() &
+				~btRigidBody::CollisionFlags::CF_STATIC_OBJECT &
+				~btRigidBody::CollisionFlags::CF_KINEMATIC_OBJECT);
+			m_Body->setMassProps(static_cast<btScalar>(m_Mass), m_Body->getLocalInertia());
+		}
+
+		void RigidBody::makeStatic()
+		{
+			m_Type = ERigidBodyType::Static;
+			m_Body->setCollisionFlags((m_Body->getCollisionFlags() |
+				btRigidBody::CollisionFlags::CF_STATIC_OBJECT) &
+				~btRigidBody::CollisionFlags::CF_KINEMATIC_OBJECT);
+			m_Body->setMassProps(static_cast<btScalar>(0.0f), m_Body->getLocalInertia());
+		}
+
+		void RigidBody::makeKinematic()
+		{
+			m_Type = ERigidBodyType::Kinematic;
+			m_Body->setCollisionFlags((m_Body->getCollisionFlags() | 
+				btRigidBody::CollisionFlags::CF_KINEMATIC_OBJECT) &
+				~btRigidBody::CollisionFlags::CF_STATIC_OBJECT);
+			m_Body->setMassProps(static_cast<btScalar>(0.0f), m_Body->getLocalInertia());
 		}
 
 		void RigidBody::setAbsolutePosition(irr::core::vector3df a_Position) const

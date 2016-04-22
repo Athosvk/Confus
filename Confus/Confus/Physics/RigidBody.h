@@ -1,6 +1,7 @@
 #pragma once
 #include <Bullet/btBulletCollisionCommon.h>
 #include <memory>
+#include <Irrlicht/irrlicht.h>
 
 namespace irr
 {
@@ -14,6 +15,13 @@ namespace Confus
 {
 	namespace Physics
 	{
+		enum class ERigidBodyType
+		{
+			Static,
+			Dynamic,
+			Kinematic
+		};
+
 		/// <summary> Represents the RigidBody in the Physics World, associated with some collision shape </summary>
 		class RigidBody
 		{
@@ -27,6 +35,11 @@ namespace Confus
 
 			/// <summary> The SceneNode with which this RigidBody is associated </summary>
 			irr::scene::ISceneNode* m_AttachedNode;
+			
+			/// <summary> The mass of the Rigid Body </summary>
+			/// <remarks> Mirrored to retain state of mass when body is changed to static/kinematic </remarks>
+			float m_Mass = 1.0f;
+			ERigidBodyType m_Type;
 
 		public:
 			/// <summary>
@@ -45,6 +58,21 @@ namespace Confus
 			/// <summary> Gets the associated/attached scene node </summary>
 			/// <returns> The associated/attached scene node </returns>
 			irr::scene::ISceneNode* getAttachedNode() const;
+
+			/// <summary> Sets the mass of the Rigid Body </summary>
+			/// <param name="a_Mass"> The new mass </param>
+			void setMass(float a_Mass);
+
+			/// <summary> Makes the RigidBody dynamic, causing it to be influenced by events in the Physics World </summary>
+			void makeDynamic();
+
+			/// <summary> Makes the RigidBody static, making it immovable in the Physics World </summary>
+			/// <remarks> Set velocity and set mass can no longer be called as long as the object stays static </remarks>
+			void makeStatic();
+			
+			/// <summary> Makes the RigidBody kinematic, causing it to be uninfluenced by events in the Physics World </summary>
+			/// <remarks> Set mass can no longer be called as long as the object stays kinematic </remarks>
+			void makeKinematic();
 		private:
 			/// <summary>
 			/// Sets the position of the attached scene node in absolute/world terms

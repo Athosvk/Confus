@@ -46,7 +46,7 @@ namespace Confus
 		{
 			auto shape = std::make_unique<btBoxShape>(toBulletVector(a_Extents / 2));
 			auto rigidBody = createRigidBody(shape.get(), a_AttachedNode);
-			auto collider = std::make_unique<BoxCollider>(std::move(shape));
+			auto collider = std::make_unique<BoxCollider>(std::move(shape), rigidBody.get());
 			m_Colliders.emplace_back(std::move(collider), std::move(rigidBody));
 			return static_cast<BoxCollider*>(m_Colliders.back().Shape.get());
 		}

@@ -20,9 +20,12 @@ namespace Confus
 			/// </remarks>
 			std::unique_ptr<btBoxShape> m_Shape;
 		public:
-			/// <summary> Initializes a new instance of the <see cref="BoxCollider"/> class </summary>
-			/// <param name="a_Shape"> The Bullet shape </param>
-			BoxCollider(std::unique_ptr<btBoxShape>&& a_Shape);
+			/// <summary>
+			/// Initializes a new instance of the <see cref="BoxCollider" /> class
+			/// </summary>
+			/// <param name="a_Shape">The Bullet shape</param>
+			/// <param name="a_RigidBody">The attached rigid body </param>
+			BoxCollider(std::unique_ptr<btBoxShape>&& a_Shape, RigidBody* a_RigidBody);
 		};
 	}
 }

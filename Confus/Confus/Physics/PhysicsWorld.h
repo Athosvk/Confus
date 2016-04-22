@@ -11,6 +11,8 @@ namespace Confus
 {
 	namespace Physics
 	{
+		class BoxCollider;
+
 		/// <summary>
 		/// The world in which all, rigid body, physics simulations are performed by the physics engine
 		/// </summary>
