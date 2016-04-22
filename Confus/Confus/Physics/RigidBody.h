@@ -36,7 +36,7 @@ namespace Confus
 			/// <param name="a_AttachedNode">The attached/associated scene node </param>
 			RigidBody(std::unique_ptr<btRigidBody>&& a_RigidBody, irr::scene::ISceneNode* a_AttachedNode);
 
-			/// <summary> Executes the necessary operations before the simulation step commences </summary>
+			/// <summary> Updates the physics world simulation structure before the physics update commences </summary>
 			void onPrePhysicsUpdate() const;
 
 			/// <summary> Syncs the transform, primarily position, after the physics update </summary>

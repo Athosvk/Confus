@@ -37,7 +37,7 @@ namespace Confus
 		{
 			for(auto& colliderPair : m_Colliders)
 			{
-				colliderPair.Body->synchronizeTransform();
+				colliderPair.Body->onPostPhysicsUpdate();
 			}
 		}
 
