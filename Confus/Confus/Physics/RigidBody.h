@@ -46,10 +46,6 @@ namespace Confus
 			
 			/// <summary> The type of Rigid Body </summary>
 			ERigidBodyType m_Type;
-			
-			/// <summary> Whether this object is influenced by and influences collision responses or not </summary>
-			bool m_Trigger = false;
-
 		public:
 			/// <summary> Initializes a new instance of the <see cref="RigidBody"/> class </summary>
 			/// <param name="a_RigidBody">The Bullet rigid body </param>
