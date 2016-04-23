@@ -61,6 +61,11 @@ namespace Confus
 			/// <returns> A handle to the created box collider </returns>
 			BoxCollider* createBoxCollider(irr::core::vector3df a_Extents, irr::scene::ISceneNode* a_AttachedNode);
 
+			/// <summary> Creates and places a new box collider from the scene node's bounding box into the physics world for simulations </summary>
+			/// <param name="a_AttachedNode"> The node the collider is attached to </param>
+			/// <returns> A handle to the created box collider </returns>
+			BoxCollider* createBoxCollider(irr::scene::IMeshSceneNode* a_AttachedNode);
+
 			/// <summary> Advanced the physics simulation based on the entered delta time value </summary>
 			/// <param name="a_DeltaTime"> 
 			/// The time with which to advance the physics simulation usually equal to the interval between two 

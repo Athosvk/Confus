@@ -60,6 +60,11 @@ namespace Confus
 			return static_cast<BoxCollider*>(m_Colliders.back().Shape.get());
 		}
 
+		BoxCollider* PhysicsWorld::createBoxCollider(irr::scene::IMeshSceneNode* a_AttachedNode)
+		{
+			return createBoxCollider(a_AttachedNode->getBoundingBox().getExtent(), a_AttachedNode);
+		}
+
 		btVector3 PhysicsWorld::toBulletVector(const irr::core::vector3df& a_Vector)
 		{
 			return btVector3(static_cast<btScalar>(a_Vector.X),
