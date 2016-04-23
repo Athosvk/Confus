@@ -1,5 +1,6 @@
 #pragma once
 #include <RakNet/MessageIdentifiers.h>
+#include <RakNet/RakPeerInterface.h>
 #include <RakNet/BitStream.h>
 #include <string>
 #include <queue>
@@ -14,7 +15,12 @@ namespace Confus
 {
     namespace Networking
     {
-        
+        /// <summary> The type of packet </summary>
+        enum class EPacketType : unsigned char
+        {
+            Message = 1 + ID_USER_PACKET_ENUM,
+            Player = 3 + ID_USER_PACKET_ENUM
+        };
         /// <summary>
         /// Represents a connection to the server that this clients is connected to.
         /// A game should only have one of these, since a client will only connect to one
@@ -36,12 +42,7 @@ namespace Confus
 			bool m_Connected = false;
 
         public:
-            /// <summary> The type of packet </summary>
-            enum class EPacketType : unsigned char
-            {
-                Message = 1 + ID_USER_PACKET_ENUM,
-                Player = 3 + ID_USER_PACKET_ENUM
-            };
+           
             /// <summary> Initializes a new instance of the <see cref="ClientConnection"/> class. </summary>
             /// <param name="a_ServerIP">The ip address of the server to connect to.</param>
             /// <param name="a_ServerPort">The port oft the server to connect to.</param>

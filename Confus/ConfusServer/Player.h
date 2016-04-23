@@ -1,5 +1,6 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
+#include "RakNet/RakNetSocket2.h"
 #include "Health.h"
 #include "Weapon.h"
 
@@ -24,6 +25,18 @@ namespace ConfusServer {
 		EFlagEnum* CarryingFlag;
 		ETeamIdentifier* TeamIdentifier;    
         Flag* FlagPointer;
+
+        #pragma pack(push, 1)
+        struct PlayerPacket
+        {
+            unsigned int playerID;
+            unsigned char playerState;
+            boolean isAttacking;
+            int8_t playerHealth;
+            irr::core::vector3df playerPosition;
+            irr::core::vector3df playerRotation;
+        };
+        #pragma pack(pop)
 	private:
         Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
 

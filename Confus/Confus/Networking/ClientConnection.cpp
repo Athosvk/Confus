@@ -1,7 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <RakNet/RakPeerInterface.h>
-#include <RakNet/MessageIdentifiers.h>
 
 #include "ClientConnection.h"
 

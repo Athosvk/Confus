@@ -167,6 +167,7 @@ namespace Confus
             m_RedRespawnFloor.disableCollision();
 		}
 		m_MazeGenerator.fixedUpdate();
+        m_PlayerNode.fixedUpdate();
     }
 
     void Game::render()

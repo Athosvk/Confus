@@ -10,20 +10,6 @@
 
 namespace Confus
 {
-    #pragma pack(push, 1)
-    struct PlayerPacket
-    {
-        RakNet::MessageID messageType;
-        unsigned int playerID;
-        unsigned char playerState;
-        boolean isAttacking;
-        int8_t playerHealth;
-        irr::core::vector3df playerPosition;
-        irr::core::vector3df playerRotation;
-    };
-    #pragma pack(pop)
-
-
     Networking::ClientConnection* m_Connection;
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
@@ -254,8 +240,16 @@ namespace Confus
 
      void Player::sendMessageToServer() const
 	{
+        RakNet::BitStream bitstreamOut;
+        bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
+        bitstreamOut.Write(createPlayerPacket());
+
+        m_Connection->sendMessage(bitstreamOut, PacketReliability::RELIABLE);
+	}
+
+     Player::PlayerPacket Player::createPlayerPacket() const
+	{
         PlayerPacket packet;
-        packet.messageType = static_cast<RakNet::MessageID>(Networking::ClientConnection::EPacketType::Player);
         packet.playerID = static_cast<unsigned int>(m_PlayerID);
         packet.playerState = static_cast<unsigned char>(m_PlayerState);
         packet.isAttacking = static_cast<boolean>(m_Attacking);
@@ -263,6 +257,6 @@ namespace Confus
         packet.playerPosition = static_cast<irr::core::vector3df>(CameraNode->getAbsolutePosition());
         packet.playerRotation = static_cast<irr::core::vector3df>(CameraNode->getRotation());
         
-        m_Connection->sendMessage(packet, PacketReliability::RELIABLE);
+        return packet;
 	}
 }

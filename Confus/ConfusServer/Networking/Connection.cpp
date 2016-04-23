@@ -9,7 +9,7 @@ namespace ConfusServer
 {
     namespace Networking
     {
-        Connection::Connection(Player* a_MainPlayer, Player* a_SecondPlayer)
+        Connection::Connection()
         {
             RakNet::SocketDescriptor socketDescriptor(60000, nullptr);
             auto result = m_Interface->Startup(5, &socketDescriptor, 1);
@@ -20,8 +20,6 @@ namespace ConfusServer
 			}
             //Use 10 as a general case for a 5 vs 5 matchup
             m_Interface->SetMaximumIncomingConnections(10);
-            m_MainPlayer = a_MainPlayer;
-            m_SecondPlayer = a_SecondPlayer;
         }
 
         Connection::~Connection()
@@ -90,21 +88,9 @@ namespace ConfusServer
 
         void Connection::processPlayerPacket(RakNet::BitStream& a_InputStream)
         {
-            bool isHeavyAttack, isMainPlayer;
-            a_InputStream.IgnoreBytes(sizeof(RakNet::MessageID));
-            a_InputStream.Read(isHeavyAttack);
-            a_InputStream.Read(isMainPlayer);
-            if(isHeavyAttack)
-            {
-                isMainPlayer ? m_MainPlayer->startHeavyAttack() : m_SecondPlayer->startHeavyAttack();
-            }
-            else
-            {
-                isMainPlayer ? m_MainPlayer->startLightAttack() : m_SecondPlayer->startLightAttack();
-            }
-            #ifdef _DEBUG
-            std::cout << "Player pressed attack button\n";
-            #endif
+            Player::PlayerPacket playerPacket;
+            a_InputStream.Read(playerPacket);
+            std::cout << "Player X position is: " << playerPacket.playerPosition.X << "\n";
         }
     }
 }

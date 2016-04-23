@@ -4,7 +4,6 @@
 #include <RakNet/MessageIdentifiers.h>
 #include "../Player.h"
 
-
 namespace ConfusServer
 {
     namespace Networking
@@ -30,14 +29,9 @@ namespace ConfusServer
             /// <summary> The RakNet interface for interacting with RakNet </summary>
             RakNet::RakPeerInterface* m_Interface = RakNet::RakPeerInterface::GetInstance();
 
-            /// <summary> A pointer to the main player. </summary>
-            Player* m_MainPlayer;
-
-            /// <summary> A pointer to the second player. </summary>
-            Player* m_SecondPlayer;
         public:
             /// <summary> Initializes a new instance of the <see cref="Connection"/> class. </summary>
-            Connection(Player* a_MainPlayer, Player* a_SecondPlayer);
+            Connection();
             /// <summary> Finalizes an instance of the <see cref="Connection"/> class. </summary>
             ~Connection();
             /// <summary>

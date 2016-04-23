@@ -51,6 +51,19 @@ namespace Confus
         /// <summary> The player's health, ranging from 127 to -127. </summary>
         int8_t m_PlayerHealth = 100;
 
+        #pragma pack(push, 1)
+        struct PlayerPacket
+        {
+            RakNet::MessageID messageType;
+            unsigned int playerID;
+            unsigned char playerState;
+            boolean isAttacking;
+            int8_t playerHealth;
+            irr::core::vector3df playerPosition;
+            irr::core::vector3df playerRotation;
+        };
+        #pragma pack(pop)
+
     public:
         Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
 		~Player();
@@ -83,6 +96,9 @@ namespace Confus
 
         /// <summary> Starts the heavy attack, which deals more damage </summary>
         void startHeavyAttack();
+        
+        /// <summary> Returns an updated playerpacket. </summary>
+        PlayerPacket createPlayerPacket() const;
 
         /// <summary> Called when the animation finishes </summary>
         /// <remarks> Generally used for the attack animations only </remarks>
