@@ -20,8 +20,8 @@ namespace Confus
 
 		PhysicsWorld::~PhysicsWorld()
 		{
-			auto collisionObjects = m_World.getCollisionObjectArray();
-			for(int i = 0; i < m_World.getNumCollisionObjects(); ++i)
+			auto& collisionObjects = m_World.getCollisionObjectArray();
+			for(int i = m_World.getNumCollisionObjects() - 1; i >= 0; --i)
 			{
 				m_World.removeCollisionObject(collisionObjects[i]);
 			}
