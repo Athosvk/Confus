@@ -64,13 +64,14 @@ namespace Confus
         }
     }
 
-    void Game::processTriangleSelectors()
-    {
-        irr::core::array<irr::scene::ISceneNode*> nodes;
+	void Game::initializeLevelColliders()
+	{
+		irr::core::array<irr::scene::ISceneNode*> nodes;
 		m_Device->getSceneManager()->getSceneNodesFromType(irr::scene::ESNT_ANY, nodes, m_LevelRootNode);
-        for(irr::u32 i = 0; i < nodes.size(); ++i)
-        {
-            irr::scene::ISceneNode* node = nodes[i];
+		for(irr::u32 i = 0; i < nodes.size(); ++i)
+		{
+			irr::scene::ISceneNode* node = nodes[i];
+			Physics::ICollider* collider = nullptr;
 
 			switch(node->getType())
 			{
@@ -78,22 +79,19 @@ namespace Confus
 			case irr::scene::ESNT_ANIMATED_MESH:
 			case irr::scene::ESNT_MESH:
 			{
-				node->updateAbsolutePosition();
-				auto collider = m_PhysicsWorld.createBoxCollider(node);
-				collider->getRigidBody()->makeStatic();
+				collider = m_PhysicsWorld.createBoxCollider(node);
 				break;
 			}
 			case irr::scene::ESNT_SPHERE:
-				break;
 			case irr::scene::ESNT_TERRAIN:
-				break;
 			case irr::scene::ESNT_OCTREE:
 				break;
 			default:
 				break;
 			}
-        }
-    }
+			collider->getRigidBody()->makeStatic();
+		}
+	}
 
     void Game::initializeConnection()
     {
