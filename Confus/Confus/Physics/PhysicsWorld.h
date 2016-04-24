@@ -6,6 +6,7 @@
 
 #include "ICollider.h"
 #include "RigidBody.h"
+#include "DebugDrawer.h"
 
 namespace Confus
 {
@@ -48,9 +49,10 @@ namespace Confus
 				&m_Solver, &m_Configuration);
 			/// <summary> The collider - rigid body pairs that are currently instantiated in the physics world </summary>
 			std::vector<ColliderPair> m_Colliders;
+			DebugDrawer m_DebugDrawer;
 		public:
 			/// <summary> Initializes a new instance of the <see cref="PhysicsWorld"/> class </summary>
-			PhysicsWorld();
+			PhysicsWorld(irr::IrrlichtDevice* a_Device);
 
 			/// <summary> Finalizes an instance of the <see cref="PhysicsWorld"/> class </summary>
 			~PhysicsWorld();
@@ -64,7 +66,7 @@ namespace Confus
 			/// <summary> Creates and places a new box collider from the scene node's bounding box into the physics world for simulations </summary>
 			/// <param name="a_AttachedNode"> The node the collider is attached to </param>
 			/// <returns> A handle to the created box collider </returns>
-			BoxCollider* createBoxCollider(irr::scene::IMeshSceneNode* a_AttachedNode);
+			BoxCollider* createBoxCollider(irr::scene::ISceneNode* a_AttachedNode);
 
 			/// <summary> Advanced the physics simulation based on the entered delta time value </summary>
 			/// <param name="a_DeltaTime"> 
@@ -72,6 +74,8 @@ namespace Confus
 			/// fixed/physics updates
 			/// </param>
 			void stepSimulation(float a_DeltaTime);
+
+			void drawDebugShapes();
 
 			/// <summary> Converts the given Irrlicht typed vector to a Bullet vector </summary>
 			/// <param name="a_Vector">The vector as Irrlichts type </param>

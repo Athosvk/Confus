@@ -15,24 +15,19 @@ namespace Confus
 		{
 			m_Type = m_Body->getInvMass() <= static_cast<btScalar>(0.0001) ? ERigidBodyType::Static :
 				ERigidBodyType::Dynamic;
+			syncRigidBodyTransform();
 		}
 
 		void RigidBody::onPrePhysicsUpdate() const
 		{
-			btTransform transform = btTransform::getIdentity();
-			transform.setOrigin(PhysicsWorld::toBulletVector(m_AttachedNode->getAbsolutePosition()));
-			btQuaternion rotation;
-			auto eulerAngles = PhysicsWorld::toBulletVector(m_AttachedNode->getRotation());
-			//Y, X, Z matches yaw, pitch, roll
-			rotation.setEuler(eulerAngles.y(), eulerAngles.x(), eulerAngles.z());
-			transform.setRotation(rotation);
-			m_Body->setWorldTransform(transform);
+			syncRigidBodyTransform();
 		}
 
 		void RigidBody::onPostPhysicsUpdate() const
 		{
 			auto transform = m_Body->getWorldTransform();
 			setAbsolutePosition(PhysicsWorld::toIrrlichtVector(transform.getOrigin()));
+			m_AttachedNode->updateAbsolutePosition();
 		}
 
 		irr::scene::ISceneNode* RigidBody::getAttachedNode() const
@@ -90,6 +85,14 @@ namespace Confus
 			{
 				m_AttachedNode->setPosition(a_Position);
 			}
+		}
+
+		void RigidBody::syncRigidBodyTransform() const
+		{
+			m_AttachedNode->updateAbsolutePosition();
+			btTransform transform = btTransform::getIdentity();
+			transform.setOrigin(PhysicsWorld::toBulletVector(m_AttachedNode->getAbsolutePosition()));
+			m_Body->setWorldTransform(transform);
 		}
 	}
 }

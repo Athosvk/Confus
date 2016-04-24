@@ -7,6 +7,7 @@
 #include "Flag.h"
 #define DEBUG_CONSOLE
 #include "Debug.h"
+#include "Physics/BoxCollider.h"
 
 namespace Confus
 {
@@ -22,7 +23,8 @@ namespace Confus
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed),
         m_RedRespawnFloor(m_Device),
         m_BlueRespawnFloor(m_Device),
-		m_GUI(m_Device, &m_PlayerNode)
+		m_GUI(m_Device, &m_PlayerNode),
+		m_PhysicsWorld(m_Device)
     {
     }
 
@@ -36,7 +38,18 @@ namespace Confus
         sceneManager->loadScene("Media/IrrlichtScenes/Bases 2.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
-        
+
+		std::function<void(irr::scene::ISceneNode* a_Node)> updateDownwards = [&updateDownwards](irr::scene::ISceneNode* a_Node)
+		{
+			a_Node->updateAbsolutePosition();
+			auto children = a_Node->getChildren();
+			for(auto child : children)
+			{
+				updateDownwards(child);
+			}
+		};
+		updateDownwards(sceneManager->getRootSceneNode());
+
         processTriangleSelectors();
 
         m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
@@ -49,8 +62,10 @@ namespace Confus
 
         m_Device->setEventReceiver(&m_EventManager);
         m_Device->getCursorControl()->setVisible(false);
-		m_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.5f), m_PlayerNode.getParent());
-        while(m_Device->run())
+		//auto collider = m_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.8f), m_PlayerNode.getParent());
+		//collider->getRigidBody()->makeKinematic();
+		
+		while(m_Device->run())
         {
             m_Connection->processPackets();
 			handleInput();
@@ -66,52 +81,47 @@ namespace Confus
         auto metatriangleSelector = sceneManager->createMetaTriangleSelector();
         
         irr::core::array<irr::scene::ISceneNode*> nodes;
-        sceneManager->getSceneNodesFromType(irr::scene::ESNT_ANY, nodes);
+        sceneManager->getSceneNodesFromType(irr::scene::ESNT_ANY, nodes, m_LevelRootNode);
         for(irr::u32 i = 0; i < nodes.size(); ++i)
         {
             irr::scene::ISceneNode* node = nodes[i];
-            irr::scene::ITriangleSelector* selector = nullptr;
 
-            switch(node->getType())
-            {
-            case irr::scene::ESNT_CUBE:
-            case irr::scene::ESNT_ANIMATED_MESH:
-                selector = m_Device->getSceneManager()->createTriangleSelectorFromBoundingBox(node);
-                break;
-            case irr::scene::ESNT_MESH:
-            case irr::scene::ESNT_SPHERE:
-                selector = sceneManager->createTriangleSelector(((irr::scene::IMeshSceneNode*)node)->getMesh(), node);
-                break;
-            case irr::scene::ESNT_TERRAIN:
-                selector = sceneManager->createTerrainTriangleSelector((irr::scene::ITerrainSceneNode*)node);
-                break;
-            case irr::scene::ESNT_OCTREE:
-                selector = sceneManager->createOctreeTriangleSelector(((irr::scene::IMeshSceneNode*)node)->getMesh(), node);
-                break;
-            default:
-                break;
-            }
-            
-            if(selector)
-            {
-                metatriangleSelector->addTriangleSelector(selector);
-                selector->drop();
-            }
+			switch(node->getType())
+			{
+			case irr::scene::ESNT_CUBE:
+			case irr::scene::ESNT_ANIMATED_MESH:
+			case irr::scene::ESNT_MESH:
+			{
+				node->setParent(m_LevelRootNode);
+				node->updateAbsolutePosition();
+				auto collider = m_PhysicsWorld.createBoxCollider(node);
+				collider->getRigidBody()->makeStatic();
+				break;
+			}
+			case irr::scene::ESNT_SPHERE:
+				break;
+			case irr::scene::ESNT_TERRAIN:
+				break;
+			case irr::scene::ESNT_OCTREE:
+				break;
+			default:
+				break;
+			}
         }
         m_LevelRootNode->setTriangleSelector(metatriangleSelector);
     }
 
     void Game::initializeConnection()
     {
-        std::string serverIP;
-        std::cout << "Enter the server's ip address: ";
-        std::cin >> serverIP;
+        //std::string serverIP;
+        //std::cout << "Enter the server's ip address: ";
+        //std::cin >> serverIP;
 
-        unsigned short serverPort;
-        std::cout << "Enter the server's port: ";
-        std::cin >> serverPort;
+        //unsigned short serverPort;
+        //std::cout << "Enter the server's port: ";
+        //std::cin >> serverPort;
 
-        m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
+        m_Connection = std::make_unique<Networking::ClientConnection>("1", 1u);
     }
 
     void Game::handleInput()
@@ -164,7 +174,14 @@ namespace Confus
             m_RedRespawnFloor.disableCollision();
 		}
 		m_MazeGenerator.fixedUpdate();
-		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
+		static double keyTimer = 2.0;
+		if(m_EventManager.IsKeyDown(irr::EKEY_CODE::KEY_SPACE) && keyTimer >= 2.0)
+		{
+			keyTimer = 0.0;
+			m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
+		}
+		//m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
+		keyTimer += m_DeltaTime;
     }
 
     void Game::render()
@@ -172,6 +189,7 @@ namespace Confus
         m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
         m_Device->getSceneManager()->drawAll();
         m_Device->getGUIEnvironment()->drawAll();
+		m_PhysicsWorld.drawDebugShapes();
         m_Device->getVideoDriver()->endScene();
     }
 }

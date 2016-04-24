@@ -192,6 +192,7 @@ lib /out:Confus.lib *.obj</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="DebugDrawer.cpp" />
     <ClCompile Include="Physics\BoxCollider.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Flag.cpp" />
@@ -222,6 +223,7 @@ lib /out:Confus.lib *.obj</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collider.h" />
+    <ClInclude Include="DebugDrawer.h" />
     <ClInclude Include="Physics\BoxCollider.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="Debug.h" />

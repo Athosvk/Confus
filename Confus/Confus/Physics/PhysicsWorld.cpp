@@ -13,8 +13,12 @@ namespace Confus
 		{
 		}
 
-		PhysicsWorld::PhysicsWorld()
+		PhysicsWorld::PhysicsWorld(irr::IrrlichtDevice* a_Device)
+			: m_DebugDrawer(a_Device, &m_World)
 		{
+			m_World.setDebugDrawer(&m_DebugDrawer);
+			m_DebugDrawer.setDebugMode(btIDebugDraw::DBG_DrawWireframe | btIDebugDraw::DBG_DrawContactPoints
+			| btIDebugDraw::DBG_DrawText);
 			m_World.setGravity(btVector3(0.0f, -9.81f, 0.0f));
 		}
 
@@ -32,6 +36,11 @@ namespace Confus
 			prePhysicsUpdate();
 			m_World.stepSimulation(a_DeltaTime);
 			postPhysicsUpdate();
+		}
+
+		void PhysicsWorld::drawDebugShapes()
+		{
+			m_DebugDrawer.draw();
 		}
 
 		void PhysicsWorld::prePhysicsUpdate() const
@@ -60,9 +69,9 @@ namespace Confus
 			return static_cast<BoxCollider*>(m_Colliders.back().Shape.get());
 		}
 
-		BoxCollider* PhysicsWorld::createBoxCollider(irr::scene::IMeshSceneNode* a_AttachedNode)
+		BoxCollider* PhysicsWorld::createBoxCollider(irr::scene::ISceneNode* a_AttachedNode)
 		{
-			return createBoxCollider(a_AttachedNode->getBoundingBox().getExtent(), a_AttachedNode);
+			return createBoxCollider(a_AttachedNode->getTransformedBoundingBox().getExtent(), a_AttachedNode);
 		}
 
 		btVector3 PhysicsWorld::toBulletVector(const irr::core::vector3df& a_Vector)
