@@ -136,5 +136,6 @@ namespace Confus
         void render();
 
         void updateOtherPlayers();
+		void updateSceneTransformations();
     };
 }

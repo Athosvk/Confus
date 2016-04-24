@@ -39,18 +39,8 @@ namespace Confus
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
 
-		std::function<void(irr::scene::ISceneNode* a_Node)> updateDownwards = [&updateDownwards](irr::scene::ISceneNode* a_Node)
-		{
-			a_Node->updateAbsolutePosition();
-			auto children = a_Node->getChildren();
-			for(auto child : children)
-			{
-				updateDownwards(child);
-			}
-		};
-		updateDownwards(sceneManager->getRootSceneNode());
-
         processTriangleSelectors();
+		updateSceneTransformations();
 
         m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_SecondPlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
@@ -76,9 +66,7 @@ namespace Confus
 
     void Game::processTriangleSelectors()
     {
-        auto sceneManager = m_Device->getSceneManager();
-        auto metatriangleSelector = sceneManager->createMetaTriangleSelector();
-        
+        auto sceneManager = m_Device->getSceneManager();        
         irr::core::array<irr::scene::ISceneNode*> nodes;
         sceneManager->getSceneNodesFromType(irr::scene::ESNT_ANY, nodes, m_LevelRootNode);
         for(irr::u32 i = 0; i < nodes.size(); ++i)
@@ -106,7 +94,6 @@ namespace Confus
 				break;
 			}
         }
-        m_LevelRootNode->setTriangleSelector(metatriangleSelector);
     }
 
     void Game::initializeConnection()
@@ -172,6 +159,20 @@ namespace Confus
         }
         */
     }
+
+	void Game::updateSceneTransformations()
+	{
+		std::function<void(irr::scene::ISceneNode* a_Node)> updateDownwards = [&updateDownwards](irr::scene::ISceneNode* a_Node)
+		{
+			a_Node->updateAbsolutePosition();
+			auto children = a_Node->getChildren();
+			for(auto child : children)
+			{
+				updateDownwards(child);
+			}
+		};
+		updateDownwards(m_Device->getSceneManager()->getRootSceneNode());
+	}
 
     void Game::fixedUpdate()
     {
