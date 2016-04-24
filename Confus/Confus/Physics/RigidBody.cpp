@@ -26,7 +26,6 @@ namespace Confus
 		{
 			auto transform = m_Body->getWorldTransform();
 			setAbsolutePosition(PhysicsWorld::toIrrlichtVector(transform.getOrigin()));
-			m_AttachedNode->updateAbsolutePosition();
 		}
 
 		irr::scene::ISceneNode* RigidBody::getAttachedNode() const
@@ -77,7 +76,9 @@ namespace Confus
 			{
 				irr::core::matrix4 transformation = irr::core::IdentityMatrix;
 				transformation.setTranslation(a_Position);
-				transformation *= m_AttachedNode->getParent()->getAbsoluteTransformation();
+				irr::core::matrix4 inverseParentMatrix;
+				m_AttachedNode->getParent()->getAbsoluteTransformation().getInverse(inverseParentMatrix);
+				transformation = inverseParentMatrix * transformation;
 				m_AttachedNode->setPosition(transformation.getTranslation());
 			}
 			else
