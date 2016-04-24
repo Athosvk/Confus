@@ -156,6 +156,24 @@ namespace Confus
         }
     }
 
+    void Game::updateOtherPlayers(/*array a_PlayerInfo*/)
+    {
+        /*
+        for(int i = 0; i < a_PlayerInfo.size(); i++)
+        {
+            for(int j = 0; j < m_PlayerArray.size(); j++)
+            {
+                if(m_PlayerArray[j].MainPlayer == false && m_PlayerArray[j].ID == a_PlayerInfo[i].ID)
+                {
+                    m_PlayerArray[j].setPosition(a_PlayerInfo[i].position);
+                    m_PlayerArray[j].setRotation(a_PlayerInfo[i].rotation); 
+                    break;
+                }
+            }
+        }
+        */
+    }
+
     void Game::fixedUpdate()
     {
 		static float timer = 0.0f;

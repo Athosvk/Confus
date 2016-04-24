@@ -1,8 +1,18 @@
 #pragma once
-#include <RakNet/RakPeerInterface.h>
 #include <RakNet/MessageIdentifiers.h>
 #include <string>
 #include <queue>
+#include <map>
+#include <vector>
+#include <functional>
+
+namespace RakNet
+{
+    class RakPeerInterface;
+    struct SystemAddress;
+    struct Packet;
+    class BitStream;
+}
 
 namespace Confus
 {
@@ -27,13 +37,14 @@ namespace Confus
 			{
 				Message = 1 + ID_USER_PACKET_ENUM
 			};
-
             /// <summary> The RakNet interface for interacting with RakNet </summary>
-			RakNet::RakPeerInterface* m_Interface = RakNet::RakPeerInterface::GetInstance();
+            RakNet::RakPeerInterface* m_Interface;
 			/// <summary> The messages it was not able to send yet due to not having a connection established </summary>
 			std::queue<std::string> m_StalledMessages;
 			/// <summary> Whether we are connected to a server</summary>
 			bool m_Connected = false;
+            /// <summary> The map thast contains the server events and the functions that involve them. </summary>
+            std::map<unsigned char, std::vector<std::function<void(RakNet::Packet* a_Data)>>> m_CallbackFunctionMap;
 
         public:
             /// <summary> Initializes a new instance of the <see cref="ClientConnection"/> class. </summary>
@@ -52,6 +63,10 @@ namespace Confus
 			/// </summary>
 			/// <param name="a_Message">The message contents</param>
 			void sendMessage(const std::string& a_Message);
+            /// <summary> Adds a function to the event in the callback function map. </summary>
+            /// <param name="a_Event">The server event that should trigger the function.</param>
+            /// <param name="a_Function">The function that should be added to the map.</param>
+            void addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function);
 		private:
 			/// <summary> Gets the amount of clients connected to this server instance </summary>
 			/// <returns> The amount of clients connected </returns>
@@ -67,6 +82,12 @@ namespace Confus
 			/// due to waiting for the connection to be established
 			/// </summary>
 			void dispatchStalledMessages();
+            /// <summary>
+            /// Handles the incoming packet
+            /// </summary>
+            /// <param name="a_Data">The data.</param>
+            /// <param name="a_Event">The server event.</param>
+            void handlePacket(RakNet::Packet* a_Data, unsigned char a_Event);
         };
     }
 }
