@@ -66,7 +66,6 @@ namespace Confus
 
     void Game::processTriangleSelectors()
     {
-        auto sceneManager = m_Device->getSceneManager();        
         irr::core::array<irr::scene::ISceneNode*> nodes;
         sceneManager->getSceneNodesFromType(irr::scene::ESNT_ANY, nodes, m_LevelRootNode);
         for(irr::u32 i = 0; i < nodes.size(); ++i)
