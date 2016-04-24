@@ -62,8 +62,7 @@ namespace Confus
 
         m_Device->setEventReceiver(&m_EventManager);
         m_Device->getCursorControl()->setVisible(false);
-		//auto collider = m_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.8f), m_PlayerNode.getParent());
-		//collider->getRigidBody()->makeKinematic();
+		auto collider = m_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.8f), m_PlayerNode.getParent());
 		
 		while(m_Device->run())
         {
