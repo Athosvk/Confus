@@ -38,19 +38,24 @@ namespace Confus
             RakNet::Packet* packet = m_Interface->Receive();
             while(packet != nullptr)
             {
-				if(packet->data[0] == ID_CONNECTION_REQUEST_ACCEPTED)
-				{
-					std::cout << "Connected to the server!\n";
-					dispatchStalledMessages();
-					m_Connected = true;
-				}
-				else
-				{
-					std::cout << "Message: \"" << packet->data  << " has arrived \"" << std::endl;					
-				}
+                handlePacket(packet, static_cast<unsigned char>(packet->data[0]));
+
                 m_Interface->DeallocatePacket(packet);
                 packet = m_Interface->Receive();
             }
+        }
+
+        void ClientConnection::handlePacket(RakNet::Packet* a_Data, unsigned char a_Event)
+        {
+            for(size_t i = 0u; i < m_CallbackFunctionMap[a_Event].size(); i++) 
+            {
+                m_CallbackFunctionMap[a_Event][i](a_Data);
+            }
+        }
+
+        void ClientConnection::addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function)
+        {
+            m_CallbackFunctionMap[a_Event].push_back(a_Function);
         }
 
 		void ClientConnection::sendMessage(const std::string& a_Message)

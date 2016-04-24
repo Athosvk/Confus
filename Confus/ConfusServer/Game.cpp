@@ -43,6 +43,13 @@ namespace ConfusServer
         m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
 
+
+        m_Connection->addFunctionToMap(ID_NEW_INCOMING_CONNECTION, [this](RakNet::Packet* a_Data)
+        {
+            addPlayer(a_Data);
+        });
+
+
         m_Device->getCursorControl()->setVisible(false);
       
         while(m_Device->run())
@@ -154,6 +161,16 @@ namespace ConfusServer
 			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
 		}
 		m_MazeGenerator.fixedUpdate();
+    }
+
+    void Game::addPlayer(RakNet::Packet* a_Data)
+    {
+        long long id = static_cast<long long>(a_Data->guid.g);
+
+        Player newPlayer(m_Device, id, m_PlayerArray.size() % 2 == 0 ? ETeamIdentifier::TeamRed : ETeamIdentifier::TeamBlue, false);
+        
+        m_PlayerArray.push_back(&newPlayer);
+        std::cout << id << " joined" << std::endl;
     }
 
     void Game::render()
