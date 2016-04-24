@@ -39,7 +39,7 @@ namespace Confus
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
 
-        processTriangleSelectors();
+        initializeLevelColliders();
 		updateSceneTransformations();
 
         m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
@@ -78,10 +78,8 @@ namespace Confus
 			case irr::scene::ESNT_CUBE:
 			case irr::scene::ESNT_ANIMATED_MESH:
 			case irr::scene::ESNT_MESH:
-			{
 				collider = m_PhysicsWorld.createBoxCollider(node);
 				break;
-			}
 			case irr::scene::ESNT_SPHERE:
 			case irr::scene::ESNT_TERRAIN:
 			case irr::scene::ESNT_OCTREE:
