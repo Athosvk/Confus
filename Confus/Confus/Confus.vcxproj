@@ -192,7 +192,6 @@ lib /out:Confus.lib *.obj</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Collider.cpp" />
-    <ClCompile Include="DebugDrawer.cpp" />
     <ClCompile Include="Physics\BoxCollider.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Flag.cpp" />
@@ -211,6 +210,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="OpenAL\Framework\LoadOAL.cpp" />
     <ClCompile Include="OpenAL\OpenALListener.cpp" />
     <ClCompile Include="OpenAL\OpenALSource.cpp" />
+    <ClCompile Include="Physics\DebugDrawer.cpp" />
     <ClCompile Include="Physics\ICollider.cpp" />
     <ClCompile Include="Physics\PhysicsWorld.cpp" />
     <ClCompile Include="Physics\RigidBody.cpp" />
@@ -223,7 +223,6 @@ lib /out:Confus.lib *.obj</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collider.h" />
-    <ClInclude Include="DebugDrawer.h" />
     <ClInclude Include="Physics\BoxCollider.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="Debug.h" />
@@ -242,6 +241,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="OpenAL\Framework\LoadOAL.h" />
     <ClInclude Include="OpenAL\OpenALListener.h" />
     <ClInclude Include="OpenAL\OpenALSource.h" />
+    <ClInclude Include="Physics\DebugDrawer.h" />
     <ClInclude Include="Physics\ICollider.h" />
     <ClInclude Include="Physics\PhysicsWorld.h" />
     <ClInclude Include="Physics\RigidBody.h" />

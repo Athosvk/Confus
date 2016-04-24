@@ -99,7 +99,7 @@
     <ClCompile Include="Physics\ICollider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DebugDrawer.cpp">
+    <ClCompile Include="Physics\DebugDrawer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -206,7 +206,7 @@
     <ClInclude Include="Physics\ICollider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DebugDrawer.h">
+    <ClInclude Include="Physics\DebugDrawer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
