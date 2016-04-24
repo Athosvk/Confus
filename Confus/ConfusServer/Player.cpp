@@ -1,4 +1,5 @@
 #include <IrrAssimp/IrrAssimp.h>
+#include <iostream>
 #include "Audio\PlayerAudioEmitter.h"
 #include "Player.h"
 #include <RakNet/BitStream.h>
@@ -175,6 +176,7 @@ namespace ConfusServer
         {
             m_FootstepSoundEmitter->playFootStepSound();
         }
+       // std::cout << "Playerposition X on server is: " << getAbsolutePosition().X << "\n";
     }
 
     void Player::createAudioEmitter()
@@ -184,14 +186,16 @@ namespace ConfusServer
 
     void Player::setConnection(Networking::Connection* a_Connection)
     {
-        /*m_Connection = a_Connection;
+        m_Connection = a_Connection;
 
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::Connection::EPacketType::Player), [this](RakNet::BitStream* a_Data)
         {
             PlayerPacket packet;
             a_Data->Read(packet);
             setPosition(packet.playerPosition);
-        });*/
+            std::cout << "Addfunctiontomap is called" << "playerposition from packet is: " << packet.playerPosition.X;
+            std::cout << packet.playerPosition.X;
+        });
         
     }
 

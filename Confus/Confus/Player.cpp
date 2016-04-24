@@ -1,4 +1,5 @@
 #include <IrrAssimp/IrrAssimp.h>
+#include <iostream>
 #include <RakNet/MessageIdentifiers.h>
 #include <RakNet/BitStream.h>
 #include "Audio\PlayerAudioEmitter.h"
@@ -253,7 +254,6 @@ namespace Confus
      void Player::sendMessageToServer() const
 	{
         RakNet::BitStream bitstreamOut;
-        bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
         bitstreamOut.Write(createPlayerPacket());
 
         m_Connection->sendMessage(bitstreamOut, PacketReliability::RELIABLE);
@@ -262,6 +262,7 @@ namespace Confus
      Player::PlayerPacket Player::createPlayerPacket() const
 	{
         PlayerPacket packet;
+        packet.messageType = static_cast<RakNet::MessageID>(Networking::EPacketType::Player);
         packet.playerID = static_cast<unsigned int>(m_PlayerID);
         packet.playerState = static_cast<unsigned char>(m_PlayerState);
         packet.isAttacking = static_cast<boolean>(m_Attacking);

@@ -34,11 +34,13 @@ namespace ConfusServer
             RakNet::Packet* packet = m_Interface->Receive();
             while(packet != nullptr)
             {
-                handlePacket(packet, static_cast<unsigned char>(packet->data[0]));
-
+                RakNet::BitStream inputStream(packet->data, packet->length, false);
+                handlePacket(&inputStream, static_cast<unsigned char>(packet->data[0]));
                 m_Interface->DeallocatePacket(packet);
                 packet = m_Interface->Receive();
             }
+            
+
         }
 
         void Connection::addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::BitStream* a_Data)> a_Function)
@@ -68,11 +70,15 @@ namespace ConfusServer
             }
         }
 
-        void Connection::handlePacket(RakNet::Packet* a_Data, unsigned char a_Event)
+        void Connection::handlePacket(RakNet::BitStream* a_Data, unsigned char a_Event)
         {
+            std::cout << "Message arrived with id " << static_cast<int>(a_Event) << std::endl;
+
+            
             for(size_t i = 0u; i < m_CallbackFunctionMap[a_Event].size(); i++)
             {
                 m_CallbackFunctionMap[a_Event][i](a_Data);
+                std::cout << a_Event;
             }
         }
 
@@ -83,12 +89,5 @@ namespace ConfusServer
 			a_InputStream.Read(contents);
 			std::cout << "Message received: " << contents << std::endl;
 		}
-
-        void Connection::processPlayerPacket(RakNet::BitStream& a_InputStream)
-        {
-            Player::PlayerPacket playerPacket;
-            a_InputStream.Read(playerPacket);
-            std::cout << "Player X position is: " << playerPacket.playerPosition.X << "\n";
-        }
     }
 }

@@ -33,7 +33,7 @@ namespace ConfusServer
             /// <summary> The RakNet interface for interacting with RakNet </summary>
             RakNet::RakPeerInterface* m_Interface = RakNet::RakPeerInterface::GetInstance();
             /// <summary> The map thast contains the server events and the functions that involve them. </summary>
-            std::map<unsigned char, std::vector<std::function<void(RakNet::Packet* a_Data)>>> m_CallbackFunctionMap;
+            std::map<unsigned char, std::vector<std::function<void(RakNet::BitStream* a_Data)>>> m_CallbackFunctionMap;
 
         public:
             /// <summary> Initializes a new instance of the <see cref="Connection"/> class. </summary>
@@ -62,7 +62,7 @@ namespace ConfusServer
 			/// </summary>
 			/// <param name="a_Data">The data.</param>
             /// <param name="a_Event">The server event.</param>
-            void handlePacket(RakNet::Packet* a_Data, unsigned char a_Event);
+            void handlePacket(RakNet::BitStream* a_Data, unsigned char a_Event);
 			/// <summary>
 			/// Prints the message.
 			/// </summary>

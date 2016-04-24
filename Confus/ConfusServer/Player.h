@@ -12,6 +12,11 @@ namespace ConfusServer {
 		class PlayerAudioEmitter;
 	}
 
+    namespace Networking
+    {
+        class Connection;
+    }
+
     enum class EFlagEnum;
 	enum class ETeamIdentifier;
     class EventManager;
@@ -30,6 +35,7 @@ namespace ConfusServer {
         #pragma pack(push, 1)
         struct PlayerPacket
         {
+            RakNet::MessageID messageType;
             unsigned int playerID;
             unsigned char playerState;
             boolean isAttacking;
