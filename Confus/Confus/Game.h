@@ -56,6 +56,7 @@ namespace Confus
         RespawnFloor m_RedRespawnFloor;
         RespawnFloor m_BlueRespawnFloor;
 
+        //use std::vector
         //std::array<Player, 2> m_PlayerArray;
         /// <summary>
         /// The Blue Flag.
