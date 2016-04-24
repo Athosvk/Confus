@@ -87,7 +87,8 @@ namespace Confus
 		/// <summary>
 		/// The connection as a client to the server that we are currently connected to
 		/// </summary>
-		std::unique_ptr<Networking::ClientConnection> m_Connection;
+		std::unique_ptr<Networking::ClientConnection> m_Connection;		
+		/// <summary> The currently active physics world </summary>
 		Physics::PhysicsWorld m_PhysicsWorld;
 
     public:
@@ -135,7 +136,9 @@ namespace Confus
         /// </summary>
         void render();
 
-        void updateOtherPlayers();
+        void updateOtherPlayers();		
+
+		/// <summary> Updates the (absolute) transformations of all the scene nodes recursively downwards </summary>
 		void updateSceneTransformations();
     };
 }
