@@ -92,7 +92,6 @@ namespace Confus
 			case irr::scene::ESNT_ANIMATED_MESH:
 			case irr::scene::ESNT_MESH:
 			{
-				node->setParent(m_LevelRootNode);
 				node->updateAbsolutePosition();
 				auto collider = m_PhysicsWorld.createBoxCollider(node);
 				collider->getRigidBody()->makeStatic();
@@ -174,14 +173,7 @@ namespace Confus
             m_RedRespawnFloor.disableCollision();
 		}
 		m_MazeGenerator.fixedUpdate();
-		static double keyTimer = 2.0;
-		if(m_EventManager.IsKeyDown(irr::EKEY_CODE::KEY_SPACE) && keyTimer >= 2.0)
-		{
-			keyTimer = 0.0;
-			m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
-		}
-		//m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
-		keyTimer += m_DeltaTime;
+		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
     }
 
     void Game::render()
