@@ -25,7 +25,7 @@ namespace ConfusServer {
 		EFlagEnum* CarryingFlag;
 		ETeamIdentifier* TeamIdentifier;    
         Flag* FlagPointer;
-
+        long long ID;
         #pragma pack(push, 1)
         struct PlayerPacket
         {
@@ -53,7 +53,7 @@ namespace ConfusServer {
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
     public:
-        Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
+        Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
 		~Player();
         void fixedUpdate();
         void update();

@@ -9,9 +9,9 @@ namespace ConfusServer
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-	Player::Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
+	Player::Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
 		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
-		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), a_id),
+		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
 		TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
 		CarryingFlag(new EFlagEnum(EFlagEnum::None))
     {
@@ -23,6 +23,8 @@ namespace ConfusServer
 
         PlayerNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh, 0, 1);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
+
+        ID = a_id;
 
         if(a_TeamIdentifier == ETeamIdentifier::TeamBlue) 
 		{

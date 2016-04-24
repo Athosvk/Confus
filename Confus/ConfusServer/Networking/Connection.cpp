@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <functional>
 #include <RakNet/BitStream.h>
 
 #include "Connection.h"
@@ -33,10 +34,16 @@ namespace ConfusServer
             RakNet::Packet* packet = m_Interface->Receive();
             while(packet != nullptr)
             {
-				handlePacket(packet);
+                handlePacket(packet, static_cast<unsigned char>(packet->data[0]));
+
                 m_Interface->DeallocatePacket(packet);
                 packet = m_Interface->Receive();
             }
+        }
+
+        void Connection::addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function)
+        {
+            m_CallbackFunctionMap[a_Event].push_back(a_Function);
         }
 
         unsigned short Connection::getConnectionCount() const
@@ -61,22 +68,13 @@ namespace ConfusServer
             }
         }
 
-		void Connection::handlePacket(RakNet::Packet* a_Packet)
-		{
-            switch(static_cast<unsigned char>(a_Packet->data[0]))
-			{
-            // Player attack ID.
-            case (ID_USER_PACKET_ENUM + 3) :
+        void Connection::handlePacket(RakNet::Packet* a_Data, unsigned char a_Event)
+        {
+            for(size_t i = 0u; i < m_CallbackFunctionMap[a_Event].size(); i++)
             {
-                RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
-                processPlayerPacket(inputStream);
+                m_CallbackFunctionMap[a_Event][i](a_Data);
             }
-            break;
-			default:
-				std::cout << "Message arrived with id " << static_cast<int>(a_Packet->data[0])
-					<< std::endl;
-			}
-		}
+        }
 
 		void Connection::printMessage(RakNet::BitStream& a_InputStream)
 		{
