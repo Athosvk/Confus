@@ -13,14 +13,7 @@ namespace Confus
 			m_AttachedNode(a_AttachedNode),
 			m_Mass(static_cast<btScalar>(1.0) / m_Body->getInvMass())
 		{
-			if(m_Body->getInvMass() <= static_cast<btScalar>(0.0001))
-			{
-				makeStatic();
-			}
-			else
-			{
-				makeDynamic();
-			}
+			m_Body->getInvMass() <= static_cast<btScalar>(0.00001) ? makeStatic() : makeDynamic();
 			syncRigidBodyTransform();
 		}
 
