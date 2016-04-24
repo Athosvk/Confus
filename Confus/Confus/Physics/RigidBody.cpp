@@ -24,8 +24,7 @@ namespace Confus
 
 		void RigidBody::onPostPhysicsUpdate() const
 		{
-			auto transform = m_Body->getWorldTransform();
-			setAbsolutePosition(PhysicsWorld::toIrrlichtVector(transform.getOrigin()));
+			setAbsoluteTransform(m_Body->getWorldTransform());
 		}
 
 		irr::scene::ISceneNode* RigidBody::getAttachedNode() const
@@ -70,12 +69,14 @@ namespace Confus
 			m_Body->setCollisionFlags(m_Body->getCollisionFlags() & ~btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
 		}
 
-		void RigidBody::setAbsolutePosition(irr::core::vector3df a_Position) const
+		void RigidBody::setAbsoluteTransform(const btTransform& a_Transform) const
 		{
 			if(m_AttachedNode->getParent() != nullptr)
 			{
 				irr::core::matrix4 transformation = irr::core::IdentityMatrix;
-				transformation.setTranslation(a_Position);
+				transformation.setTranslation(PhysicsWorld::toIrrlichtVector(a_Transform.getOrigin()));
+
+				transformation.setRotationRadians(toIrrlichtEuler(a_Transform.getRotation()));
 				irr::core::matrix4 inverseParentMatrix;
 				m_AttachedNode->getParent()->getAbsoluteTransformation().getInverse(inverseParentMatrix);
 				transformation = inverseParentMatrix * transformation;
@@ -83,7 +84,8 @@ namespace Confus
 			}
 			else
 			{
-				m_AttachedNode->setPosition(a_Position);
+				m_AttachedNode->setPosition(PhysicsWorld::toIrrlichtVector(a_Transform.getOrigin()));
+				m_AttachedNode->setRotation(toIrrlichtEuler(a_Transform.getRotation()) * irr::core::DEGTORAD);
 			}
 		}
 
@@ -93,6 +95,14 @@ namespace Confus
 			btTransform transform = btTransform::getIdentity();
 			transform.setOrigin(PhysicsWorld::toBulletVector(m_AttachedNode->getAbsolutePosition()));
 			m_Body->setWorldTransform(transform);
+		}
+
+		irr::core::vector3df RigidBody::toIrrlichtEuler(btQuaternion& a_Rotation) const
+		{
+			irr::core::vector3df eulerAngles;
+			irr::core::quaternion(a_Rotation.x(), a_Rotation.y(), a_Rotation.z(),
+				a_Rotation.w()).toEuler(eulerAngles);
+			return eulerAngles;
 		}
 	}
 }

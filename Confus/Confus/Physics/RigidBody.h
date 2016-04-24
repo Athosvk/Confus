@@ -79,16 +79,15 @@ namespace Confus
 			/// <summary> Makes this RigidBody a regular collider, causing it to start being influenced and start influencing collision responses </summary>
 			void disableTriggerState();
 		private:
-			/// <summary>
-			/// Sets the position of the attached scene node in absolute/world terms
-			/// </summary>
+			/// <summary> Sets the position of the attached scene node in absolute/world terms </summary>
 			/// <param name="a_Position"> The world postion </param>
-			void setAbsolutePosition(irr::core::vector3df a_Position) const;
+			void setAbsoluteTransform(const btTransform& a_Transform) const;
 
-			/// <summary>
-			/// Synchronizes the rigid body transform with the scene node's transform
-			/// </summary>
+			/// <summary> Synchronizes the rigid body transform with the scene node's transform </summary>
 			void syncRigidBodyTransform() const;
+
+			/// <summary> Gets the euler angles. </summary>
+			irr::core::vector3df toIrrlichtEuler(btQuaternion& a_Rotation) const;
 		};
 	}
 }
