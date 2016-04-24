@@ -28,6 +28,9 @@ namespace ConfusServer
     void Game::run()
     {
         initializeConnection();
+        //m_PlayerNode.setConnection(m_Connection.get());
+        //m_SecondPlayerNode.setConnection(m_Connection.get());
+
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
@@ -43,12 +46,11 @@ namespace ConfusServer
         m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
 
-
+/*
         m_Connection->addFunctionToMap(ID_NEW_INCOMING_CONNECTION, [this](RakNet::Packet* a_Data)
         {
             addPlayer(a_Data);
-        });
-
+        });*/
 
         m_Device->getCursorControl()->setVisible(false);
       

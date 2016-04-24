@@ -23,13 +23,13 @@ namespace ConfusServer
         class Connection
         {
         public:
+            /// <summary> The type of packet </summary>
+            enum class EPacketType : unsigned char
+            {
+                Message = 1 + ID_USER_PACKET_ENUM,
+                Player = 3 + ID_USER_PACKET_ENUM
+            };
         private:
-			/// <summary> The type of packet </summary>
-			enum class EPacketType : unsigned char
-			{
-				Message = 1 + ID_USER_PACKET_ENUM
-			};
-
             /// <summary> The RakNet interface for interacting with RakNet </summary>
             RakNet::RakPeerInterface* m_Interface = RakNet::RakPeerInterface::GetInstance();
             /// <summary> The map thast contains the server events and the functions that involve them. </summary>
@@ -48,7 +48,7 @@ namespace ConfusServer
             /// <summary> Adds a function to the event in the callback function map. </summary>
             /// <param name="a_Event">The server event that should trigger the function.</param>
             /// <param name="a_Function">The function that should be added to the map.</param>
-            void addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function);
+            void addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::BitStream* a_Data)> a_Function);
 		private:
 			/// <summary> Gets the amount of clients connected to this server instance </summary>
 			/// <returns>The amount of clients connected</returns>

@@ -1,6 +1,7 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
 #include "RakNet/RakNetSocket2.h"
+#include "Networking\Connection.h"
 #include "Health.h"
 #include "Weapon.h"
 
@@ -52,6 +53,10 @@ namespace ConfusServer {
         bool m_Attacking = false;
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
+
+        Networking::Connection* m_Connection;
+       // Networking::Connection* m_Connection;
+
     public:
         Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
 		~Player();
@@ -69,6 +74,8 @@ namespace ConfusServer {
 
         /// <summary> Starts the heavy attack, which deals more damage </summary>
         void startHeavyAttack();
+
+        void setConnection(Networking::Connection* a_Connection);
     private:
         /// <summary> Starts the walking animation, which is the default animation </summary>
         void startWalking() const;

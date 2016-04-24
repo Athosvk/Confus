@@ -1,6 +1,7 @@
 #include <IrrAssimp/IrrAssimp.h>
 #include "Audio\PlayerAudioEmitter.h"
 #include "Player.h"
+#include <RakNet/BitStream.h>
 #include "EventManager.h"
 #include "Flag.h"
 
@@ -20,7 +21,6 @@ namespace ConfusServer
 
         IrrAssimp irrAssimp(sceneManager);
         m_Mesh = sceneManager->getMesh("Media/ninja.b3d");
-
         PlayerNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh, 0, 1);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
 
@@ -72,9 +72,11 @@ namespace ConfusServer
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
+
     }
 
-	Player::~Player() {
+	Player::~Player() 
+    {
 		delete(CarryingFlag);
 		delete(TeamIdentifier);
 	}
@@ -179,4 +181,18 @@ namespace ConfusServer
     {
         m_FootstepSoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
     }
+
+    void Player::setConnection(Networking::Connection* a_Connection)
+    {
+        /*m_Connection = a_Connection;
+
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::Connection::EPacketType::Player), [this](RakNet::BitStream* a_Data)
+        {
+            PlayerPacket packet;
+            a_Data->Read(packet);
+            setPosition(packet.playerPosition);
+        });*/
+        
+    }
+
 }
