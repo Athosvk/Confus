@@ -49,9 +49,11 @@ namespace Confus
 				&m_Solver, &m_Configuration);
 			/// <summary> The collider - rigid body pairs that are currently instantiated in the physics world </summary>
 			std::vector<ColliderPair> m_Colliders;
+			/// <summary> The debug drawer to draw debug information with </summary>
 			DebugDrawer m_DebugDrawer;
 		public:
-			/// <summary> Initializes a new instance of the <see cref="PhysicsWorld"/> class </summary>
+			/// <summary> Initializes a new instance of the <see cref="PhysicsWorld" /> class </summary>
+			/// <param name="a_Device">The currently active Irrlicht devcie</param>
 			PhysicsWorld(irr::IrrlichtDevice* a_Device);
 
 			/// <summary> Finalizes an instance of the <see cref="PhysicsWorld"/> class </summary>
@@ -75,7 +77,8 @@ namespace Confus
 			/// </param>
 			void stepSimulation(float a_DeltaTime);
 
-			void drawDebugShapes();
+			/// <summary> Draws the debug information of the world </summary>
+			void drawDebugInformation();
 
 			/// <summary> Converts the given Irrlicht typed vector to a Bullet vector </summary>
 			/// <param name="a_Vector">The vector as Irrlichts type </param>

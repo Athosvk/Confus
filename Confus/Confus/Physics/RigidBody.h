@@ -84,6 +84,10 @@ namespace Confus
 			/// </summary>
 			/// <param name="a_Position"> The world postion </param>
 			void setAbsolutePosition(irr::core::vector3df a_Position) const;
+
+			/// <summary>
+			/// Synchronizes the rigid body transform with the scene node's transform
+			/// </summary>
 			void syncRigidBodyTransform() const;
 		};
 	}

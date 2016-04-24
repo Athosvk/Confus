@@ -199,7 +199,7 @@ namespace Confus
         m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
         m_Device->getSceneManager()->drawAll();
         m_Device->getGUIEnvironment()->drawAll();
-		m_PhysicsWorld.drawDebugShapes();
+		m_PhysicsWorld.drawDebugInformation();
         m_Device->getVideoDriver()->endScene();
     }
 }

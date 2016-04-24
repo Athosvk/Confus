@@ -38,7 +38,7 @@ namespace Confus
 			postPhysicsUpdate();
 		}
 
-		void PhysicsWorld::drawDebugShapes()
+		void PhysicsWorld::drawDebugInformation()
 		{
 			m_DebugDrawer.draw();
 		}
