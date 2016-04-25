@@ -176,7 +176,7 @@ namespace ConfusServer
         {
             m_FootstepSoundEmitter->playFootStepSound();
         }
-       // std::cout << "Playerposition X on server is: " << getAbsolutePosition().X << "\n";
+        std::cout << "Playerposition X on server is: " << getAbsolutePosition().X << "\n";
     }
 
     void Player::createAudioEmitter()
@@ -192,8 +192,10 @@ namespace ConfusServer
         {
             PlayerPacket packet;
             a_Data->Read(packet);
+            std::cout << "Updating position to: " << packet.playerPosition.X;
             setPosition(packet.playerPosition);
-            std::cout << "Addfunctiontomap is called, " << "playerposition from packet is: " << std::to_string(packet.playerPosition.X);
+            setRotation(packet.playerRotation);
+
         });
         
     }

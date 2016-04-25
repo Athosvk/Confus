@@ -14,7 +14,7 @@ namespace Confus
     class Flag;
     enum class EPlayerState : unsigned char
     {
-        ALIVE, CARRYINGFLAG, ATTACKING, DEAD
+        Alive, Carryingflag, Heavyattacking, Lightattacking, Dead
     };
 
     class Player : irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
@@ -64,7 +64,7 @@ namespace Confus
         /// <summary> The player's unique ID. </summary>
         unsigned int m_PlayerID = 0;
         /// <summary> The player's active state. </summary>
-        EPlayerState m_PlayerState = EPlayerState::ALIVE;
+        EPlayerState m_PlayerState = EPlayerState::Alive;
         /// <summary> The player's health, ranging from 127 to -127. </summary>
         int8_t m_PlayerHealth = 100;
 
