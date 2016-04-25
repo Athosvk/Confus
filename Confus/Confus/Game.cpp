@@ -72,20 +72,23 @@ namespace Confus
 			irr::scene::ISceneNode* node = nodes[i];
 			Physics::ICollider* collider = nullptr;
 
-			switch(node->getType())
+			if(node->isVisible())
 			{
-			case irr::scene::ESNT_CUBE:
-			case irr::scene::ESNT_ANIMATED_MESH:
-			case irr::scene::ESNT_MESH:
-				collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node);
-				collider->getRigidBody()->makeStatic();
-				break;
-			case irr::scene::ESNT_SPHERE:
-			case irr::scene::ESNT_TERRAIN:
-			case irr::scene::ESNT_OCTREE:
-				break;
-			default:
-				break;
+				switch(node->getType())
+				{
+				case irr::scene::ESNT_CUBE:
+				case irr::scene::ESNT_ANIMATED_MESH:
+				case irr::scene::ESNT_MESH:
+					collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node);
+					collider->getRigidBody()->makeStatic();
+					break;
+				case irr::scene::ESNT_SPHERE:
+				case irr::scene::ESNT_TERRAIN:
+				case irr::scene::ESNT_OCTREE:
+					break;
+				default:
+					break;
+				}
 			}
 		}
 	}
