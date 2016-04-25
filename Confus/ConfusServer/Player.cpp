@@ -177,6 +177,7 @@ namespace ConfusServer
             m_FootstepSoundEmitter->playFootStepSound();
         }
         std::cout << "Player rotation X on server is: " << getRotation().X << "\n";
+        std::cout << "Player position Y on server is: " << getPosition().Y << "\n";
     }
 
     void Player::createAudioEmitter()
