@@ -258,8 +258,10 @@ namespace Confus
         packet = createPlayerPacket();
         //bitstreamOut.Write(packet);
         bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
-        bitstreamOut.Write("Hai");
-        
+        bitstreamOut.Write(CameraNode->getPosition());
+        bitstreamOut.Write(CameraNode->getRotation());
+        bitstreamOut.Write(Player::m_PlayerState);
+
         m_Connection->sendMessage(&bitstreamOut, PacketReliability::UNRELIABLE);
 	}
 

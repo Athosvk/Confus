@@ -31,7 +31,6 @@ namespace Confus
 
         struct PlayerPacket
         {
-            RakNet::MessageID messageType;
             unsigned int playerID;
             unsigned char playerState;
             boolean isAttacking;
@@ -40,6 +39,8 @@ namespace Confus
             irr::core::vector3df playerRotation;
         private:
             char Padding[2];
+        public:
+            RakNet::MessageID messageType;
         };
        
         /// <summary> Determines if this player is this users player or not </summary>

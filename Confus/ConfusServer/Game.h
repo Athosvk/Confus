@@ -51,7 +51,7 @@ namespace ConfusServer
         /// The Players to test with.
         /// </summary>
         Player m_PlayerNode;
-		Player m_SecondPlayerNode;
+		//Player m_SecondPlayerNode;
 
         std::vector<Player*> m_PlayerArray;
         /// <summary>

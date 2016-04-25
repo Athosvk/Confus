@@ -176,7 +176,7 @@ namespace ConfusServer
         {
             m_FootstepSoundEmitter->playFootStepSound();
         }
-        std::cout << "Playerposition X on server is: " << getAbsolutePosition().X << "\n";
+        std::cout << "Player rotation X on server is: " << getRotation().X << "\n";
     }
 
     void Player::createAudioEmitter()
@@ -191,11 +191,15 @@ namespace ConfusServer
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::Connection::EPacketType::Player), [this](RakNet::BitStream* a_Data)
         {
             PlayerPacket packet;
-            a_Data->Read(packet);
-            std::cout << "Updating position to: " << packet.playerPosition.X;
-            setPosition(packet.playerPosition);
-            setRotation(packet.playerRotation);
+            irr::core::vector3df position;
+            irr::core::vector3df rotation;
 
+            a_Data->IgnoreBytes(sizeof(unsigned char));
+            a_Data->Read(position);
+            a_Data->Read(rotation);
+
+            setPosition(position);
+            setRotation(rotation);
         });
         
     }
