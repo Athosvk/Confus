@@ -13,7 +13,12 @@ namespace Confus
         ClientConnection::ClientConnection(const std::string& a_ServerIP,
             unsigned short a_Port)
         {
+<<<<<<< HEAD
+			m_Interface = RakNet::RakPeerInterface::GetInstance();
+
+=======
             m_Interface = RakNet::RakPeerInterface::GetInstance();
+>>>>>>> aade5336debe535049ef450629166bfc1d1418de
             RakNet::SocketDescriptor socketDescriptor;
             m_Interface->Startup(1, &socketDescriptor, 1);
             //There won't be a password for the server, which is why we pass nullptr

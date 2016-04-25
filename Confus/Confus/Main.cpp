@@ -1,5 +1,5 @@
-#include "Game.h"
 #include <Irrlicht\irrlicht.h>
+#include "Game.h"
 
 int main()
 {

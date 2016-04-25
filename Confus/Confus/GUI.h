@@ -1,10 +1,10 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
+#include <memory>
 
 #include "Player.h"
 #include "IUIElement.h"
 #include "OpenAL\OpenALSource.h"
-#include <memory>
 
 namespace Confus
 {

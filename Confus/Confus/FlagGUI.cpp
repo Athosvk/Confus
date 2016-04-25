@@ -21,16 +21,20 @@ namespace Confus
 		irr::core::vector2d<irr::s32> rect;
 
 		if (a_LeftSide)
+		{
 			rect = m_ExclamationMarkImage->getRelativePosition().UpperLeftCorner - irr::core::dimension2di(offset.Width, 0);
+		}
 		else
+		{
 			rect = m_ExclamationMarkImage->getRelativePosition().UpperLeftCorner + irr::core::dimension2di(offset.Width, 0);
+		}
 		m_FlagImage = guiEnvironment->addImage(a_FlagTexture, rect);
 		m_FlagImage->setColor(flagColor);
 		m_FlagImage->setScaleImage(true);
 		m_FlagImage->setMaxSize(m_ImageMaxSize);
 	}
 
-	void FlagGUI::ChangeFlagState()
+	void FlagGUI::changeFlagState()
 	{
 		if (*(m_Flag->getFlagStatus()) != EFlagEnum::FlagBase)
 		{
@@ -44,7 +48,7 @@ namespace Confus
 
 	void FlagGUI::update()
 	{
-		ChangeFlagState();
+		changeFlagState();
 	}
 
 	irr::core::dimension2du FlagGUI::calculateOffset(irr::video::ITexture * a_Texture)
