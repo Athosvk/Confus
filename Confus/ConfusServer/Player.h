@@ -32,7 +32,6 @@ namespace ConfusServer {
 		ETeamIdentifier* TeamIdentifier;    
         Flag* FlagPointer;
         long long ID;
-        #pragma pack(push, 1)
         struct PlayerPacket
         {
             RakNet::MessageID messageType;
@@ -43,7 +42,6 @@ namespace ConfusServer {
             irr::core::vector3df playerPosition;
             irr::core::vector3df playerRotation;
         };
-        #pragma pack(pop)
 	private:
         Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
 

@@ -65,7 +65,7 @@ namespace Confus
 			/// Sends a message to the server
 			/// </summary>
 			/// <param name="a_Stream">The Bitstream that needs to be send.</param>
-			void sendMessage(const RakNet::BitStream& a_Stream, PacketReliability a_Reliability);
+			void sendMessage(RakNet::BitStream* a_Stream, PacketReliability a_Reliability);
             /// <summary> Adds a function to the event in the callback function map. </summary>
             /// <param name="a_Event">The server event that should trigger the function.</param>
             /// <param name="a_Function">The function that should be added to the map.</param>

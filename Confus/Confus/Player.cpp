@@ -254,9 +254,13 @@ namespace Confus
      void Player::sendMessageToServer() const
 	{
         RakNet::BitStream bitstreamOut;
-        bitstreamOut.Write(createPlayerPacket());
-
-        m_Connection->sendMessage(bitstreamOut, PacketReliability::RELIABLE);
+        PlayerPacket packet;
+        packet = createPlayerPacket();
+        //bitstreamOut.Write(packet);
+        bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
+        bitstreamOut.Write("Hai");
+        
+        m_Connection->sendMessage(&bitstreamOut, PacketReliability::UNRELIABLE);
 	}
 
      Player::PlayerPacket Player::createPlayerPacket() const

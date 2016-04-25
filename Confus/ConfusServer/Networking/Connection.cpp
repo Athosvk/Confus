@@ -34,6 +34,7 @@ namespace ConfusServer
             RakNet::Packet* packet = m_Interface->Receive();
             while(packet != nullptr)
             {
+                std::cout << "Packet Processed \n";
                 RakNet::BitStream inputStream(packet->data, packet->length, false);
                 handlePacket(&inputStream, static_cast<unsigned char>(packet->data[0]));
                 m_Interface->DeallocatePacket(packet);
@@ -73,12 +74,9 @@ namespace ConfusServer
         void Connection::handlePacket(RakNet::BitStream* a_Data, unsigned char a_Event)
         {
             std::cout << "Message arrived with id " << static_cast<int>(a_Event) << std::endl;
-
-            
             for(size_t i = 0u; i < m_CallbackFunctionMap[a_Event].size(); i++)
             {
                 m_CallbackFunctionMap[a_Event][i](a_Data);
-                std::cout << a_Event;
             }
         }
 

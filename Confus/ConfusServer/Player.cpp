@@ -193,8 +193,7 @@ namespace ConfusServer
             PlayerPacket packet;
             a_Data->Read(packet);
             setPosition(packet.playerPosition);
-            std::cout << "Addfunctiontomap is called" << "playerposition from packet is: " << packet.playerPosition.X;
-            std::cout << packet.playerPosition.X;
+            std::cout << "Addfunctiontomap is called, " << "playerposition from packet is: " << std::to_string(packet.playerPosition.X);
         });
         
     }

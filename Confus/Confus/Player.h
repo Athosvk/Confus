@@ -28,6 +28,19 @@ namespace Confus
 		ETeamIdentifier* TeamIdentifier;    
         Flag* FlagPointer = nullptr;
 		Health PlayerHealth;
+
+        struct PlayerPacket
+        {
+            RakNet::MessageID messageType;
+            unsigned int playerID;
+            unsigned char playerState;
+            boolean isAttacking;
+            int8_t playerHealth;
+            irr::core::vector3df playerPosition;
+            irr::core::vector3df playerRotation;
+        private:
+            char Padding[2];
+        };
        
         /// <summary> Determines if this player is this users player or not </summary>
         bool MainPlayer = false;
@@ -54,19 +67,6 @@ namespace Confus
         EPlayerState m_PlayerState = EPlayerState::ALIVE;
         /// <summary> The player's health, ranging from 127 to -127. </summary>
         int8_t m_PlayerHealth = 100;
-
-        #pragma pack(push, 1)
-        struct PlayerPacket
-        {
-            RakNet::MessageID messageType;
-            unsigned int playerID;
-            unsigned char playerState;
-            boolean isAttacking;
-            int8_t playerHealth;
-            irr::core::vector3df playerPosition;
-            irr::core::vector3df playerRotation;
-        };
-        #pragma pack(pop)
 
     public:
         /// <summary> Player class constructor. </summary>

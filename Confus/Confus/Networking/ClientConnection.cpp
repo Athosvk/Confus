@@ -5,6 +5,7 @@
 #include <RakNet/RakPeerInterface.h>
 
 #include "ClientConnection.h"
+#include "../Player.h"
 
 namespace Confus
 {
@@ -40,8 +41,14 @@ namespace Confus
             RakNet::Packet* packet = m_Interface->Receive();
             while(packet != nullptr)
             {
-                handlePacket(packet, static_cast<unsigned char>(packet->data[0]));
+                if(packet->data[0] == ID_CONNECTION_REQUEST_ACCEPTED)
+                {
+                    std::cout << "Connected to the server!\n";
+                    dispatchStalledMessages();
+                    m_Connected = true;
+                }
 
+                handlePacket(packet, static_cast<unsigned char>(packet->data[0]));
                 m_Interface->DeallocatePacket(packet);
                 packet = m_Interface->Receive();
             }
@@ -60,11 +67,11 @@ namespace Confus
             m_CallbackFunctionMap[a_Event].push_back(a_Function);
         }
 
-		void ClientConnection::sendMessage(const RakNet::BitStream& a_Stream, PacketReliability a_Reliability) 
+		void ClientConnection::sendMessage(RakNet::BitStream* a_Stream, PacketReliability a_Reliability) 
 		{
 			if(m_Connected)
 			{
-				m_Interface->Send(&a_Stream, PacketPriority::HIGH_PRIORITY,
+				m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
 					a_Reliability, 0, getServerAddress(), false);
 			}
 			else
