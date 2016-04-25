@@ -39,6 +39,7 @@ namespace Confus
 				~btRigidBody::CollisionFlags::CF_STATIC_OBJECT &
 				~btRigidBody::CollisionFlags::CF_KINEMATIC_OBJECT);
 			m_Body->setMassProps(static_cast<btScalar>(m_Mass), m_Body->getLocalInertia());
+			m_Body->setActivationState(DISABLE_DEACTIVATION);
 		}
 
 		void RigidBody::makeStatic()
@@ -48,6 +49,7 @@ namespace Confus
 				btRigidBody::CollisionFlags::CF_STATIC_OBJECT) &
 				~btRigidBody::CollisionFlags::CF_KINEMATIC_OBJECT);
 			m_Body->setMassProps(static_cast<btScalar>(0.0f), m_Body->getLocalInertia());
+			m_Body->setActivationState(ACTIVE_TAG);
 		}
 
 		void RigidBody::makeKinematic()
@@ -57,6 +59,7 @@ namespace Confus
 				btRigidBody::CollisionFlags::CF_KINEMATIC_OBJECT) &
 				~btRigidBody::CollisionFlags::CF_STATIC_OBJECT);
 			m_Body->setMassProps(static_cast<btScalar>(0.0f), m_Body->getLocalInertia());
+			m_Body->setActivationState(DISABLE_DEACTIVATION);
 		}
 
 		void RigidBody::enableTriggerState()
