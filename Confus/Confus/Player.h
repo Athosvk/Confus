@@ -7,16 +7,21 @@
 
 namespace Confus 
 {
-
 	namespace Audio 
     {
 		class PlayerAudioEmitter;
+	}
+	namespace Physics
+	{
+		class BoxCollider;
+		class PhysicsWorld;
 	}
 
     enum class EFlagEnum;
 	enum class ETeamIdentifier;
     class EventManager;
     class Flag;
+
     /// <summary> 
     /// Player class
     /// </summary>
@@ -36,6 +41,7 @@ namespace Confus
         irr::s32 ID;
 	private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
+		Physics::BoxCollider* m_Collider;
 
         void createAudioEmitter();
         /// <summary> The weapon bone index of the animation for the weapon </summary>
@@ -54,7 +60,7 @@ namespace Confus
         /// <param name="a_ID">The ID of the scenenode.</param>
         /// <param name="a_TeamIdentifier">The team's identifier the player should have.</param>
         /// <param name="a_MainPlayer">A boolean to identify the player the user controls.</param>
-        Player(irr::IrrlichtDevice* a_Device, irr::s32 a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
+		Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, irr::s32 a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
         /// <summary> Player class destructor. </summary>
 		~Player();
         /// <summary> Update function, any tasks that need to be done every frame go here. </summary>

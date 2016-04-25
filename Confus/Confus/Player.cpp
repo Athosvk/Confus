@@ -1,15 +1,20 @@
 #include <IrrAssimp/IrrAssimp.h>
+
 #include "Audio\PlayerAudioEmitter.h"
 #include "Player.h"
 #include "EventManager.h"
 #include "Flag.h"
+#include "Physics/PhysicsWorld.h"
+#include "Physics\BoxCollider.h"
+#include "Physics/RigidBody.h"
 
 namespace Confus
 {
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-	Player::Player(irr::IrrlichtDevice* a_Device, irr::s32 a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
+
+	Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, irr::s32 a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
 		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
 		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), a_ID),
 		TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
@@ -71,6 +76,8 @@ namespace Confus
         }
 	    PlayerNode->setParent(this);
 		setParent(CameraNode);
+		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.2f), CameraNode);
+		m_Collider->getRigidBody()->enableTriggerState();
 
         createAudioEmitter();
         startWalking();

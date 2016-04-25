@@ -16,15 +16,15 @@ namespace Confus
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
+		m_PhysicsWorld(m_Device),
 		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-        m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamBlue, true),
-        m_SecondPlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, false),
+        m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true),
+        m_SecondPlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamRed, false),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed),
         m_RedRespawnFloor(m_Device),
         m_BlueRespawnFloor(m_Device),
-		m_GUI(m_Device, &m_PlayerNode),
-		m_PhysicsWorld(m_Device)
+		m_GUI(m_Device, &m_PlayerNode)
     {
     }
 
@@ -52,7 +52,6 @@ namespace Confus
 
         m_Device->setEventReceiver(&m_EventManager);
         m_Device->getCursorControl()->setVisible(false);
-		auto collider = m_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.8f), m_PlayerNode.getParent());
 		
 		while(m_Device->run())
         {
@@ -78,7 +77,7 @@ namespace Confus
 			case irr::scene::ESNT_CUBE:
 			case irr::scene::ESNT_ANIMATED_MESH:
 			case irr::scene::ESNT_MESH:
-				collider = m_PhysicsWorld.createBoxCollider(node);
+				collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node);
 				collider->getRigidBody()->makeStatic();
 				break;
 			case irr::scene::ESNT_SPHERE:

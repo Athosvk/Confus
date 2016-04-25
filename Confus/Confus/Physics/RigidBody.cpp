@@ -94,14 +94,15 @@ namespace Confus
 			m_AttachedNode->updateAbsolutePosition();
 			btTransform transform = btTransform::getIdentity();
 			transform.setOrigin(PhysicsWorld::toBulletVector(m_AttachedNode->getAbsolutePosition()));
+			auto eulerAngles = m_AttachedNode->getRotation() * irr::core::DEGTORAD;
+			transform.setRotation(btQuaternion(eulerAngles.Y, eulerAngles.X, eulerAngles.Z));
 			m_Body->setWorldTransform(transform);
 		}
 
 		irr::core::vector3df RigidBody::toIrrlichtEuler(btQuaternion& a_Rotation) const
 		{
 			irr::core::vector3df eulerAngles;
-			irr::core::quaternion(a_Rotation.x(), a_Rotation.y(), a_Rotation.z(),
-				a_Rotation.w()).toEuler(eulerAngles);
+			irr::core::quaternion(a_Rotation.x(), a_Rotation.y(), a_Rotation.z(), a_Rotation.w()).toEuler(eulerAngles);
 			return eulerAngles;
 		}
 	}

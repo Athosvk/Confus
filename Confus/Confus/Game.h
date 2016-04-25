@@ -40,6 +40,8 @@ namespace Confus
         /// MazeGenerator that hasa accesible maze
         /// </summary>
         MazeGenerator m_MazeGenerator;
+		/// <summary> The currently active physics world </summary>
+		Physics::PhysicsWorld m_PhysicsWorld;
         /// <summary>
         /// The OpenAL listener that is attached to the camera.
         /// </summary>
@@ -88,8 +90,6 @@ namespace Confus
 		/// The connection as a client to the server that we are currently connected to
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;		
-		/// <summary> The currently active physics world </summary>
-		Physics::PhysicsWorld m_PhysicsWorld;
 
     public:
         /// <summary>
