@@ -46,6 +46,7 @@ namespace Confus
 			
 			/// <summary> The type of Rigid Body </summary>
 			ERigidBodyType m_Type;
+			std::unique_ptr<btDefaultMotionState> m_MotionState;
 		public:
 			/// <summary> Initializes a new instance of the <see cref="RigidBody"/> class </summary>
 			/// <param name="a_RigidBody">The Bullet rigid body </param>
@@ -78,6 +79,12 @@ namespace Confus
 
 			/// <summary> Makes this RigidBody a regular collider, causing it to start being influenced and start influencing collision responses </summary>
 			void disableTriggerState();
+			
+			/// <summary> Sets the velocity </summary>
+			/// <param name="a_Velocity"> The new velocity </param>
+			void setVelocity(irr::core::vector3df a_Velocity) const;
+
+			irr::core::vector3df getVelocity() const;
 		private:
 			/// <summary> Sets the position of the attached scene node in absolute/world terms </summary>
 			/// <param name="a_Position"> The world postion </param>
@@ -88,6 +95,7 @@ namespace Confus
 
 			/// <summary> Gets the euler angles. </summary>
 			irr::core::vector3df toIrrlichtEuler(btQuaternion& a_Rotation) const;
+			btTransform extractTransform() const;
 		};
 	}
 }

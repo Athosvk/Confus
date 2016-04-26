@@ -11,8 +11,10 @@ namespace Confus
 		RigidBody::RigidBody(std::unique_ptr<btRigidBody>&& a_RigidBody, irr::scene::ISceneNode* a_AttachedNode)
 			: m_Body(std::move(a_RigidBody)),
 			m_AttachedNode(a_AttachedNode),
-			m_Mass(static_cast<btScalar>(1.0) / m_Body->getInvMass())
+			m_Mass(static_cast<btScalar>(1.0) / m_Body->getInvMass()),
+			m_MotionState(std::make_unique<btDefaultMotionState>(extractTransform()))
 		{
+			m_Body->setMotionState(m_MotionState.get());
 			m_Body->getInvMass() <= static_cast<btScalar>(0.00001) ? makeStatic() : makeDynamic();
 			syncRigidBodyTransform();
 		}
@@ -24,7 +26,9 @@ namespace Confus
 
 		void RigidBody::onPostPhysicsUpdate() const
 		{
-			setAbsoluteTransform(m_Body->getWorldTransform());
+			btTransform transform;
+			m_MotionState->getWorldTransform(transform);
+			setAbsoluteTransform(transform);
 		}
 
 		irr::scene::ISceneNode* RigidBody::getAttachedNode() const
@@ -72,6 +76,16 @@ namespace Confus
 			m_Body->setCollisionFlags(m_Body->getCollisionFlags() & ~btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
 		}
 
+		void RigidBody::setVelocity(irr::core::vector3df a_Velocity) const
+		{
+			m_Body->setLinearVelocity(PhysicsWorld::toBulletVector(a_Velocity));
+		}
+
+		irr::core::vector3df RigidBody::getVelocity() const
+		{
+			return PhysicsWorld::toIrrlichtVector(m_Body->getLinearVelocity());
+		}
+
 		void RigidBody::setAbsoluteTransform(const btTransform& a_Transform) const
 		{
 			if(m_AttachedNode->getParent() != nullptr)
@@ -94,12 +108,7 @@ namespace Confus
 
 		void RigidBody::syncRigidBodyTransform() const
 		{
-			m_AttachedNode->updateAbsolutePosition();
-			btTransform transform = btTransform::getIdentity();
-			transform.setOrigin(PhysicsWorld::toBulletVector(m_AttachedNode->getAbsolutePosition()));
-			auto eulerAngles = m_AttachedNode->getRotation() * irr::core::DEGTORAD;
-			transform.setRotation(btQuaternion(eulerAngles.Y, eulerAngles.X, eulerAngles.Z));
-			m_Body->setWorldTransform(transform);
+			m_MotionState->setWorldTransform(extractTransform());
 		}
 
 		irr::core::vector3df RigidBody::toIrrlichtEuler(btQuaternion& a_Rotation) const
@@ -107,6 +116,15 @@ namespace Confus
 			irr::core::vector3df eulerAngles;
 			irr::core::quaternion(a_Rotation.x(), a_Rotation.y(), a_Rotation.z(), a_Rotation.w()).toEuler(eulerAngles);
 			return eulerAngles;
+		}
+
+		btTransform RigidBody::extractTransform() const
+		{
+			btTransform transform = btTransform::getIdentity();
+			transform.setOrigin(PhysicsWorld::toBulletVector(m_AttachedNode->getAbsolutePosition()));
+			auto eulerAngles = m_AttachedNode->getRotation() * irr::core::DEGTORAD;
+			transform.setRotation(btQuaternion(eulerAngles.Y, eulerAngles.X, eulerAngles.Z));
+			return transform;
 		}
 	}
 }

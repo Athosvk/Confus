@@ -77,7 +77,6 @@ namespace Confus
 	    PlayerNode->setParent(this);
 		setParent(CameraNode);
 		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.2f), CameraNode);
-		m_Collider->getRigidBody()->enableTriggerState();
 
         createAudioEmitter();
         startWalking();
