@@ -257,6 +257,7 @@ namespace Confus
      void Player::updateServer() const
 	{
         RakNet::BitStream bitstreamOut;
+
         bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
         bitstreamOut.Write(m_PlayerID);
         bitstreamOut.Write(CameraNode->getPosition());
