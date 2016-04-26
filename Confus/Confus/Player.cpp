@@ -42,19 +42,19 @@ namespace Confus
         }
 
         m_KeyMap[0].Action = irr::EKA_MOVE_FORWARD;
-        m_KeyMap[0].KeyCode = irr::KEY_KEY_W;
+        m_KeyMap[0].KeyCode = irr::KEY_KEY_0;
 
         m_KeyMap[1].Action = irr::EKA_MOVE_BACKWARD;
-        m_KeyMap[1].KeyCode = irr::KEY_KEY_S;
+        m_KeyMap[1].KeyCode = irr::KEY_KEY_0;
 
         m_KeyMap[2].Action = irr::EKA_STRAFE_LEFT;
-        m_KeyMap[2].KeyCode = irr::KEY_KEY_A;
+        m_KeyMap[2].KeyCode = irr::KEY_KEY_0;
 
         m_KeyMap[3].Action = irr::EKA_STRAFE_RIGHT;
-        m_KeyMap[3].KeyCode = irr::KEY_KEY_D;
+        m_KeyMap[3].KeyCode = irr::KEY_KEY_0;
 
         m_KeyMap[4].Action = irr::EKA_JUMP_UP;
-        m_KeyMap[4].KeyCode = irr::KEY_SPACE;
+        m_KeyMap[4].KeyCode = irr::KEY_KEY_0;
 
         if(a_MainPlayer) 
         {
@@ -103,6 +103,31 @@ namespace Confus
                 startLightAttack();
             }
         }
+
+		auto movementDirection = irr::core::vector3df();
+		if(a_EventManager.IsKeyDown(irr::KEY_KEY_W))
+		{
+			movementDirection.Z = 1.0f;
+		}
+		else if(a_EventManager.IsKeyDown(irr::KEY_KEY_S))
+		{
+			movementDirection.Z = -1.0f;
+		}
+		if(a_EventManager.IsKeyDown(irr::KEY_KEY_A))
+		{
+			movementDirection.X = -1.0f;
+		}
+		else if(a_EventManager.IsKeyDown(irr::KEY_KEY_D))
+		{
+			movementDirection.X = 1.0f;
+		}
+		movementDirection.rotateXZBy(-CameraNode->getRotation().Y);
+		movementDirection = movementDirection.normalize();
+		auto rigidBody = m_Collider->getRigidBody();
+		const float Speed = 5.0f;
+		auto resultingVelocity = irr::core::vector3df(movementDirection.X, 0.0f, movementDirection.Z) * Speed
+			+ irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
+		rigidBody->setVelocity(resultingVelocity);
     }
 
     void Player::render()
@@ -201,26 +226,13 @@ namespace Confus
 
     void Player::respawn()
     {
-        irr::scene::ISceneNodeAnimatorCollisionResponse * animator = 0;
-
-        irr::core::list<irr::scene::ISceneNodeAnimator*>::ConstIterator iterator = CameraNode->getAnimators().begin();
-
-        for(; iterator != CameraNode->getAnimators().end(); ++iterator)
-        {
-            animator = (irr::scene::ISceneNodeAnimatorCollisionResponse*)(*iterator);
-            if(animator->getType() == irr::scene::ESNAT_COLLISION_RESPONSE)
-                break;
-        }
-
         if(*TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
              CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
-             animator->setTargetNode(CameraNode);
         }
         else if(*TeamIdentifier == ETeamIdentifier::TeamRed)
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
-            animator->setTargetNode(CameraNode);
         }
     }
 
