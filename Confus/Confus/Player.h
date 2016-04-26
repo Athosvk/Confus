@@ -14,7 +14,7 @@ namespace Confus
     class Flag;
     enum class EPlayerState : unsigned char
     {
-        Alive, Carryingflag, Heavyattacking, Lightattacking, Dead
+        Alive, CarryingFlag, HeavyAttacking, LightAttacking, Dead
     };
 
     class Player : irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
@@ -68,7 +68,8 @@ namespace Confus
         EPlayerState m_PlayerState = EPlayerState::Alive;
         /// <summary> The player's health, ranging from 127 to -127. </summary>
         int8_t m_PlayerHealth = 100;
-
+        /// <summary> The local time at which a state change took place. </summary>
+        RakNet::Time m_StateChangeTime = 0;
     public:
         /// <summary> Player class constructor. </summary>
         /// <param name="a_Device">The active Irrlicht Device.</param>
@@ -119,6 +120,9 @@ namespace Confus
         
         /// <summary> Returns an updated playerpacket. </summary>
         PlayerPacket createPlayerPacket() const;
+        
+        /// <summary> Changes the state of the player. </summary>
+        void changeState(EPlayerState a_NewState);
 
         /// <summary> Called when the animation finishes </summary>
         /// <remarks> Generally used for the attack animations only </remarks>

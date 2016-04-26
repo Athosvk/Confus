@@ -21,7 +21,11 @@ namespace ConfusServer {
 	enum class ETeamIdentifier;
     class EventManager;
     class Flag;
-
+    
+    enum class EPlayerState : unsigned char
+    {
+        Alive, CarryingFlag, HeavyAttacking, LightAttacking, Dead
+    };
     class Player : irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
     {   
     public:

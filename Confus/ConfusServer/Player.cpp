@@ -80,7 +80,7 @@ namespace ConfusServer
     {
 		delete(CarryingFlag);
 		delete(TeamIdentifier);
-	}
+    }
 
     const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const
     {
@@ -192,16 +192,30 @@ namespace ConfusServer
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::Connection::EPacketType::Player), [this](RakNet::BitStream* a_Data)
         {
             PlayerPacket packet;
+            RakNet::Time timeStamp;
             irr::core::vector3df position;
             irr::core::vector3df rotation;
+            EPlayerState state;
 
-            a_Data->IgnoreBytes(sizeof(unsigned char));
+            a_Data->Read(timeStamp);
             a_Data->Read(position);
             a_Data->Read(rotation);
+            a_Data->Read(state);
 
             setPosition(position);
             setRotation(rotation);
-        });
+            
+            if(state == EPlayerState::LightAttacking)
+            {
+                startLightAttack();
+                std::cout << "State is heavy attack, calling this on the server";
+            }
+            else if(state == EPlayerState::HeavyAttacking)
+            {
+                startHeavyAttack();
+                std::cout << "State is heavy attack, calling this on the server";
+            }
+    });
         
     }
 

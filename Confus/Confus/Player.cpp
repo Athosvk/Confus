@@ -2,6 +2,7 @@
 #include <iostream>
 #include <RakNet/MessageIdentifiers.h>
 #include <RakNet/BitStream.h>
+#include <RakNet/GetTime.h>
 #include "Audio\PlayerAudioEmitter.h"
 #include "Networking/ClientConnection.h"
 #include "Player.h"
@@ -148,6 +149,7 @@ namespace Confus
 
     void Player::startLightAttack()
     {
+        changeState(EPlayerState::LightAttacking);
         PlayerNode->setFrameLoop(38, 41);
         PlayerNode->setCurrentFrame(38);
         m_Weapon.Damage = LightAttackDamage;
@@ -158,6 +160,7 @@ namespace Confus
 
     void Player::startHeavyAttack()
     {
+        changeState(EPlayerState::HeavyAttacking);
         PlayerNode->setFrameLoop(60, 66);
         PlayerNode->setCurrentFrame(60);
         m_Weapon.Damage = HeavyAttackDamage;
@@ -172,6 +175,8 @@ namespace Confus
             m_Attacking = false;
             m_Weapon.disableCollider();
             startWalking();
+            // Reset the player state.
+            changeState(EPlayerState::Alive);
         }
     }
 
@@ -191,7 +196,6 @@ namespace Confus
 				FlagPointer->drop(this);
 			}
         }
-
         if(CameraNode->getPosition().Y <= -10) {
             respawn();
 			if (FlagPointer != nullptr) {
@@ -254,14 +258,13 @@ namespace Confus
      void Player::sendMessageToServer() const
 	{
         RakNet::BitStream bitstreamOut;
-        PlayerPacket packet;
-        packet = createPlayerPacket();
-        //bitstreamOut.Write(packet);
         bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
+        bitstreamOut.Write(RakNet::GetTime());
         bitstreamOut.Write(CameraNode->getPosition());
         bitstreamOut.Write(CameraNode->getRotation());
         bitstreamOut.Write(Player::m_PlayerState);
-
+        bitstreamOut.Write(m_StateChangeTime);
+        
         m_Connection->sendMessage(&bitstreamOut, PacketReliability::UNRELIABLE);
 	}
 
@@ -278,4 +281,15 @@ namespace Confus
         
         return packet;
 	}
+
+     void Player::changeState(EPlayerState a_NewState)
+     {
+         // Only change state is it is different from the player's current state.
+         if(a_NewState != m_PlayerState) 
+         {
+             m_PlayerState = a_NewState;
+             m_StateChangeTime = RakNet::GetTime();
+             std::cout << "State changed! Time of change is: " << m_StateChangeTime;
+         } 
+     }
 }
