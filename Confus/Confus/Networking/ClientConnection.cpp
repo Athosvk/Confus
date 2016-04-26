@@ -75,8 +75,8 @@ namespace Confus
 				inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
 				inputStream.Read(redScore);
 				inputStream.Read(blueScore);
-				ClientTeamScore::RedTeamScore = redScore;
-				ClientTeamScore::BlueTeamScore = blueScore;
+				ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, redScore);
+                ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, blueScore);
 				std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
 				break;
 			}
