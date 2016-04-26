@@ -16,7 +16,6 @@ namespace Confus
 		{
 			m_Body->setMotionState(m_MotionState.get());
 			m_Body->getInvMass() <= static_cast<btScalar>(0.00001) ? makeStatic() : makeDynamic();
-			syncRigidBodyTransform();
 		}
 
 		void RigidBody::onPrePhysicsUpdate() const
