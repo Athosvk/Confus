@@ -9,9 +9,9 @@ namespace Confus
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-	Player::Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
+	Player::Player(irr::IrrlichtDevice* a_Device, irr::s32 a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
 		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
-		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), a_id),
+		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), a_ID),
 		TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
 		CarryingFlag(new EFlagEnum(EFlagEnum::None))
     {
@@ -20,11 +20,13 @@ namespace Confus
 
         IrrAssimp irrAssimp(sceneManager);
         m_Mesh = sceneManager->getMesh("Media/ninja.b3d");
+        MainPlayer = a_MainPlayer;
+        ID = a_ID;
 
         PlayerNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh, nullptr);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
         PlayerNode->setScale(irr::core::vector3df(0.3f, 0.3f, 0.3f));
-        PlayerNode->setPosition(irr::core::vector3df(0.f, -2.f, -0.2f));
+        PlayerNode->setPosition(irr::core::vector3df(0.f, -2.0f, -0.2f));
         PlayerNode->setName({"Player"});
 
         if(a_TeamIdentifier == ETeamIdentifier::TeamBlue) {
@@ -82,11 +84,6 @@ namespace Confus
 		delete(TeamIdentifier);
 	}
 
-    const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const
-    {
-        return m_Mesh->getBoundingBox();
-    }
-
     void Player::handleInput(EventManager& a_EventManager)
     {
         if(!m_Attacking)
@@ -107,10 +104,20 @@ namespace Confus
 
     }
 
+    const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const
+    {
+        return m_Mesh->getBoundingBox();
+    }
+
     void Player::setLevelCollider(irr::scene::ISceneManager* a_SceneManager,
         irr::scene::ITriangleSelector* a_Level)
     {
-        CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level, PlayerNode, {0.1f, 0.2f, 0.1f}, { 0, -1, 0 }));
+        CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level, PlayerNode, {0.1f, 0.2f, 0.1f}, { 0, -1, 0 }, {0, 1.5f, 0}, 1));
+        
+        irr::scene::ITriangleSelector* selector = nullptr;
+        selector = a_SceneManager->createTriangleSelector(PlayerNode);
+        CameraNode->setTriangleSelector(selector);
+        selector->drop();
     }
 
     void Player::startWalking() const
@@ -209,6 +216,16 @@ namespace Confus
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
             animator->setTargetNode(CameraNode);
         }
+    }
+
+    void Player::updatePosition(irr::core::vector3df a_NewPosition)
+    {
+        CameraNode->setPosition(a_NewPosition);
+    }
+
+    void Player::updateRotation(irr::core::vector3df a_NewRotation)
+    {
+        CameraNode->setRotation(a_NewRotation);
     }
 
     void Player::createAudioEmitter()

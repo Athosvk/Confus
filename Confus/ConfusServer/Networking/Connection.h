@@ -1,6 +1,9 @@
 #pragma once
 #include <vector>
 #include <RakNet/MessageIdentifiers.h>
+#include <map>
+#include <vector>
+#include <functional>
 
 namespace RakNet 
 {
@@ -25,10 +28,13 @@ namespace ConfusServer
         /// </remarks>
         class Connection
         {
-		private:
+        public:
+        private:
 
             /// <summary> The RakNet interface for interacting with RakNet </summary>
             RakNet::RakPeerInterface* m_Interface; 
+            /// <summary> The map thast contains the server events and the functions that involve them. </summary>
+            std::map<unsigned char, std::vector<std::function<void(RakNet::Packet* a_Data)>>> m_CallbackFunctionMap;
 
         public:
 			/// <summary> The type of packet </summary>
@@ -48,6 +54,10 @@ namespace ConfusServer
             /// requesting services
             /// </summary>
             void processPackets();
+            /// <summary> Adds a function to the event in the callback function map. </summary>
+            /// <param name="a_Event">The server event that should trigger the function.</param>
+            /// <param name="a_Function">The function that should be added to the map.</param>
+            void addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function);
             /// <summary> Send Package to all clients </summary>
             /// <param name="a_BitStream">The packet to send.</param>
             void broadcastBitstream(RakNet::BitStream& a_BitStream);
@@ -62,15 +72,16 @@ namespace ConfusServer
 			/// <summary>
 			/// Handles the incoming packet
 			/// </summary>
-			/// <param name="a_Packet">The packet.</param>
-			void handlePacket(RakNet::Packet* a_Packet);			
+			/// <param name="a_Data">The data.</param>
+            /// <param name="a_Event">The server event.</param>
+            void handlePacket(RakNet::Packet* a_Data, unsigned char a_Event);
 			/// <summary>
 			/// Prints the InputStream.
 			/// </summary>
 			/// <param name="a_InputStream">The a_InputStream message.</param>
 			void printMessage(RakNet::BitStream& a_InputStream);
             /// <summary> Get all the open connections in a vector </summary>
-            std::vector<RakNet::SystemAddress> getOpenConnections();
+            std::vector<RakNet::SystemAddress> getOpenConnections() const;
         };
     }
 }

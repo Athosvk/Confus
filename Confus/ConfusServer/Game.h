@@ -62,6 +62,8 @@ namespace ConfusServer
         /// </summary>
         Player m_PlayerNode;
 		Player m_SecondPlayerNode;
+
+        std::vector<Player*> m_PlayerArray;
         /// <summary>
         /// The Blue Flag.
         /// </summary>
@@ -147,7 +149,7 @@ namespace ConfusServer
 		/// Processes the packets connection
 		/// </summary>
 		void processConnection();
-        /// <summary>
+	    void addPlayer(RakNet::Packet* a_Data);
         /// Broadcast a maze change
         /// </summary>
         void broadcastMazeChange(int a_Seed);

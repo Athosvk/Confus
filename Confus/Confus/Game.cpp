@@ -1,9 +1,13 @@
 #include <Irrlicht/irrlicht.h>
 #include <iostream>
+#include <RakNet/BitStream.h>
+#include <RakNet/MessageIdentifiers.h>
+#include <RakNet/GetTime.h>
 
 #include "Game.h"
 #include "Player.h"
 #include "Flag.h"
+#include "FlagGUI.h"
 
 #define DEBUG_CONSOLE
 #include "../Common/Debug.h"
@@ -15,9 +19,9 @@ namespace Confus
     const double Game::FixedUpdateInterval = 0.02;
     const double Game::MaxFixedUpdateInterval = 0.1;
 
-    Game::Game()
-        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
-		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+    Game::Game(irr::core::dimension2d<irr::u32> a_Resolution)
+        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL,a_Resolution)),
+		m_MazeGenerator(m_Device,60,60, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24), irr::core::vector2df(30.,30.)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
         m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamBlue, true),
         m_SecondPlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, false),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
@@ -26,6 +30,16 @@ namespace Confus
         m_BlueRespawnFloor(m_Device),
 		m_GUI(m_Device, &m_PlayerNode)
     {
+		auto videoDriver = m_Device->getVideoDriver();
+		m_GUI.addElement<FlagGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(50, 50),
+					videoDriver->getTexture("Media/Textures/FlagUIImage.png"),
+					videoDriver->getTexture("Media/Textures/ExclamationMark.png"),
+					irr::core::vector2df(0.44f, 0.0f), false);
+
+		m_GUI.addElement<FlagGUI>(m_Device, &m_RedFlag, irr::core::dimension2du(50, 50),
+			videoDriver->getTexture("Media/Textures/MirroredFlagUIImage.png"),
+			videoDriver->getTexture("Media/Textures/MirroredExclamationMark.png"),
+			irr::core::vector2df(0.56f, 0.0f), true);
     }
 
     void Game::run()
@@ -114,7 +128,26 @@ namespace Confus
         std::cin >> serverPort;
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
-        m_Connection->MazeGeneratorReference = &m_MazeGenerator;
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Packet) {
+            int timeMazeChanges, mazeSeed;
+            RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
+            inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+            inputStream.Read(timeMazeChanges);
+            inputStream.Read(mazeSeed);
+            std::cout << "Update is in " << (timeMazeChanges - static_cast<int>(RakNet::GetTimeMS())) << " ms, the seed is:\t" << mazeSeed << std::endl;
+            m_MazeGenerator.refillMainMazeRequest(mazeSeed, timeMazeChanges);
+        });
+
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [](RakNet::Packet* a_Packet) {
+            int redScore, blueScore;
+            RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
+            inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+            inputStream.Read(redScore);
+            inputStream.Read(blueScore);
+            ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, redScore);
+            ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, blueScore);
+            std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
+        });
     }
 
     void Game::handleInput()
@@ -148,6 +181,24 @@ namespace Confus
             m_FixedUpdateTimer -= FixedUpdateInterval;
             fixedUpdate();
         }
+    }
+
+    void Game::updateOtherPlayers(/*array a_PlayerInfo*/)
+    {
+        /*
+        for(int i = 0; i < a_PlayerInfo.size(); i++)
+        {
+            for(int j = 0; j < m_PlayerArray.size(); j++)
+            {
+                if(m_PlayerArray[j].MainPlayer == false && m_PlayerArray[j].ID == a_PlayerInfo[i].ID)
+                {
+                    m_PlayerArray[j].setPosition(a_PlayerInfo[i].position);
+                    m_PlayerArray[j].setRotation(a_PlayerInfo[i].rotation); 
+                    break;
+                }
+            }
+        }
+        */
     }
 
     void Game::fixedUpdate()

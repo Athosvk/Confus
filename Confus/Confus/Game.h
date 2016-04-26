@@ -56,6 +56,9 @@ namespace Confus
 		Player m_SecondPlayerNode;
         RespawnFloor m_RedRespawnFloor;
         RespawnFloor m_BlueRespawnFloor;
+
+        //use std::vector
+        //std::array<Player, 2> m_PlayerArray;
         /// <summary>
         /// The Blue Flag.
         /// </summary>
@@ -89,7 +92,7 @@ namespace Confus
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
         /// </summary>
-        Game();
+        Game(irr::core::dimension2d<irr::u32> a_Resolution);
         /// <summary>
         /// Finalizes an instance of the <see cref="Game"/> class.
         /// </summary>
@@ -129,5 +132,7 @@ namespace Confus
         /// Renders the objects in the game
         /// </summary>
         void render();
+
+        void updateOtherPlayers();
     };
 }

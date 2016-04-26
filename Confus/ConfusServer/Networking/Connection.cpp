@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <functional>
 
 #include "Connection.h"
 #define DEBUG_CONSOLE
@@ -38,17 +39,22 @@ namespace ConfusServer
             RakNet::Packet* packet = m_Interface->Receive();
             while(packet != nullptr)
             {
-				handlePacket(packet);
+                handlePacket(packet, static_cast<unsigned char>(packet->data[0]));
+
                 m_Interface->DeallocatePacket(packet);
                 packet = m_Interface->Receive();
             }
         }
 
-        std::vector<RakNet::SystemAddress> Connection::getOpenConnections()
+        void Connection::addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function)
+        {
+            m_CallbackFunctionMap[a_Event].push_back(a_Function);
+        }
+
+        std::vector<RakNet::SystemAddress> Connection::getOpenConnections() const
         {
             auto connectionCount = getConnectionCount();
-            std::vector<RakNet::SystemAddress>
-                openConnections(static_cast<size_t>(connectionCount));
+            std::vector<RakNet::SystemAddress> openConnections(static_cast<size_t>(connectionCount));
             auto serverID = m_Interface->GetConnectionList(openConnections.data(),
                 &connectionCount);
             return openConnections;
@@ -72,18 +78,13 @@ namespace ConfusServer
             }
         }
 
-		void Connection::handlePacket(RakNet::Packet* a_Packet)
-		{
-			switch(static_cast<unsigned char>(a_Packet->data[0]))
-			{
-			case static_cast<unsigned char>(EPacketType::Message) :
-				printMessage(RakNet::BitStream(a_Packet->data, a_Packet->length, false));
-				break;
-			default:
-				std::cout << "Message arrived with id " << static_cast<int>(a_Packet->data[0])
-					<< std::endl;
-			}
-		}
+        void Connection::handlePacket(RakNet::Packet* a_Data, unsigned char a_Event)
+        {
+            for(size_t i = 0u; i < m_CallbackFunctionMap[a_Event].size(); i++)
+            {
+                m_CallbackFunctionMap[a_Event][i](a_Data);
+            }
+        }
 
 		void Connection::printMessage(RakNet::BitStream& a_InputStream)
 		{

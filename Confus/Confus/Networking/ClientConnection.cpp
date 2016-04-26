@@ -2,11 +2,9 @@
 #include <vector>
 #include <RakNet/BitStream.h>
 #include <RakNet/MessageIdentifiers.h>
-#include <RakNet/GetTime.h>
+#include <RakNet/RakPeerInterface.h>
 
 #include "ClientConnection.h"
-#include "../ClientTeamScore.h"
-#include "../MazeGenerator.h"
 
 namespace Confus
 {
@@ -15,6 +13,7 @@ namespace Confus
         ClientConnection::ClientConnection(const std::string& a_ServerIP,
             unsigned short a_Port)
         {
+            m_Interface = RakNet::RakPeerInterface::GetInstance();
             RakNet::SocketDescriptor socketDescriptor;
             m_Interface->Startup(1, &socketDescriptor, 1);
             //There won't be a password for the server, which is why we pass nullptr
@@ -40,65 +39,25 @@ namespace Confus
         {
             RakNet::Packet* packet = m_Interface->Receive();
             while(packet != nullptr)
-            {				
-                handlePacket(packet);
+            {
+                handlePacket(packet, static_cast<unsigned char>(packet->data[0]));
+
                 m_Interface->DeallocatePacket(packet);
                 packet = m_Interface->Receive();
             }
         }
 
-        void ClientConnection::printMessage(RakNet::BitStream& a_InputStream)
+        void ClientConnection::handlePacket(RakNet::Packet* a_Data, unsigned char a_Event)
         {
-            RakNet::RakString contents;
-            a_InputStream.IgnoreBytes(sizeof(RakNet::MessageID));
-            a_InputStream.Read(contents);
-            std::cout << "Message received: " << contents << std::endl;
+            for(size_t i = 0u; i < m_CallbackFunctionMap[a_Event].size(); i++) 
+            {
+                m_CallbackFunctionMap[a_Event][i](a_Data);
+            }
         }
 
-
-        void ClientConnection::handlePacket(RakNet::Packet* a_Packet)
+        void ClientConnection::addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function)
         {
-            switch(static_cast<unsigned char>(a_Packet->data[0]))
-            {
-            case static_cast<unsigned char>(ID_CONNECTION_REQUEST_ACCEPTED) :
-                std::cout << "Connected to the server!\n";
-                dispatchStalledMessages();
-                m_Connected = true;
-                break;
-            case static_cast<unsigned char>(EPacketType::Message) : //or ID_MESSAGE
-                printMessage(RakNet::BitStream(a_Packet->data, a_Packet->length, false));
-                break;
-			case static_cast<unsigned char>(EPacketType::ScoreUpdate) :
-			{
-				int redScore, blueScore;
-				RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
-				inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
-				inputStream.Read(redScore);
-				inputStream.Read(blueScore);
-				ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, redScore);
-                ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, blueScore);
-				std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
-				break;
-			}
-            case static_cast<unsigned char>(EPacketType::MazeChange) :
-            {
-                int timeMazeChanges, mazeSeed;
-                RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
-                inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
-                inputStream.Read(timeMazeChanges);
-                inputStream.Read(mazeSeed);
-                std::cout << "Update is in " << (timeMazeChanges - static_cast<int>(RakNet::GetTimeMS()))  << " ms, the seed is:\t" << mazeSeed << std::endl;
-                if(MazeGeneratorReference == nullptr)
-                {
-                    throw std::logic_error("Maze reference generator is a nullptr");
-                }
-                MazeGeneratorReference->refillMainMazeRequest(mazeSeed, timeMazeChanges);
-                break;
-            }
-            default:
-                std::cout << "Message arrived with id " << static_cast<int>(a_Packet->data[0])
-                    << std::endl;
-            }
+            m_CallbackFunctionMap[a_Event].push_back(a_Function);
         }
 
 		void ClientConnection::sendMessage(const std::string& a_Message)

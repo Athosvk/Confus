@@ -6,8 +6,8 @@
 namespace Confus
 {
 
-	MazeGenerator::MazeGenerator(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_StartPosition, int a_InitialSeed)
-		: m_MainMaze(a_Device, a_StartPosition,true), m_ReplacementMaze(a_Device, a_StartPosition, false), m_Seed(a_InitialSeed)
+	MazeGenerator::MazeGenerator(irr::IrrlichtDevice* a_Device, int a_MazeSizeX, int a_MazeSizeY, irr::core::vector3df a_StartPosition, int a_InitialSeed, irr::core::vector2df a_GenerateStartPoint)
+		: m_MainMaze(a_Device, a_MazeSizeX, a_MazeSizeY, a_StartPosition,1.5f,true), m_ReplacementMaze(a_Device, a_MazeSizeX, a_MazeSizeY, a_StartPosition, false), m_Seed(a_InitialSeed), m_GenerateStartPoint(a_GenerateStartPoint)
 	{
 		generateMaze(m_MainMaze.MazeTiles, a_InitialSeed);
 	}
@@ -61,7 +61,7 @@ namespace Confus
 		//setup globals & variables
 		srand(a_Seed);
 		MoveableWall* wall = nullptr;
-		std::shared_ptr<MazeTile> currentTile = a_Maze[0][0];
+		std::shared_ptr<MazeTile> currentTile = a_Maze[static_cast<int>(m_GenerateStartPoint.X)][static_cast<int>(m_GenerateStartPoint.Y)];
 
 		//Startcell must be set to visited, add to visitedcount
 		currentTile->Raised = false;

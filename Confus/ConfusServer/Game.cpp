@@ -3,10 +3,10 @@
 #include <iostream>
 #include <RakNet\GetTime.h>
 
+#define DEBUG_CONSOLE
 #include "Game.h"
 #include "Player.h"
 #include "Flag.h"
-#define DEBUG_CONSOLE
 #include "../Common/Debug.h"
 #include "../Common/TeamIdentifier.h"
 
@@ -46,6 +46,13 @@ namespace ConfusServer
         m_SecondPlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+
+
+        m_Connection->addFunctionToMap(ID_NEW_INCOMING_CONNECTION, [this](RakNet::Packet* a_Data)
+        {
+            addPlayer(a_Data);
+        });
+
 
         m_Device->getCursorControl()->setVisible(false);
       
@@ -149,7 +156,8 @@ namespace ConfusServer
             }
             if(currentDelay == 0.0f)
             {
-                currentSeed = static_cast<int>(time(0));
+                currentSeed = static_cast<int>(time(0)) % 1000;
+                m_TeamScoreManager.teamScoredPoint(static_cast<ETeamIdentifier>(1 + rand() % 2));
                 broadcastMazeChange(currentSeed);
             }
             currentDelay += static_cast<float>(m_DeltaTime);
@@ -174,10 +182,6 @@ namespace ConfusServer
 
     void Game::broadcastMazeChange(int a_Seed)
     {
-        time_t currentTime = time(0);
-        struct tm buffer;
-        gmtime_s(&buffer, &currentTime);
-
         int newTime = static_cast<int>(RakNet::GetTimeMS()) + (static_cast<int>(MazeDelay * 1000));
 
         RakNet::BitStream bitStream;
@@ -185,6 +189,16 @@ namespace ConfusServer
         bitStream.Write(newTime);
         bitStream.Write(a_Seed);
         m_Connection->broadcastBitstream(bitStream);
+    }
+
+    void Game::addPlayer(RakNet::Packet* a_Data)
+    {
+        long long id = static_cast<long long>(a_Data->guid.g);
+
+        Player newPlayer(m_Device, id, m_PlayerArray.size() % 2 == 0 ? ETeamIdentifier::TeamRed : ETeamIdentifier::TeamBlue, false);
+
+        m_PlayerArray.push_back(&newPlayer);
+        std::cout << id << " joined" << std::endl;
     }
 
     void Game::render()

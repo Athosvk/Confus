@@ -1,9 +1,14 @@
 #include <irrlicht/irrlicht.h>
 #include <IrrAssimp/IrrAssimp.h>
+#include <iostream>
 
 #include "Flag.h"
 #include "Player.h"
 #include "Collider.h"
+
+#define Debug_Console
+#include "../Common/Debug.h"
+
 
 
 namespace Confus {
@@ -47,7 +52,7 @@ namespace Confus {
             }
             else if(a_CollidedNode->getID() == 1) 
 			{
-                //Failed to get player class from attached node.
+				std::cout << "Failed to get player class from attached node.";
                 return true;
             }
             return false;
@@ -113,7 +118,7 @@ namespace Confus {
         particleAffector->drop();
     }
 
-    irr::video::SColor Flag::getColor() 
+     const irr::video::SColor Flag::getColor() const
     {
         switch(*m_TeamIdentifier)
         {
@@ -125,6 +130,11 @@ namespace Confus {
             return { 255, 255, 255, 255 };
         }
     }
+
+	 const EFlagEnum * Flag::getFlagStatus() const
+	 {
+		 return m_FlagStatus;
+	 }
 
 	//This class handles what to do on collision
 	void Flag::captureFlag(Player* a_PlayerObject) 
@@ -203,6 +213,10 @@ namespace Confus {
         m_FlagNode->setRotation(*m_StartRotation);
 		*m_FlagStatus = EFlagEnum::FlagBase;
     }
+
+	irr::scene::ITriangleSelector* Flag::GetTriangleSelector(irr::scene::ISceneManager* a_SceneManager) {
+		return a_SceneManager->createTriangleSelectorFromBoundingBox(m_FlagNode);
+	}
 
 	Flag::~Flag() {
         m_FlagNode->setParent(m_FlagOldParent);
