@@ -119,6 +119,7 @@ namespace Confus
 
 		btTransform RigidBody::extractTransform() const
 		{
+			m_AttachedNode->updateAbsolutePosition();
 			btTransform transform = btTransform::getIdentity();
 			transform.setOrigin(PhysicsWorld::toBulletVector(m_AttachedNode->getAbsolutePosition()));
 			auto eulerAngles = m_AttachedNode->getRotation() * irr::core::DEGTORAD;
