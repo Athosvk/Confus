@@ -206,9 +206,8 @@ namespace Confus
 
     void Player::fixedUpdate()
     {
-        sendMessageToServer();
+        updateServer();
     }
-
 
     void Player::respawn()
     {
@@ -255,31 +254,18 @@ namespace Confus
         m_Connection = a_Connection;
 	}
 
-     void Player::sendMessageToServer() const
+     void Player::updateServer() const
 	{
         RakNet::BitStream bitstreamOut;
         bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
-        bitstreamOut.Write(RakNet::GetTime());
+        bitstreamOut.Write(m_PlayerID);
         bitstreamOut.Write(CameraNode->getPosition());
         bitstreamOut.Write(CameraNode->getRotation());
         bitstreamOut.Write(Player::m_PlayerState);
         bitstreamOut.Write(m_StateChangeTime);
+        bitstreamOut.Write(m_PlayerHealth);
         
         m_Connection->sendMessage(&bitstreamOut, PacketReliability::UNRELIABLE);
-	}
-
-     Player::PlayerPacket Player::createPlayerPacket() const
-	{
-        PlayerPacket packet;
-        packet.messageType = static_cast<RakNet::MessageID>(Networking::EPacketType::Player);
-        packet.playerID = static_cast<unsigned int>(m_PlayerID);
-        packet.playerState = static_cast<unsigned char>(m_PlayerState);
-        packet.isAttacking = static_cast<boolean>(m_Attacking);
-        packet.playerHealth = static_cast<int8_t>(m_PlayerHealth);
-        packet.playerPosition = static_cast<irr::core::vector3df>(CameraNode->getAbsolutePosition());
-        packet.playerRotation = static_cast<irr::core::vector3df>(CameraNode->getRotation());
-        
-        return packet;
 	}
 
      void Player::changeState(EPlayerState a_NewState)

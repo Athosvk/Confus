@@ -36,19 +36,7 @@ namespace ConfusServer {
 		ETeamIdentifier* TeamIdentifier;    
         Flag* FlagPointer;
         long long ID;
-        struct PlayerPacket
-        {
-            unsigned int playerID;
-            unsigned char playerState;
-            boolean isAttacking;
-            int8_t playerHealth;
-            irr::core::vector3df playerPosition;
-            irr::core::vector3df playerRotation;
-        private:
-            char Padding[2];
-        public:
-            RakNet::MessageID messageType;
-        };
+   
 	private:
         Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
 

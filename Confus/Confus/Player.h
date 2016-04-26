@@ -29,20 +29,6 @@ namespace Confus
         Flag* FlagPointer = nullptr;
 		Health PlayerHealth;
 
-        struct PlayerPacket
-        {
-            unsigned int playerID;
-            unsigned char playerState;
-            boolean isAttacking;
-            int8_t playerHealth;
-            irr::core::vector3df playerPosition;
-            irr::core::vector3df playerRotation;
-        private:
-            char Padding[2];
-        public:
-            RakNet::MessageID messageType;
-        };
-       
         /// <summary> Determines if this player is this users player or not </summary>
         bool MainPlayer = false;
         irr::s32 ID;
@@ -103,7 +89,7 @@ namespace Confus
         void setConnection(Networking::ClientConnection* a_Connection);
         
         /// <summary> Sets the connection to the server. </summary>
-        void sendMessageToServer() const;
+        void updateServer() const;
 
     private:
         /// <summary> Starts the walking animation, which is the default animation. </summary>
@@ -117,9 +103,6 @@ namespace Confus
 
         /// <summary> Starts the heavy attack, which deals more damage. </summary>
         void startHeavyAttack();
-        
-        /// <summary> Returns an updated playerpacket. </summary>
-        PlayerPacket createPlayerPacket() const;
         
         /// <summary> Changes the state of the player. </summary>
         void changeState(EPlayerState a_NewState);

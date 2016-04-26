@@ -139,22 +139,29 @@ namespace ConfusServer
         m_Attacking = true;
         m_Weapon.enableCollider();
         m_Weapon.resetCollider();
+        std::cout << "Attacking on server" << std::endl;
     }
 
     void Player::startLightAttack()
     {
-        PlayerNode->setFrameLoop(38, 41);
-        PlayerNode->setCurrentFrame(38);
-        m_Weapon.Damage = LightAttackDamage;
-        initializeAttack();
+        if(!m_Attacking) 
+        {
+            PlayerNode->setFrameLoop(38, 41);
+            PlayerNode->setCurrentFrame(38);
+            m_Weapon.Damage = LightAttackDamage;
+            initializeAttack();
+        }
     }
 
     void Player::startHeavyAttack()
     {
-        PlayerNode->setFrameLoop(60, 66);
-        PlayerNode->setCurrentFrame(60);
-        m_Weapon.Damage = HeavyAttackDamage;
-        initializeAttack();
+        if(!m_Attacking)
+        {
+            PlayerNode->setFrameLoop(60, 66);
+            PlayerNode->setCurrentFrame(60);
+            m_Weapon.Damage = HeavyAttackDamage;
+            initializeAttack();
+        }
     }
 
     void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node)
@@ -176,8 +183,8 @@ namespace ConfusServer
         {
             m_FootstepSoundEmitter->playFootStepSound();
         }
-        std::cout << "Player rotation X on server is: " << getRotation().X << "\n";
-        std::cout << "Player position Y on server is: " << getPosition().Y << "\n";
+        //std::cout << "Player rotation X on server is: " << getRotation().X << "\n";
+        //std::cout << "Player position Y on server is: " << getPosition().Y << "\n";
     }
 
     void Player::createAudioEmitter()
@@ -191,16 +198,20 @@ namespace ConfusServer
 
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::Connection::EPacketType::Player), [this](RakNet::BitStream* a_Data)
         {
-            PlayerPacket packet;
-            RakNet::Time timeStamp;
+            unsigned int playerID;
             irr::core::vector3df position;
             irr::core::vector3df rotation;
             EPlayerState state;
+            RakNet::Time stateChangeTime;
+            unsigned int playerHealth;
 
-            a_Data->Read(timeStamp);
+            a_Data->IgnoreBytes(sizeof(unsigned char));
+            a_Data->Read(playerID);
             a_Data->Read(position);
             a_Data->Read(rotation);
             a_Data->Read(state);
+            a_Data->Read(stateChangeTime);
+            a_Data->Read(playerHealth);
 
             setPosition(position);
             setRotation(rotation);
@@ -208,15 +219,11 @@ namespace ConfusServer
             if(state == EPlayerState::LightAttacking)
             {
                 startLightAttack();
-                std::cout << "State is heavy attack, calling this on the server";
             }
             else if(state == EPlayerState::HeavyAttacking)
             {
                 startHeavyAttack();
-                std::cout << "State is heavy attack, calling this on the server";
             }
     });
-        
     }
-
 }
