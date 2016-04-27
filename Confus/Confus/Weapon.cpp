@@ -2,21 +2,29 @@
 #include <math.h>
 
 #include "Weapon.h"
+#include "../ConfusShared/Physics/RigidBody.h"
+#include "../ConfusShared/Physics/PhysicsWorld.h"
+#include <iostream>
 
 namespace Confus
 {
-    Weapon::Weapon(irr::scene::ISceneManager* a_SceneManager, irr::core::vector3df a_Dimensions)
+    Weapon::Weapon(irr::scene::ISceneManager* a_SceneManager, Physics::PhysicsWorld& a_World,
+		irr::core::vector3df a_Dimensions)
     {
         m_Node = a_SceneManager->addCubeSceneNode(1.0f, nullptr, -1, irr::core::vector3df(), irr::core::vector3df(),
             a_Dimensions);
         m_Node->setVisible(false);
 
-        m_Collider->setCallback([this](irr::scene::ISceneNode* a_CollidedNode)
+		m_Collider = a_World.createBoxCollider(a_Dimensions, m_Node, Physics::ECollisionFilter::Interactable,
+			Physics::ECollisionFilter::Player);
+		m_Collider->getRigidBody()->makeKinematic();
+		m_Collider->getRigidBody()->enableTriggerState();
+        m_Collider->setTriggerEnterCallback([this](Physics::BoxCollider* a_Other)
         {
             if(!m_Collided)
             {
                 m_Collided = true;
-                damagePlayer(a_CollidedNode);
+                damagePlayer(a_Other->getRigidBody()->getAttachedNode());
             }
             return true;
         });

@@ -1,10 +1,12 @@
 #pragma once
-#include <memory>
-
-#include "Collider.h"
+#include "../ConfusShared/Physics/BoxCollider.h"
 
 namespace Confus
 {    
+	namespace Physics
+	{
+		class PhysicsWorld;
+	}
     /// <summary> The weapon used by the player in order to deal damage to others </summary>
     /// <remarks> 
     /// Will basically be used by the Player class only,
@@ -19,10 +21,10 @@ namespace Confus
         /// <summary> The angle at which an attack is seen as a backstab</summary>
         irr::f32 BackstabAngle = 45.0f;
     private:
-        /// <summary> The collider instance used for collision callbacks </summary>
-        std::unique_ptr<Collider> m_Collider = nullptr;
+        /// <summary> The collider </summary>
+		Physics::BoxCollider* m_Collider;
 
-        /// <summary> The irrlicht scnee node </summary>
+        /// <summary> The irrlicht scene node </summary>
         irr::scene::ISceneNode* m_Node;
 
         /// <summary> Whether a collision has been trigered between now and the call to <see cref="resetCollider"> </summary> 
@@ -33,7 +35,8 @@ namespace Confus
         /// <summary> Initializes a new instance of the <see cref="Weapon"/> class </summary>
         /// <param name="a_SceneManager">The active scene manager </param>
         /// <param name="a_Dimensions">The dimensions of the weapon </param>
-        Weapon(irr::scene::ISceneManager* a_SceneManager, irr::core::vector3df a_Dimensions);
+        Weapon(irr::scene::ISceneManager* a_SceneManager, Physics::PhysicsWorld& a_World,
+			irr::core::vector3df a_Dimensions);
 
         /// <summary> Enables the collider.of the weapon, making it possible to damage players </summary>
         /// <remarks> 

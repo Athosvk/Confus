@@ -13,7 +13,6 @@ namespace Confus
         loadMesh();
         setSceneNode(a_Position, a_Rotation);
         setTexture();
-        addMeshCollider();
         addLight(a_Position);
     }
 

@@ -15,7 +15,7 @@ namespace Confus
     const unsigned Player::HeavyAttackDamage = 30u;
 
 	Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, irr::s32 a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
-		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
+		: m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.5f, 0.5f, 3.0f)),
 		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), a_ID),
 		TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
 		CarryingFlag(new EFlagEnum(EFlagEnum::None))
@@ -129,7 +129,7 @@ namespace Confus
 		movementDirection.rotateXZBy(-CameraNode->getRotation().Y);
 		movementDirection = movementDirection.normalize();
 		auto rigidBody = m_Collider->getRigidBody();
-		const float Speed = 5.0f;
+		const float Speed = 15.0f;
 		auto resultingVelocity = irr::core::vector3df(movementDirection.X, 0.0f, movementDirection.Z) * Speed
 			+ irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
 		rigidBody->setVelocity(resultingVelocity);
