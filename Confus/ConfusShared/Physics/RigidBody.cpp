@@ -71,11 +71,13 @@ namespace Confus
 		void RigidBody::enableTriggerState()
 		{
 			m_Body->setCollisionFlags(m_Body->getCollisionFlags() | btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
+			m_Trigger = true;
 		}
 
 		void RigidBody::disableTriggerState()
 		{
 			m_Body->setCollisionFlags(m_Body->getCollisionFlags() & ~btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
+			m_Trigger = false;
 		}
 
 		void RigidBody::setVelocity(irr::core::vector3df a_Velocity) const
@@ -116,6 +118,11 @@ namespace Confus
 		{
 			m_Body->forceActivationState(DISABLE_DEACTIVATION);
 			m_SleepingAllowed = false;
+		}
+
+		bool RigidBody::isTrigger() const
+		{
+			return m_Trigger;
 		}
 
 		void RigidBody::setAbsoluteTransform(const btTransform& a_Transform) const
