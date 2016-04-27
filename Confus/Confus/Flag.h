@@ -1,18 +1,10 @@
 #pragma once
+#include "../Common/TeamIdentifier.h"
 
 namespace Confus 
 {
 class Player;
 class Collider;
-
-/// <summary> The Team's Identifier. A player has a team, flag has a team, ui has a team, etc. </summary>
-enum class ETeamIdentifier 
-{
-	
-	None, ///< This object doesn't have a team identifier.
-	TeamRed, ///< This object has a red team identifier.
-	TeamBlue ///< This object has a blue team identifier.
-};
 
 /// <summary> The Flag's status. A player can have flagtaken or no flag. A flag can be taken, dropped or at base. </summary>
 enum class EFlagEnum
@@ -33,7 +25,7 @@ enum class EFlagEnum
         ETeamIdentifier* m_TeamIdentifier;
         irr::scene::IMeshSceneNode* m_FlagNode;
         Collider* m_Collider;
-        irr::scene::ISceneNode* m_FlagOldParent;
+        irr::scene::ISceneNode* m_FlagOldParent = nullptr;
 		EFlagEnum* m_FlagStatus;
 
     public: 
