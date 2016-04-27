@@ -24,8 +24,8 @@ namespace Confus
         m_SecondPlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamRed, false),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_PhysicsWorld),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_PhysicsWorld),
-        m_RedRespawnFloor(m_Device),
-        m_BlueRespawnFloor(m_Device),
+        m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
+        m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
 		m_GUI(m_Device, &m_PlayerNode)
     {
 		auto videoDriver = m_Device->getVideoDriver();
@@ -58,9 +58,6 @@ namespace Confus
         m_SecondPlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-
-        m_BlueRespawnFloor.setPosition(irr::core::vector3df(0.f, 3.45f, 11.f));
-        m_RedRespawnFloor.setPosition(irr::core::vector3df(0.f, 3.45f, -83.f));
 
         m_Device->setEventReceiver(&m_EventManager);
         m_Device->getCursorControl()->setVisible(false);
@@ -151,12 +148,12 @@ namespace Confus
 
 		static float timer = 0.0f;
 		timer += static_cast<float>(m_DeltaTime);
-		if(timer >= 3.0f && timer <= 8.0f)
+		if(timer >= 3.0f)
 		{
 			m_BlueRespawnFloor.enableCollision();
 			m_RedRespawnFloor.enableCollision();
 		}
-		if(timer >= 100.0f)
+		if(timer >= 20.0f)
 		{
 			timer = 0.0f;
 			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
