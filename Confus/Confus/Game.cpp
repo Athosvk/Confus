@@ -12,7 +12,7 @@
 
 namespace Confus
 {
-    const double Game::FixedUpdateInterval = 0.02;
+    const double Game::FixedUpdateInterval = 0.03;
     const double Game::MaxFixedUpdateInterval = 0.1;
 
     Game::Game(irr::core::dimension2d<irr::u32> a_Resolution)
@@ -22,8 +22,8 @@ namespace Confus
 			irr::core::vector2df(30., 30.), m_PhysicsWorld),
         m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true),
         m_SecondPlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamRed, false),
-        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
-        m_RedFlag(m_Device, ETeamIdentifier::TeamRed),
+        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_PhysicsWorld),
+        m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_PhysicsWorld),
         m_RedRespawnFloor(m_Device),
         m_BlueRespawnFloor(m_Device),
 		m_GUI(m_Device, &m_PlayerNode)
