@@ -7,6 +7,7 @@
 #include "ICollider.h"
 #include "RigidBody.h"
 #include "DebugDrawer.h"
+#include "ECollisionFilter.h"
 
 namespace Confus
 {
@@ -69,12 +70,14 @@ namespace Confus
 			/// <returns>
 			/// A handle to the created box collider
 			/// </returns>
-			BoxCollider* createBoxCollider(irr::core::vector3df a_Extents, irr::scene::ISceneNode* a_AttachedNode);
+			BoxCollider* createBoxCollider(irr::core::vector3df a_Extents, irr::scene::ISceneNode* a_AttachedNode,
+				ECollisionFilter a_Group = ECollisionFilter::All, ECollisionFilter a_Mask = ECollisionFilter::None);
 
 			/// <summary> Creates and places a new box collider from the scene node's bounding box into the physics world for simulations </summary>
 			/// <param name="a_AttachedNode"> The node the collider is attached to </param>
 			/// <returns> A handle to the created box collider </returns>
-			BoxCollider* createBoxCollider(irr::scene::ISceneNode* a_AttachedNode);
+			BoxCollider* createBoxCollider(irr::scene::ISceneNode* a_AttachedNode, ECollisionFilter a_Group = ECollisionFilter::Other,
+				ECollisionFilter a_Mask = ECollisionFilter::All);
 
 			/// <summary> Advanced the physics simulation based on the entered delta time value </summary>
 			/// <param name="a_DeltaTime"> 
@@ -112,7 +115,7 @@ namespace Confus
 			/// <returns> The created RigidBody </returns>
 			/// <remarks> The created Rigid Body has a mass of one and is dynamic by default </remarks>
 			std::unique_ptr<RigidBody> createRigidBody(btCollisionShape* a_Shape,
-				irr::scene::ISceneNode* a_AttachedNode);
+				irr::scene::ISceneNode* a_AttachedNode, ECollisionFilter a_Group, ECollisionFilter a_Mask);
 		};
 	}
 }

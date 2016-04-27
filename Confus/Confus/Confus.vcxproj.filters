@@ -64,5 +64,7 @@
     <ClInclude Include="StaticWall.h" />
     <ClInclude Include="WalledMazeTile.h" />
     <ClInclude Include="Weapon.h" />
+    <ClInclude Include="Physics\ECollisionFilter.h" />
+    <ClInclude Include="EnumUtility.h" />
   </ItemGroup>
 </Project>

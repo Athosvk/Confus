@@ -1,7 +1,6 @@
 #include "PhysicsWorld.h"
 #include "BoxCollider.h"
 #include "../Game.h"
-#include "ECollisionFilter.h"
 
 namespace Confus
 {
@@ -61,20 +60,21 @@ namespace Confus
 		}
 
 
-		BoxCollider* PhysicsWorld::createBoxCollider(irr::core::vector3df a_Extents,
-			irr::scene::ISceneNode* a_AttachedNode)
+		BoxCollider* PhysicsWorld::createBoxCollider(irr::core::vector3df a_Extents, irr::scene::ISceneNode* a_AttachedNode, 
+			ECollisionFilter a_Group, ECollisionFilter a_Mask)
 		{
 			auto shape = std::make_unique<btBoxShape>(toBulletVector(a_Extents / 2));
-			auto rigidBody = createRigidBody(shape.get(), a_AttachedNode);
+			auto rigidBody = createRigidBody(shape.get(), a_AttachedNode, a_Group, a_Mask);
 			auto collider = std::make_unique<BoxCollider>(std::move(shape), rigidBody.get());
 			m_Colliders.emplace_back(std::move(collider), std::move(rigidBody));
 			return static_cast<BoxCollider*>(m_Colliders.back().Shape.get());
 		}
 
-		BoxCollider* PhysicsWorld::createBoxCollider(irr::scene::ISceneNode* a_AttachedNode)
+		BoxCollider* PhysicsWorld::createBoxCollider(irr::scene::ISceneNode* a_AttachedNode, ECollisionFilter a_Group,
+			ECollisionFilter a_Mask)
 		{
 			return createBoxCollider(a_AttachedNode->getBoundingBox().getExtent() * a_AttachedNode->getScale(), 
-				a_AttachedNode);
+				a_AttachedNode, a_Group, a_Mask);
 		}
 
 		btVector3 PhysicsWorld::toBulletVector(const irr::core::vector3df& a_Vector)
@@ -92,12 +92,12 @@ namespace Confus
 		}
 
 		std::unique_ptr<RigidBody> PhysicsWorld::createRigidBody(btCollisionShape* a_Shape, 
-			irr::scene::ISceneNode* a_AttachedNode)
+			irr::scene::ISceneNode* a_AttachedNode, ECollisionFilter a_Group, ECollisionFilter a_Mask)
 		{
 			btRigidBody::btRigidBodyConstructionInfo rigidBodyInfo =
 				btRigidBody::btRigidBodyConstructionInfo(1.0f, nullptr, a_Shape);
 			auto rigidBody = std::make_unique<btRigidBody>(rigidBodyInfo);
-			m_World.addRigidBody(rigidBody.get());
+			m_World.addRigidBody(rigidBody.get(), static_cast<short>(a_Group), static_cast<short>(a_Mask));
 			return std::make_unique<RigidBody>(std::move(rigidBody), a_AttachedNode);
 		}
 	}

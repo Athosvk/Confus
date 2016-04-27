@@ -94,11 +94,13 @@ namespace Confus
 					if(std::string(static_cast<const char*>(node->getName())).find("Ground", 0) != std::string::npos)
 					{
 						collider = m_PhysicsWorld.createBoxCollider(irr::core::vector3df(node->getBoundingBox().getExtent().X * 
-							node->getScale().X, 0.3f, node->getBoundingBox().getExtent().Z * node->getScale().Z), node);
+							node->getScale().X, 0.3f, node->getBoundingBox().getExtent().Z * node->getScale().Z), node,
+							Physics::ECollisionFilter::LevelStatic, Physics::ECollisionFilter::Player);
 					}
 					else
 					{
-						collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node);
+						collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, Physics::ECollisionFilter::LevelStatic, 
+							Physics::ECollisionFilter::Player);
 					}
 					collider->getRigidBody()->makeStatic();
 					break;

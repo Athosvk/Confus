@@ -16,7 +16,8 @@ namespace Confus
         loadTextures(a_Device->getVideoDriver());
         m_MeshNode->setPosition(m_RegularPosition);
 		m_MeshNode->setScale(a_Scale);
-		m_RigidBody = a_PhysicsWorld.createBoxCollider(m_MeshNode)->getRigidBody();
+		m_RigidBody = a_PhysicsWorld.createBoxCollider(m_MeshNode, Physics::ECollisionFilter::MoveableWall,
+			Physics::ECollisionFilter::Player)->getRigidBody();
 		m_RigidBody->makeKinematic();
         solidify();
     }
