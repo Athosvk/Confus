@@ -5,8 +5,10 @@
 #include "Flag.h"
 #include "Player.h"
 #include "Collider.h"
-#include "Debug.h"
+
 #define Debug_Console
+#include "../Common/Debug.h"
+
 
 
 namespace Confus {

@@ -18,6 +18,14 @@ namespace Confus
 {
     namespace Networking
     {
+        /// <summary> The type of packet </summary>
+        enum class EPacketType : unsigned char
+        {
+            Message = ID_USER_PACKET_ENUM + 1,
+            ScoreUpdate = Message + 1,
+            PlayerAttack = ScoreUpdate + 1,
+            MazeChange = PlayerAttack + 1
+        };
         /// <summary>
         /// Represents a connection to the server that this clients is connected to.
         /// A game should only have one of these, since a client will only connect to one
@@ -32,12 +40,6 @@ namespace Confus
         class ClientConnection
         {
 		private:
-			/// <summary> The type of packet </summary>
-			enum class EPacketType : unsigned char
-			{
-				Message = 1 + ID_USER_PACKET_ENUM
-			};
-
             /// <summary> The RakNet interface for interacting with RakNet </summary>
 			RakNet::RakPeerInterface* m_Interface;
 			/// <summary> The messages it was not able to send yet due to not having a connection established </summary>

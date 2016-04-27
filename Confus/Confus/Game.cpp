@@ -1,14 +1,19 @@
 #include <Irrlicht/irrlicht.h>
-#include <time.h>
 #include <iostream>
+#include <RakNet/BitStream.h>
+#include <RakNet/MessageIdentifiers.h>
+#include <RakNet/GetTime.h>
 
 #include "Game.h"
 #include "Player.h"
 #include "Flag.h"
 #include "FlagGUI.h"
+
 #include "ScoreGUI.h"
 #define DEBUG_CONSOLE
-#include "Debug.h"
+#include "../Common/Debug.h"
+#include "../Common/TeamIdentifier.h"
+
 
 namespace Confus
 {
@@ -52,7 +57,7 @@ namespace Confus
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
         m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
-        sceneManager->loadScene("Media/IrrlichtScenes/Bases 2.irr", nullptr, m_LevelRootNode);
+        sceneManager->loadScene("Media/IrrlichtScenes/Bases2.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
         
@@ -131,6 +136,26 @@ namespace Confus
         std::cin >> serverPort;
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Packet) {
+            int timeMazeChanges, mazeSeed;
+            RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
+            inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+            inputStream.Read(timeMazeChanges);
+            inputStream.Read(mazeSeed);
+            std::cout << "Update is in " << (timeMazeChanges - static_cast<int>(RakNet::GetTimeMS())) << " ms, the seed is:\t" << mazeSeed << std::endl;
+            m_MazeGenerator.refillMainMazeRequest(mazeSeed, timeMazeChanges);
+        });
+
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [](RakNet::Packet* a_Packet) {
+            int redScore, blueScore;
+            RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
+            inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+            inputStream.Read(redScore);
+            inputStream.Read(blueScore);
+            ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, redScore);
+            ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, blueScore);
+            std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
+        });
     }
 
     void Game::handleInput()
@@ -196,7 +221,6 @@ namespace Confus
 		if (timer >= 9.0f)
 		{
 			timer = 0.0f;
-			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
             m_BlueRespawnFloor.disableCollision();
             m_RedRespawnFloor.disableCollision();
 		}

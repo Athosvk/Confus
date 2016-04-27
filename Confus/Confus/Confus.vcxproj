@@ -191,6 +191,7 @@ lib /out:Confus.lib *.obj</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ClientTeamScore.cpp" />
     <ClCompile Include="Announcer.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="EventManager.cpp" />
@@ -220,10 +221,12 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Common\Debug.h" />
+    <ClInclude Include="..\Common\TeamIdentifier.h" />
+    <ClInclude Include="ClientTeamScore.h" />
     <ClInclude Include="Announcer.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="EventManager.h" />
-    <ClInclude Include="Debug.h" />
     <ClInclude Include="Flag.h" />
     <ClInclude Include="FlagGUI.h" />
     <ClInclude Include="Game.h" />
