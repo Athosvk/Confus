@@ -63,16 +63,12 @@ namespace Confus
         /// </summary>
         bool m_Transitioning = false;
 
-        /// <summary>
-        /// The triangle selector used for collision detection
-        /// </summary>
-        irr::scene::ITriangleSelector* m_TriangleSelector;
-
 		/// <summary>
 		/// If the wall is raised or lowered
 		/// </summary>
 		bool m_Raised = true;
-
+		
+		/// <summary> The rigid body for collision detection </summary>
 		Physics::RigidBody* m_RigidBody = nullptr;
 
     public:        

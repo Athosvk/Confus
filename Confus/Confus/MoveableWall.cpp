@@ -40,7 +40,6 @@ namespace Confus
     {
         IrrAssimp importer(a_SceneManager);
         m_MeshNode = a_SceneManager->addAnimatedMeshSceneNode(a_SceneManager->getMesh("Media/Meshes/WallMeshSquare.irrmesh"));
-        m_TriangleSelector = a_SceneManager->createTriangleSelector(m_MeshNode);
     }
 
     void MoveableWall::hide()
