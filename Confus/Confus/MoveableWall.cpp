@@ -24,10 +24,6 @@ namespace Confus
 
     MoveableWall::~MoveableWall()
     {
-        //m_MeshNode->drop();
-        //m_TriangleSelector->drop();
-        //m_RegularTexture->drop();
-        //m_TransparentTexture->drop();
     }
 
     void MoveableWall::loadTextures(irr::video::IVideoDriver* a_VideoDriver)
@@ -38,7 +34,6 @@ namespace Confus
 
     void MoveableWall::loadMesh(irr::scene::ISceneManager* a_SceneManager)
     {
-        IrrAssimp importer(a_SceneManager);
         m_MeshNode = a_SceneManager->addAnimatedMeshSceneNode(a_SceneManager->getMesh("Media/Meshes/WallMeshSquare.irrmesh"));
     }
 

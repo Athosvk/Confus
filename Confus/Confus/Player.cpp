@@ -152,17 +152,6 @@ namespace Confus
         return m_Mesh->getBoundingBox();
     }
 
-    void Player::setLevelCollider(irr::scene::ISceneManager* a_SceneManager,
-        irr::scene::ITriangleSelector* a_Level)
-    {
-        //CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level, PlayerNode, {0.1f, 0.2f, 0.1f}, { 0, -1, 0 }, {0, 1.5f, 0}));
-        
-        irr::scene::ITriangleSelector* selector = nullptr;
-        selector = a_SceneManager->createTriangleSelector(PlayerNode);
-        CameraNode->setTriangleSelector(selector);
-        selector->drop();
-    }
-
     void Player::startWalking() const
     {
         PlayerNode->setAnimationEndCallback(nullptr);

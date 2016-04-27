@@ -52,12 +52,6 @@ namespace Confus {
         initParticleSystem(sceneManager);
 	}
 
-    void Flag::setCollisionTriangleSelector(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_TriangleSelector) 
-    {
-        auto animator = a_SceneManager->createCollisionResponseAnimator(a_TriangleSelector, m_FlagNode, { 1.25f, 1.f, 1.25f });
-        m_FlagNode->addAnimator(animator);
-    }
-
 	//Set color & position based on color of flag
 	void Flag::setColor(irr::video::IVideoDriver* a_VideoDriver) 
 	{
@@ -210,10 +204,6 @@ namespace Confus {
         m_FlagNode->setRotation(*m_StartRotation);
 		*m_FlagStatus = EFlagEnum::FlagBase;
     }
-
-	irr::scene::ITriangleSelector* Flag::GetTriangleSelector(irr::scene::ISceneManager* a_SceneManager) {
-		return a_SceneManager->createTriangleSelectorFromBoundingBox(m_FlagNode);
-	}
 
 	Flag::~Flag() {
         m_FlagNode->setParent(m_FlagOldParent);

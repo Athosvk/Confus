@@ -22,10 +22,6 @@ namespace Confus
         /// <summary> The collider instance used for collision callbacks </summary>
         std::unique_ptr<Collider> m_Collider = nullptr;
 
-        /// <summary> The triangle selector used for collision </summary>
-        /// <remarks> Stored so that we can temporarily disable it </remarks>
-        irr::scene::ITriangleSelector* m_TriangleSelector;
-
         /// <summary> The irrlicht scnee node </summary>
         irr::scene::ISceneNode* m_Node;
 

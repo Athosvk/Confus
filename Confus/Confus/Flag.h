@@ -65,15 +65,6 @@ namespace Confus
 		/// <param name="a_PlayerObject"> Score a point for the player object. </param>
 		void score(Player* a_PlayerObject);
 
-		/// <summary> Set the collision of the level and players and add an physics animation. </summary>
-		/// <param name="a_SceneManager"> Pass the scenemanager to add a physics animator. </param>
-		/// <param name="a_TriangleSelector"> The triangle seletor that has the level and players. </param>
-        void setCollisionTriangleSelector(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_TriangleSelector);
-
-		/// <summary> Get the triangle selector of the flag mesh. </summary>
-		/// <param name="a_SceneManager"> Pass the scenemanager to get the triangle selector. </param>
-		irr::scene::ITriangleSelector* GetTriangleSelector(irr::scene::ISceneManager* a_SceneManager);
-
 		const irr::video::SColor getColor()const;
 		const EFlagEnum* getFlagStatus() const;
     private:
