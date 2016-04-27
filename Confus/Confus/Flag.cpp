@@ -5,7 +5,7 @@
 #include "Flag.h"
 #include "Player.h"
 #include "Collider.h"
-#include "Debug.h"
+
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "../ConfusShared/Physics/BoxCollider.h"
 

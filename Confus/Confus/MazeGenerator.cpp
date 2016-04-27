@@ -1,3 +1,5 @@
+#include <RakNet\GetTime.h>
+
 #include "MazeGenerator.h"
 #include "WalledMazeTile.h"
 
@@ -15,6 +17,12 @@ namespace Confus
 
 	void MazeGenerator::fixedUpdate()
 	{
+        int currentTime = RakNet::GetTimeMS();
+        if(!hasBeenRefilled && currentTime > refillMazeTime)
+        {
+            refillMainMaze(m_Seed);
+            hasBeenRefilled = true;
+        }
 		m_MainMaze.fixedUpdate();
 	}
 
@@ -145,7 +153,17 @@ namespace Confus
 		return neighbours;
 	}
 
-	MazeGenerator::~MazeGenerator()
+    void MazeGenerator::refillMainMazeRequest(int a_Seed, int a_ChangeWantedTime)
+    {
+        if(a_ChangeWantedTime > refillMazeTime)
+        {
+            refillMazeTime = a_ChangeWantedTime;
+            m_Seed = a_Seed;
+            hasBeenRefilled = false;
+        }
+    }
+
+    MazeGenerator::~MazeGenerator()
 	{
 	}
 }

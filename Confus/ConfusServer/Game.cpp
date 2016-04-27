@@ -1,38 +1,42 @@
 #include <Irrlicht/irrlicht.h>
 #include <time.h>
 #include <iostream>
+#include <RakNet\GetTime.h>
 
+#define DEBUG_CONSOLE
 #include "Game.h"
 #include "Player.h"
 #include "Flag.h"
-#define DEBUG_CONSOLE
-#include "Debug.h"
+#include "../Common/Debug.h"
+#include "../Common/TeamIdentifier.h"
 
 namespace ConfusServer
 {
     const double Game::FixedUpdateInterval = 0.02;
     const double Game::MaxFixedUpdateInterval = 0.1;
-
 	const double Game::ProcessPacketsInterval = 0.03;
+    const double Game::MazeDelay = 2.0;
+    const double Game::MazeChangeInterval = 10.0 - MazeDelay;
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),
 		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
         m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, true),        
         m_SecondPlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, false),
-        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
-        m_RedFlag(m_Device, ETeamIdentifier::TeamRed)
+        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_TeamScoreManager),
+        m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_TeamScoreManager)
     {
     }
 
     void Game::run()
     {
         initializeConnection();
+
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
         m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
-        sceneManager->loadScene("Media/IrrlichtScenes/Bases 2.irr", nullptr, m_LevelRootNode);
+        sceneManager->loadScene("Media/IrrlichtScenes/Bases2.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
         
@@ -65,6 +69,7 @@ namespace ConfusServer
     void Game::initializeConnection()
     {
         m_Connection = std::make_unique<Networking::Connection>();
+        m_TeamScoreManager.setConnection(m_Connection.get());
     }
 
 	void Game::processConnection()
@@ -132,12 +137,31 @@ namespace ConfusServer
 
         m_PlayerNode.update();
         m_Listener.setPosition(m_PlayerNode.CameraNode->getAbsolutePosition());
-        irr::core::quaternion playerRotation(m_PlayerNode.CameraNode->getRotation());
 
-        //Todo: Fix rotations
+        irr::core::quaternion playerRotation(m_PlayerNode.CameraNode->getRotation());
         irr::core::vector3df upVector = playerRotation * irr::core::vector3df( 0, 1, 0 );
         irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
-        m_Listener.setDirection(forwardVector, upVector);     
+        m_Listener.setDirection(forwardVector, upVector);
+
+        static float currentDelay = 0.0f;
+        static int currentSeed;
+        m_MazeTimer += m_DeltaTime;
+        if(m_MazeTimer >= MazeChangeInterval)
+        {
+            if(currentDelay >= MazeDelay)
+            {
+                m_MazeGenerator.refillMainMaze(currentSeed);
+                m_MazeTimer = 0.0f;
+                currentDelay = 0.0f;
+            }
+            if(currentDelay == 0.0f)
+            {
+                currentSeed = static_cast<int>(time(0)) % 1000;
+                m_TeamScoreManager.teamScoredPoint(static_cast<ETeamIdentifier>(1 + rand() % 2));
+                broadcastMazeChange(currentSeed);
+            }
+            currentDelay += static_cast<float>(m_DeltaTime);
+        }
     }
 
     void Game::processFixedUpdates()
@@ -153,14 +177,18 @@ namespace ConfusServer
 
     void Game::fixedUpdate()
     {
-		static float timer = 0.0f;
-		timer += static_cast<float>(m_DeltaTime);
-		if (timer >= 9.0f)
-		{
-			timer = 0.0f;
-			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
-		}
 		m_MazeGenerator.fixedUpdate();
+    }
+
+    void Game::broadcastMazeChange(int a_Seed)
+    {
+        int newTime = static_cast<int>(RakNet::GetTimeMS()) + (static_cast<int>(MazeDelay * 1000));
+
+        RakNet::BitStream bitStream;
+        bitStream.Write(static_cast<RakNet::MessageID>(Networking::Connection::EPacketType::MazeChange));
+        bitStream.Write(newTime);
+        bitStream.Write(a_Seed);
+        m_Connection->broadcastBitstream(bitStream);
     }
 
     void Game::addPlayer(RakNet::Packet* a_Data)
@@ -168,7 +196,7 @@ namespace ConfusServer
         long long id = static_cast<long long>(a_Data->guid.g);
 
         Player newPlayer(m_Device, id, m_PlayerArray.size() % 2 == 0 ? ETeamIdentifier::TeamRed : ETeamIdentifier::TeamBlue, false);
-        
+
         m_PlayerArray.push_back(&newPlayer);
         std::cout << id << " joined" << std::endl;
     }

@@ -75,6 +75,7 @@
     <LibraryPath>$(SolutionDir)../Libraries/32 bit/Debug;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <SourcePath>$(SolutionDir)Common;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -211,13 +212,15 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Audio\PlayerAudioEmitter.cpp" />
     <ClCompile Include="StaticWall.cpp" />
+    <ClCompile Include="TeamScore.cpp" />
     <ClCompile Include="WalledMazeTile.cpp" />
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Common\Debug.h" />
+    <ClInclude Include="..\Common\TeamIdentifier.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="EventManager.h" />
-    <ClInclude Include="Debug.h" />
     <ClInclude Include="Flag.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Health.h" />
@@ -235,6 +238,7 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClInclude Include="Player.h" />
     <ClInclude Include="Audio\PlayerAudioEmitter.h" />
     <ClInclude Include="StaticWall.h" />
+    <ClInclude Include="TeamScore.h" />
     <ClInclude Include="WalledMazeTile.h" />
     <ClInclude Include="Weapon.h" />
   </ItemGroup>

@@ -68,7 +68,7 @@ namespace Confus
         }
         if(a_TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
-            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
+            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 0.f));
         }
         else if(a_TeamIdentifier == ETeamIdentifier::TeamRed)
         {

@@ -10,6 +10,7 @@
 #include "Flag.h"
 #include "RespawnFloor.h"
 #include "GUI.h"
+#include "ClientTeamScore.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 
 namespace Confus
@@ -89,7 +90,7 @@ namespace Confus
 		/// <summary>
 		/// The connection as a client to the server that we are currently connected to
 		/// </summary>
-		std::unique_ptr<Networking::ClientConnection> m_Connection;		
+		std::unique_ptr<Networking::ClientConnection> m_Connection;
 
     public:
         /// <summary>

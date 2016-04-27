@@ -1,22 +1,14 @@
 #pragma once
+#include "../Common/TeamIdentifier.h"
 
 namespace Confus 
 {
+	class Player;
 	namespace Physics
 	{
 		class BoxCollider;
 		class PhysicsWorld;
 	}
-	class Player;
-	class Collider;
-
-	/// <summary> The Team's Identifier. A player has a team, flag has a team, ui has a team, etc. </summary>
-	enum class ETeamIdentifier 
-	{
-		None, ///< This object doesn't have a team identifier.
-		TeamRed, ///< This object has a red team identifier.
-		TeamBlue ///< This object has a blue team identifier.
-	};
 
 	/// <summary> The Flag's status. A player can have flagtaken or no flag. A flag can be taken, dropped or at base. </summary>
 	enum class EFlagEnum
@@ -36,15 +28,15 @@ namespace Confus
 		irr::core::vector3df* m_StartRotation;
         ETeamIdentifier* m_TeamIdentifier;
         irr::scene::IMeshSceneNode* m_FlagNode;
-        irr::scene::ISceneNode* m_FlagOldParent;
+        Physics::BoxCollider* m_Collider;
+        irr::scene::ISceneNode* m_FlagOldParent = nullptr;
 		EFlagEnum* m_FlagStatus;
-		Physics::BoxCollider* m_Collider = nullptr;
 
     public: 
         /// <summary> Flag class constructor. </summary>
         /// <param name="a_Device">The active Irrlicht Device.</param>
         /// <param name="a_TeamIdentifier">The team's identifier the flag should have.</param>
-        Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, 
+        Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier,
 			Physics::PhysicsWorld& a_PhysicsWorld);
 
         /// <summary> Flag class destructor </summary>
