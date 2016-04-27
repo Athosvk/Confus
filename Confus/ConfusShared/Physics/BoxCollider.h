@@ -32,6 +32,7 @@ namespace Confus
 			/// <param name="a_CollisionObject">The collision object.</param>
 			BoxCollider(std::unique_ptr<btBoxShape>&& a_Shape, RigidBody* a_RigidBody,
 				CollisionRegistrar& a_CollisionRegistrar);
+			virtual ~BoxCollider() override = default;
 
 			void setTriggerEnterCallback(std::function<void(BoxCollider* a_Other)>& a_Callback);
 			void setTriggerEnterCallback(std::function<void(BoxCollider* a_Other)>&& a_Callback);

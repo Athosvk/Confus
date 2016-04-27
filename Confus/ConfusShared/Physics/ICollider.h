@@ -13,8 +13,9 @@ namespace Confus
 			RigidBody* m_RigidBody;
 		protected:
 			ICollider(RigidBody* a_RigidBody);
-
 		public:
+			virtual ~ICollider() = default;
+
 			RigidBody* getRigidBody();
 		};
 	}
