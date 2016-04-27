@@ -11,8 +11,9 @@ namespace Confus
 			MoveableWall = 1,
 			Player = 2,
 			LevelStatic = 4,
-			Other = 8,
-			All = None | MoveableWall | Player | LevelStatic | Other
+			Interactable = 8,
+			Other = 16,
+			All = None | MoveableWall | Player | LevelStatic | Interactable | Other
 		};
 		EnumFlagOperators(ECollisionFilter);
 	}
