@@ -1,7 +1,7 @@
 #include "ScoreGUI.h"
 #include "GUI.h"
 #include "Game.h"
-//#include "TeamScoreManager.h"
+#include "ClientTeamScore.h"
 
 namespace Confus
 {
@@ -22,11 +22,10 @@ namespace Confus
 
 	void ScoreGUI::update()
 	{
-		int score;
-		//int score = m_TeamScoreManager->getPointsOfTeam(m_Flag->getTeamIdentifier())
+		int score = ClientTeamScore::getTeamScore(*m_Flag->getTeamIdentifier());
 		for (int i = 0; i < Game::MaxScore; i++)
 		{
-			if (score <= i)
+			if (score > i)
 				m_ScoreImages[i]->setColor(m_Flag->getColor());
 		}
 	}

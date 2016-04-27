@@ -5,6 +5,7 @@
 #include "Flag.h"
 #include "Player.h"
 #include "Collider.h"
+#include "ClientTeamScore.h"
 
 #define Debug_Console
 #include "../Common/Debug.h"
@@ -190,7 +191,8 @@ namespace Confus {
 	//TODO Score points to team of a_PlayerObject
 	void Flag::score(Player* a_PlayerObject) 
     {
-        *a_PlayerObject->CarryingFlag = EFlagEnum::None;
+         *a_PlayerObject->CarryingFlag = EFlagEnum::None;
+		 ClientTeamScore::setTeamScore(*a_PlayerObject->TeamIdentifier, ClientTeamScore::getTeamScore(*a_PlayerObject->TeamIdentifier) + 1);
 	}
 
 	void Flag::drop(Player* a_PlayerObject) 

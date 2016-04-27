@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 
-#include "Flag.h"
+#include "../Common/TeamIdentifier.h"
 #include "OpenAL\OpenALSource.h"
 namespace Confus
 {
