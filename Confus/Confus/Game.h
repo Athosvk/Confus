@@ -36,12 +36,12 @@ namespace Confus
 		/// Statics are avoided to make code clearer, hence this is not a static
         /// </summary>
         irr::IrrlichtDevice* m_Device;
+		/// <summary> The currently active physics world </summary>
+		Physics::PhysicsWorld m_PhysicsWorld;
         /// <summary>
         /// MazeGenerator that hasa accesible maze
         /// </summary>
         MazeGenerator m_MazeGenerator;
-		/// <summary> The currently active physics world </summary>
-		Physics::PhysicsWorld m_PhysicsWorld;
         /// <summary>
         /// The OpenAL listener that is attached to the camera.
         /// </summary>

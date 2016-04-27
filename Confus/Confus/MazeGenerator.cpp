@@ -3,9 +3,11 @@
 
 namespace Confus
 {
-
-	MazeGenerator::MazeGenerator(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_StartPosition, int a_InitialSeed)
-		: m_MainMaze(a_Device, a_StartPosition,true), m_ReplacementMaze(a_Device, a_StartPosition, false), m_Seed(a_InitialSeed)
+	MazeGenerator::MazeGenerator(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_StartPosition, int a_InitialSeed,
+		Physics::PhysicsWorld& a_PhysicsWorld)
+		: m_MainMaze(a_Device, a_StartPosition, a_PhysicsWorld, true), 
+		m_ReplacementMaze(a_Device, a_StartPosition, a_PhysicsWorld), 
+		m_Seed(a_InitialSeed)
 	{
 		generateMaze(m_MainMaze.MazeTiles, a_InitialSeed);
 	}

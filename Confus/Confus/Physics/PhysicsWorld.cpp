@@ -71,7 +71,8 @@ namespace Confus
 
 		BoxCollider* PhysicsWorld::createBoxCollider(irr::scene::ISceneNode* a_AttachedNode)
 		{
-			return createBoxCollider(a_AttachedNode->getTransformedBoundingBox().getExtent(), a_AttachedNode);
+			return createBoxCollider(a_AttachedNode->getBoundingBox().getExtent() * a_AttachedNode->getScale(), 
+				a_AttachedNode);
 		}
 
 		btVector3 PhysicsWorld::toBulletVector(const irr::core::vector3df& a_Vector)

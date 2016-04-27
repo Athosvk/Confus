@@ -2,9 +2,9 @@
 
 namespace Confus
 {
-
-	WalledMazeTile::WalledMazeTile(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RealPosition)
-		:m_Wall(a_Device, a_RealPosition)
+	WalledMazeTile::WalledMazeTile(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RealPosition,
+		Physics::PhysicsWorld& a_World)
+		:m_Wall(a_Device, a_RealPosition, a_World)
 	{
 	}
 

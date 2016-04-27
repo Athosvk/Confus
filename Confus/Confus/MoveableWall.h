@@ -3,6 +3,12 @@
 
 namespace Confus
 {    
+	namespace Physics
+	{
+		class PhysicsWorld;
+		class RigidBody;
+	};
+
     /// <summary>
     /// Represents a wall that transitions into and out of the maze
     /// </summary>
@@ -67,13 +73,16 @@ namespace Confus
 		/// </summary>
 		bool m_Raised = true;
 
+		Physics::RigidBody* m_RigidBody = nullptr;
+
     public:        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MoveableWall"/> class.
-        /// </summary>
-        /// <param name="a_Device">The current Irrlicht device.</param>
-        /// <param name="a_RegularPosition">The position of the wall when present in the maze.</param>
-        MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition);      
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MoveableWall" /> class.
+		/// </summary>
+		/// <param name="a_Device">The current Irrlicht device.</param>
+		/// <param name="a_RegularPosition">The position of the wall when present in the maze.</param>
+		/// <param name="a_PhysicsWorld">The active physics world </param>
+		MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition, Physics::PhysicsWorld& a_PhysicsWorld);
 
         /// <summary>
         /// Finalizes an instance of the <see cref="MoveableWall"/> class, cleans up Irrlicht resources

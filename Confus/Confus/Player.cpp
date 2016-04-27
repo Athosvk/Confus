@@ -76,7 +76,8 @@ namespace Confus
         }
 	    PlayerNode->setParent(this);
 		setParent(CameraNode);
-		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.2f), CameraNode);
+		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.05f, 0.2f, 0.05f), CameraNode);
+		m_Collider->getRigidBody()->disableSleeping();
 
         createAudioEmitter();
         startWalking();
@@ -135,9 +136,9 @@ namespace Confus
 		if(a_EventManager.IsKeyDown(irr::KEY_SPACE) && timer >= 5.0f)
 		{
 			timer = 0.0f;
-			rigidBody->applyForce(irr::core::vector3df(0.0f, 200.0f, 0.0f));
+			rigidBody->applyForce(irr::core::vector3df(0.0f, 1200.0f, 0.0f));
 		}
-		timer += 0.008f;
+		timer += 0.020f;
     }
 
     void Player::render()

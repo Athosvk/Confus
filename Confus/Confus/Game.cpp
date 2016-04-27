@@ -15,9 +15,10 @@ namespace Confus
     const double Game::MaxFixedUpdateInterval = 0.1;
 
     Game::Game()
-        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL)),
+        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_DIRECT3D9)),
 		m_PhysicsWorld(m_Device),
-		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+			m_PhysicsWorld),
         m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true),
         m_SecondPlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamRed, false),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
@@ -134,6 +135,21 @@ namespace Confus
         irr::core::vector3df upVector = playerRotation * irr::core::vector3df( 0, 1, 0 );
         irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
         m_Listener.setDirection(forwardVector, upVector);     
+
+		static float timer = 0.0f;
+		timer += static_cast<float>(m_DeltaTime);
+		if(timer >= 3.0f && timer <= 8.0f)
+		{
+			m_BlueRespawnFloor.enableCollision();
+			m_RedRespawnFloor.enableCollision();
+		}
+		if(timer >= 100.0f)
+		{
+			timer = 0.0f;
+			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
+			m_BlueRespawnFloor.disableCollision();
+			m_RedRespawnFloor.disableCollision();
+		}
     }
 
     void Game::processFixedUpdates()
@@ -181,20 +197,6 @@ namespace Confus
 
     void Game::fixedUpdate()
     {
-		static float timer = 0.0f;
-		timer += static_cast<float>(m_DeltaTime);
-        if(timer >= 3.0f && timer <= 8.0f)
-        {
-            m_BlueRespawnFloor.enableCollision();
-            m_RedRespawnFloor.enableCollision();
-        }
-		if (timer >= 9.0f)
-		{
-			timer = 0.0f;
-			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
-            m_BlueRespawnFloor.disableCollision();
-            m_RedRespawnFloor.disableCollision();
-		}
 		m_MazeGenerator.fixedUpdate();
 		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
     }

@@ -5,6 +5,11 @@
 
 namespace Confus
 {
+	namespace Physics
+	{
+		class PhysicsWorld;
+	}
+
 	/// <summary>
 	/// Contains a 2D Vector of mazeTiles, forms the Maze
 	/// </summary>
@@ -21,6 +26,8 @@ namespace Confus
 		/// The current IrrlichtDevice. Needed to pass to created MazeTiles.
 		/// </summary>
 		irr::IrrlichtDevice* m_IrrDevice;
+
+		Physics::PhysicsWorld& m_PhysicsWorld;
 
 		/// <summary>
 		/// the X size of the maze
@@ -48,8 +55,10 @@ namespace Confus
 		/// </summary>
 		/// <param name="a_Device">The current Irrlicht device.</param>
 		/// <param name="a_StartPosition">Startposition is passed on in the constructor so we might be able to adjust the position where the maze is drawn</param>
+		/// <param name="a_PhysicsWorld">The active physics world.</param>
 		/// <param name="a_NeedRender">Boolean that states if this maze needs to be rendered or not</param>
-		Maze(irr::IrrlichtDevice * a_Device, irr::core::vector3df a_StartPosition, bool a_NeedRender = false);
+		Maze(irr::IrrlichtDevice * a_Device, irr::core::vector3df a_StartPosition, Physics::PhysicsWorld& a_PhysicsWorld,
+			bool a_NeedRender = false);
 
 		/// <summary>
 		/// Resets the 2d vector, raising all mazetiles in it or making it a rendered maze

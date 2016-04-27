@@ -3,8 +3,10 @@
 
 namespace Confus
 {
-	Maze::Maze(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_StartPosition, bool a_NeedRender)
-		:m_MazeSizeX(60), m_MazeSizeY(60)
+	Maze::Maze(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_StartPosition, Physics::PhysicsWorld& a_PhysicsWorld,
+		bool a_NeedRender)
+		:m_MazeSizeX(60), m_MazeSizeY(60),
+		m_PhysicsWorld(a_PhysicsWorld)
 	{
 		m_IrrDevice = a_Device;
 		resetMaze(irr::core::vector2df(30, -7), a_NeedRender);
@@ -22,12 +24,13 @@ namespace Confus
 				if (a_NeedRender)
 				{
 					std::shared_ptr<WalledMazeTile> mazeTile = std::make_shared<WalledMazeTile>(m_IrrDevice, 
-						irr::core::vector3df(static_cast<float>(-x + a_Offset.X), 0.5f, static_cast<float>(-y + a_Offset.Y)));
+						irr::core::vector3df(static_cast<float>(-x + a_Offset.X), 0.5f, static_cast<float>(-y + a_Offset.Y)),
+						m_PhysicsWorld);
 					const irr::scene::IAnimatedMeshSceneNode* wallMeshNode = mazeTile->getWall()->getMeshNode();
 					irr::core::vector3df boundingBox = wallMeshNode->getBoundingBox().getExtent();
 					mazeTile->getWall()->HiddenPosition = irr::core::vector3df(static_cast<float>(-x + a_Offset.X), 
 						-boundingBox.Y * wallMeshNode->getScale().Y, static_cast<float>(-y + a_Offset.Y));
-					mazeTile->getWall()->TransitionSpeed = 0.5f;
+					mazeTile->getWall()->TransitionSpeed = 0.005f;
 					MazeTiles[x].push_back(mazeTile);
 				}
 				else

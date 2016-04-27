@@ -4,6 +4,11 @@
 #include "Maze.h"
 namespace Confus
 {
+	namespace Physics
+	{
+		class PhysicsWorld;
+	}
+
 	/// <summary>
 	/// Generates the maze
 	/// </summary>
@@ -34,10 +39,12 @@ namespace Confus
 		/// <summary>
 		/// Loads the necessary textures
 		/// </summary>
-		/// <param name="a_Device"> The instance of the IrrlichtDevice </param>
+		/// <param name="a_Device">The instance of the IrrlichtDevice</param>
 		/// <param name="a_StartPosition">The startposition for walls.</param>
 		/// <param name="a_InitialSeed">The initial seed used to generate the first maze.</param>
-		MazeGenerator(irr::IrrlichtDevice * a_Device, irr::core::vector3df a_StartPosition, int a_InitialSeed);
+		/// <param name="a_PhysicsWorld">The active physics world </param>
+		MazeGenerator(irr::IrrlichtDevice * a_Device, irr::core::vector3df a_StartPosition, int a_InitialSeed,
+			Physics::PhysicsWorld& a_PhysicsWorld);
 
 		/// <summary>
 		/// The fixed update used to update the state of the main maze

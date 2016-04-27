@@ -2,15 +2,20 @@
 
 #include "MoveableWall.h"
 #include "Game.h"
+#include "Physics/BoxCollider.h"
+#include "Physics/PhysicsWorld.h"
 
 namespace Confus
 {
-    MoveableWall::MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition)
+    MoveableWall::MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition, 
+		Physics::PhysicsWorld& a_PhysicsWorld)
         : m_RegularPosition(a_RegularPosition)
 	{
         loadMesh(a_Device->getSceneManager());
         loadTextures(a_Device->getVideoDriver());
         m_MeshNode->setPosition(m_RegularPosition);
+		m_RigidBody = a_PhysicsWorld.createBoxCollider(m_MeshNode)->getRigidBody();
+		m_RigidBody->makeKinematic();
         solidify();
     }
 
@@ -37,9 +42,9 @@ namespace Confus
 
     void MoveableWall::hide()
     {
-		m_MeshNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_TRANSPARENT_ALPHA_CHANNEL);
         m_TargetPosition = HiddenPosition;
         m_Transitioning = true;
+		makeTransparent();
     }
 
     void MoveableWall::rise()
@@ -76,28 +81,30 @@ namespace Confus
     {
         m_MeshNode->setMaterialTexture(0, m_RegularTexture);
         enableCollision();
+		m_MeshNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_SOLID);
     }
 
     void MoveableWall::makeTransparent()
     {
+		m_MeshNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_TRANSPARENT_ALPHA_CHANNEL);
         m_MeshNode->setMaterialTexture(0, m_TransparentTexture);
         disableCollision();
     }
 
     void MoveableWall::enableCollision()
     {
-        m_MeshNode->setTriangleSelector(m_TriangleSelector);
+		m_RigidBody->activate();
     }
 
     void MoveableWall::disableCollision()
     {
-        m_MeshNode->setTriangleSelector(nullptr);
+		m_RigidBody->deactivate();
     }
 
     void MoveableWall::updatePosition()
     {
         auto distance = (m_TargetPosition - m_MeshNode->getPosition()).getLength();
-        if(distance > 0.0f)
+        if(distance > 0.01f)
         {
             auto clampedSpeed = irr::core::clamp(TransitionSpeed, 0.0f, distance);
             auto velocity = ((m_TargetPosition - m_MeshNode->getPosition()) / distance) * clampedSpeed;
@@ -113,7 +120,6 @@ namespace Confus
 		{
 			m_Raised = true;
 			m_Transitioning = false;
-			m_MeshNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_SOLID);
 		}
     }
 }

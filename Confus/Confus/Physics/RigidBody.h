@@ -79,6 +79,12 @@ namespace Confus
 			irr::core::vector3df getVelocity() const;
 
 			void applyForce(irr::core::vector3df a_Force) const;
+
+			void deactivate();
+
+			void activate();
+
+			void disableSleeping();
 		private:
 			/// <summary> Sets the position of the attached scene node in absolute/world terms </summary>
 			/// <param name="a_Position"> The world postion </param>

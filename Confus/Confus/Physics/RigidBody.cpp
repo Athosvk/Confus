@@ -20,14 +20,20 @@ namespace Confus
 
 		void RigidBody::onPrePhysicsUpdate() const
 		{
-			syncRigidBodyTransform();
+			if(m_Type != ERigidBodyType::Static)
+			{
+				syncRigidBodyTransform();
+			}
 		}
 
 		void RigidBody::onPostPhysicsUpdate() const
 		{
-			btTransform transform;
-			m_MotionState->getWorldTransform(transform);
-			setAbsoluteTransform(transform);
+			if(m_Type != ERigidBodyType::Static)
+			{
+				btTransform transform;
+				m_MotionState->getWorldTransform(transform);
+				setAbsoluteTransform(transform);
+			}
 		}
 
 		irr::scene::ISceneNode* RigidBody::getAttachedNode() const
@@ -42,7 +48,6 @@ namespace Confus
 				~btRigidBody::CollisionFlags::CF_STATIC_OBJECT &
 				~btRigidBody::CollisionFlags::CF_KINEMATIC_OBJECT);
 			m_Body->setMassProps(static_cast<btScalar>(m_Mass), m_Body->getLocalInertia());
-			m_Body->setActivationState(DISABLE_DEACTIVATION);
 		}
 
 		void RigidBody::makeStatic()
@@ -52,7 +57,6 @@ namespace Confus
 				btRigidBody::CollisionFlags::CF_STATIC_OBJECT) &
 				~btRigidBody::CollisionFlags::CF_KINEMATIC_OBJECT);
 			m_Body->setMassProps(static_cast<btScalar>(0.0f), m_Body->getLocalInertia());
-			m_Body->setActivationState(ACTIVE_TAG);
 		}
 
 		void RigidBody::makeKinematic()
@@ -62,7 +66,6 @@ namespace Confus
 				btRigidBody::CollisionFlags::CF_KINEMATIC_OBJECT) &
 				~btRigidBody::CollisionFlags::CF_STATIC_OBJECT);
 			m_Body->setMassProps(static_cast<btScalar>(0.0f), m_Body->getLocalInertia());
-			m_Body->setActivationState(DISABLE_DEACTIVATION);
 		}
 
 		void RigidBody::enableTriggerState()
@@ -88,6 +91,23 @@ namespace Confus
 		void RigidBody::applyForce(irr::core::vector3df a_Force) const
 		{
 			m_Body->applyForce(PhysicsWorld::toBulletVector(a_Force), btVector3(0.f, 0.f, 0.f));
+		}
+
+		void RigidBody::deactivate()
+		{
+			m_Body->forceActivationState(DISABLE_SIMULATION);
+			m_Body->setCollisionFlags(m_Body->getCollisionFlags() | btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
+		}
+
+		void RigidBody::activate()
+		{
+			m_Body->forceActivationState(ACTIVE_TAG);
+			m_Body->setCollisionFlags(m_Body->getCollisionFlags() & ~btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
+		}
+
+		void RigidBody::disableSleeping()
+		{
+			m_Body->forceActivationState(DISABLE_DEACTIVATION);
 		}
 
 		void RigidBody::setAbsoluteTransform(const btTransform& a_Transform) const
