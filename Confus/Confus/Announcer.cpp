@@ -30,10 +30,26 @@ namespace Confus
 
 	void Announcer::playFlagReturnedSound(ETeamIdentifier a_TeamIdentifier)
 	{
+		if (a_TeamIdentifier == ETeamIdentifier::TeamBlue)
+		{
+			m_FlagBlueReturnedSource->play();
+		}
+		else if (a_TeamIdentifier == ETeamIdentifier::TeamRed)
+		{
+			m_FlagRedReturnedSource->play();
+		}
 	}
 
 	void Announcer::playFlagTakenSound(ETeamIdentifier a_TeamIdentifier)
 	{
+		if (a_TeamIdentifier == ETeamIdentifier::TeamBlue)
+		{
+			m_FlagBlueTakenSource->play();
+		}
+		else if (a_TeamIdentifier == ETeamIdentifier::TeamRed)
+		{
+			m_FlagRedTakenSource->play();
+		}
 	}
 
 	void Announcer::PlayAnnouncerEvent(ETeamIdentifier a_TeamIdentifier, EAnnouncerEvent a_AnnouncerEvent)
