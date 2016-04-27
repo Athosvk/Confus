@@ -34,7 +34,8 @@ namespace ConfusServer
             RakNet::RakPeerInterface* m_Interface = RakNet::RakPeerInterface::GetInstance();
             /// <summary> The map thast contains the server events and the functions that involve them. </summary>
             std::map<unsigned char, std::vector<std::function<void(RakNet::BitStream* a_Data)>>> m_CallbackFunctionMap;
-
+            /// <summary> Is the server connected to any clients? </summary>
+            bool m_Connected = false;
         public:
             /// <summary> Initializes a new instance of the <see cref="Connection"/> class. </summary>
             Connection();
@@ -45,10 +46,12 @@ namespace ConfusServer
             /// requesting services
             /// </summary>
             void processPackets();
+            std::vector<RakNet::SystemAddress> getOpenConnections();
             /// <summary> Adds a function to the event in the callback function map. </summary>
             /// <param name="a_Event">The server event that should trigger the function.</param>
             /// <param name="a_Function">The function that should be added to the map.</param>
             void addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::BitStream* a_Data)> a_Function);
+            void sendMessage(RakNet::BitStream & a_InputStream, PacketReliability a_Reliability);
 		private:
 			/// <summary> Gets the amount of clients connected to this server instance </summary>
 			/// <returns>The amount of clients connected</returns>

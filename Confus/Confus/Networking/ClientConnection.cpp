@@ -47,6 +47,10 @@ namespace Confus
                     dispatchStalledMessages();
                     m_Connected = true;
                 }
+                if(packet->data[0] == static_cast<unsigned char>(Networking::EPacketType::Player))
+                {
+                    std::cout << "Getiing a message from server with type player";
+                }
 
                 handlePacket(packet, static_cast<unsigned char>(packet->data[0]));
                 m_Interface->DeallocatePacket(packet);

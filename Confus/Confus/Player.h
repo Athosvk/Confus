@@ -1,6 +1,7 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
 
+#include "EventManager.h"
 #include "Networking\ClientConnection.h"
 #include "Audio\PlayerAudioEmitter.h"
 #include "Health.h"
@@ -56,6 +57,8 @@ namespace Confus
         int8_t m_PlayerHealth = 100;
         /// <summary> The local time at which a state change took place. </summary>
         RakNet::Time m_StateChangeTime = 0;
+        /// <summary> A reference to the eventmanager. </summary>
+        EventManager* m_EventManager;
     public:
         /// <summary> Player class constructor. </summary>
         /// <param name="a_Device">The active Irrlicht Device.</param>
@@ -90,7 +93,8 @@ namespace Confus
         
         /// <summary> Sets the connection to the server. </summary>
         void updateServer() const;
-
+        /// <summary> Sets the eventmanager. </summary>
+        void setEventManager(EventManager* a_Manager);
     private:
         /// <summary> Starts the walking animation, which is the default animation. </summary>
         void startWalking() const;

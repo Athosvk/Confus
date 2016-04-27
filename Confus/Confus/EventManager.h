@@ -19,6 +19,7 @@ namespace Confus
             bool RightButtonDown;
             MouseState() : LeftButtonDown(false), RightButtonDown(false) { }
         } m_MouseState;
+
     public:
         /// <summary> Constructor for the Event Manager. </summary>
         EventManager();

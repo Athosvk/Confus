@@ -78,6 +78,7 @@ namespace Confus
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
         }
 	    PlayerNode->setParent(this);
+        
 		setParent(CameraNode);
 
         createAudioEmitter();
@@ -252,6 +253,17 @@ namespace Confus
      void Player::setConnection(Networking::ClientConnection* a_Connection)
 	{
         m_Connection = a_Connection;
+
+      /*  m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::BitStream* a_Data)
+        {
+            irr::core::vector3df newPosition;
+
+            a_Data->IgnoreBytes(sizeof(unsigned char));
+            a_Data->Read(newPosition);
+
+            std::cout << std::to_string((newPosition).X);
+            CameraNode->setPosition(newPosition);
+        });*/
 	}
 
      void Player::updateServer() const
@@ -265,7 +277,11 @@ namespace Confus
         bitstreamOut.Write(Player::m_PlayerState);
         bitstreamOut.Write(m_StateChangeTime);
         bitstreamOut.Write(m_PlayerHealth);
-        
+        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_W));
+        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_S));
+        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_A));
+        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_D));
+
         m_Connection->sendMessage(&bitstreamOut, PacketReliability::UNRELIABLE);
 	}
 
@@ -278,5 +294,10 @@ namespace Confus
              m_StateChangeTime = RakNet::GetTime();
              std::cout << "State changed! Time of change is: " << m_StateChangeTime;
          } 
+     }
+
+     void Player::setEventManager(EventManager* a_Manager) 
+     {
+         m_EventManager = a_Manager;
      }
 }

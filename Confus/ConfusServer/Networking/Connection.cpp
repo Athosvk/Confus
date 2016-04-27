@@ -2,6 +2,8 @@
 #include <vector>
 #include <string>
 #include <functional>
+#include <RakNet/RakPeerInterface.h>
+#include <RakNet/RakNetTypes.h>
 #include <RakNet/BitStream.h>
 
 #include "Connection.h"
@@ -34,11 +36,25 @@ namespace ConfusServer
             RakNet::Packet* packet = m_Interface->Receive();
             while(packet != nullptr)
             {
+                if(packet->data[0] == ID_NEW_INCOMING_CONNECTION)
+                {
+                    m_Connected = true;
+                }
                 RakNet::BitStream inputStream(packet->data, packet->length, false);
                 handlePacket(&inputStream, static_cast<unsigned char>(packet->data[0]));
                 m_Interface->DeallocatePacket(packet);
                 packet = m_Interface->Receive();
             }
+        }
+
+        std::vector<RakNet::SystemAddress> Connection::getOpenConnections()
+        {
+            auto connectionCount = getConnectionCount();
+            std::vector<RakNet::SystemAddress>
+                openConnections(static_cast<size_t>(connectionCount));
+            auto serverID = m_Interface->GetConnectionList(openConnections.data(),
+                &connectionCount);
+            return openConnections;
         }
 
         void Connection::addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::BitStream* a_Data)> a_Function)
@@ -83,5 +99,14 @@ namespace ConfusServer
 			a_InputStream.Read(contents);
 			std::cout << "Message received: " << contents << std::endl;
 		}
+
+        void Connection::sendMessage(RakNet::BitStream& a_InputStream, PacketReliability a_Reliability)
+        {
+            if(m_Connected)
+            {
+                auto openConnections = getOpenConnections();
+                m_Interface->Send(&a_InputStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE, 0, openConnections[0], false);
+            }
+        }
     }
 }

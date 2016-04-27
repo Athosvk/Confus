@@ -50,6 +50,7 @@ namespace Confus
         m_RedRespawnFloor.setPosition(irr::core::vector3df(0.f, 3.45f, -83.f));
 
         m_Device->setEventReceiver(&m_EventManager);
+        m_PlayerNode.setEventManager(&m_EventManager);
         m_Device->getCursorControl()->setVisible(false);
       
         while(m_Device->run())

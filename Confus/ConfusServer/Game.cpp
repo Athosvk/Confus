@@ -159,6 +159,7 @@ namespace ConfusServer
 			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
 		}
 		m_MazeGenerator.fixedUpdate();
+        m_PlayerNode.fixedUpdate();
     }
 
     void Game::addPlayer(RakNet::Packet* a_Data)

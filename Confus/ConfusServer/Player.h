@@ -41,6 +41,8 @@ namespace ConfusServer {
         Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
 
         void createAudioEmitter();
+        void updateClient();
+        void moveOnButtonPress(irr::EKEY_CODE a_Key);
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
         static const unsigned LightAttackDamage;

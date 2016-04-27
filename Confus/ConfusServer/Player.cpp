@@ -61,7 +61,8 @@ namespace ConfusServer
         m_KeyMap[4].Action = irr::EKA_JUMP_UP;
         m_KeyMap[4].KeyCode = irr::KEY_SPACE;
 
-		if (a_MainPlayer) {
+		if (a_MainPlayer) 
+        {
 			CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.15f, false);
 			CameraNode->setPosition(irr::core::vector3df(2.5f, 5.f, -30.0f));
 			PlayerNode->setParent(this);
@@ -73,7 +74,6 @@ namespace ConfusServer
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
-
     }
 
 	Player::~Player() 
@@ -183,14 +183,30 @@ namespace ConfusServer
         {
             m_FootstepSoundEmitter->playFootStepSound();
         }
+        
         //std::cout << "Player rotation X on server is: " << getRotation().X << "\n";
         //std::cout << "Player position Y on server is: " << getPosition().Y << "\n";
+    }
+
+    void Player::fixedUpdate()
+    {
+        updateClient();
     }
 
     void Player::createAudioEmitter()
     {
         m_FootstepSoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
     }
+
+    void Player::updateClient()
+    {
+        RakNet::BitStream bitstreamOut;
+        bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::Connection::EPacketType::Player));
+        bitstreamOut.Write(CameraNode->getAbsolutePosition());
+        
+        m_Connection->sendMessage(bitstreamOut, PacketReliability::UNRELIABLE);
+    }
+ 
 
     void Player::setConnection(Networking::Connection* a_Connection)
     {
@@ -203,7 +219,11 @@ namespace ConfusServer
             irr::core::vector3df rotation;
             EPlayerState state;
             RakNet::Time stateChangeTime;
-            unsigned int playerHealth;
+            int8_t playerHealth;
+            bool forwardKeyPressed;
+            bool backwardKeyPressed;
+            bool leftKeyPressed;
+            bool rightKeyPressed;
 
             a_Data->IgnoreBytes(sizeof(unsigned char));
             a_Data->Read(playerID);
@@ -212,10 +232,13 @@ namespace ConfusServer
             a_Data->Read(state);
             a_Data->Read(stateChangeTime);
             a_Data->Read(playerHealth);
+            a_Data->Read(forwardKeyPressed);
+            a_Data->Read(backwardKeyPressed);
+            a_Data->Read(leftKeyPressed);
+            a_Data->Read(rightKeyPressed);
 
-            setPosition(position);
             setRotation(rotation);
-            
+             
             if(state == EPlayerState::LightAttacking)
             {
                 startLightAttack();
