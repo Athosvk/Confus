@@ -121,6 +121,9 @@ namespace Confus
 		{
 			movementDirection.X = 1.0f;
 		}
+		//Rotate with the negative xz-rotation (around the Y axis), as
+		//the scene node convention seems to be clockwise while the rotate function
+		//is counter-clockwise
 		movementDirection.rotateXZBy(-CameraNode->getRotation().Y);
 		movementDirection = movementDirection.normalize();
 		auto rigidBody = m_Collider->getRigidBody();
@@ -128,6 +131,13 @@ namespace Confus
 		auto resultingVelocity = irr::core::vector3df(movementDirection.X, 0.0f, movementDirection.Z) * Speed
 			+ irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
 		rigidBody->setVelocity(resultingVelocity);
+		static float timer = 5.0f;
+		if(a_EventManager.IsKeyDown(irr::KEY_SPACE) && timer >= 5.0f)
+		{
+			timer = 0.0f;
+			rigidBody->applyForce(irr::core::vector3df(0.0f, 200.0f, 0.0f));
+		}
+		timer += 0.008f;
     }
 
     void Player::render()
