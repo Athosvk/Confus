@@ -79,7 +79,15 @@ namespace Confus
 				case irr::scene::ESNT_CUBE:
 				case irr::scene::ESNT_ANIMATED_MESH:
 				case irr::scene::ESNT_MESH:
-					collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node);
+					if(std::string(static_cast<const char*>(node->getName())).find("Ground", 0) != std::string::npos)
+					{
+						collider = m_PhysicsWorld.createBoxCollider(irr::core::vector3df(node->getBoundingBox().getExtent().X * 
+							node->getScale().X, 0.3f, node->getBoundingBox().getExtent().Z * node->getScale().Z), node);
+					}
+					else
+					{
+						collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node);
+					}
 					collider->getRigidBody()->makeStatic();
 					break;
 				case irr::scene::ESNT_SPHERE:
