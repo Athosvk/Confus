@@ -12,9 +12,9 @@ namespace Confus
 		{
 		}
 
-
 		PhysicsWorld::PhysicsWorld(irr::IrrlichtDevice* a_Device)
-			: m_DebugDrawer(a_Device, &m_World)
+			: m_DebugDrawer(a_Device, &m_World),
+			m_CollisionRegistrar(&m_World)
 		{
 			m_World.setDebugDrawer(&m_DebugDrawer);
 			m_DebugDrawer.setDebugMode(btIDebugDraw::DBG_DrawWireframe | btIDebugDraw::DBG_DrawContactPoints
@@ -36,6 +36,7 @@ namespace Confus
 			prePhysicsUpdate();
 			m_World.stepSimulation(a_DeltaTime);
 			postPhysicsUpdate();
+			m_CollisionRegistrar.onPostPhysicsUpdate();
 		}
 
 		void PhysicsWorld::drawDebugInformation()
@@ -64,9 +65,13 @@ namespace Confus
 			ECollisionFilter a_Group, ECollisionFilter a_Mask)
 		{
 			auto shape = std::make_unique<btBoxShape>(toBulletVector(a_Extents / 2));
-			auto rigidBody = createRigidBody(shape.get(), a_AttachedNode, a_Group, a_Mask);
-			auto collider = std::make_unique<BoxCollider>(std::move(shape), rigidBody.get());
-			m_Colliders.emplace_back(std::move(collider), std::move(rigidBody));
+			auto bulletRigidBody = createRigidBody(shape.get(), a_AttachedNode, a_Group, a_Mask);
+			auto bulletRigidBodyHandle = bulletRigidBody.get();
+			auto rigidBody = std::make_unique<RigidBody>(std::move(bulletRigidBody), a_AttachedNode);
+			auto collider = std::make_unique<BoxCollider>(std::move(shape), rigidBody.get(), m_CollisionRegistrar);
+			bulletRigidBodyHandle->setUserPointer(collider.get());
+			m_Colliders.emplace_back(std::move(collider), 
+				std::move(rigidBody));
 			return static_cast<BoxCollider*>(m_Colliders.back().Shape.get());
 		}
 
@@ -91,14 +96,14 @@ namespace Confus
 				static_cast<float>(a_Vector.z()));
 		}
 
-		std::unique_ptr<RigidBody> PhysicsWorld::createRigidBody(btCollisionShape* a_Shape, 
+		std::unique_ptr<btRigidBody> PhysicsWorld::createRigidBody(btCollisionShape* a_Shape, 
 			irr::scene::ISceneNode* a_AttachedNode, ECollisionFilter a_Group, ECollisionFilter a_Mask)
 		{
 			btRigidBody::btRigidBodyConstructionInfo rigidBodyInfo =
 				btRigidBody::btRigidBodyConstructionInfo(1.0f, nullptr, a_Shape);
 			auto rigidBody = std::make_unique<btRigidBody>(rigidBodyInfo);
 			m_World.addRigidBody(rigidBody.get(), static_cast<short>(a_Group), static_cast<short>(a_Mask));
-			return std::make_unique<RigidBody>(std::move(rigidBody), a_AttachedNode);
+			return rigidBody;
 		}
 	}
 }

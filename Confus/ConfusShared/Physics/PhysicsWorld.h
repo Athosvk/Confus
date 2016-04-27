@@ -8,6 +8,7 @@
 #include "RigidBody.h"
 #include "DebugDrawer.h"
 #include "ECollisionFilter.h"
+#include "CollisionRegistrar.h"
 
 namespace Confus
 {
@@ -51,7 +52,9 @@ namespace Confus
 			/// <summary> The collider - rigid body pairs that are currently instantiated in the physics world </summary>
 			std::vector<ColliderPair> m_Colliders;
 			/// <summary> The debug drawer to draw debug information with </summary>
-			DebugDrawer m_DebugDrawer;
+			DebugDrawer m_DebugDrawer;			
+			/// <summary> The handles the callbacks of collisions </summary>
+			CollisionRegistrar m_CollisionRegistrar;
 		public:
 			/// <summary>
 			/// Initializes a new instance of the <see cref="PhysicsWorld" /> class
@@ -116,7 +119,7 @@ namespace Confus
 			/// <param name="a_AttachedNode">The attached Irrlicht scenenode</param>
 			/// <returns> The created RigidBody </returns>
 			/// <remarks> The created Rigid Body has a mass of one and is dynamic by default </remarks>
-			std::unique_ptr<RigidBody> createRigidBody(btCollisionShape* a_Shape,
+			std::unique_ptr<btRigidBody> createRigidBody(btCollisionShape* a_Shape,
 				irr::scene::ISceneNode* a_AttachedNode, ECollisionFilter a_Group, ECollisionFilter a_Mask);
 		};
 	}

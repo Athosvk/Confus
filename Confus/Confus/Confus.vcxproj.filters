@@ -108,6 +108,9 @@
     <ClCompile Include="..\ConfusShared\Physics\RigidBody.cpp">
       <Filter>Shared</Filter>
     </ClCompile>
+    <ClCompile Include="..\ConfusShared\Physics\CollisionRegistrar.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -222,6 +225,9 @@
       <Filter>Shared</Filter>
     </ClInclude>
     <ClInclude Include="..\ConfusShared\Physics\RigidBody.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Physics\CollisionRegistrar.h">
       <Filter>Shared</Filter>
     </ClInclude>
   </ItemGroup>
