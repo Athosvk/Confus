@@ -77,7 +77,8 @@ enum class EFlagEnum
 		/// <param name="a_SceneManager"> Pass the scenemanager to get the triangle selector. </param>
 		irr::scene::ITriangleSelector* GetTriangleSelector(irr::scene::ISceneManager* a_SceneManager);
 
-		const irr::video::SColor getColor()const;
+		const irr::video::SColor getColor() const;
+		const ETeamIdentifier* getTeamIdentifier() const;
 		const EFlagEnum* getFlagStatus() const;
     private:
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);

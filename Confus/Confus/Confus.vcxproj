@@ -213,6 +213,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Audio\PlayerAudioEmitter.cpp" />
     <ClCompile Include="RespawnFloor.cpp" />
+    <ClCompile Include="ScoreGUI.cpp" />
     <ClCompile Include="StaticWall.cpp" />
     <ClCompile Include="WalledMazeTile.cpp" />
     <ClCompile Include="Weapon.cpp" />
@@ -241,6 +242,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="Player.h" />
     <ClInclude Include="Audio\PlayerAudioEmitter.h" />
     <ClInclude Include="RespawnFloor.h" />
+    <ClInclude Include="ScoreGUI.h" />
     <ClInclude Include="StaticWall.h" />
     <ClInclude Include="WalledMazeTile.h" />
     <ClInclude Include="Weapon.h" />

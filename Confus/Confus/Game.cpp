@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Flag.h"
 #include "FlagGUI.h"
+#include "ScoreGUI.h"
 #define DEBUG_CONSOLE
 #include "Debug.h"
 
@@ -13,6 +14,7 @@ namespace Confus
 {
     const double Game::FixedUpdateInterval = 0.02;
     const double Game::MaxFixedUpdateInterval = 0.1;
+	const int Game::MaxScore = 3; // dont change this for now. Breaks redside score.
 
     Game::Game(irr::core::dimension2d<irr::u32> a_Resolution)
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL,a_Resolution)),
@@ -35,6 +37,12 @@ namespace Confus
 			videoDriver->getTexture("Media/Textures/MirroredFlagUIImage.png"),
 			videoDriver->getTexture("Media/Textures/MirroredExclamationMark.png"),
 			irr::core::vector2df(0.56f, 0.0f), true);
+
+		m_GUI.addElement<ScoreGUI>(m_Device, &m_RedFlag, irr::core::dimension2du(30, 30),
+			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.59f, 0.061f));
+
+		m_GUI.addElement<ScoreGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(30, 30),
+			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.45f, 0.061f));
     }
 
     void Game::run()

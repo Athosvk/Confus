@@ -129,6 +129,11 @@ namespace Confus {
         }
     }
 
+	 const ETeamIdentifier* Flag::getTeamIdentifier() const
+	 {
+		 return m_TeamIdentifier;
+	 }
+
 	 const EFlagEnum * Flag::getFlagStatus() const
 	 {
 		 return m_FlagStatus;

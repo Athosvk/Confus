@@ -20,6 +20,11 @@ namespace Confus
     /// </summary>
     class Game
     {
+	public:
+		/// <summary>
+		/// The maximum score used to determine if someone has won
+		/// </summary>
+		static const int MaxScore;
     private:
         /// <summary>
         /// The rate at which fixed updates are carried out
