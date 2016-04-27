@@ -7,13 +7,15 @@
 
 namespace Confus
 {
-    MoveableWall::MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition, 
-		Physics::PhysicsWorld& a_PhysicsWorld)
+
+	MoveableWall::MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition,
+		irr::core::vector3df a_Scale, Physics::PhysicsWorld& a_PhysicsWorld)
         : m_RegularPosition(a_RegularPosition)
 	{
         loadMesh(a_Device->getSceneManager());
         loadTextures(a_Device->getVideoDriver());
         m_MeshNode->setPosition(m_RegularPosition);
+		m_MeshNode->setScale(a_Scale);
 		m_RigidBody = a_PhysicsWorld.createBoxCollider(m_MeshNode)->getRigidBody();
 		m_RigidBody->makeKinematic();
         solidify();

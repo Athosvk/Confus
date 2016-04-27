@@ -116,7 +116,7 @@ namespace Confus {
         particleAffector->drop();
     }
 
-    irr::video::SColor Flag::getColor() 
+     const irr::video::SColor Flag::getColor() const
     {
         switch(*m_TeamIdentifier)
         {
@@ -128,6 +128,11 @@ namespace Confus {
             return { 255, 255, 255, 255 };
         }
     }
+
+	 const EFlagEnum * Flag::getFlagStatus() const
+	 {
+		 return m_FlagStatus;
+	 }
 
 	//This class handles what to do on collision
 	void Flag::captureFlag(Player* a_PlayerObject) 

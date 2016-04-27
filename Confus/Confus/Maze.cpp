@@ -3,10 +3,11 @@
 
 namespace Confus
 {
-	Maze::Maze(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_StartPosition, Physics::PhysicsWorld& a_PhysicsWorld,
-		bool a_NeedRender)
-		:m_MazeSizeX(60), m_MazeSizeY(60),
-		m_PhysicsWorld(a_PhysicsWorld)
+	Maze::Maze(irr::IrrlichtDevice * a_Device, int a_MazeSizeX, int a_MazeSizeY, Physics::PhysicsWorld& a_PhysicsWorld, 
+		float a_MazeScalar, bool a_NeedRender)
+		:m_MazeSizeX(a_MazeSizeX), m_MazeSizeY(a_MazeSizeY),
+		m_PhysicsWorld(a_PhysicsWorld), 
+		m_MazeScalar(a_MazeScalar)
 	{
 		m_IrrDevice = a_Device;
 		resetMaze(irr::core::vector2df(30, -7), a_NeedRender);
@@ -24,13 +25,14 @@ namespace Confus
 				if (a_NeedRender)
 				{
 					std::shared_ptr<WalledMazeTile> mazeTile = std::make_shared<WalledMazeTile>(m_IrrDevice, 
-						irr::core::vector3df(static_cast<float>(-x + a_Offset.X), 0.5f, static_cast<float>(-y + a_Offset.Y)),
+						irr::core::vector3df(static_cast<float>(-x*m_MazeScalar + a_Offset.X), 0.5f, static_cast<float>(-y*m_MazeScalar + a_Offset.Y)),
+						irr::core::vector3df(m_MazeScalar, 1., m_MazeScalar), //do not want to raise the wall height
 						m_PhysicsWorld);
-					const irr::scene::IAnimatedMeshSceneNode* wallMeshNode = mazeTile->getWall()->getMeshNode();
+					irr::scene::IAnimatedMeshSceneNode* wallMeshNode = mazeTile->getWall()->getMeshNode();
 					irr::core::vector3df boundingBox = wallMeshNode->getBoundingBox().getExtent();
-					mazeTile->getWall()->HiddenPosition = irr::core::vector3df(static_cast<float>(-x + a_Offset.X), 
-						-boundingBox.Y * wallMeshNode->getScale().Y, static_cast<float>(-y + a_Offset.Y));
-					mazeTile->getWall()->TransitionSpeed = 0.005f;
+					mazeTile->getWall()->HiddenPosition = irr::core::vector3df(static_cast<float>(-x * m_MazeScalar + a_Offset.X), 
+						-boundingBox.Y * wallMeshNode->getScale().Y, static_cast<float>(-y*m_MazeScalar + a_Offset.Y));
+					mazeTile->getWall()->TransitionSpeed = 0.01f;
 					MazeTiles[x].push_back(mazeTile);
 				}
 				else

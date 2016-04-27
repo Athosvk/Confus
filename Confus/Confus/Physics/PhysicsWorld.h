@@ -59,10 +59,16 @@ namespace Confus
 			/// <summary> Finalizes an instance of the <see cref="PhysicsWorld"/> class </summary>
 			~PhysicsWorld();
 
-			/// <summary> Creates and places a new box collider into the physics world for simulations </summary>
+			/// <summary>
+			/// Creates and places a new box collider into the physics world for simulations
+			/// </summary>
 			/// <param name="a_Extents">The extents/dimensions of the collider to be created</param>
 			/// <param name="a_AttachedNode">The node the collider is attached to</param>
-			/// <returns> A handle to the created box collider </returns>
+			/// <param name="a_Type"> The type of the boxcollider, which group it belongs to</param>
+			/// <param name="a_Mask"> The mask for ignoring collisions </param>
+			/// <returns>
+			/// A handle to the created box collider
+			/// </returns>
 			BoxCollider* createBoxCollider(irr::core::vector3df a_Extents, irr::scene::ISceneNode* a_AttachedNode);
 
 			/// <summary> Creates and places a new box collider from the scene node's bounding box into the physics world for simulations </summary>

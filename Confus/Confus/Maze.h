@@ -39,6 +39,11 @@ namespace Confus
 		/// </summary>
 		int m_MazeSizeY;
 
+		/// <summary>
+		/// This Scalar increases the scale of the walls and the position that that walls are from each other thus making larger paths.
+		/// </summary>
+		float m_MazeScalar;
+
 	public:
 		/// <summary>
 		/// Gets the current X size of the maze
@@ -54,11 +59,10 @@ namespace Confus
 		/// Constructor for this class
 		/// </summary>
 		/// <param name="a_Device">The current Irrlicht device.</param>
-		/// <param name="a_StartPosition">Startposition is passed on in the constructor so we might be able to adjust the position where the maze is drawn</param>
 		/// <param name="a_PhysicsWorld">The active physics world.</param>
 		/// <param name="a_NeedRender">Boolean that states if this maze needs to be rendered or not</param>
-		Maze(irr::IrrlichtDevice * a_Device, irr::core::vector3df a_StartPosition, Physics::PhysicsWorld& a_PhysicsWorld,
-			bool a_NeedRender = false);
+		Maze(irr::IrrlichtDevice * a_Device,int a_MazeSizeX, int a_MazeSizeY, Physics::PhysicsWorld& a_PhysicsWorld,
+			float a_MazeScalar = 1, bool a_NeedRender = false);
 
 		/// <summary>
 		/// Resets the 2d vector, raising all mazetiles in it or making it a rendered maze

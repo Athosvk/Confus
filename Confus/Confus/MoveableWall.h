@@ -81,8 +81,10 @@ namespace Confus
 		/// </summary>
 		/// <param name="a_Device">The current Irrlicht device.</param>
 		/// <param name="a_RegularPosition">The position of the wall when present in the maze.</param>
-		/// <param name="a_PhysicsWorld">The active physics world </param>
-		MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition, Physics::PhysicsWorld& a_PhysicsWorld);
+		/// <param name="a_Scale">The scale </param>
+		/// <param name="a_PhysicsWorld">The active physics world</param>
+		MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition,
+			irr::core::vector3df a_Scale, Physics::PhysicsWorld& a_PhysicsWorld);
 
         /// <summary>
         /// Finalizes an instance of the <see cref="MoveableWall"/> class, cleans up Irrlicht resources
@@ -94,7 +96,7 @@ namespace Confus
         /// </summary>
         void hide();
 
-		const irr::scene::IAnimatedMeshSceneNode* getMeshNode() const { return m_MeshNode; }
+		irr::scene::IAnimatedMeshSceneNode* getMeshNode() const { return m_MeshNode; }
 		
 		/// <summary>
 		/// Starts the rising up transition, for moving into the maze

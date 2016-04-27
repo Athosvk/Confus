@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "Player.h"
 #include "Flag.h"
+#include "FlagGUI.h"
 #define DEBUG_CONSOLE
 #include "Debug.h"
 #include "Physics/BoxCollider.h"
@@ -14,11 +15,11 @@ namespace Confus
     const double Game::FixedUpdateInterval = 0.02;
     const double Game::MaxFixedUpdateInterval = 0.1;
 
-    Game::Game()
-        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_DIRECT3D9)),
+    Game::Game(irr::core::dimension2d<irr::u32> a_Resolution)
+        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_DIRECT3D9, a_Resolution)),
 		m_PhysicsWorld(m_Device),
-		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-			m_PhysicsWorld),
+		m_MazeGenerator(m_Device, 60, 60,(19+20+21+22+23+24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+			irr::core::vector2df(30., 30.), m_PhysicsWorld),
         m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true),
         m_SecondPlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamRed, false),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
@@ -27,6 +28,16 @@ namespace Confus
         m_BlueRespawnFloor(m_Device),
 		m_GUI(m_Device, &m_PlayerNode)
     {
+		auto videoDriver = m_Device->getVideoDriver();
+		m_GUI.addElement<FlagGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(50, 50),
+					videoDriver->getTexture("Media/Textures/FlagUIImage.png"),
+					videoDriver->getTexture("Media/Textures/ExclamationMark.png"),
+					irr::core::vector2df(0.44f, 0.0f), false);
+
+		m_GUI.addElement<FlagGUI>(m_Device, &m_RedFlag, irr::core::dimension2du(50, 50),
+			videoDriver->getTexture("Media/Textures/MirroredFlagUIImage.png"),
+			videoDriver->getTexture("Media/Textures/MirroredExclamationMark.png"),
+			irr::core::vector2df(0.56f, 0.0f), true);
     }
 
     void Game::run()
