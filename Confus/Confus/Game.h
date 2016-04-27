@@ -10,7 +10,7 @@
 #include "Flag.h"
 #include "RespawnFloor.h"
 #include "GUI.h"
-#include "Physics/PhysicsWorld.h"
+#include "../ConfusShared/Physics/PhysicsWorld.h"
 
 namespace Confus
 {    

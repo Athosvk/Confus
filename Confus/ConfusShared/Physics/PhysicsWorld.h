@@ -53,7 +53,9 @@ namespace Confus
 			/// <summary> The debug drawer to draw debug information with </summary>
 			DebugDrawer m_DebugDrawer;
 		public:
-			/// <summary> Initializes a new instance of the <see cref="PhysicsWorld" /> class </summary>
+			/// <summary>
+			/// Initializes a new instance of the <see cref="PhysicsWorld" /> class
+			/// </summary>
 			/// <param name="a_Device">The currently active Irrlicht devcie</param>
 			PhysicsWorld(irr::IrrlichtDevice* a_Device);
 

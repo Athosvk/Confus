@@ -2,8 +2,8 @@
 
 #include "MoveableWall.h"
 #include "Game.h"
-#include "Physics/BoxCollider.h"
-#include "Physics/PhysicsWorld.h"
+#include "../ConfusShared/Physics/BoxCollider.h"
+#include "../ConfusShared/Physics/PhysicsWorld.h"
 
 namespace Confus
 {

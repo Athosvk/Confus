@@ -8,7 +8,7 @@
 #include "FlagGUI.h"
 #define DEBUG_CONSOLE
 #include "Debug.h"
-#include "Physics/BoxCollider.h"
+#include "../ConfusShared/Physics//BoxCollider.h"
 
 namespace Confus
 {

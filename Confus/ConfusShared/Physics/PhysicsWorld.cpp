@@ -1,6 +1,5 @@
 #include "PhysicsWorld.h"
 #include "BoxCollider.h"
-#include "../Game.h"
 
 namespace Confus
 {
@@ -12,6 +11,7 @@ namespace Confus
 			Body(std::move(a_RigidBody))
 		{
 		}
+
 
 		PhysicsWorld::PhysicsWorld(irr::IrrlichtDevice* a_Device)
 			: m_DebugDrawer(a_Device, &m_World)

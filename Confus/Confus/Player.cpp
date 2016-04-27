@@ -4,9 +4,9 @@
 #include "Player.h"
 #include "EventManager.h"
 #include "Flag.h"
-#include "Physics/PhysicsWorld.h"
-#include "Physics\BoxCollider.h"
-#include "Physics/RigidBody.h"
+#include "../Confusshared/Physics/PhysicsWorld.h"
+#include "../Confusshared/Physics/BoxCollider.h"
+#include "../Confusshared/Physics/RigidBody.h"
 
 namespace Confus
 {
