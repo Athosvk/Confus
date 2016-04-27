@@ -127,8 +127,9 @@ namespace Confus
 			m_AttachedNode->updateAbsolutePosition();
 			btTransform transform = btTransform::getIdentity();
 			transform.setOrigin(PhysicsWorld::toBulletVector(m_AttachedNode->getAbsolutePosition()));
-			auto eulerAngles = m_AttachedNode->getRotation() * irr::core::DEGTORAD;
-			transform.setRotation(btQuaternion(eulerAngles.Y, eulerAngles.X, eulerAngles.Z));
+			auto rotation = irr::core::quaternion(m_AttachedNode->getRelativeTransformation().getRotationDegrees() * 
+				irr::core::DEGTORAD);
+			transform.setRotation(btQuaternion(rotation.X, rotation.Y, rotation.Z, rotation.W));
 			return transform;
 		}
 	}
