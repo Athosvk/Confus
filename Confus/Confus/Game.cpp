@@ -148,6 +148,26 @@ namespace Confus
             ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, blueScore);
             std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
         });
+
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::EndOfGame), [this](RakNet::Packet* a_Packet) {
+            ETeamIdentifier a_TeamIdentifier;
+            RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
+            inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+            inputStream.Read(a_TeamIdentifier);
+            auto button = m_Device->getGUIEnvironment()->addButton({ 10, 240, 10 + 150, 240 + 80 });
+            
+            if (a_TeamIdentifier == ETeamIdentifier::TeamBlue) {
+                button->setText(L"Blue team won!");
+            }
+            else if(a_TeamIdentifier == ETeamIdentifier::TeamRed) {
+                button->setText(L"Red team won!");
+            }
+
+            render();
+            reset();
+            m_Device->sleep(10000);
+            button->remove();
+        });
     }
 
     void Game::handleInput()
@@ -199,6 +219,18 @@ namespace Confus
             }
         }
         */
+    }
+
+    void Game::reset() 
+    {
+        std::cout << "Resetting level!" << std::endl;
+        m_BlueFlag.returnToStartPosition();
+        m_RedFlag.returnToStartPosition();
+        ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, 0);
+        ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, 0);
+        
+        //Server will send score, and new positions.
+        m_PlayerNode.respawn();
     }
 
     void Game::fixedUpdate()

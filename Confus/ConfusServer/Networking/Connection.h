@@ -17,6 +17,15 @@ namespace ConfusServer
 {
     namespace Networking
     {
+        /// <summary> The type of packet </summary>
+        enum class EPacketType : unsigned char
+        {
+            Message = ID_USER_PACKET_ENUM + 1,
+            ScoreUpdate = Message + 1,
+            PlayerAttack = ScoreUpdate + 1,
+            MazeChange = PlayerAttack + 1,
+            EndOfGame = MazeChange + 1
+        };
         /// <summary>
         /// Represents the outgoing connection/group of outgoing connections to the client(s)
         /// that the server instance will be receiving packets from and sending packets to
@@ -37,14 +46,6 @@ namespace ConfusServer
             std::map<unsigned char, std::vector<std::function<void(RakNet::Packet* a_Data)>>> m_CallbackFunctionMap;
 
         public:
-			/// <summary> The type of packet </summary>
-			enum class EPacketType : unsigned char
-			{
-                Message = ID_USER_PACKET_ENUM + 1,
-                ScoreUpdate = Message + 1,
-                PlayerAttack = ScoreUpdate + 1,
-                MazeChange = PlayerAttack + 1
-			};
             /// <summary> Initializes a new instance of the <see cref="Connection"/> class. </summary>
             Connection();
             /// <summary> Finalizes an instance of the <see cref="Connection"/> class. </summary>

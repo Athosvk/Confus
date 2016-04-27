@@ -1,4 +1,7 @@
 #pragma once
+#include <vector>
+#include <functional>
+
 #include "../Common/TeamIdentifier.h"
 #include "Networking/Connection.h"
 
@@ -17,6 +20,8 @@ namespace ConfusServer
         int m_RedTeamScore = 0;
         /// <summary> The Connection class instance to send the score with. </summary>
         Networking::Connection* m_Connection;
+        /// <summary> Reset callback function </summary>
+        std::function<void()> m_Callback;
     public:
         /// <summary> TeamScore set connection. </summary>
         /// <param name="a_Connection"> The Connection class instance to send the score with. </param>
@@ -27,10 +32,14 @@ namespace ConfusServer
         /// <param name="a_TeamScored"> The team that achieved a point. </param>
         /// <param name="a_IncreasementValue"> The amount of points the value will be increased with. </param>
         void teamScoredPoint(ETeamIdentifier a_TeamScored, int a_IncreasementValue = 1);
+        /// <summary > Reset the score. </summary>
+        void resetScore();
         /// <summary> Check the amount of points a team has. </summary>
         /// <returns> Returns the amount of points a team has. </returns>
         /// <param name="a_Team"> The team you want to know the score of. </param>
         int getPointsOfTeam(ETeamIdentifier a_Team);
+        /// <summary> Set the game reset callback </summary>
+        void setResetCallback(const std::function<void()>& a_Callback);
     private:
         /// <summary> TeamScore calls this to check if a team has score enough points to win. </summary>
         /// <returns> Returns if the team has enough points to win </returns>

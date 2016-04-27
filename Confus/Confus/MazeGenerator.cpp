@@ -160,6 +160,11 @@ namespace Confus
         }
     }
 
+    void MazeGenerator::resetMaze()
+    {
+
+    }
+
     MazeGenerator::~MazeGenerator()
 	{
 	}

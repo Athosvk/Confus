@@ -102,6 +102,11 @@ namespace Confus
         /// Starts the game and gameloop
         /// </summary>
         void run();
+
+        /// <summary>
+        /// Resets the game and gameloop
+        /// </summary>
+        void reset();
     private:
         /// <summary>
         /// Processes the triangle selectors.

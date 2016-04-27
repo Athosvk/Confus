@@ -3,10 +3,11 @@
 #include <iostream>
 #include <RakNet\GetTime.h>
 
-#define DEBUG_CONSOLE
 #include "Game.h"
 #include "Player.h"
 #include "Flag.h"
+
+#define DEBUG_CONSOLE
 #include "../Common/Debug.h"
 #include "../Common/TeamIdentifier.h"
 
@@ -20,18 +21,32 @@ namespace ConfusServer
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),
+        m_TeamScoreManager(),
 		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
         m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, true),        
         m_SecondPlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, false),
-        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_TeamScoreManager),
-        m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_TeamScoreManager)
+        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, &m_TeamScoreManager),
+        m_RedFlag(m_Device, ETeamIdentifier::TeamRed, &m_TeamScoreManager)
     {
+    }
+
+    void Game::resetGame() {
+        m_BlueFlag.returnToStartPosition();
+        m_RedFlag.returnToStartPosition();
+        m_TeamScoreManager.resetScore();
+        m_MazeTimer = 0;
+        broadcastMazeChange(19 + 20 + 21 + 22 + 23 + 24);
+
+        //Discuss: Communicate team identifier?
+        //for(Player* player : m_PlayerArray) {
+        //    player->resetPlayer();
+        //}
     }
 
     void Game::run()
     {
         initializeConnection();
-
+        m_TeamScoreManager.setResetCallback([this] {resetGame(); });
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
@@ -157,8 +172,8 @@ namespace ConfusServer
             if(currentDelay == 0.0f)
             {
                 currentSeed = static_cast<int>(time(0)) % 1000;
-                m_TeamScoreManager.teamScoredPoint(static_cast<ETeamIdentifier>(1 + rand() % 2));
                 broadcastMazeChange(currentSeed);
+                //m_TeamScoreManager.teamScoredPoint(static_cast<ETeamIdentifier>(1 + (rand() % 2)));
             }
             currentDelay += static_cast<float>(m_DeltaTime);
         }
@@ -185,7 +200,7 @@ namespace ConfusServer
         int newTime = static_cast<int>(RakNet::GetTimeMS()) + (static_cast<int>(MazeDelay * 1000));
 
         RakNet::BitStream bitStream;
-        bitStream.Write(static_cast<RakNet::MessageID>(Networking::Connection::EPacketType::MazeChange));
+        bitStream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::MazeChange));
         bitStream.Write(newTime);
         bitStream.Write(a_Seed);
         m_Connection->broadcastBitstream(bitStream);

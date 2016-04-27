@@ -24,7 +24,8 @@ namespace Confus
             Message = ID_USER_PACKET_ENUM + 1,
             ScoreUpdate = Message + 1,
             PlayerAttack = ScoreUpdate + 1,
-            MazeChange = PlayerAttack + 1
+            MazeChange = PlayerAttack + 1,
+            EndOfGame = MazeChange + 1
         };
         /// <summary>
         /// Represents a connection to the server that this clients is connected to.

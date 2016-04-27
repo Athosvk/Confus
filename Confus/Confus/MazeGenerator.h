@@ -25,7 +25,6 @@ namespace Confus
 		/// This stack is used by the maze generating algorithm to keep track of mazeTiles that might still have neighbours that can be accesed
 		/// </summary>
 		std::stack<MazeTile, std::vector<std::shared_ptr<MazeTile>>> m_TileStack;
-
 		/// <summary>
 		/// The seed used to randomly chose an available neighbour and thus the seed that determines the layout of the maze.
 		/// </summary>
@@ -70,6 +69,8 @@ namespace Confus
         /// <param name="a_Seed">Seed used to make a new maze</param>
         /// <param name="a_ChangeWantedTime">The time at which the maze should change.</param>
         void refillMainMazeRequest(int a_Seed, int a_ChangeWantedTime);
+
+        void resetMaze();
 
 		/// <summary>
 		/// Default destructor, could be omitted
