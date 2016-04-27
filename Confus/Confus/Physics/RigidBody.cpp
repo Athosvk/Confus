@@ -101,13 +101,21 @@ namespace Confus
 
 		void RigidBody::activate()
 		{
-			m_Body->forceActivationState(ACTIVE_TAG);
+			if(m_SleepingAllowed)
+			{
+				m_Body->forceActivationState(ACTIVE_TAG);
+			}
+			else
+			{
+				m_Body->forceActivationState(DISABLE_DEACTIVATION);
+			}
 			m_Body->setCollisionFlags(m_Body->getCollisionFlags() & ~btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
 		}
 
 		void RigidBody::disableSleeping()
 		{
 			m_Body->forceActivationState(DISABLE_DEACTIVATION);
+			m_SleepingAllowed = false;
 		}
 
 		void RigidBody::setAbsoluteTransform(const btTransform& a_Transform) const

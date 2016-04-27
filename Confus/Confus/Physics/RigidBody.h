@@ -39,6 +39,7 @@ namespace Confus
 			/// <summary> The type of Rigid Body </summary>
 			ERigidBodyType m_Type;
 			std::unique_ptr<btDefaultMotionState> m_MotionState;
+			bool m_SleepingAllowed = true;
 		public:
 			/// <summary> Initializes a new instance of the <see cref="RigidBody"/> class </summary>
 			/// <param name="a_RigidBody">The Bullet rigid body </param>
