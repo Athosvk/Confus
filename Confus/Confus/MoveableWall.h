@@ -73,9 +73,7 @@ namespace Confus
         /// </summary>
         /// <param name="a_Device">The current Irrlicht device.</param>
         /// <param name="a_RegularPosition">The position of the wall when present in the maze.</param>
-        /// <param name="a_HiddenPosition">The position of the wall when out of the maze.</param>
-        MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition,
-            irr::core::vector3df a_HiddenPosition);      
+        MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition);      
 
         /// <summary>
         /// Finalizes an instance of the <see cref="MoveableWall"/> class, cleans up Irrlicht resources

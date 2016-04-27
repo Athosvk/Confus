@@ -21,11 +21,12 @@ namespace Confus
 			{
 				if (a_NeedRender)
 				{
-					std::shared_ptr<WalledMazeTile> mazeTile = std::make_shared<WalledMazeTile>(m_IrrDevice, irr::core::vector3df(static_cast<float>(-x + a_Offset.X), 0.5f, static_cast<float>(-y + a_Offset.Y)),
-															 irr::core::vector3df(static_cast<float>(-x + a_Offset.X), 0.5f, static_cast<float>(-y + a_Offset.Y)));
+					std::shared_ptr<WalledMazeTile> mazeTile = std::make_shared<WalledMazeTile>(m_IrrDevice, 
+						irr::core::vector3df(static_cast<float>(-x + a_Offset.X), 0.5f, static_cast<float>(-y + a_Offset.Y)));
 					const irr::scene::IAnimatedMeshSceneNode* wallMeshNode = mazeTile->getWall()->getMeshNode();
 					irr::core::vector3df boundingBox = wallMeshNode->getBoundingBox().getExtent();
-					mazeTile->getWall()->HiddenPosition = irr::core::vector3df(mazeTile->getWall()->HiddenPosition.X, -boundingBox.Y * wallMeshNode->getScale().Y, mazeTile->getWall()->HiddenPosition.Z);
+					mazeTile->getWall()->HiddenPosition = irr::core::vector3df(static_cast<float>(-x + a_Offset.X), 
+						-boundingBox.Y * wallMeshNode->getScale().Y, static_cast<float>(-y + a_Offset.Y));
 					mazeTile->getWall()->TransitionSpeed = 0.5f;
 					MazeTiles[x].push_back(mazeTile);
 				}

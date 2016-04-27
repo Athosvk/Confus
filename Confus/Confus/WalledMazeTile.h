@@ -19,8 +19,7 @@ namespace Confus
 		/// </summary>
 		/// <param name="a_Device">The current Irrlicht device.</param>
 		/// <param name="a_RealPosition">The position of the wall when it is raised</param>
-		/// <param name="a_HiddenPosition">The position of the wall when it is lowered</param>
-		WalledMazeTile(irr::IrrlichtDevice * a_Device, irr::core::vector3df a_RealPosition, irr::core::vector3df a_HiddenPosition);
+		WalledMazeTile(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RealPosition);
 
 		/// <summary>
 		/// The fixed update used to update the state of the walledMazeTile

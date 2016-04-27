@@ -5,11 +5,9 @@
 
 namespace Confus
 {
-    MoveableWall::MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition,
-        irr::core::vector3df a_HiddenPosition)
-        : m_RegularPosition(a_RegularPosition),
-        HiddenPosition(a_HiddenPosition)
-    {
+    MoveableWall::MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition)
+        : m_RegularPosition(a_RegularPosition)
+	{
         loadMesh(a_Device->getSceneManager());
         loadTextures(a_Device->getVideoDriver());
         m_MeshNode->setPosition(m_RegularPosition);
