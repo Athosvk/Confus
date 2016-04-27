@@ -3,14 +3,6 @@
 #include <memory>
 #include <Irrlicht/irrlicht.h>
 
-namespace irr
-{
-	namespace scene
-	{
-		class ISceneNode;
-	}
-}
-
 namespace Confus
 {
 	namespace Physics
@@ -85,6 +77,8 @@ namespace Confus
 			void setVelocity(irr::core::vector3df a_Velocity) const;
 
 			irr::core::vector3df getVelocity() const;
+
+			void applyForce(irr::core::vector3df a_Force) const;
 		private:
 			/// <summary> Sets the position of the attached scene node in absolute/world terms </summary>
 			/// <param name="a_Position"> The world postion </param>

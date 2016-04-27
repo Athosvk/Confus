@@ -85,6 +85,11 @@ namespace Confus
 			return PhysicsWorld::toIrrlichtVector(m_Body->getLinearVelocity());
 		}
 
+		void RigidBody::applyForce(irr::core::vector3df a_Force) const
+		{
+			m_Body->applyForce(PhysicsWorld::toBulletVector(a_Force), btVector3(0.f, 0.f, 0.f));
+		}
+
 		void RigidBody::setAbsoluteTransform(const btTransform& a_Transform) const
 		{
 			if(m_AttachedNode->getParent() != nullptr)
