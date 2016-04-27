@@ -183,9 +183,6 @@ namespace ConfusServer
         {
             m_FootstepSoundEmitter->playFootStepSound();
         }
-        
-        //std::cout << "Player rotation X on server is: " << getRotation().X << "\n";
-        //std::cout << "Player position Y on server is: " << getPosition().Y << "\n";
     }
 
     void Player::fixedUpdate()
@@ -246,6 +243,24 @@ namespace ConfusServer
             else if(state == EPlayerState::HeavyAttacking)
             {
                 startHeavyAttack();
+            }
+
+            // Change this into something better when we are not using irrlichts FPS camera. 
+            if(forwardKeyPressed)
+            {
+                CameraNode->setPosition(irr::core::vector3df(getPosition().X, getPosition().Y + 10, getPosition().Z));
+            } 
+            else if(backwardKeyPressed)
+            {
+                CameraNode->setPosition(irr::core::vector3df(getPosition().X, getPosition().Y - 10, getPosition().Z));
+            }
+            else if(leftKeyPressed)
+            {
+                CameraNode->setPosition(irr::core::vector3df(getPosition().X - 10, getPosition().Y, getPosition().Z));
+            }
+            else if(rightKeyPressed)
+            {
+                CameraNode->setPosition(irr::core::vector3df(getPosition().X + 10, getPosition().Y, getPosition().Z));
             }
     });
     }

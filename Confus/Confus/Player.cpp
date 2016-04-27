@@ -254,7 +254,7 @@ namespace Confus
 	{
         m_Connection = a_Connection;
 
-      /*  m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::BitStream* a_Data)
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::BitStream* a_Data)
         {
             irr::core::vector3df newPosition;
 
@@ -263,7 +263,7 @@ namespace Confus
 
             std::cout << std::to_string((newPosition).X);
             CameraNode->setPosition(newPosition);
-        });*/
+        });
 	}
 
      void Player::updateServer() const
