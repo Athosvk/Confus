@@ -100,6 +100,7 @@ namespace Confus
 		{
 			m_Body->forceActivationState(DISABLE_SIMULATION);
 			m_Body->setCollisionFlags(m_Body->getCollisionFlags() | btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
+			m_Active = false;
 		}
 
 		void RigidBody::activate()
@@ -113,12 +114,18 @@ namespace Confus
 				m_Body->forceActivationState(DISABLE_DEACTIVATION);
 			}
 			m_Body->setCollisionFlags(m_Body->getCollisionFlags() & ~btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
+			m_Active = true;
 		}
 
 		void RigidBody::disableSleeping()
 		{
 			m_Body->forceActivationState(DISABLE_DEACTIVATION);
 			m_SleepingAllowed = false;
+		}
+
+		bool RigidBody::isActive() const
+		{
+			return m_Active;
 		}
 
 		bool RigidBody::isTrigger() const

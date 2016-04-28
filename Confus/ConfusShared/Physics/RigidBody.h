@@ -41,6 +41,7 @@ namespace Confus
 			std::unique_ptr<btDefaultMotionState> m_MotionState;
 			bool m_SleepingAllowed = true;
 			bool m_Trigger = false;
+			bool m_Active = true;
 		public:
 			/// <summary> Initializes a new instance of the <see cref="RigidBody"/> class </summary>
 			/// <param name="a_RigidBody">The Bullet rigid body </param>
@@ -87,6 +88,8 @@ namespace Confus
 			void activate();
 
 			void disableSleeping();
+
+			bool isActive() const;
 			
 			/// <summary> Determines whether this instance is a trigger collider </summary>
 			/// <returns> Whether this is a trigger collider </returns>

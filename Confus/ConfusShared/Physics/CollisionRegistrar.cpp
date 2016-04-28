@@ -1,4 +1,6 @@
 #include "CollisionRegistrar.h"
+#include "BoxCollider.h"
+#include "RigidBody.h"
 
 namespace Confus
 {
@@ -53,7 +55,9 @@ namespace Confus
 		void CollisionRegistrar::handleCollision(BoxCollider* a_ColliderA, BoxCollider* a_ColliderB)
 		{
 			m_Collisions.emplace_back(a_ColliderA, a_ColliderB);
-			if(std::find(m_PreviousCollisions.begin(), m_PreviousCollisions.end(),
+			if(a_ColliderA->getRigidBody()->isActive() && a_ColliderB->getRigidBody()->isActive() &&
+				a_ColliderA->getRigidBody()->isTrigger() && a_ColliderB->getRigidBody()->isTrigger() &&
+				std::find(m_PreviousCollisions.begin(), m_PreviousCollisions.end(),
 				CollisionInfo(a_ColliderA, a_ColliderB)) == m_PreviousCollisions.end())
 			{
 				if(m_TriggerEnterCallbacks.find(a_ColliderA) != m_TriggerEnterCallbacks.end())
