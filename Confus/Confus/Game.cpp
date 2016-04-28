@@ -29,8 +29,6 @@ namespace Confus
     {
         initializeConnection();
         m_PlayerNode.setConnection(m_Connection.get());
-        RakNet::BitStream stream;
-        stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
 
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();

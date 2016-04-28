@@ -52,7 +52,6 @@ namespace Confus
         /// The Players to test with.
         /// </summary>
         Player m_PlayerNode;
-		//Player m_SecondPlayerNode;
         RespawnFloor m_RedRespawnFloor;
         RespawnFloor m_BlueRespawnFloor;
 
