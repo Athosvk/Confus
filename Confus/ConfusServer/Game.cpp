@@ -49,6 +49,11 @@ namespace ConfusServer
             addPlayer(a_Data);
         });
 
+        m_Connection->addFunctionToMap(ID_DISCONNECTION_NOTIFICATION, [this](RakNet::Packet* a_Data)
+        {
+            removePlayer(a_Data);
+        });
+
 
         m_Device->getCursorControl()->setVisible(false);
       
@@ -159,18 +164,80 @@ namespace ConfusServer
 		{
 			timer = 0.0f;
 			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
+            updatePlayers();
 		}
 		m_MazeGenerator.fixedUpdate();
+
+        //TODO crashes server, too many calls/packets or function is just not correct
+       
     }
 
     void Game::addPlayer(RakNet::Packet* a_Data)
     {
         long long id = static_cast<long long>(a_Data->guid.g);
+        ETeamIdentifier teamID = m_PlayerArray.size() % 2 == 0 ? ETeamIdentifier::TeamRed : ETeamIdentifier::TeamBlue;
 
-        Player newPlayer(m_Device, id, m_PlayerArray.size() % 2 == 0 ? ETeamIdentifier::TeamRed : ETeamIdentifier::TeamBlue, false);
-        
-        m_PlayerArray.push_back(&newPlayer);
+        Player* newPlayer = new Player(m_Device, id, teamID, false);
+        m_PlayerArray.push_back(newPlayer);
+
+        RakNet::BitStream stream;
+        stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::MainPlayerJoined));
+        stream.Write(static_cast<long long>(id));
+        stream.Write(static_cast<ETeamIdentifier>(teamID));
+        stream.Write(static_cast<size_t>(m_PlayerArray.size()));
+        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        {
+            stream.Write(static_cast<long long>(m_PlayerArray[i]->ID));
+            stream.Write(static_cast<ETeamIdentifier>(*m_PlayerArray[i]->TeamIdentifier));
+        }
+        RakNet::AddressOrGUID guid = a_Data->guid;
+        m_Connection->sendPacket(&stream, &guid);
+
+        RakNet::BitStream stream2;
+        stream2.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::OtherPlayerJoined));
+        stream2.Write(static_cast<long long>(id));
+        stream2.Write(static_cast<ETeamIdentifier>(teamID));
+
+        m_Connection->broadcastPacket(&stream2, &guid);
+
         std::cout << id << " joined" << std::endl;
+    }
+
+    void Game::removePlayer(RakNet::Packet* a_Data)
+    {
+        long long id = static_cast<long long>(a_Data->guid.g);
+        std::cout << id << " left" << std::endl;
+
+        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        {
+            if(m_PlayerArray[i]->ID == id)
+            {
+                m_PlayerArray[i]->remove();
+                delete(m_PlayerArray[i]);
+                m_PlayerArray.erase(m_PlayerArray.begin()+i);
+            }
+        }
+
+        RakNet::BitStream stream;
+        stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::PlayerLeft));
+        stream.Write(id);
+        RakNet::AddressOrGUID guid = a_Data->guid;
+        m_Connection->broadcastPacket(&stream, &guid);
+    }
+
+    void Game::updatePlayers()
+    {
+        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        {
+            std::cout << m_PlayerArray[i]->ID << " trying to send position" << std::endl;
+            RakNet::BitStream stream;
+            stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdatePosition));
+            stream.Write(static_cast<long long>(m_PlayerArray[i]->ID));
+            stream.Write(static_cast<irr::core::vector3df>(m_PlayerArray[i]->CameraNode->getPosition()));
+            stream.Write(static_cast<irr::core::vector3df>(m_PlayerArray[i]->CameraNode->getRotation()));
+            m_Connection->broadcastPacket(&stream, nullptr);
+            std::cout << m_PlayerArray[i]->ID << " sent position" << std::endl;
+        }
     }
 
     void Game::render()

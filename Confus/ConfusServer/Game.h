@@ -134,5 +134,7 @@ namespace ConfusServer
 		/// </summary>
 		void processConnection();
         void addPlayer(RakNet::Packet* a_Data);
+        void removePlayer(RakNet::Packet* a_Data);
+        void updatePlayers();
     };
 }

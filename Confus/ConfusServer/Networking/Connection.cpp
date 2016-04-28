@@ -68,6 +68,20 @@ namespace ConfusServer
             }
         }
 
+        void Connection::sendPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Address)
+        {
+            RakNet::AddressOrGUID guid =  *a_Address;
+            m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
+                PacketReliability::RELIABLE_ORDERED, 0, guid, false);
+        }
+
+        void Connection::broadcastPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Excluded)
+        {
+            RakNet::AddressOrGUID guid = a_Excluded != nullptr ? *a_Excluded : m_Interface->GetMyGUID();
+            m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
+                    PacketReliability::RELIABLE_ORDERED, 0, guid, true);
+        }
+
         void Connection::handlePacket(RakNet::Packet* a_Data, unsigned char a_Event)
         {
             for(size_t i = 0u; i < m_CallbackFunctionMap[a_Event].size(); i++)
