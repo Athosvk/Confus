@@ -128,9 +128,6 @@
     <ClInclude Include="EventManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MoveableWall.h">
       <Filter>Header Files</Filter>
     </ClInclude>

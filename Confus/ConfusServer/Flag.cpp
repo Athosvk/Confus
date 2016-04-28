@@ -1,6 +1,8 @@
 #include <irrlicht/irrlicht.h>
 #include <IrrAssimp/IrrAssimp.h>
 
+#include <RakNet\BitStream.h>
+
 #include "Flag.h"
 #include "Player.h"
 #include "Collider.h"
@@ -140,7 +142,6 @@ namespace ConfusServer {
 			return;
 		}
 
-
 		if (*a_PlayerObject->TeamIdentifier != *m_TeamIdentifier && *a_PlayerObject->CarryingFlag == EFlagEnum::None) 
         {
             // Capturing flag if player has no flag
@@ -210,6 +211,40 @@ namespace ConfusServer {
         m_FlagNode->setRotation(*m_StartRotation);
 		*m_FlagStatus = EFlagEnum::FlagBase;
     }
+
+    void Flag::setConnection(Networking::Connection* a_Connection)
+    {
+        m_Connection = a_Connection;
+
+       /* m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::Connection::EPacketType::Flag), [this](RakNet::Bitstream* a_Packet) 
+        {
+            
+        });*/
+    }
+
+    void Flag::updateClients()
+    {
+        // To update all clients we will send:
+        // - Flag Color (teamIdentifier)
+        // - Flag State 
+        // - Flag position
+        
+       //if(m_FlagStatus != EFlagEnum::FlagBase) 
+        RakNet::BitStream outputStream;
+
+        outputStream.Write(Networking::Connection::EPacketType::Flag);
+        outputStream.Write(m_TeamIdentifier);
+        outputStream.Write(m_FlagStatus);
+        outputStream.Write(m_FlagNode->getPosition());
+
+        m_Connection->broadcastBitstream(outputStream);
+    }
+
+    void Flag::update()
+    {
+        updateClients();
+    }
+
 
 	Flag::~Flag() {
         m_FlagNode->setParent(m_FlagOldParent);

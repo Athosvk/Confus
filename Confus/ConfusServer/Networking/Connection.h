@@ -29,21 +29,23 @@ namespace ConfusServer
         class Connection
         {
         public:
+            /// <summary> Is the server connected to a client? </summary>
+            bool m_Connected = false;
         private:
 
             /// <summary> The RakNet interface for interacting with RakNet </summary>
             RakNet::RakPeerInterface* m_Interface; 
             /// <summary> The map thast contains the server events and the functions that involve them. </summary>
             std::map<unsigned char, std::vector<std::function<void(RakNet::Packet* a_Data)>>> m_CallbackFunctionMap;
-
         public:
 			/// <summary> The type of packet </summary>
-			enum class EPacketType : unsigned char
-			{
+            enum class EPacketType : unsigned char
+            {
                 Message = ID_USER_PACKET_ENUM + 1,
                 ScoreUpdate = Message + 1,
                 PlayerAttack = ScoreUpdate + 1,
-                MazeChange = PlayerAttack + 1
+                MazeChange = PlayerAttack + 1,
+                Flag = MazeChange + 1
 			};
             /// <summary> Initializes a new instance of the <see cref="Connection"/> class. </summary>
             Connection();

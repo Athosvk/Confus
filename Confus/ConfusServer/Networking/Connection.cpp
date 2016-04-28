@@ -16,6 +16,7 @@ namespace ConfusServer
     {
         Connection::Connection()
         {
+            m_Connected = false;
             m_Interface = RakNet::RakPeerInterface::GetInstance();
             RakNet::SocketDescriptor socketDescriptor(60000, nullptr);
             auto result = m_Interface->Startup(5, &socketDescriptor, 1);
@@ -39,6 +40,10 @@ namespace ConfusServer
             RakNet::Packet* packet = m_Interface->Receive();
             while(packet != nullptr)
             {
+                if(packet->data[0] == ID_NEW_INCOMING_CONNECTION)
+                {
+                    m_Connected = true;
+                }
                 handlePacket(packet, static_cast<unsigned char>(packet->data[0]));
 
                 m_Interface->DeallocatePacket(packet);
@@ -96,11 +101,14 @@ namespace ConfusServer
 
         void Connection::broadcastBitstream(RakNet::BitStream& a_BitStream)
         {
-            auto openConnections = getOpenConnections();
-
-            for(unsigned short i = 0u; i < openConnections.size(); ++i)
+            if(m_Connected)
             {
-                m_Interface->Send(&a_BitStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0, openConnections[i], false);
+                auto openConnections = getOpenConnections();
+
+                for(unsigned short i = 0u; i < openConnections.size(); ++i)
+                {
+                    m_Interface->Send(&a_BitStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0, openConnections[i], false);
+                }
             }
         }
     }

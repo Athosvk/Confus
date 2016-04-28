@@ -93,6 +93,9 @@
     <ClCompile Include="ClientTeamScore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FlagGUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -183,6 +186,12 @@
       <Filter>Shared Files</Filter>
     </ClInclude>
     <ClInclude Include="ClientTeamScore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\TeamIdentifier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

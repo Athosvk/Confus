@@ -136,6 +136,9 @@ namespace ConfusServer
         m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
 
         m_PlayerNode.update();
+        m_BlueFlag.update();
+        m_RedFlag.update();
+
         m_Listener.setPosition(m_PlayerNode.CameraNode->getAbsolutePosition());
 
         irr::core::quaternion playerRotation(m_PlayerNode.CameraNode->getRotation());

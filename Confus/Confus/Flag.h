@@ -1,4 +1,5 @@
 #pragma once
+#include "Networking\ClientConnection.h"
 #include "../Common/TeamIdentifier.h"
 
 namespace Confus 
@@ -28,11 +29,15 @@ enum class EFlagEnum
         irr::scene::ISceneNode* m_FlagOldParent = nullptr;
 		EFlagEnum* m_FlagStatus;
 
+        /// <summary> A pointer to the connection with the server. </summary>
+        Networking::ClientConnection* m_Connection;
     public: 
         /// <summary> Flag class constructor. </summary>
         /// <param name="a_Device">The active Irrlicht Device.</param>
         /// <param name="a_TeamIdentifier">The team's identifier the flag should have.</param>
         Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier);
+
+        void setConnection(Networking::ClientConnection * a_Connection);
 
         /// <summary> Flag class destructor </summary>
         ~Flag();

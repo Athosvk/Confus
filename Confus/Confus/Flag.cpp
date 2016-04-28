@@ -218,6 +218,16 @@ namespace Confus {
 		return a_SceneManager->createTriangleSelectorFromBoundingBox(m_FlagNode);
 	}
 
+    void Flag::setConnection(Networking::ClientConnection* a_Connection)
+    {
+        m_Connection = a_Connection;
+
+         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Flag), [this](RakNet::BitStream* a_Packet)
+        {
+            std::cout << "Getting a message with Flag enum!";
+        });
+    }
+
 	Flag::~Flag() {
         m_FlagNode->setParent(m_FlagOldParent);
 		delete(m_Collider);

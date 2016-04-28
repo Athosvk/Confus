@@ -128,22 +128,20 @@ namespace Confus
         std::cin >> serverPort;
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Packet) {
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::BitStream* a_InputStream) {
             int timeMazeChanges, mazeSeed;
-            RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
-            inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
-            inputStream.Read(timeMazeChanges);
-            inputStream.Read(mazeSeed);
+            a_InputStream->IgnoreBytes(sizeof(RakNet::MessageID));
+            a_InputStream->Read(timeMazeChanges);
+            a_InputStream->Read(mazeSeed);
             std::cout << "Update is in " << (timeMazeChanges - static_cast<int>(RakNet::GetTimeMS())) << " ms, the seed is:\t" << mazeSeed << std::endl;
             m_MazeGenerator.refillMainMazeRequest(mazeSeed, timeMazeChanges);
         });
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [](RakNet::Packet* a_Packet) {
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [](RakNet::BitStream* a_InputStream) {
             int redScore, blueScore;
-            RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
-            inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
-            inputStream.Read(redScore);
-            inputStream.Read(blueScore);
+            a_InputStream->IgnoreBytes(sizeof(RakNet::MessageID));
+            a_InputStream->Read(redScore);
+            a_InputStream->Read(blueScore);
             ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, redScore);
             ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, blueScore);
             std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
