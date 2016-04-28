@@ -15,7 +15,7 @@ namespace Confus
     const unsigned Player::HeavyAttackDamage = 30u;
 
 	Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, irr::s32 a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
-		: m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.5f, 0.5f, 3.0f)),
+		: m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f)),
 		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), a_ID),
 		TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
 		CarryingFlag(new EFlagEnum(EFlagEnum::None))
@@ -80,11 +80,13 @@ namespace Confus
 			Physics::ECollisionFilter::Player, ~Physics::ECollisionFilter::Player);
 		m_Collider->getRigidBody()->disableSleeping();
 
+
         createAudioEmitter();
         startWalking();
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
+		PlayerNode->setAnimationEndCallback(this);
     }
 
 	Player::~Player() {
@@ -139,7 +141,7 @@ namespace Confus
 			timer = 0.0f;
 			rigidBody->applyForce(irr::core::vector3df(0.0f, 1200.0f, 0.0f));
 		}
-		timer += 0.020f;
+		timer += 0.20f;
     }
 
     void Player::render()

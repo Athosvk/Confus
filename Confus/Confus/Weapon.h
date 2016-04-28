@@ -2,7 +2,8 @@
 #include "../ConfusShared/Physics/BoxCollider.h"
 
 namespace Confus
-{    
+{
+	class Player;
 	namespace Physics
 	{
 		class PhysicsWorld;
@@ -66,11 +67,7 @@ namespace Confus
     private:
         /// <summary> Damages the playe. </summary>
         /// <remarks> Triggered as callback on collision </remarks>
-        void damagePlayer(irr::scene::ISceneNode* a_CollidedNode) const;
-        
-        /// <summary> Backstabs the player collided with </summary>
-        /// <remarks> Triggered if we are in the given angle behind the player </remarks>
-        void backstabPlayer() const;
+        void damagePlayer(Player* a_Player) const;
 
         /// <summary> Gets the angle between the given vectors </summary>
         /// <param name="a_Vector1">The first vector </param>

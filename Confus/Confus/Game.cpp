@@ -23,8 +23,8 @@ namespace Confus
     Game::Game(irr::core::dimension2d<irr::u32> a_Resolution)
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_DIRECT3D9, a_Resolution)),
 		m_PhysicsWorld(m_Device),
-		m_MazeGenerator(m_Device, 60, 60,(19+20+21+22+23+24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-			irr::core::vector2df(30., 30.), m_PhysicsWorld),
+		m_MazeGenerator(m_Device, 40, 40,(19+20+21+22+23+24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+			irr::core::vector2df(15., 15.), m_PhysicsWorld),
         m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true),
         m_SecondPlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamRed, false),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_PhysicsWorld),

@@ -25,7 +25,7 @@ namespace Confus
     /// <summary> 
     /// Player class
     /// </summary>
-    class Player : irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
+    class Player : public irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
     {   
     public:
 		/// <summary> The IAnimatedMeshSceneNode for the player </summary>

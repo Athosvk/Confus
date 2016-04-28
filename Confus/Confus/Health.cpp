@@ -15,7 +15,10 @@ namespace Confus
 			if (m_Health <= 0)
 			{
 				m_Health = 0;
-				m_DeathCallback(m_AttachedNode);
+				if(m_DeathCallback)
+				{
+					m_DeathCallback(m_AttachedNode);
+				}
 			}
 		}
 	}

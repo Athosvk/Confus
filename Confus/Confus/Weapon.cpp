@@ -4,7 +4,7 @@
 #include "Weapon.h"
 #include "../ConfusShared/Physics/RigidBody.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
-#include <iostream>
+#include "Player.h"
 
 namespace Confus
 {
@@ -23,24 +23,27 @@ namespace Confus
         {
             if(!m_Collided)
             {
-                m_Collided = true;
-                damagePlayer(a_Other->getRigidBody()->getAttachedNode());
+				auto playerNode = dynamic_cast<Player*>(*a_Other->getRigidBody()->getAttachedNode()->getChildren().begin());
+				if(playerNode != nullptr)
+				{
+					damagePlayer(playerNode);
+					m_Collided = true;
+				}
             }
             return true;
         });
     }
 
-    void Weapon::damagePlayer(irr::scene::ISceneNode* a_CollidedNode) const
+    void Weapon::damagePlayer(Player* a_Player) const
     {
-        if(getAngle(a_CollidedNode->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle))
+        if(getAngle(a_Player->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle))
         {
-            backstabPlayer();
+			a_Player->PlayerHealth.damage(a_Player->PlayerHealth.getHealth());
         }
-    }
-
-    void Weapon::backstabPlayer() const
-    {
-
+		else
+		{
+			a_Player->PlayerHealth.damage(Damage);
+		}
     }
 
     float Weapon::getAngle(irr::core::vector3df a_Vector1, irr::core::vector3df a_Vector2) const
@@ -50,10 +53,12 @@ namespace Confus
 
     void Weapon::enableCollider()
     {
+		m_Collider->getRigidBody()->activate();
     }
 
     void Weapon::disableCollider()
     {
+		m_Collider->getRigidBody()->deactivate();
     }
 
     void Weapon::resetCollider()
