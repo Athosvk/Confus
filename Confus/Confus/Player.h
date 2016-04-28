@@ -27,8 +27,8 @@ namespace Confus
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
         /// <summary> The ICameraSceneNode for the player </summary>
         irr::scene::ICameraSceneNode* CameraNode = nullptr;
-		EFlagEnum* CarryingFlag;
-		ETeamIdentifier* TeamIdentifier;    
+		EFlagEnum CarryingFlag;
+		ETeamIdentifier TeamIdentifier;    
         Flag* FlagPointer = nullptr;
 		Health PlayerHealth;
         /// <summary> Determines if this player is this users player or not </summary>

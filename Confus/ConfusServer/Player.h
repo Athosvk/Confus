@@ -21,8 +21,8 @@ namespace ConfusServer {
 		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
         irr::scene::ICameraSceneNode* CameraNode = nullptr;
-		EFlagEnum* CarryingFlag;
-		ETeamIdentifier* TeamIdentifier;    
+		EFlagEnum CarryingFlag;
+		ETeamIdentifier TeamIdentifier;    
         Flag* FlagPointer;
         long long ID;
 	private:
