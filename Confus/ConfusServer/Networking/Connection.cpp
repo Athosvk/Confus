@@ -1,12 +1,14 @@
+#include <RakNet/RakPeerInterface.h>
+#include <RakNet/RakNetTypes.h>
+#include <RakNet/BitStream.h>
 #include <iostream>
 #include <vector>
 #include <string>
 #include <functional>
-#include <RakNet/RakPeerInterface.h>
-#include <RakNet/RakNetTypes.h>
-#include <RakNet/BitStream.h>
 
 #include "Connection.h"
+#define DEBUG_CONSOLE
+#include "../../Common/Debug.h"
 
 namespace ConfusServer
 {
@@ -14,6 +16,7 @@ namespace ConfusServer
     {
         Connection::Connection()
         {
+            m_Interface = RakNet::RakPeerInterface::GetInstance();
             RakNet::SocketDescriptor socketDescriptor(60000, nullptr);
             auto result = m_Interface->Startup(5, &socketDescriptor, 1);
 			if(result != RakNet::StartupResult::RAKNET_STARTED)
@@ -62,23 +65,28 @@ namespace ConfusServer
             m_CallbackFunctionMap[a_Event].push_back(a_Function);
         }
 
+        std::vector<RakNet::SystemAddress> Connection::getOpenConnections() const
+        {
+            auto connectionCount = getConnectionCount();
+            std::vector<RakNet::SystemAddress> openConnections(static_cast<size_t>(connectionCount));
+            auto serverID = m_Interface->GetConnectionList(openConnections.data(),
+                &connectionCount);
+            return openConnections;
+        }
+
         unsigned short Connection::getConnectionCount() const
         {
             unsigned short openConnections = 0;
-			//Passing nullptr allows us to get the amount of open connections
+            //Passing nullptr allows us to get the amount of open connections
             m_Interface->GetConnectionList(nullptr, &openConnections);
             return openConnections;
         }
 
         void Connection::closeAllConnections()
         {
-            auto connectionCount = getConnectionCount();
-            std::vector<RakNet::SystemAddress>
-                openConnections(static_cast<size_t>(connectionCount));
-            auto serverID = m_Interface->GetConnectionList(openConnections.data(),
-                &connectionCount);
+            auto openConnections = getOpenConnections();
 
-            for(unsigned short i = 0u; i < connectionCount; ++i)
+            for(unsigned short i = 0u; i < openConnections.size(); ++i)
             {
                 m_Interface->CloseConnection(openConnections[i], true);
             }
@@ -106,6 +114,16 @@ namespace ConfusServer
             {
                 auto openConnections = getOpenConnections();
                 m_Interface->Send(&a_InputStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE, 0, openConnections[0], false);
+            }
+        }
+
+        void Connection::broadcastBitstream(RakNet::BitStream& a_BitStream)
+        {
+            auto openConnections = getOpenConnections();
+
+            for(unsigned short i = 0u; i < openConnections.size(); ++i)
+            {
+                m_Interface->Send(&a_BitStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0, openConnections[i], false);
             }
         }
     }

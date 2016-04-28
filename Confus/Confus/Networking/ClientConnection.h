@@ -23,8 +23,10 @@ namespace Confus
         /// <summary> The type of packet </summary>
         enum class EPacketType : unsigned char
         {
-            Message = 1 + ID_USER_PACKET_ENUM,
-            Player = 3 + ID_USER_PACKET_ENUM
+            Message = ID_USER_PACKET_ENUM + 1,
+            ScoreUpdate = Message + 1,
+            Player = ScoreUpdate + 1,
+            MazeChange = Player + 1
         };
         /// <summary>
         /// Represents a connection to the server that this clients is connected to.
@@ -40,7 +42,7 @@ namespace Confus
         class ClientConnection
         {
 		private:
-            RakNet::RakPeerInterface* m_Interface;
+			RakNet::RakPeerInterface* m_Interface;
 			/// <summary> The messages it was not able to send yet due to not having a connection established </summary>
 			std::queue<RakNet::BitStream> m_StalledMessages;
 			/// <summary> Whether we are connected to a server</summary>

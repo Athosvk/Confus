@@ -30,6 +30,20 @@ namespace Confus
 		/// The seed used to randomly chose an available neighbour and thus the seed that determines the layout of the maze.
 		/// </summary>
 		int m_Seed;
+		/// <summary>
+		/// The point from which the maze will be generated.
+		/// </summary>
+		irr::core::vector2df m_GenerateStartPoint;	
+			
+        /// <summary>
+        /// The time at which the generator will refill the maze again
+        /// <summary>
+        int refillMazeTime;
+
+        /// <summary>
+        /// A bool that checks if the maze fill request has been fulfilled yet
+        /// </summary>
+        bool hasBeenRefilled = true;
 	public:
 		/// <summary>
 		/// Loads the necessary textures
@@ -37,7 +51,7 @@ namespace Confus
 		/// <param name="a_Device"> The instance of the IrrlichtDevice </param>
 		/// <param name="a_StartPosition">The startposition for walls.</param>
 		/// <param name="a_InitialSeed">The initial seed used to generate the first maze.</param>
-		MazeGenerator(irr::IrrlichtDevice * a_Device, irr::core::vector3df a_StartPosition, int a_InitialSeed);
+		MazeGenerator(irr::IrrlichtDevice * a_Device, int a_MazeSizeX, int a_MazeSizeY, irr::core::vector3df a_StartPosition, int a_InitialSeed, irr::core::vector2df a_GenerateStartPoint);
 
 		/// <summary>
 		/// The fixed update used to update the state of the main maze
@@ -49,6 +63,13 @@ namespace Confus
 		/// </summary>
 		/// <param name="a_Seed">Seed used to make a new maze</param>
 		void refillMainMaze(int a_Seed);
+
+        /// <summary>
+        ///  replaces the main maze with a newly generated replacement maze
+        /// </summary>
+        /// <param name="a_Seed">Seed used to make a new maze</param>
+        /// <param name="a_ChangeWantedTime">The time at which the maze should change.</param>
+        void refillMainMazeRequest(int a_Seed, int a_ChangeWantedTime);
 
 		/// <summary>
 		/// Default destructor, could be omitted

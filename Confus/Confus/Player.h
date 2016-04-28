@@ -6,11 +6,11 @@
 #include "Audio\PlayerAudioEmitter.h"
 #include "Health.h"
 #include "Weapon.h"
+#include "../Common/TeamIdentifier.h"
 
 namespace Confus 
 {
     enum class EFlagEnum;
-	enum class ETeamIdentifier;
     class EventManager;
     class Flag;
     enum class EPlayerState : unsigned char
