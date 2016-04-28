@@ -8,8 +8,11 @@
 
 namespace ConfusServer {
 
-	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier) : m_TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
-				m_FlagStatus(new EFlagEnum(EFlagEnum::FlagBase)) {
+	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, TeamScore a_TeamScore) :
+                m_TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
+		        m_FlagStatus(new EFlagEnum(EFlagEnum::FlagBase)),
+                m_TeamScore(a_TeamScore) 
+    {
         //Get drivers to load model
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
@@ -161,8 +164,6 @@ namespace ConfusServer {
                     if(a_PlayerObject->FlagPointer != nullptr) 
 					{
                         // Player scored a point!
-                        a_PlayerObject->FlagPointer->returnToStartPosition();
-                        a_PlayerObject->FlagPointer = nullptr;
                         score(a_PlayerObject);
                     }
 					else
@@ -178,6 +179,9 @@ namespace ConfusServer {
 	void Flag::score(Player* a_PlayerObject) 
     {
         *a_PlayerObject->CarryingFlag = EFlagEnum::None;
+        m_TeamScore.teamScoredPoint(*a_PlayerObject->TeamIdentifier);
+        returnToStartPosition();
+        a_PlayerObject->FlagPointer = nullptr;
 	}
 
 

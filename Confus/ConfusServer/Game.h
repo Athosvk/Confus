@@ -9,9 +9,10 @@
 #include "Audio\PlayerAudioEmitter.h"
 #include "EventManager.h"
 #include "Flag.h"
+#include "TeamScore.h"
 
 namespace ConfusServer
-{    
+{ 
     /// <summary> 
     /// The Game instance itself, running the game loop. It ties the objects in
     /// the Game to the Irrlicht instance, so that these can communicate through this
@@ -32,6 +33,15 @@ namespace ConfusServer
 		/// The interval at which packets queue before processed
 		/// </summary>
 		static const double ProcessPacketsInterval;
+        /// <summary>
+        /// The interval at which packets queue before processed
+        /// </summary>
+        static const double MazeChangeInterval;
+        /// <summary>
+        /// The delay the maze has before it changes after broadcasting
+        /// </summary>
+        static const double MazeDelay;
+
 
         /// <summary>
         /// The instance of the IrrlichtDevice
@@ -75,6 +85,10 @@ namespace ConfusServer
         /// </summary>
         double m_DeltaTime = 0.0;
         /// <summary>
+        /// The time interval between the last update and the new maze update.
+        /// </summary>
+        double m_MazeTimer = 0.0;
+        /// <summary>
 		/// The total elapsed game ticks in milliseconds in the last frame
         /// </summary>
         irr::u32 m_PreviousTicks = 0;
@@ -85,6 +99,8 @@ namespace ConfusServer
         /// <summary> The connection to the clients of this server</summary>
         std::unique_ptr<Networking::Connection> m_Connection;
         irr::scene::ISceneNode* m_LevelRootNode;
+        /// <summary> Team Score Manager </summary>
+        TeamScore m_TeamScoreManager;
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
@@ -133,8 +149,12 @@ namespace ConfusServer
 		/// Processes the packets connection
 		/// </summary>
 		void processConnection();
-        void addPlayer(RakNet::Packet* a_Data);
+	    void addPlayer(RakNet::Packet* a_Data);
         void removePlayer(RakNet::Packet* a_Data);
         void updatePlayers();
+        /// <summary>
+        /// Broadcast a maze change
+        /// </summary>
+        void broadcastMazeChange(int a_Seed);
     };
 }

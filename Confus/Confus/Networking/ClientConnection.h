@@ -7,6 +7,15 @@
 #include <vector>
 #include <functional>
 
+namespace RakNet
+{
+    class RakPeerInterface;
+    struct SystemAddress;
+    struct Packet;
+    class BitStream;
+    struct AddressOrGUID;
+}
+
 namespace Confus
 {
     namespace Networking
@@ -18,7 +27,10 @@ namespace Confus
             MainPlayerJoined = 2 + ID_USER_PACKET_ENUM,
             OtherPlayerJoined = 3 + ID_USER_PACKET_ENUM,
             PlayerLeft = 4 + ID_USER_PACKET_ENUM,
-            UpdatePosition = 5 + ID_USER_PACKET_ENUM
+            UpdatePosition = 5 + ID_USER_PACKET_ENUM,
+            ScoreUpdate = 6 + ID_USER_PACKET_ENUM,
+            PlayerAttack = 7 + ID_USER_PACKET_ENUM,
+            MazeChange = 8 + ID_USER_PACKET_ENUM
         };
         /// <summary>
         /// Represents a connection to the server that this clients is connected to.
@@ -35,7 +47,7 @@ namespace Confus
         {
 		private:
             /// <summary> The RakNet interface for interacting with RakNet </summary>
-			RakNet::RakPeerInterface* m_Interface = RakNet::RakPeerInterface::GetInstance();
+			RakNet::RakPeerInterface* m_Interface;
 			/// <summary> The messages it was not able to send yet due to not having a connection established </summary>
 			std::queue<std::string> m_StalledMessages;
 			/// <summary> Whether we are connected to a server</summary>

@@ -10,6 +10,7 @@
 #include "Flag.h"
 #include "RespawnFloor.h"
 #include "GUI.h"
+#include "ClientTeamScore.h"
 
 namespace Confus
 {    
@@ -85,12 +86,11 @@ namespace Confus
 		/// The connection as a client to the server that we are currently connected to
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
-
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
         /// </summary>
-        Game();
+        Game(irr::core::dimension2d<irr::u32> a_Resolution);
         /// <summary>
         /// Finalizes an instance of the <see cref="Game"/> class.
         /// </summary>

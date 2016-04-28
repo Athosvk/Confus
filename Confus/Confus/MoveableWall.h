@@ -87,7 +87,7 @@ namespace Confus
         /// </summary>
         void hide();
 
-		const irr::scene::IAnimatedMeshSceneNode* getMeshNode() const { return m_MeshNode; }
+		irr::scene::IAnimatedMeshSceneNode* getMeshNode() const { return m_MeshNode; }
 		
 		/// <summary>
 		/// Starts the rising up transition, for moving into the maze

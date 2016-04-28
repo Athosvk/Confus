@@ -1,10 +1,20 @@
 #pragma once
+#include <vector>
 #include <RakNet/RakPeerInterface.h>
 #include <RakNet/RakNetTypes.h>
 #include <RakNet/MessageIdentifiers.h>
 #include <map>
 #include <vector>
 #include <functional>
+
+namespace RakNet 
+{
+    class RakPeerInterface;
+	struct Packet;
+	class BitStream;
+    struct SystemAddress;
+    struct AdressOrGUID;
+}
 
 namespace ConfusServer
 {
@@ -17,7 +27,10 @@ namespace ConfusServer
             MainPlayerJoined = 2 + ID_USER_PACKET_ENUM,
             OtherPlayerJoined = 3 + ID_USER_PACKET_ENUM,
             PlayerLeft = 4 + ID_USER_PACKET_ENUM,
-            UpdatePosition = 5 + ID_USER_PACKET_ENUM
+            UpdatePosition = 5 + ID_USER_PACKET_ENUM,
+            ScoreUpdate = 6 + ID_USER_PACKET_ENUM,
+            PlayerAttack = 7 + ID_USER_PACKET_ENUM,
+            MazeChange = 8 + ID_USER_PACKET_ENUM
         };
         /// <summary>
         /// Represents the outgoing connection/group of outgoing connections to the client(s)
@@ -32,7 +45,7 @@ namespace ConfusServer
         {
         private:
             /// <summary> The RakNet interface for interacting with RakNet </summary>
-            RakNet::RakPeerInterface* m_Interface = RakNet::RakPeerInterface::GetInstance();
+            RakNet::RakPeerInterface* m_Interface; 
             /// <summary> The map thast contains the server events and the functions that involve them. </summary>
             std::map<unsigned char, std::vector<std::function<void(RakNet::Packet* a_Data)>>> m_CallbackFunctionMap;
 
@@ -52,6 +65,9 @@ namespace ConfusServer
             void addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function);
             void broadcastPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Excluded = nullptr);
             void sendPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Address);
+            /// <summary> Send Package to all clients </summary>
+            /// <param name="a_BitStream">The packet to send.</param>
+            void broadcastBitstream(RakNet::BitStream& a_BitStream);
 		private:
 			/// <summary> Gets the amount of clients connected to this server instance </summary>
 			/// <returns>The amount of clients connected</returns>
@@ -67,10 +83,12 @@ namespace ConfusServer
             /// <param name="a_Event">The server event.</param>
             void handlePacket(RakNet::Packet* a_Data, unsigned char a_Event);
 			/// <summary>
-			/// Prints the message.
+			/// Prints the InputStream.
 			/// </summary>
-			/// <param name="a_Message">The a_ message.</param>
+			/// <param name="a_InputStream">The a_InputStream message.</param>
 			void printMessage(RakNet::BitStream& a_InputStream);
+            /// <summary> Get all the open connections in a vector </summary>
+            std::vector<RakNet::SystemAddress> getOpenConnections() const;
         };
     }
 }
