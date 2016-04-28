@@ -248,19 +248,19 @@ namespace ConfusServer
             // Change this into something better when we are not using irrlichts FPS camera. 
             if(forwardKeyPressed)
             {
-                CameraNode->setPosition(irr::core::vector3df(getPosition().X, getPosition().Y + 10, getPosition().Z));
+                CameraNode->setPosition(irr::core::vector3df(getPosition().X, getPosition().Y, getPosition().Z) + 0.1f);
             } 
             else if(backwardKeyPressed)
             {
-                CameraNode->setPosition(irr::core::vector3df(getPosition().X, getPosition().Y - 10, getPosition().Z));
+                CameraNode->setPosition(irr::core::vector3df(getPosition().X, getPosition().Y, getPosition().Z) - 0.1f);
             }
             else if(leftKeyPressed)
             {
-                CameraNode->setPosition(irr::core::vector3df(getPosition().X - 10, getPosition().Y, getPosition().Z));
+                CameraNode->setPosition(irr::core::vector3df(getPosition().X + 0.1f, getPosition().Y, getPosition().Z));
             }
             else if(rightKeyPressed)
             {
-                CameraNode->setPosition(irr::core::vector3df(getPosition().X + 10, getPosition().Y, getPosition().Z));
+                CameraNode->setPosition(irr::core::vector3df(getPosition().X - 0.1f, getPosition().Y, getPosition().Z));
             }
     });
     }

@@ -261,7 +261,6 @@ namespace Confus
             a_Data->IgnoreBytes(sizeof(unsigned char));
             a_Data->Read(newPosition);
 
-            std::cout << std::to_string((newPosition).X);
             CameraNode->setPosition(newPosition);
         });
 	}
