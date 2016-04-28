@@ -1,5 +1,4 @@
 #pragma once
-#include <RakNet/RakPeerInterface.h>
 #include <RakNet/MessageIdentifiers.h>
 #include <string>
 #include <queue>

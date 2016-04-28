@@ -1,8 +1,7 @@
 #pragma once
-#include <vector>
-#include <RakNet/RakPeerInterface.h>
-#include <RakNet/RakNetTypes.h>
 #include <RakNet/MessageIdentifiers.h>
+#include <string>
+#include <queue>
 #include <map>
 #include <vector>
 #include <functional>
@@ -13,7 +12,7 @@ namespace RakNet
 	struct Packet;
 	class BitStream;
     struct SystemAddress;
-    struct AdressOrGUID;
+    struct AddressOrGUID;
 }
 
 namespace ConfusServer

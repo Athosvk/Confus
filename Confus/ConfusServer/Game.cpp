@@ -194,7 +194,7 @@ namespace ConfusServer
         int newTime = static_cast<int>(RakNet::GetTimeMS()) + (static_cast<int>(MazeDelay * 1000));
 
         RakNet::BitStream bitStream;
-        bitStream.Write(static_cast<RakNet::MessageID>(Networking::Connection::EPacketType::MazeChange));
+        bitStream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::MazeChange));
         bitStream.Write(newTime);
         bitStream.Write(a_Seed);
         m_Connection->broadcastBitstream(bitStream);
