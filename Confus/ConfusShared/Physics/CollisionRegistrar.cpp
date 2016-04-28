@@ -56,7 +56,7 @@ namespace Confus
 		{
 			m_Collisions.emplace_back(a_ColliderA, a_ColliderB);
 			if(a_ColliderA->getRigidBody()->isActive() && a_ColliderB->getRigidBody()->isActive() &&
-				a_ColliderA->getRigidBody()->isTrigger() && a_ColliderB->getRigidBody()->isTrigger() &&
+				(a_ColliderA->getRigidBody()->isTrigger() || a_ColliderB->getRigidBody()->isTrigger()) &&
 				std::find(m_PreviousCollisions.begin(), m_PreviousCollisions.end(),
 				CollisionInfo(a_ColliderA, a_ColliderB)) == m_PreviousCollisions.end())
 			{

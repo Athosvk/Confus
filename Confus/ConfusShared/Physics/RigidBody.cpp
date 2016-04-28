@@ -71,8 +71,11 @@ namespace Confus
 
 		void RigidBody::enableTriggerState()
 		{
-			m_Body->setCollisionFlags(m_Body->getCollisionFlags() | btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
-			m_Trigger = true;
+			if(m_Active)
+			{
+				m_Body->setCollisionFlags(m_Body->getCollisionFlags() | btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
+				m_Trigger = true;
+			}
 		}
 
 		void RigidBody::disableTriggerState()
@@ -113,7 +116,10 @@ namespace Confus
 			{
 				m_Body->forceActivationState(DISABLE_DEACTIVATION);
 			}
-			m_Body->setCollisionFlags(m_Body->getCollisionFlags() & ~btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
+			if(!m_Trigger)
+			{
+				m_Body->setCollisionFlags(m_Body->getCollisionFlags() & ~btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
+			}
 			m_Active = true;
 		}
 
