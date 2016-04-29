@@ -109,7 +109,7 @@ namespace ConfusServer
         /// <summary>
         /// Finalizes an instance of the <see cref="Game"/> class.
         /// </summary>
-        virtual ~Game() = default;
+        virtual ~Game();
 
         /// <summary>
         /// Starts the game and gameloop

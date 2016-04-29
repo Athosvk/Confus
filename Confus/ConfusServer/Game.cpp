@@ -28,6 +28,15 @@ namespace ConfusServer
     {
     }
 
+    Game::~Game()
+    {
+        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        {
+            //m_PlayerArray[i]->remove();
+            //delete(m_PlayerArray[i]);
+        }
+    }
+
     void Game::run()
     {
         initializeConnection();
@@ -182,11 +191,8 @@ namespace ConfusServer
 
     void Game::fixedUpdate()
     {
-            updatePlayers();
+        updatePlayers();
 		m_MazeGenerator.fixedUpdate();
-
-        //TODO crashes server, too many calls/packets or function is just not correct
-       
     }
 
     void Game::broadcastMazeChange(int a_Seed)
@@ -221,12 +227,12 @@ namespace ConfusServer
         RakNet::AddressOrGUID guid = a_Data->guid;
         m_Connection->sendPacket(&stream, &guid);
 
-        RakNet::BitStream stream2;
-        stream2.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::OtherPlayerJoined));
-        stream2.Write(static_cast<long long>(id));
-        stream2.Write(static_cast<ETeamIdentifier>(teamID));
+        RakNet::BitStream broadcastStream;
+        broadcastStream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::OtherPlayerJoined));
+        broadcastStream.Write(static_cast<long long>(id));
+        broadcastStream.Write(static_cast<ETeamIdentifier>(teamID));
 
-        m_Connection->broadcastPacket(&stream2, &guid);
+        m_Connection->broadcastPacket(&broadcastStream, &guid);
 
         std::cout << id << " joined" << std::endl;
     }
@@ -257,14 +263,12 @@ namespace ConfusServer
     {
         for(size_t i = 0u; i < m_PlayerArray.size(); i++)
         {
-            std::cout << m_PlayerArray[i]->ID << " trying to send position" << std::endl;
             RakNet::BitStream stream;
             stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdatePosition));
             stream.Write(static_cast<long long>(m_PlayerArray[i]->ID));
             stream.Write(static_cast<irr::core::vector3df>(m_PlayerArray[i]->CameraNode->getPosition()));
             stream.Write(static_cast<irr::core::vector3df>(m_PlayerArray[i]->CameraNode->getRotation()));
             m_Connection->broadcastPacket(&stream, nullptr);
-            std::cout << m_PlayerArray[i]->ID << " sent position" << std::endl;
         }
     }
 

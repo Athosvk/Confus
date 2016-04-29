@@ -94,7 +94,7 @@ namespace Confus
         /// <summary>
         /// Finalizes an instance of the <see cref="Game"/> class.
         /// </summary>
-        ~Game();
+        virtual ~Game();
 
         /// <summary>
         /// Starts the game and gameloop
