@@ -18,7 +18,7 @@ namespace ConfusServer
     void TeamScore::sendScoreToClients()
     {
         RakNet::BitStream bitStream;
-        bitStream.Write(static_cast<RakNet::MessageID>(Networking::Connection::EPacketType::ScoreUpdate));
+        bitStream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::ScoreUpdate));
 
         bitStream.Write(m_RedTeamScore);
 		bitStream.Write(m_BlueTeamScore);
