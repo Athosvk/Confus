@@ -21,10 +21,10 @@ namespace ConfusServer
 	class Flag 
     {
     private:		
-		irr::core::vector3df* m_StartPosition;
-		irr::core::vector3df* m_StartRotation;
-		EFlagEnum* m_FlagStatus;
-        ETeamIdentifier* m_TeamIdentifier;
+		irr::core::vector3df m_StartPosition;
+		irr::core::vector3df m_StartRotation;
+		EFlagEnum m_FlagStatus;
+        ETeamIdentifier m_TeamIdentifier;
         irr::scene::IMeshSceneNode* m_FlagNode;
         Collider* m_Collider;
         irr::scene::ISceneNode* m_FlagOldParent = nullptr;

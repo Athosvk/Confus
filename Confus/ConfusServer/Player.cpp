@@ -12,8 +12,8 @@ namespace ConfusServer
 	Player::Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
 		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
 		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
-		TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
-		CarryingFlag(new EFlagEnum(EFlagEnum::None))
+		TeamIdentifier(a_TeamIdentifier),
+		CarryingFlag(EFlagEnum::None)
     {
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
@@ -90,19 +90,17 @@ namespace ConfusServer
 
     void Player::resetPlayer() 
     {
-        if(*TeamIdentifier == ETeamIdentifier::TeamBlue)
+        if(TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 0.f));
         }
-        else if(*TeamIdentifier == ETeamIdentifier::TeamRed)
+        else if(TeamIdentifier == ETeamIdentifier::TeamRed)
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
         }
     }
 
 	Player::~Player() {
-		delete(CarryingFlag);
-		delete(TeamIdentifier);
 	}
 
     const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const

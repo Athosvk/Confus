@@ -237,7 +237,7 @@ namespace ConfusServer
         for(size_t i = 0u; i < m_PlayerArray.size(); i++)
         {
             stream.Write(static_cast<long long>(m_PlayerArray[i]->ID));
-            stream.Write(static_cast<ETeamIdentifier>(*m_PlayerArray[i]->TeamIdentifier));
+            stream.Write(static_cast<ETeamIdentifier>(m_PlayerArray[i]->TeamIdentifier));
         }
         RakNet::AddressOrGUID guid = a_Data->guid;
         m_Connection->sendPacket(&stream, &guid);
