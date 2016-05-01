@@ -173,7 +173,7 @@ namespace ConfusServer
             {
                 currentSeed = static_cast<int>(time(0)) % 1000;
                 broadcastMazeChange(currentSeed);
-                //m_TeamScoreManager.teamScoredPoint(static_cast<ETeamIdentifier>(1 + (rand() % 2)));
+                m_TeamScoreManager.teamScoredPoint(static_cast<ETeamIdentifier>(1 + (rand() % 2)));
             }
             currentDelay += static_cast<float>(m_DeltaTime);
         }

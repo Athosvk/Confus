@@ -3,6 +3,8 @@
 #include <RakNet/BitStream.h>
 #include <RakNet/MessageIdentifiers.h>
 #include <RakNet/GetTime.h>
+#include <chrono>
+#include <thread>
 
 #include "Game.h"
 #include "Player.h"
@@ -154,19 +156,36 @@ namespace Confus
             RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
             inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
             inputStream.Read(a_TeamIdentifier);
-            auto button = m_Device->getGUIEnvironment()->addButton({ 10, 240, 10 + 150, 240 + 80 });
+            auto text = m_Device->getGUIEnvironment()->addStaticText(L"Winner!", { 10, 240, 10 + 150, 240 + 80 });
             
             if (a_TeamIdentifier == ETeamIdentifier::TeamBlue) {
-                button->setText(L"Blue team won!");
+				text->setText(L"Blue team won! \nPress space to continue!");
             }
             else if(a_TeamIdentifier == ETeamIdentifier::TeamRed) {
-                button->setText(L"Red team won!");
+				text->setText(L"Red team won! \nPress space to continue!");
             }
 
+			// Render game and show text
             render();
+
+			// Reset all values
             reset();
-            m_Device->sleep(10000);
-            button->remove();
+			irr::u32 currentTicks = m_Device->getTimer()->getTime();
+			irr::u32 previousTicks = currentTicks;
+			double time = 0;
+			double breakTime = 10;
+
+			while (!m_EventManager.IsLeftMouseDown()) { // m_EventManager.IsKeyDown(irr::KEY_SPACE) 
+				previousTicks = currentTicks;
+				currentTicks = m_Device->getTimer()->getTime();
+				time += ((m_CurrentTicks - m_PreviousTicks) / 1000.0);
+				std::this_thread::sleep_for(std::chrono::milliseconds((1/60)*1000));
+
+				if (time > breakTime) {
+					break;
+				}
+			}
+			text->remove();
         });
     }
 
@@ -228,7 +247,7 @@ namespace Confus
         m_RedFlag.returnToStartPosition();
         ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, 0);
         ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, 0);
-        
+
         //Server will send score, and new positions.
         m_PlayerNode.respawn();
     }
