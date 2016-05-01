@@ -76,9 +76,10 @@ namespace Confus
         }
 	    PlayerNode->setParent(this);
 		setParent(CameraNode);
-		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.5f, 2.3f, 0.5f), CameraNode,
+		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.6f, 2.7f, 0.6f), CameraNode,
 			Physics::ECollisionFilter::Player, ~Physics::ECollisionFilter::Player);
 		m_Collider->getRigidBody()->disableSleeping();
+		m_Collider->getRigidBody()->setOffset(irr::core::vector3df(0.0f, -0.65f, -0.2f));
 
         createAudioEmitter();
         startWalking();
@@ -179,7 +180,6 @@ namespace Confus
         m_Weapon.Damage = LightAttackDamage;
         m_SoundEmitter->playAttackSound(false);
         initializeAttack();
-
     }
 
     void Player::startHeavyAttack()
@@ -230,7 +230,7 @@ namespace Confus
     {
         if(*TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
-             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
+            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
         }
         else if(*TeamIdentifier == ETeamIdentifier::TeamRed)
         {

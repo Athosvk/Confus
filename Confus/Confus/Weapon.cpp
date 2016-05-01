@@ -14,6 +14,7 @@ namespace Confus
         m_Node = a_SceneManager->addCubeSceneNode(1.0f, nullptr, -1, irr::core::vector3df(), irr::core::vector3df(),
             a_Dimensions);
         m_Node->setVisible(false);
+		m_Node->setPosition(irr::core::vector3df(0.0f, 0.0f, -1.2f));
 
 		m_Collider = a_World.createBoxCollider(a_Dimensions, m_Node, Physics::ECollisionFilter::Interactable,
 			Physics::ECollisionFilter::Player);
