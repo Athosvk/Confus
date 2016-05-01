@@ -228,6 +228,7 @@ namespace Confus
 
     void Player::respawn()
     {
+		PlayerHealth.reset();
         if(*TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
