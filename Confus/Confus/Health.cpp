@@ -44,4 +44,9 @@ namespace Confus
 	{
 		return m_Health;
 	}
+
+	void Health::reset()
+	{
+		m_Health = m_MaxHealth;
+	}
 }
