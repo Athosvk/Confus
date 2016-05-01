@@ -24,13 +24,14 @@ namespace Confus
 	class Flag 
     {
     private:		
-		irr::core::vector3df* m_StartPosition;
-		irr::core::vector3df* m_StartRotation;
-        ETeamIdentifier* m_TeamIdentifier;
+		irr::core::vector3df m_StartPosition = irr::core::vector3df(0.f);
+		irr::core::vector3df m_StartRotation = irr::core::vector3df(0.f);
+        ETeamIdentifier m_TeamIdentifier;
+		EFlagEnum m_FlagStatus;
         irr::scene::IMeshSceneNode* m_FlagNode;
         Physics::BoxCollider* m_Collider;
         irr::scene::ISceneNode* m_FlagOldParent = nullptr;
-		EFlagEnum* m_FlagStatus;
+
 
     public: 
         /// <summary> Flag class constructor. </summary>
@@ -66,7 +67,7 @@ namespace Confus
 		void score(Player* a_PlayerObject);
 
 		const irr::video::SColor getColor()const;
-		const EFlagEnum* getFlagStatus() const;
+		const EFlagEnum getFlagStatus() const;
     private:
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
 		void setColor(irr::video::IVideoDriver* a_VideoDriver);

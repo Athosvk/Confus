@@ -8,19 +8,15 @@
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "../ConfusShared/Physics/BoxCollider.h"
 
-namespace Confus {
-
+namespace Confus 
+{
 	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, Physics::PhysicsWorld& a_PhysicsWorld) : 
-		m_TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
-		m_FlagStatus(new EFlagEnum(EFlagEnum::FlagBase)) 
+		m_TeamIdentifier(a_TeamIdentifier),
+		m_FlagStatus(EFlagEnum::FlagBase) 
 	{
         //Get drivers to load model
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
-
-		//Flags
-		m_StartPosition = new irr::core::vector3df();
-		m_StartRotation = new irr::core::vector3df();
 
         //Load model
         IrrAssimp irrAssimp(sceneManager);
@@ -54,23 +50,23 @@ namespace Confus {
 	//Set color & position based on color of flag
 	void Flag::setColor(irr::video::IVideoDriver* a_VideoDriver) 
 	{
-		switch (*m_TeamIdentifier)
+		switch (m_TeamIdentifier)
 		{
 		case ETeamIdentifier::TeamBlue:
             m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_BLUE.png"));
-			m_StartPosition->set({ -2.0f, 15.f, -2.f });
-			m_StartRotation->set({ 0.f, 0.f, 0.f });
+			m_StartPosition.set({ -2.0f, 15.f, -2.f });
+			m_StartRotation.set({ 0.f, 0.f, 0.f });
 			returnToStartPosition();
 			break;
 		case ETeamIdentifier::TeamRed:
             m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_RED.png"));
-			m_StartPosition->set({ 1.5f, 15.f, -72.f });
-			m_StartRotation->set({ 0.f, 180.f, 0.f });
+			m_StartPosition.set({ 1.5f, 15.f, -72.f });
+			m_StartRotation.set({ 0.f, 180.f, 0.f });
             returnToStartPosition();
 			break;
 		default:
-			m_StartPosition->set({ 0, 0, 0 });
-			m_StartRotation->set({ 0, 0, 0 });
+			m_StartPosition.set({ 0, 0, 0 });
+			m_StartRotation.set({ 0, 0, 0 });
 			break;
 		}
 	}
@@ -110,7 +106,7 @@ namespace Confus {
 
      const irr::video::SColor Flag::getColor() const
     {
-        switch(*m_TeamIdentifier)
+        switch(m_TeamIdentifier)
         {
         case ETeamIdentifier::TeamBlue:
             return { 255, 0, 0, 255 };
@@ -121,7 +117,7 @@ namespace Confus {
         }
     }
 
-	 const EFlagEnum * Flag::getFlagStatus() const
+	 const EFlagEnum Flag::getFlagStatus() const
 	 {
 		 return m_FlagStatus;
 	 }
@@ -130,37 +126,35 @@ namespace Confus {
 	void Flag::captureFlag(Player* a_PlayerObject) 
     {
 		//Somebody is already carrying the flag
-		if (*m_FlagStatus == EFlagEnum::FlagTaken) 
+		if (m_FlagStatus == EFlagEnum::FlagTaken) 
 		{
 			return;
 		}
 
 
-		if (*a_PlayerObject->TeamIdentifier != *m_TeamIdentifier && *a_PlayerObject->CarryingFlag == EFlagEnum::None) 
+		if (a_PlayerObject->TeamIdentifier != m_TeamIdentifier && a_PlayerObject->CarryingFlag == EFlagEnum::None) 
         {
             // Capturing flag if player has no flag
             m_FlagNode->setParent(a_PlayerObject->PlayerNode);            
-            *m_FlagStatus = EFlagEnum::FlagTaken;
+            m_FlagStatus = EFlagEnum::FlagTaken;
             a_PlayerObject->FlagPointer = this;
-            *a_PlayerObject->CarryingFlag = EFlagEnum::FlagTaken;
+            a_PlayerObject->CarryingFlag = EFlagEnum::FlagTaken;
 		}
-		else if (*a_PlayerObject->TeamIdentifier == *m_TeamIdentifier) 
+		else if (a_PlayerObject->TeamIdentifier == m_TeamIdentifier) 
         {
 			//If flag has been dropped return flag to base
- 			if (*m_FlagStatus == EFlagEnum::FlagDropped) 
+ 			if (m_FlagStatus == EFlagEnum::FlagDropped) 
             {
                 returnToStartPosition();
 			}
 			//If flag is at base and player is carrying a flag
-			else if (*m_FlagStatus == EFlagEnum::FlagBase) 
+			else if (m_FlagStatus == EFlagEnum::FlagBase) 
             {
-				if (*a_PlayerObject->CarryingFlag == EFlagEnum::FlagTaken) 
+				if (a_PlayerObject->CarryingFlag == EFlagEnum::FlagTaken) 
                 {					
                     if(a_PlayerObject->FlagPointer != nullptr) 
 					{
                         // Player scored a point!
-                        a_PlayerObject->FlagPointer->returnToStartPosition();
-                        a_PlayerObject->FlagPointer = nullptr;
                         score(a_PlayerObject);
                     }
 					else
@@ -175,7 +169,9 @@ namespace Confus {
 	//TODO Score points to team of a_PlayerObject
 	void Flag::score(Player* a_PlayerObject) 
     {
-        *a_PlayerObject->CarryingFlag = EFlagEnum::None;
+		a_PlayerObject->FlagPointer->returnToStartPosition();
+		a_PlayerObject->FlagPointer = nullptr;
+        a_PlayerObject->CarryingFlag = EFlagEnum::None;
 	}
 
 	void Flag::drop(Player* a_PlayerObject) 
@@ -183,32 +179,28 @@ namespace Confus {
         m_FlagNode->setParent(m_FlagOldParent);
         m_FlagNode->setPosition(a_PlayerObject->PlayerNode->getAbsolutePosition());
         a_PlayerObject->FlagPointer = nullptr;
-        *m_FlagStatus = EFlagEnum::FlagDropped;
-        *a_PlayerObject->CarryingFlag = EFlagEnum::None;
+        m_FlagStatus = EFlagEnum::FlagDropped;
+        a_PlayerObject->CarryingFlag = EFlagEnum::None;
 	}
 
     void Flag::setStartPosition(irr::core::vector3df a_Position) 
     {
-        m_StartPosition->set(a_Position);
+        m_StartPosition.set(a_Position);
     }
 
     void Flag::setStartRotation(irr::core::vector3df a_Rotation) 
     {
-        m_StartRotation->set(a_Rotation);
+        m_StartRotation.set(a_Rotation);
     }
 
     void Flag::returnToStartPosition() {
         m_FlagNode->setParent(m_FlagOldParent);
-        m_FlagNode->setPosition(*m_StartPosition);
-        m_FlagNode->setRotation(*m_StartRotation);
-		*m_FlagStatus = EFlagEnum::FlagBase;
+        m_FlagNode->setPosition(m_StartPosition);
+        m_FlagNode->setRotation(m_StartRotation);
+		m_FlagStatus = EFlagEnum::FlagBase;
     }
 
 	Flag::~Flag() {
         m_FlagNode->setParent(m_FlagOldParent);
-		delete(m_TeamIdentifier);
-		delete(m_FlagStatus);
-		delete(m_StartPosition);
-        delete(m_StartRotation);
 	}
 }

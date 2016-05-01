@@ -14,11 +14,11 @@ namespace Confus
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
 
-	Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, irr::s32 a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
+	Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
 		: m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f)),
-		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), a_ID),
-		TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
-		CarryingFlag(new EFlagEnum(EFlagEnum::None))
+		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
+		TeamIdentifier(a_TeamIdentifier),
+		CarryingFlag(EFlagEnum::None)
     {
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
@@ -90,8 +90,6 @@ namespace Confus
     }
 
 	Player::~Player() {
-		delete(CarryingFlag);
-		delete(TeamIdentifier);
 	}
 
     void Player::handleInput(EventManager& a_EventManager)
@@ -201,6 +199,17 @@ namespace Confus
         }
     }
 
+    void Player::updateColor(irr::IrrlichtDevice* a_Device)
+    {
+        auto videoDriver = a_Device->getVideoDriver();
+        if(TeamIdentifier == ETeamIdentifier::TeamBlue) {
+            PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
+        }
+        else if(TeamIdentifier == ETeamIdentifier::TeamRed) {
+            PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
+        }
+    }
+
     void Player::update()
     {
         m_SoundEmitter->updatePosition();
@@ -229,11 +238,11 @@ namespace Confus
     void Player::respawn()
     {
 		PlayerHealth.reset();
-        if(*TeamIdentifier == ETeamIdentifier::TeamBlue)
+        if(TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
         }
-        else if(*TeamIdentifier == ETeamIdentifier::TeamRed)
+        else if(TeamIdentifier == ETeamIdentifier::TeamRed)
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
         }

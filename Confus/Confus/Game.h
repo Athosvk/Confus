@@ -56,12 +56,10 @@ namespace Confus
         /// The Players to test with.
         /// </summary>
         Player m_PlayerNode;
-		Player m_SecondPlayerNode;
         RespawnFloor m_RedRespawnFloor;
         RespawnFloor m_BlueRespawnFloor;
 
-        //use std::vector
-        //std::array<Player, 2> m_PlayerArray;
+        std::vector<Player*> m_PlayerArray;
         /// <summary>
         /// The Blue Flag.
         /// </summary>
@@ -100,7 +98,7 @@ namespace Confus
         /// <summary>
         /// Finalizes an instance of the <see cref="Game"/> class.
         /// </summary>
-        virtual ~Game() = default;
+        virtual ~Game();
 
         /// <summary>
         /// Starts the game and gameloop
@@ -134,7 +132,19 @@ namespace Confus
         /// </summary>
         void render();
 
-        void updateOtherPlayers();		
+        /// <summary>
+        /// Creates a new Player object for this user, this player will be regarded as THEIR player.
+        /// </summary>
+        void addOwnPlayer(RakNet::Packet* a_Data);
+        /// <summary>
+        /// Creates a new Player object for a different user that just joined.
+        /// </summary>
+        void addOtherPlayer(RakNet::Packet* a_Data);
+        /// <summary>
+        /// Updates positions and rotations of all other players.
+        /// </summary>
+        void updateOtherPlayer(RakNet::Packet* a_Data);
+        void removePlayer(RakNet::Packet* a_Data);
 
 		/// <summary> Updates the (absolute) transformations of all the scene nodes recursively downwards </summary>
 		void updateSceneTransformations();
