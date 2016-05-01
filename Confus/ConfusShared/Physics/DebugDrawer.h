@@ -15,14 +15,20 @@ namespace Confus
 			int m_Mode = 0;
 			/// <summary> The active Bullet world </summary>
 			btCollisionWorld* m_World = nullptr;
-			DefaultColors m_DefaultColors = DefaultColors();
+			/// <summary> The colors used for the types of bodies in the world </summary>
+			DefaultColors m_Colors;
 
-		public:
+		public:			
+			/// <summary> Initializes a new instance of the <see cref="DebugDrawer"/> class. </summary>
+			/// <param name="a_Device">The active Irrlicth device </param>
+			/// <param name="a_World">The bullet collision world to draw </param>
 			DebugDrawer(irr::IrrlichtDevice* a_Device, btCollisionWorld* a_World);
 			
 			/// <summary> Draws the entire world's debug infromation </summary>
 			void draw() const;
-
+			
+			/// <summary> Gets the colors used to draw the various types of bodies in the world </summary>
+			/// <returns> The colors used/to use </returns>
 			virtual DefaultColors getDefaultColors() const override;
 
 			/// <summary> Draws a line between given points </summary>
@@ -48,7 +54,7 @@ namespace Confus
 			/// <returns> The current debug drawing mode </returns>
 			virtual int getDebugMode() const override;
 
-			/// <summary> Displays or logs the given warning </summary>
+			/// <summary> Displays or logs the given warning using the standard output stream </summary>
 			/// <param name="a_Warning"> The warning text </param>
 			virtual void reportErrorWarning(const char* a_Warning);
 
@@ -57,6 +63,9 @@ namespace Confus
 			/// <param name="a_Text"> The text to draw </param>
 			virtual void draw3dText(const btVector3& a_Location, const char* a_Text);
 		private:
+			/// <summary> Converts the given vector, of colors in range [0, 1], to the format used by Irrlicht </summary>
+			/// <param name="a_Color"> The bullet color vector to convert </param>
+			/// <returns> The color in Irrlicht's format </returns>
 			static irr::video::SColor toIrrlichtColor(const btVector3& a_Color);
 		};
 	}

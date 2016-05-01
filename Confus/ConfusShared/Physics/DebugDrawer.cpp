@@ -11,7 +11,7 @@ namespace Confus
 			m_World(a_World)
 		{
 			m_World->setDebugDrawer(this);
-			m_DefaultColors.m_disabledDeactivationObject = btVector3(1, 0, 1);
+			m_Colors.m_disabledDeactivationObject = btVector3(1, 0, 1);
 		}
 
 		void DebugDrawer::draw() const
@@ -25,7 +25,7 @@ namespace Confus
 
 		DebugDrawer::DefaultColors DebugDrawer::getDefaultColors() const
 		{
-			return m_DefaultColors;
+			return m_Colors;
 		}
 
 		void DebugDrawer::drawLine(const btVector3& a_From, const btVector3& a_To, const btVector3& a_Color)
