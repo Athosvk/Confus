@@ -15,12 +15,15 @@ namespace Confus
 			int m_Mode = 0;
 			/// <summary> The active Bullet world </summary>
 			btCollisionWorld* m_World = nullptr;
+			DefaultColors m_DefaultColors = DefaultColors();
 
 		public:
 			DebugDrawer(irr::IrrlichtDevice* a_Device, btCollisionWorld* a_World);
 			
 			/// <summary> Draws the entire world's debug infromation </summary>
 			void draw() const;
+
+			virtual DefaultColors getDefaultColors() const override;
 
 			/// <summary> Draws a line between given points </summary>
 			/// <param name="a_From"> The starting point </param>
@@ -53,6 +56,8 @@ namespace Confus
 			/// <param name="a_Location"> The draw location </param>
 			/// <param name="a_Text"> The text to draw </param>
 			virtual void draw3dText(const btVector3& a_Location, const char* a_Text);
+		private:
+			static irr::video::SColor toIrrlichtColor(const btVector3& a_Color);
 		};
 	}
 }
