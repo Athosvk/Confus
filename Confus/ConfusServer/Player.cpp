@@ -60,12 +60,26 @@ namespace ConfusServer
         m_KeyMap[4].Action = irr::EKA_JUMP_UP;
         m_KeyMap[4].KeyCode = irr::KEY_SPACE;
 
-		if (a_MainPlayer) {
-			CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.15f, false);
-			CameraNode->setPosition(irr::core::vector3df(2.5f, 5.f, -30.0f));
-			PlayerNode->setParent(this);
-			setParent(CameraNode);
-		}
+        if(a_MainPlayer)
+        {
+            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, true);
+            CameraNode->setFOV(70.f);
+            CameraNode->setNearValue(0.1f);
+        }
+        else
+        {
+            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, false);
+        }
+        if(a_TeamIdentifier == ETeamIdentifier::TeamBlue)
+        {
+            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
+        }
+        else if(a_TeamIdentifier == ETeamIdentifier::TeamRed)
+        {
+            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
+        }
+        PlayerNode->setParent(this);
+        setParent(CameraNode);
 
         createAudioEmitter();
         startWalking();

@@ -32,6 +32,11 @@ namespace Confus
         {
 			//True is sent to notify the server so we can exit gracefully
 			m_Interface->CloseConnection(getServerAddress(), true);
+            //spin wait to allow CloseConnection to finish
+            while(getConnectionCount() > 0)
+            {
+
+            }
             RakNet::RakPeerInterface::DestroyInstance(m_Interface);
         }
 

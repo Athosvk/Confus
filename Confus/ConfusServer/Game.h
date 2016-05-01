@@ -109,7 +109,7 @@ namespace ConfusServer
         /// <summary>
         /// Finalizes an instance of the <see cref="Game"/> class.
         /// </summary>
-        virtual ~Game() = default;
+        virtual ~Game();
 
         /// <summary>
         /// Starts the game and gameloop
@@ -150,6 +150,8 @@ namespace ConfusServer
 		/// </summary>
 		void processConnection();
 	    void addPlayer(RakNet::Packet* a_Data);
+        void removePlayer(RakNet::Packet* a_Data);
+        void updatePlayers();
         /// <summary>
         /// Broadcast a maze change
         /// </summary>

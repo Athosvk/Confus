@@ -1,6 +1,7 @@
 #pragma once
-#include <vector>
 #include <RakNet/MessageIdentifiers.h>
+#include <string>
+#include <queue>
 #include <map>
 #include <vector>
 #include <functional>
@@ -11,6 +12,7 @@ namespace RakNet
 	struct Packet;
 	class BitStream;
     struct SystemAddress;
+    struct AddressOrGUID;
 }
 
 namespace ConfusServer
@@ -20,11 +22,15 @@ namespace ConfusServer
         /// <summary> The type of packet </summary>
         enum class EPacketType : unsigned char
         {
-            Message = ID_USER_PACKET_ENUM + 1,
-            ScoreUpdate = Message + 1,
-            PlayerAttack = ScoreUpdate + 1,
-            MazeChange = PlayerAttack + 1,
-            EndOfGame = MazeChange + 1
+            Message = 1 + ID_USER_PACKET_ENUM,
+            MainPlayerJoined = 2 + ID_USER_PACKET_ENUM,
+            OtherPlayerJoined = 3 + ID_USER_PACKET_ENUM,
+            PlayerLeft = 4 + ID_USER_PACKET_ENUM,
+            UpdatePosition = 5 + ID_USER_PACKET_ENUM,
+            ScoreUpdate = 6 + ID_USER_PACKET_ENUM,
+            PlayerAttack = 7 + ID_USER_PACKET_ENUM,
+            MazeChange = 8 + ID_USER_PACKET_ENUM,
+            EndOfGame = 9 + ID_USER_PACKET_ENUM
         };
         /// <summary>
         /// Represents the outgoing connection/group of outgoing connections to the client(s)
@@ -37,9 +43,7 @@ namespace ConfusServer
         /// </remarks>
         class Connection
         {
-        public:
         private:
-
             /// <summary> The RakNet interface for interacting with RakNet </summary>
             RakNet::RakPeerInterface* m_Interface; 
             /// <summary> The map thast contains the server events and the functions that involve them. </summary>
@@ -59,6 +63,8 @@ namespace ConfusServer
             /// <param name="a_Event">The server event that should trigger the function.</param>
             /// <param name="a_Function">The function that should be added to the map.</param>
             void addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function);
+            void broadcastPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Excluded = nullptr);
+            void sendPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Address);
             /// <summary> Send Package to all clients </summary>
             /// <param name="a_BitStream">The packet to send.</param>
             void broadcastBitstream(RakNet::BitStream& a_BitStream);
