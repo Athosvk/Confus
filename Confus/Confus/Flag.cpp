@@ -19,10 +19,6 @@ namespace Confus {
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
 
-		//Flags
-		m_StartPosition;
-		m_StartRotation;
-
         //Load model
         IrrAssimp irrAssimp(sceneManager);
         irr::scene::IAnimatedMesh* mesh = sceneManager->getMesh("Media/Meshes/Flag.3ds");

@@ -20,8 +20,8 @@ enum class EFlagEnum
 	class Flag 
     {
     private:		
-		irr::core::vector3df m_StartPosition;
-		irr::core::vector3df m_StartRotation;
+		irr::core::vector3df m_StartPosition = irr::core::vector3df(0.f);
+		irr::core::vector3df m_StartRotation = irr::core::vector3df(0.f);
         ETeamIdentifier m_TeamIdentifier;
 		EFlagEnum m_FlagStatus;
         irr::scene::IMeshSceneNode* m_FlagNode;
