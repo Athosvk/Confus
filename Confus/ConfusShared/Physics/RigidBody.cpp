@@ -162,6 +162,9 @@ namespace Confus
 		void RigidBody::syncRigidBodyTransform() const
 		{
 			m_MotionState->setWorldTransform(extractTransform());
+			btTransform transform;
+			m_MotionState->getWorldTransform(transform);
+			m_Body->setWorldTransform(transform);
 		}
 
 		irr::core::vector3df RigidBody::toIrrlichtEuler(btQuaternion& a_Rotation) const
