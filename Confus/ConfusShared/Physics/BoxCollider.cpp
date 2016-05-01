@@ -18,12 +18,12 @@ namespace Confus
 
 		void BoxCollider::setTriggerEnterCallback(std::function<void(BoxCollider*a_Other)>& a_Callback)
 		{
-			m_CollisionRegistrar.setCallback(this, a_Callback);
+			m_CollisionRegistrar.setTriggerEnterCallback(this, a_Callback);
 		}
 
 		void BoxCollider::setTriggerEnterCallback(std::function<void(BoxCollider*a_Other)>&& a_Callback)
 		{
-			m_CollisionRegistrar.setCallback(this, a_Callback);
+			m_CollisionRegistrar.setTriggerEnterCallback(this, a_Callback);
 		}
 	}
 }

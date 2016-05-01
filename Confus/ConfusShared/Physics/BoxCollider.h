@@ -22,6 +22,8 @@ namespace Confus
 			/// is necessary for Bullet to keep a pointer in the btRigidBody to the shape
 			/// </remarks>
 			std::unique_ptr<btBoxShape> m_Shape;
+
+			/// <summary> The CollisionRegistrar that keeps track of the collisions occurred </summary>
 			CollisionRegistrar& m_CollisionRegistrar;
 		public:
 			/// <summary>
@@ -32,9 +34,16 @@ namespace Confus
 			/// <param name="a_CollisionObject">The collision object.</param>
 			BoxCollider(std::unique_ptr<btBoxShape>&& a_Shape, RigidBody* a_RigidBody,
 				CollisionRegistrar& a_CollisionRegistrar);
+			
+			/// <summary> Finalizes an instance of the <see cref="BoxCollider"/> class. </summary>
 			virtual ~BoxCollider() override = default;
-
+			
+			/// <summary> Sets the trigger enter callback </summary>
+			/// <param name="a_Callback">The callback to use once a Trigger Enter event has occurred </param>
 			void setTriggerEnterCallback(std::function<void(BoxCollider* a_Other)>& a_Callback);
+
+			/// <summary> Sets the trigger enter callback </summary>
+			/// <param name="a_Callback">The callback to use once a Trigger Enter event has occurred </param>
 			void setTriggerEnterCallback(std::function<void(BoxCollider* a_Other)>&& a_Callback);
 		};
 	}

@@ -23,13 +23,13 @@ namespace Confus
 		{
 		}
 
-		void CollisionRegistrar::setCallback(BoxCollider* a_Collider,
+		void CollisionRegistrar::setTriggerEnterCallback(BoxCollider* a_Collider,
 			std::function<void(BoxCollider* a_Other)>& a_Callback)
 		{
 			m_TriggerEnterCallbacks.emplace(a_Collider, a_Callback);
 		}
 
-		void CollisionRegistrar::setCallback(BoxCollider* a_Collider, 
+		void CollisionRegistrar::setTriggerEnterCallback(BoxCollider* a_Collider,
 			std::function<void(BoxCollider* a_Other)>&& a_Callback)
 		{
 			m_TriggerEnterCallbacks.emplace(a_Collider, std::move(a_Callback));
