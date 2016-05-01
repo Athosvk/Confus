@@ -15,7 +15,7 @@
 namespace Confus {
 
 	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier) : m_TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
-				m_FlagStatus(new EFlagEnum(EFlagEnum::FlagBase)) {
+				m_FlagStatus(new EFlagEnum(EFlagEnum::FlagBase)){
         //Get drivers to load model
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
@@ -86,7 +86,13 @@ namespace Confus {
 		}
 	}
 
-    void Flag::initParticleSystem(irr::scene::ISceneManager* a_SceneManager) 
+	void Flag::setFlagStatus(EFlagEnum a_FlagStatus)
+	{
+ 		FlagStatusChangedEvent(*m_TeamIdentifier, *m_FlagStatus, a_FlagStatus);
+		*m_FlagStatus = a_FlagStatus;
+	}
+
+	void Flag::initParticleSystem(irr::scene::ISceneManager* a_SceneManager)
     {
         //Create Particle System
         irr::scene::IParticleSystemSceneNode* particleSystem = a_SceneManager->addParticleSystemSceneNode(false);
@@ -155,8 +161,8 @@ namespace Confus {
 		if (*a_PlayerObject->TeamIdentifier != *m_TeamIdentifier && *a_PlayerObject->CarryingFlag == EFlagEnum::None) 
         {
             // Capturing flag if player has no flag
-            m_FlagNode->setParent(a_PlayerObject->PlayerNode);            
-            *m_FlagStatus = EFlagEnum::FlagTaken;
+            m_FlagNode->setParent(a_PlayerObject->PlayerNode);
+			setFlagStatus(EFlagEnum::FlagTaken);
             a_PlayerObject->FlagPointer = this;
             *a_PlayerObject->CarryingFlag = EFlagEnum::FlagTaken;
 		}
@@ -200,7 +206,7 @@ namespace Confus {
         m_FlagNode->setParent(m_FlagOldParent);
         m_FlagNode->setPosition(a_PlayerObject->PlayerNode->getAbsolutePosition());
         a_PlayerObject->FlagPointer = nullptr;
-        *m_FlagStatus = EFlagEnum::FlagDropped;
+		setFlagStatus(EFlagEnum::FlagDropped);
         *a_PlayerObject->CarryingFlag = EFlagEnum::None;
 	}
 
@@ -218,7 +224,7 @@ namespace Confus {
         m_FlagNode->setParent(m_FlagOldParent);
         m_FlagNode->setPosition(*m_StartPosition);
         m_FlagNode->setRotation(*m_StartRotation);
-		*m_FlagStatus = EFlagEnum::FlagBase;
+		setFlagStatus(EFlagEnum::FlagBase);
     }
 
 	irr::scene::ITriangleSelector* Flag::GetTriangleSelector(irr::scene::ISceneManager* a_SceneManager) {

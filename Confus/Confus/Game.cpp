@@ -21,15 +21,17 @@ namespace Confus
     const double Game::MaxFixedUpdateInterval = 0.1;
 	const int Game::MaxScore = 3; // dont change this for now. Breaks redside score.
 
-    Game::Game(irr::core::dimension2d<irr::u32> a_Resolution)
-        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL,a_Resolution)),
-		m_MazeGenerator(m_Device,60,60, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24), irr::core::vector2df(30.,30.)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-        m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamBlue, true),
-        m_SecondPlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, false),
-        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
-        m_RedFlag(m_Device, ETeamIdentifier::TeamRed),
-        m_RedRespawnFloor(m_Device),
-        m_BlueRespawnFloor(m_Device),
+	Game::Game(irr::core::dimension2d<irr::u32> a_Resolution)
+		: m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL, a_Resolution)),
+		m_Listener(),
+		m_MazeGenerator(m_Device, 60, 60, irr::core::vector3df(0.0f, 0.0f, 0.0f), (19 + 20 + 21 + 22 + 23 + 24), irr::core::vector2df(30., 30.)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+		m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamBlue, true),
+		m_SecondPlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, false),
+		m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
+		m_RedFlag(m_Device, ETeamIdentifier::TeamRed),
+		m_Announcer(&m_RedFlag, &m_BlueFlag, &m_PlayerNode),
+		m_RedRespawnFloor(m_Device),
+		m_BlueRespawnFloor(m_Device),
 		m_GUI(m_Device, &m_PlayerNode)
     {
 		auto videoDriver = m_Device->getVideoDriver();
@@ -52,6 +54,7 @@ namespace Confus
 
     void Game::run()
     {
+		//m_Listener.init();
         initializeConnection();
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
@@ -177,7 +180,7 @@ namespace Confus
         //Todo: Fix rotations
         irr::core::vector3df upVector = playerRotation * irr::core::vector3df( 0, 1, 0 );
         irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
-        m_Listener.setDirection(forwardVector, upVector);     
+        m_Listener.setDirection(forwardVector, upVector);
     }
 
     void Game::processFixedUpdates()

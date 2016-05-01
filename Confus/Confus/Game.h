@@ -11,6 +11,7 @@
 #include "RespawnFloor.h"
 #include "GUI.h"
 #include "ClientTeamScore.h"
+#include "Announcer.h"
 
 namespace Confus
 {    
@@ -59,8 +60,7 @@ namespace Confus
         /// </summary>
         Player m_PlayerNode;
 		Player m_SecondPlayerNode;
-        RespawnFloor m_RedRespawnFloor;
-        RespawnFloor m_BlueRespawnFloor;
+
 
         //use std::vector
         //std::array<Player, 2> m_PlayerArray;
@@ -72,6 +72,11 @@ namespace Confus
         /// The Red Flag.
         /// </summary>
         Flag m_RedFlag;
+
+		Announcer m_Announcer;
+		RespawnFloor m_RedRespawnFloor;
+		RespawnFloor m_BlueRespawnFloor;
+
         /// <summary>
         /// The delay between the last and future fixed update
         /// </summary>
@@ -93,6 +98,8 @@ namespace Confus
 		/// The connection as a client to the server that we are currently connected to
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
+
+		
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.

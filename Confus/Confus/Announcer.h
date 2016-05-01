@@ -1,37 +1,29 @@
 #pragma once
 #include <memory>
 
-#include "../Common/TeamIdentifier.h"
+#include "Flag.h"
+#include "Player.h"
+
 #include "OpenAL\OpenALSource.h"
+#include "Audio\AudioLibrary.h"
 namespace Confus
 {
-	/// <summary> Enum that contains all the events that the announcer may react to </summary>
-	enum class EAnnouncerEvent
-	{
-		None,
-		Scored,
-		FlagReturned,
-		FlagTaken
-	};
-
 	class Announcer
 	{
 	private:
-		std::unique_ptr<OpenALSource> m_RedScoredSource;
-		std::unique_ptr<OpenALSource> m_FlagRedTakenSource;
-		std::unique_ptr<OpenALSource> m_FlagRedReturnedSource;
-
-		std::unique_ptr<OpenALSource> m_BlueScoredSource;
-		std::unique_ptr<OpenALSource> m_FlagBlueTakenSource;
-		std::unique_ptr<OpenALSource> m_FlagBlueReturnedSource;
+		Flag* m_RedFlag;
+		Flag* m_BlueFlag;
+		Player* m_Player;
+		Audio::AudioLibrary* m_lib;
 	private:
 		void playScoredSound(ETeamIdentifier a_TeamIdentifier);
 		void playFlagTakenSound(ETeamIdentifier a_TeamIdentifier);
 		void playFlagReturnedSound(ETeamIdentifier a_TeamIdentifier);
 	public:
-		Announcer();
-		void PlayAnnouncerEvent(ETeamIdentifier a_TeamIdentifier, EAnnouncerEvent a_AnnouncerEvent);
+		Announcer(Flag* a_RedFlag, Flag* a_BlueFlag, Player* a_Player);
+		void playFlagEvent(ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum);
 		~Announcer();
 	};
 }
+
 

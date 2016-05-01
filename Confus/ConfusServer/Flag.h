@@ -60,6 +60,7 @@ namespace ConfusServer
 		/// <param name="a_TriangleSelector"> The triangle seletor that has the level and players. </param>
         void setCollisionTriangleSelector(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_TriangleSelector);
     private:
+		void setFlagStatus(EFlagEnum a_FlagStatus);
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
 		void setColor(irr::video::IVideoDriver* a_VideoDriver);
 		irr::video::SColor getColor();

@@ -1,5 +1,8 @@
 #pragma once
+#include <Irrlicht\irrlicht.h>
+
 #include "../Common/TeamIdentifier.h"
+#include "Delegate.h"
 
 namespace Confus 
 {
@@ -19,6 +22,8 @@ enum class EFlagEnum
 	/// Flag class with status and team id
 	class Flag 
     {
+	public:
+		Delegate<void(ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum)> FlagStatusChangedEvent;
     private:		
 		irr::core::vector3df* m_StartPosition;
 		irr::core::vector3df* m_StartRotation;
@@ -73,6 +78,7 @@ enum class EFlagEnum
 		const ETeamIdentifier* getTeamIdentifier() const;
 		const EFlagEnum* getFlagStatus() const;
     private:
+		void setFlagStatus(EFlagEnum a_FlagStatus);
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
 		void setColor(irr::video::IVideoDriver* a_VideoDriver);
 	};

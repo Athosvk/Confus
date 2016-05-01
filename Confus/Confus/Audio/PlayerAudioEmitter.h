@@ -1,8 +1,10 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
 #include <vector>
+#include <memory>
 
 #include "..\OpenAL\OpenALSource.h"
+#include "AudioLibrary.h"
 
 namespace Confus
 {
@@ -16,6 +18,16 @@ namespace Confus
             OpenALSource* m_AudioSourceFootsteps[3];
             OpenALSource* m_AudioSourceGrunts[3];
             OpenALSource* m_AudioSourceSwordSwoshes[4];
+			
+		public:
+			std::unique_ptr<OpenALSource> m_RedScoredSource;
+			std::unique_ptr<OpenALSource> m_FlagRedTakenSource;
+			std::unique_ptr<OpenALSource> m_FlagRedReturnedSource;
+				Audio::AudioLibrary* test;
+
+			std::unique_ptr<OpenALSource> m_BlueScoredSource;
+			std::unique_ptr<OpenALSource> m_FlagBlueTakenSource;
+			std::unique_ptr<OpenALSource> m_FlagBlueReturnedSource;
             
             irr::scene::IAnimatedMeshSceneNode* m_AttachedPlayer;
         public:            

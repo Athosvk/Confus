@@ -17,7 +17,7 @@ namespace Confus {
         m_WaveFileString = a_WaveFileString;
         m_Buffer = new ALuint;
         m_Source = new ALuint;
-        m_PlayingState = new ALint;
+        m_PlayingState = new ALint(0);
         alGenBuffers(1, m_Buffer);
 
         if(!OpenAL::ALFWLoadWaveToBuffer((char*)OpenAL::ALFWaddMediaPath(m_WaveFileString.c_str()), *m_Buffer))

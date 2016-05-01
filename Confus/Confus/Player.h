@@ -34,8 +34,9 @@ namespace Confus
         /// <summary> Determines if this player is this users player or not </summary>
         bool MainPlayer = false;
         irr::s32 ID;
+		Audio::PlayerAudioEmitter* m_SoundEmitter;
 	private:
-        Audio::PlayerAudioEmitter* m_SoundEmitter;
+        
 
         void createAudioEmitter();
         /// <summary> The weapon bone index of the animation for the weapon </summary>

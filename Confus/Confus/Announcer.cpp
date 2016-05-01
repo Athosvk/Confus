@@ -1,30 +1,48 @@
 #include "Announcer.h"
 
-
-
 namespace Confus
 {
 
-	Announcer::Announcer()
+	Announcer::Announcer(Flag* a_RedFlag, Flag* a_BlueFlag, Player* a_Player)
+		: m_RedFlag(a_RedFlag), m_BlueFlag(a_BlueFlag), m_Player(a_Player)
 	{
-		m_RedScoredSource = std::make_unique<OpenALSource>("test");
-		m_FlagRedTakenSource = std::make_unique<OpenALSource>("test");
-		m_FlagRedReturnedSource = std::make_unique<OpenALSource>("test");
 
-		m_BlueScoredSource = std::make_unique<OpenALSource>("test");
-		m_FlagBlueTakenSource = std::make_unique<OpenALSource>("test");
-		m_FlagBlueReturnedSource = std::make_unique<OpenALSource>("test");
+		auto flagChangedEvents = [this](ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum) -> void 
+		{ 
+			playFlagEvent(a_TeamIdentifier, a_PreviousFlagEnum, a_CurrentFlagEnum); 
+		};
+		m_RedFlag->FlagStatusChangedEvent += flagChangedEvents;
+		m_BlueFlag->FlagStatusChangedEvent += flagChangedEvents;
+		m_lib = new Audio::AudioLibrary();
+	}
+
+	void Announcer::playFlagEvent(ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum)
+	{
+		if (a_PreviousFlagEnum == EFlagEnum::FlagTaken && a_CurrentFlagEnum == EFlagEnum::FlagBase)
+		{
+			playScoredSound(a_TeamIdentifier);
+		}
+
+		if (a_PreviousFlagEnum != EFlagEnum::FlagBase && a_CurrentFlagEnum == EFlagEnum::FlagBase)
+		{
+			playFlagReturnedSound(a_TeamIdentifier);
+		}
+
+		if (a_PreviousFlagEnum != EFlagEnum::FlagTaken && a_CurrentFlagEnum == EFlagEnum::FlagTaken)
+		{
+			playFlagTakenSound(a_TeamIdentifier);
+		}
 	}
 
 	void Announcer::playScoredSound(ETeamIdentifier a_TeamIdentifier)
 	{
 		if (a_TeamIdentifier == ETeamIdentifier::TeamBlue)
 		{
-			m_BlueScoredSource->play();
+			m_lib->m_BlueScoredSource->play();
 		}
 		else if (a_TeamIdentifier == ETeamIdentifier::TeamRed)
 		{
-			m_RedScoredSource->play();
+			m_lib->m_RedScoredSource->play();
 		}
 	}
 
@@ -32,11 +50,11 @@ namespace Confus
 	{
 		if (a_TeamIdentifier == ETeamIdentifier::TeamBlue)
 		{
-			m_FlagBlueReturnedSource->play();
+			m_lib->m_FlagBlueReturnedSource->play();
 		}
 		else if (a_TeamIdentifier == ETeamIdentifier::TeamRed)
 		{
-			m_FlagRedReturnedSource->play();
+			m_lib->m_FlagRedReturnedSource->play();
 		}
 	}
 
@@ -44,33 +62,18 @@ namespace Confus
 	{
 		if (a_TeamIdentifier == ETeamIdentifier::TeamBlue)
 		{
-			m_FlagBlueTakenSource->play();
+			m_lib->m_FlagBlueTakenSource->play();
 		}
 		else if (a_TeamIdentifier == ETeamIdentifier::TeamRed)
 		{
-			m_FlagRedTakenSource->play();
-		}
-	}
-
-	void Announcer::PlayAnnouncerEvent(ETeamIdentifier a_TeamIdentifier, EAnnouncerEvent a_AnnouncerEvent)
-	{
-		switch (a_AnnouncerEvent)
-		{
-		case EAnnouncerEvent::Scored: 
-			playScoredSound(a_TeamIdentifier);
-			break;
-		case EAnnouncerEvent::FlagReturned:
-			playFlagReturnedSound(a_TeamIdentifier);
-			break;
-		case EAnnouncerEvent::FlagTaken:
-			playFlagTakenSound(a_TeamIdentifier);
-			break;
-		default: break;
+			//m_Player->m_SoundEmitter->m_FlagRedTakenSource->play();// m_FlagRedTakenSource->play();
+			m_Player->m_SoundEmitter->test->m_FlagRedTakenSource->play();
 		}
 	}
 
 
 	Announcer::~Announcer()
 	{
+		delete(m_lib);
 	}
 }
