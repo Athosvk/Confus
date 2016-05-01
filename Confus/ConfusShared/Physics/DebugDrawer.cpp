@@ -16,11 +16,14 @@ namespace Confus
 
 		void DebugDrawer::draw() const
 		{
+#define DEBUG_DRAW
+#ifdef DEBUG_DRAW
 			irr::video::SMaterial debugMaterial;
 			debugMaterial.Lighting = false;
 			m_Device->getVideoDriver()->setMaterial(debugMaterial);
 			m_Device->getVideoDriver()->setTransform(irr::video::ETS_WORLD, irr::core::IdentityMatrix);
 			m_World->debugDrawWorld();
+#endif
 		}
 
 		DebugDrawer::DefaultColors DebugDrawer::getDefaultColors() const
