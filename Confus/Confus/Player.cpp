@@ -169,10 +169,10 @@ namespace Confus
     void Player::updateColor(irr::IrrlichtDevice* a_Device)
     {
         auto videoDriver = a_Device->getVideoDriver();
-        if(*TeamIdentifier == ETeamIdentifier::TeamBlue) {
+        if(TeamIdentifier == ETeamIdentifier::TeamBlue) {
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
         }
-        else if(*TeamIdentifier == ETeamIdentifier::TeamRed) {
+        else if(TeamIdentifier == ETeamIdentifier::TeamRed) {
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
         }
     }
