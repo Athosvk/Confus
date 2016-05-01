@@ -76,10 +76,9 @@ namespace Confus
         }
 	    PlayerNode->setParent(this);
 		setParent(CameraNode);
-		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.05f, 0.2f, 0.05f), CameraNode,
+		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.5f, 2.3f, 0.5f), CameraNode,
 			Physics::ECollisionFilter::Player, ~Physics::ECollisionFilter::Player);
 		m_Collider->getRigidBody()->disableSleeping();
-
 
         createAudioEmitter();
         startWalking();
