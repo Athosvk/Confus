@@ -139,12 +139,22 @@ namespace Confus
 			return m_Trigger;
 		}
 
+		irr::core::vector3df RigidBody::getOffset() const
+		{
+			return m_Offset;
+		}
+
+		void RigidBody::setOffset(irr::core::vector3df a_Offset)
+		{
+			m_Offset = a_Offset;
+		}
+
 		void RigidBody::setAbsoluteTransform(const btTransform& a_Transform) const
 		{
 			if(m_AttachedNode->getParent() != nullptr)
 			{
 				irr::core::matrix4 transformation = irr::core::IdentityMatrix;
-				transformation.setTranslation(PhysicsWorld::toIrrlichtVector(a_Transform.getOrigin()));
+				transformation.setTranslation(PhysicsWorld::toIrrlichtVector(a_Transform.getOrigin()) - m_Offset);
 
 				transformation.setRotationRadians(toIrrlichtEuler(a_Transform.getRotation()));
 				irr::core::matrix4 inverseParentMatrix;
@@ -154,7 +164,7 @@ namespace Confus
 			}
 			else
 			{
-				m_AttachedNode->setPosition(PhysicsWorld::toIrrlichtVector(a_Transform.getOrigin()));
+				m_AttachedNode->setPosition(PhysicsWorld::toIrrlichtVector(a_Transform.getOrigin()) - m_Offset);
 				m_AttachedNode->setRotation(toIrrlichtEuler(a_Transform.getRotation()) * irr::core::DEGTORAD);
 			}
 		}
@@ -178,7 +188,7 @@ namespace Confus
 		{
 			m_AttachedNode->updateAbsolutePosition();
 			btTransform transform = btTransform::getIdentity();
-			transform.setOrigin(PhysicsWorld::toBulletVector(m_AttachedNode->getAbsolutePosition()));
+			transform.setOrigin(PhysicsWorld::toBulletVector(m_AttachedNode->getAbsolutePosition() + m_Offset));
 			auto rotation = irr::core::quaternion(m_AttachedNode->getAbsoluteTransformation().getRotationDegrees() * 
 				irr::core::DEGTORAD);
 			transform.setRotation(btQuaternion(rotation.X, rotation.Y, rotation.Z, rotation.W));

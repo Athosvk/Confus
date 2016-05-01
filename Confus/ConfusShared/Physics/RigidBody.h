@@ -7,7 +7,7 @@ namespace Confus
 {
 	namespace Physics
 	{
-		/// <summary> The type of RigidBody, depicting how it will be influenced how it will be influenced by the physics world </summary>
+		/// <summary> The type of RigidBody, depicting how it will be influenced by the physics world </summary>
 		enum class ERigidBodyType
 		{
 			/// <summary> The Rigid Body is not updated or influenced by the physics world </summary>
@@ -38,7 +38,10 @@ namespace Confus
 
 			/// <summary> The type of Rigid Body </summary>
 			ERigidBodyType m_Type;
-		
+			
+			/// <summary> The offset from the scene node </summary>
+			irr::core::vector3df m_Offset = irr::core::vector3df(0.0f);
+
 			/// <summary> The motion state, used for moving kinematic bodies and interpolation </summary>
 			std::unique_ptr<btDefaultMotionState> m_MotionState;
 
@@ -114,6 +117,9 @@ namespace Confus
 			/// <summary> Determines whether this instance is a trigger collider </summary>
 			/// <returns> Whether this is a trigger collider </returns>
 			bool isTrigger() const;
+
+			irr::core::vector3df getOffset() const;
+			void setOffset(irr::core::vector3df a_Offset);
 		private:
 			/// <summary> Sets the position of the attached scene node in absolute/world terms </summary>
 			/// <param name="a_Position"> The world postion </param>
