@@ -30,7 +30,7 @@ namespace Confus
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_PhysicsWorld),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_PhysicsWorld),
         m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
-        m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
+        m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, -83.f)),
 		m_GUI(m_Device, &m_PlayerNode)
     {
 		auto videoDriver = m_Device->getVideoDriver();
