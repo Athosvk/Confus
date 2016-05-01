@@ -19,6 +19,7 @@ namespace Confus
 		m_RigidBody = a_PhysicsWorld.createBoxCollider(m_MeshNode, Physics::ECollisionFilter::MoveableWall,
 			Physics::ECollisionFilter::Player)->getRigidBody();
 		m_RigidBody->makeKinematic();
+		m_RigidBody->setOffset(irr::core::vector3df(0.0f, 0.75f, 0.0f));
         solidify();
     }
 
