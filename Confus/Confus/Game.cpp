@@ -267,7 +267,7 @@ namespace Confus
         inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
         inputStream.Read(m_PlayerNode.ID);
-        inputStream.Read(*m_PlayerNode.TeamIdentifier);
+        inputStream.Read(m_PlayerNode.TeamIdentifier);
         m_PlayerNode.respawn();
         m_PlayerNode.updateColor(m_Device);
 
