@@ -98,7 +98,5 @@ namespace Confus
         /// <remarks> Generally used for the attack animations only </remarks>
         /// <param name="node">The node whoms animation finished</param>
         virtual void OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node) override;
-        /// <summary> KeyMap used for the controls of the player </summary>
-        irr::SKeyMap m_KeyMap[6];
     };
 }

@@ -41,30 +41,15 @@ namespace Confus
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
         }
 
-        m_KeyMap[0].Action = irr::EKA_MOVE_FORWARD;
-        m_KeyMap[0].KeyCode = irr::KEY_KEY_0;
-
-        m_KeyMap[1].Action = irr::EKA_MOVE_BACKWARD;
-        m_KeyMap[1].KeyCode = irr::KEY_KEY_0;
-
-        m_KeyMap[2].Action = irr::EKA_STRAFE_LEFT;
-        m_KeyMap[2].KeyCode = irr::KEY_KEY_0;
-
-        m_KeyMap[3].Action = irr::EKA_STRAFE_RIGHT;
-        m_KeyMap[3].KeyCode = irr::KEY_KEY_0;
-
-        m_KeyMap[4].Action = irr::EKA_JUMP_UP;
-        m_KeyMap[4].KeyCode = irr::KEY_KEY_0;
-
         if(a_MainPlayer) 
         {
-            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, true);
+            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.0f, 1, nullptr, 0, true, 0.0f);
             CameraNode->setFOV(70.f);
             CameraNode->setNearValue(0.1f);
         }
         else 
         {
-            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, false);
+            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.0f, 1, nullptr, 0, true, 0.0f, false, false);
         }
         if(a_TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
@@ -133,13 +118,6 @@ namespace Confus
 		auto resultingVelocity = irr::core::vector3df(movementDirection.X, 0.0f, movementDirection.Z) * Speed
 			+ irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
 		rigidBody->setVelocity(resultingVelocity);
-		static float timer = 5.0f;
-		if(a_EventManager.IsKeyDown(irr::KEY_SPACE) && timer >= 5.0f)
-		{
-			timer = 0.0f;
-			rigidBody->applyForce(irr::core::vector3df(0.0f, 1200.0f, 0.0f));
-		}
-		timer += 0.20f;
     }
 
     void Player::render()
