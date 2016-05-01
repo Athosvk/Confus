@@ -43,7 +43,7 @@ namespace ConfusServer
             bitStream.Write(a_TeamScored);
             m_Connection->broadcastBitstream(bitStream);
             std::cout << "Team has won: " << static_cast<int>(a_TeamScored) << std::endl;
-            m_Callback();
+            m_ResetGameCallback();
         }
         std::cout << "Score updated\tRed score: " << m_RedTeamScore << "\t Blue score: " << m_BlueTeamScore << std::endl;
         sendScoreToClients();
@@ -73,9 +73,9 @@ namespace ConfusServer
         return scoreAmount;
     }
 
-    void TeamScore::setResetCallback(const std::function<void()>& a_Callback)
+    void TeamScore::setResetCallback(const std::function<void()>& a_ResetGameCallback)
     {
-        m_Callback = a_Callback;
+        m_ResetGameCallback = a_ResetGameCallback;
     }
 
     bool TeamScore::teamHasWon(ETeamIdentifier a_Team)

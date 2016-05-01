@@ -16,12 +16,12 @@ namespace ConfusServer
         const int TeamMaxScore = 3;
         /// <summary> The Blue team's score. </summary>
         int m_BlueTeamScore = 0;
-        /// <summary> The Red team's score. </summary>
+        /// <summary> The Red team's score. </summary> 
         int m_RedTeamScore = 0;
         /// <summary> The Connection class instance to send the score with. </summary>
         Networking::Connection* m_Connection;
-        /// <summary> Reset callback function </summary>
-        std::function<void()> m_Callback;
+        /// <summary> Reset game callback function. Will be called when the score hits the max score. Is used to reset the entire game. (Player, flag, maze and score) </summary>
+        std::function<void()> m_ResetGameCallback;
     public:
         /// <summary> TeamScore set connection. </summary>
         /// <param name="a_Connection"> The Connection class instance to send the score with. </param>
@@ -39,7 +39,7 @@ namespace ConfusServer
         /// <param name="a_Team"> The team you want to know the score of. </param>
         int getPointsOfTeam(ETeamIdentifier a_Team);
         /// <summary> Set the game reset callback </summary>
-        void setResetCallback(const std::function<void()>& a_Callback);
+        void setResetCallback(const std::function<void()>& a_ResetGameCallback);
     private:
         /// <summary> TeamScore calls this to check if a team has score enough points to win. </summary>
         /// <returns> Returns if the team has enough points to win </returns>

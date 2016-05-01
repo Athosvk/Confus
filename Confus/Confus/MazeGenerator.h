@@ -70,8 +70,6 @@ namespace Confus
         /// <param name="a_ChangeWantedTime">The time at which the maze should change.</param>
         void refillMainMazeRequest(int a_Seed, int a_ChangeWantedTime);
 
-        void resetMaze();
-
 		/// <summary>
 		/// Default destructor, could be omitted
 		/// </summary>
