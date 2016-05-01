@@ -71,7 +71,7 @@ namespace Confus
         while(m_Device->run())
         {
             m_Connection->processPackets();
-			handleInput();
+            handleInput();
             update();
             processFixedUpdates();
             render();
@@ -130,7 +130,8 @@ namespace Confus
         std::cin >> serverPort;
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Packet) {
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Packet) 
+        {
             int timeMazeChanges, mazeSeed;
             RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
             inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -140,7 +141,8 @@ namespace Confus
             m_MazeGenerator.refillMainMazeRequest(mazeSeed, timeMazeChanges);
         });
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [](RakNet::Packet* a_Packet) {
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [](RakNet::Packet* a_Packet) 
+        {
             int redScore, blueScore;
             RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
             inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -151,41 +153,47 @@ namespace Confus
             std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
         });
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::EndOfGame), [this](RakNet::Packet* a_Packet) {
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::EndOfGame), [this](RakNet::Packet* a_Packet) 
+        {
             ETeamIdentifier a_TeamIdentifier;
             RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
             inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
             inputStream.Read(a_TeamIdentifier);
-            auto text = m_Device->getGUIEnvironment()->addStaticText(L"Winner!", { 10, 240, 10 + 150, 240 + 80 });
-            
-            if (a_TeamIdentifier == ETeamIdentifier::TeamBlue) {
-				text->setText(L"Blue team won! \nPress space to continue!");
-            }
-            else if(a_TeamIdentifier == ETeamIdentifier::TeamRed) {
-				text->setText(L"Red team won! \nPress space to continue!");
-            }
 
-			// Render game and show text
-            render();
+            auto text = m_Device->getGUIEnvironment()->addStaticText(L"Resetting Game", { 10, 240, 10 + 150, 240 + 80 });
 
-			// Reset all values
+            // Values to calculate time with
+            irr::u32 currentTicks = m_Device->getTimer()->getRealTime();
+            irr::u32 previousTicks = currentTicks;
+            double time = 0;
+            double breakTime = 60;
+            while(time < breakTime && !m_EventManager.IsKeyDown(irr::KEY_SPACE))
+            {
+                // Show text on GUI
+                if(a_TeamIdentifier == ETeamIdentifier::TeamBlue) 
+                {
+                    text->setText((L"Blue team won! \nPress space to restart now! \nRestarting in: " + std::to_wstring(breakTime - time)).c_str());
+                }
+                else if(a_TeamIdentifier == ETeamIdentifier::TeamRed) 
+                {
+                    text->setText((L"Red team won! \nPress space to restart now! \nRestarting in: " + std::to_wstring(breakTime - time)).c_str());
+                }
+
+                // Call render to update GUI text
+                m_Device->run();
+                m_Connection->processPackets();
+                m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 100, 100));
+                m_Device->getGUIEnvironment()->drawAll();
+                m_Device->getVideoDriver()->endScene();
+
+                // Calculate time to see if we've been here longer than breaktime
+                previousTicks = currentTicks;
+                currentTicks = m_Device->getTimer()->getRealTime();
+                time += ((currentTicks - previousTicks) / 1000.0);
+                std::this_thread::sleep_for(std::chrono::milliseconds((1 / 60) * 1000));
+            }
+            text->remove();
             reset();
-			irr::u32 currentTicks = m_Device->getTimer()->getTime();
-			irr::u32 previousTicks = currentTicks;
-			double time = 0;
-			double breakTime = 10;
-
-			while (!m_EventManager.IsLeftMouseDown()) { // m_EventManager.IsKeyDown(irr::KEY_SPACE) 
-				previousTicks = currentTicks;
-				currentTicks = m_Device->getTimer()->getTime();
-				time += ((m_CurrentTicks - m_PreviousTicks) / 1000.0);
-				std::this_thread::sleep_for(std::chrono::milliseconds((1/60)*1000));
-
-				if (time > breakTime) {
-					break;
-				}
-			}
-			text->remove();
         });
     }
 
@@ -242,13 +250,11 @@ namespace Confus
 
     void Game::reset() 
     {
-        std::cout << "Resetting level!" << std::endl;
+        // We actually would not need to call this method since the server will send score, and new positions.
         m_BlueFlag.returnToStartPosition();
         m_RedFlag.returnToStartPosition();
         ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, 0);
         ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, 0);
-
-        //Server will send score, and new positions.
         m_PlayerNode.respawn();
     }
 
