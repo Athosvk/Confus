@@ -6,15 +6,14 @@ namespace Confus
 		class RigidBody;
 
 		/// <summary> A generic interface that all colliders in the physics world need to implement </summary>
-		//To do: Change name to Collider after refactor
-		class ICollider
+		class Collider
 		{
 		private:
 			RigidBody* m_RigidBody;
 		protected:
-			ICollider(RigidBody* a_RigidBody);
+			Collider(RigidBody* a_RigidBody);
 		public:
-			virtual ~ICollider() = default;
+			virtual ~Collider() = default;
 
 			RigidBody* getRigidBody();
 		};

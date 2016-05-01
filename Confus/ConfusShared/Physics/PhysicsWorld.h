@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-#include "ICollider.h"
+#include "Collider.h"
 #include "RigidBody.h"
 #include "DebugDrawer.h"
 #include "ECollisionFilter.h"
@@ -27,14 +27,14 @@ namespace Confus
 			{
 			public:				
 				/// <summary> The (collider)shape of this collision structure </summary>
-				std::unique_ptr<ICollider> Shape;				
+				std::unique_ptr<Collider> Shape;
 				/// <summary> The rigid body of this collision structure </summary>
 				std::unique_ptr<RigidBody> Body;
 
 				/// <summary> Initializes a new instance of the <see cref="ColliderPair"/> struct </summary>
 				/// <param name="a_Shape">The (collider)shape </param>
 				/// <param name="a_RigidBody">The rigid body </param>
-				ColliderPair(std::unique_ptr<ICollider>&& a_Shape,
+				ColliderPair(std::unique_ptr<Collider>&& a_Shape,
 					std::unique_ptr<RigidBody>&& a_RigidBody);
 			};
 

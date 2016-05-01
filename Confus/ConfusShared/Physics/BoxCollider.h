@@ -3,7 +3,7 @@
 #include <memory>
 #include <functional>
 
-#include "ICollider.h"
+#include "Collider.h"
 
 namespace Confus
 {
@@ -13,7 +13,7 @@ namespace Confus
 
 		/// <summary> A collider in the shape of a Box to handle collisions </summary>
 		/// <seealso cref="ICollider" />
-		class BoxCollider : public ICollider
+		class BoxCollider : public Collider
 		{
 		private:
 			/// <summary> The collision shape used for Bullet physics </summary>

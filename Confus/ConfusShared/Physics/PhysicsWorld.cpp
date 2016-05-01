@@ -5,7 +5,7 @@ namespace Confus
 {
 	namespace Physics
 	{
-		PhysicsWorld::ColliderPair::ColliderPair(std::unique_ptr<ICollider>&& a_Shape,
+		PhysicsWorld::ColliderPair::ColliderPair(std::unique_ptr<Collider>&& a_Shape,
 			std::unique_ptr<RigidBody>&& a_RigidBody)
 			: Shape(std::move(a_Shape)),
 			Body(std::move(a_RigidBody))

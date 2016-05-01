@@ -79,7 +79,7 @@ namespace Confus
 		for(irr::u32 i = 0; i < nodes.size(); ++i)
 		{
 			irr::scene::ISceneNode* node = nodes[i];
-			Physics::ICollider* collider = nullptr;
+			Physics::Collider* collider = nullptr;
 
 			if(node->isVisible())
 			{
@@ -88,17 +88,8 @@ namespace Confus
 				case irr::scene::ESNT_CUBE:
 				case irr::scene::ESNT_ANIMATED_MESH:
 				case irr::scene::ESNT_MESH:
-					if(std::string(static_cast<const char*>(node->getName())).find("Ground", 0) != std::string::npos)
-					{
-						collider = m_PhysicsWorld.createBoxCollider(irr::core::vector3df(node->getBoundingBox().getExtent().X * 
-							node->getScale().X, 0.3f, node->getBoundingBox().getExtent().Z * node->getScale().Z), node,
-							Physics::ECollisionFilter::LevelStatic, Physics::ECollisionFilter::Player);
-					}
-					else
-					{
-						collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, Physics::ECollisionFilter::LevelStatic, 
-							Physics::ECollisionFilter::Player);
-					}
+					collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, Physics::ECollisionFilter::LevelStatic, 
+						Physics::ECollisionFilter::Player);
 					collider->getRigidBody()->makeStatic();
 					break;
 				case irr::scene::ESNT_SPHERE:
@@ -157,6 +148,7 @@ namespace Confus
         m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
 
         m_PlayerNode.update();
+		m_SecondPlayerNode.update();
 		m_GUI.update();
         m_Listener.setPosition(m_PlayerNode.CameraNode->getAbsolutePosition());
         irr::core::quaternion playerRotation(m_PlayerNode.CameraNode->getRotation());

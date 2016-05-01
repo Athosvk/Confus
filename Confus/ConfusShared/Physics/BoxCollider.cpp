@@ -10,7 +10,7 @@ namespace Confus
 	{
 		BoxCollider::BoxCollider(std::unique_ptr<btBoxShape>&& a_Shape, RigidBody* a_RigidBody,
 			CollisionRegistrar& a_CollisionRegistrar)
-			: ICollider(a_RigidBody), 
+			: Collider(a_RigidBody),
 			m_Shape(std::move(a_Shape)),
 			m_CollisionRegistrar(a_CollisionRegistrar)
 		{
