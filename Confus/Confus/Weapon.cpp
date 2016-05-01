@@ -30,7 +30,6 @@ namespace Confus
 					m_Collided = true;
 				}
             }
-            return true;
         });
     }
 
