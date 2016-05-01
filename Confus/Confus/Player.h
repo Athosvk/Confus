@@ -33,7 +33,7 @@ namespace Confus
 		Health PlayerHealth;
         /// <summary> Determines if this player is this users player or not </summary>
         bool MainPlayer = false;
-        irr::s32 ID;
+        long long ID;
 	private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
 
@@ -54,13 +54,14 @@ namespace Confus
         /// <param name="a_ID">The ID of the scenenode.</param>
         /// <param name="a_TeamIdentifier">The team's identifier the player should have.</param>
         /// <param name="a_MainPlayer">A boolean to identify the player the user controls.</param>
-        Player(irr::IrrlichtDevice* a_Device, irr::s32 a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
+        Player(irr::IrrlichtDevice* a_Device, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
         /// <summary> Player class destructor. </summary>
 		~Player();
         /// <summary> Update function, any tasks that need to be done every frame go here. </summary>
         void update();
         ///<summary> Respawns the player to their base, public so round resets etc. can call this. </summary>
         void respawn();
+        void updateColor(irr::IrrlichtDevice* a_Device);
         ///<summary> Updates the rotation of this player.  </summary>
         /// <param name="a_NewPosition">The new rotation for this player.</param>
         void updateRotation(irr::core::vector3df a_NewRotation);
