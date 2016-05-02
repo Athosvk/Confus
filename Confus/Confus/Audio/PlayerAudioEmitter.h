@@ -2,20 +2,22 @@
 #include <irrlicht/irrlicht.h>
 #include <vector>
 
-#include "..\OpenAL\OpenALSource.h"
+#include "../Audio/Sound.h"
 
 namespace Confus
 {
     namespace Audio
     {
+		class AudioManager;
+
         /// <summary>
         /// Class PlayerAudioEmitter emits sounds like footsteps and attacking sounds from each individual player.
         /// </summary>
         class PlayerAudioEmitter
         {
-            OpenALSource* m_AudioSourceFootsteps[3];
-            OpenALSource* m_AudioSourceGrunts[3];
-            OpenALSource* m_AudioSourceSwordSwoshes[4];
+            Sound m_AudioSourceFootsteps[3];
+			Sound m_AudioSourceGrunts[3];
+            Sound m_AudioSourceSwordSwoshes[4];
             
             irr::scene::IAnimatedMeshSceneNode* m_AttachedPlayer;
         public:            
@@ -23,7 +25,7 @@ namespace Confus
             /// Initializes a new instance of the <see cref="PlayerAudioEmitter"/> class.
             /// </summary>
             /// <param name="a_AttachedPlayer">The player that owns this emitter.</param>
-            PlayerAudioEmitter(irr::scene::IAnimatedMeshSceneNode* a_AttachedPlayer);
+            PlayerAudioEmitter(irr::scene::IAnimatedMeshSceneNode* a_AttachedPlayer, AudioManager* a_AudioManager);
             /// <summary>
             /// Finalizes an instance of the <see cref="PlayerAudioEmitter"/> class.
             /// </summary>
@@ -52,7 +54,7 @@ namespace Confus
             /// <summary>
             /// Creates the audio sources.
             /// </summary>
-            void createAudioSources();
+            void createAudioSources(AudioManager* a_AudioManager);
         };
     }
 }

@@ -11,6 +11,7 @@
 #include "RespawnFloor.h"
 #include "GUI.h"
 #include "ClientTeamScore.h"
+#include "Audio/AudioManager.h"
 
 namespace Confus
 {    
@@ -86,6 +87,8 @@ namespace Confus
 		/// The connection as a client to the server that we are currently connected to
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
+		Audio::AudioManager m_AudioManager;
+
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.

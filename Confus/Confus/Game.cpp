@@ -94,10 +94,6 @@ namespace Confus
             updateOtherPlayer(a_Data);
         });
 
-
-
-
-      
         while(m_Device->run())
         {
             m_Connection->processPackets();
@@ -202,6 +198,8 @@ namespace Confus
         irr::core::vector3df upVector = playerRotation * irr::core::vector3df( 0, 1, 0 );
         irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
         m_Listener.setDirection(forwardVector, upVector);     
+
+		m_AudioManager.update();
     }
 
     void Game::processFixedUpdates()

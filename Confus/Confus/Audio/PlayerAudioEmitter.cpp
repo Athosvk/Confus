@@ -1,39 +1,29 @@
 #include <time.h> 
 
 #include "PlayerAudioEmitter.h"
+#include "AudioManager.h"
 
 namespace Confus
 {
     namespace Audio
     {
-        PlayerAudioEmitter::PlayerAudioEmitter(irr::scene::IAnimatedMeshSceneNode* a_AttachedPlayer) : m_AttachedPlayer(a_AttachedPlayer)
+        PlayerAudioEmitter::PlayerAudioEmitter(irr::scene::IAnimatedMeshSceneNode* a_AttachedPlayer, AudioManager* a_AudioManager)
+			: m_AttachedPlayer(a_AttachedPlayer)
         {
-        createAudioSources();
+			createAudioSources(a_AudioManager);
         }
 
         PlayerAudioEmitter::~PlayerAudioEmitter()
         {
-            for(auto audioSource : m_AudioSourceFootsteps)
-            {
-                delete(audioSource);
-            }
-            for(auto audioSource : m_AudioSourceGrunts)
-            {
-                delete(audioSource);
-            }
-            for(auto audioSource : m_AudioSourceSwordSwoshes)
-            {
-                delete(audioSource);
-            }
         }
 
         void PlayerAudioEmitter::playFootStepSound() const
         {
-            if(!m_AudioSourceFootsteps[0]->isPlaying())
+            if(!m_AudioSourceFootsteps[0].isPlaying())
             {
                 m_AudioSourceFootsteps[0]->play();
             }
-            else if(!m_AudioSourceFootsteps[1]->isPlaying())
+            else if(!m_AudioSourceFootsteps[1].isPlaying())
             {
                 m_AudioSourceFootsteps[1]->play();
             }
@@ -101,41 +91,41 @@ namespace Confus
 
         void PlayerAudioEmitter::updatePosition() const
         {
-            for(auto audioSource : m_AudioSourceFootsteps)
+            for(auto sound : m_AudioSourceFootsteps)
             {
                 audioSource->setPosition(m_AttachedPlayer->getAbsolutePosition());
             }
 
-            for (auto audioSource : m_AudioSourceGrunts)
+            for (auto sound : m_AudioSourceGrunts)
             {
-                audioSource->setPosition(m_AttachedPlayer->getAbsolutePosition());
+				sound->setPosition(m_AttachedPlayer->getAbsolutePosition());
             }
 
-            for(auto audioSource : m_AudioSourceSwordSwoshes)
+            for(auto sound : m_AudioSourceSwordSwoshes)
             {
                 audioSource->setPosition(m_AttachedPlayer->getAbsolutePosition());
             }
         }
 
-        void PlayerAudioEmitter::createAudioSources()
+        void PlayerAudioEmitter::createAudioSources(AudioManager* a_AudioManager)
         {
-            m_AudioSourceFootsteps[0] = new OpenALSource("Footstep1_Concrete.wav");
-            m_AudioSourceFootsteps[1] = new OpenALSource("Footstep2_Concrete.wav");
-            m_AudioSourceFootsteps[2] = new OpenALSource("Footstep3_Concrete.wav");
+            m_AudioSourceFootsteps[0] = a_AudioManager->createSound("Footstep1_Concrete.wav");
+            m_AudioSourceFootsteps[1] = a_AudioManager->createSound("Footstep2_Concrete.wav");
+            m_AudioSourceFootsteps[2] = a_AudioManager->createSound("Footstep3_Concrete.wav");
 
-            m_AudioSourceGrunts[0] = new OpenALSource("Grunt1.wav");
-            m_AudioSourceGrunts[1] = new OpenALSource("Grunt2.wav");
-            m_AudioSourceGrunts[2] = new OpenALSource("GruntHeavy.wav");
+            m_AudioSourceGrunts[0] =a_AudioManager->createSound("Grunt1.wav");
+            m_AudioSourceGrunts[1] =a_AudioManager->createSound("Grunt2.wav");
+            m_AudioSourceGrunts[2] =a_AudioManager->createSound("GruntHeavy.wav");
 
-            for(auto audioSource : m_AudioSourceGrunts)
+            for(auto sound : m_AudioSourceGrunts)
             {
-                audioSource->setVolume(0.1f);
+				sound.setVolume(0.1f);
             }
             
-            m_AudioSourceSwordSwoshes[0] = new OpenALSource("Sword_swing_1.wav");
-            m_AudioSourceSwordSwoshes[1] = new OpenALSource("Sword_swing_2.wav");
-            m_AudioSourceSwordSwoshes[2] = new OpenALSource("Sword_swing_3.wav");
-            m_AudioSourceSwordSwoshes[3] = new OpenALSource("Sword_swing_4.wav");
+            m_AudioSourceSwordSwoshes[0] = a_AudioManager->createSound("Sword_swing_1.wav");
+            m_AudioSourceSwordSwoshes[1] = a_AudioManager->createSound("Sword_swing_2.wav");
+            m_AudioSourceSwordSwoshes[2] = a_AudioManager->createSound("Sword_swing_3.wav");
+            m_AudioSourceSwordSwoshes[3] = a_AudioManager->createSound("Sword_swing_4.wav");
         }
     }
 }
