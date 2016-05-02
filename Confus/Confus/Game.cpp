@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "Flag.h"
 #include "FlagGUI.h"
+#include "WinScreen.h"
 
 #define DEBUG_CONSOLE
 #include "../Common/Debug.h"
@@ -19,12 +20,8 @@
 
 namespace Confus
 {
-    const double Game::FixedUpdateInterval = 0.02;
-    const double Game::MaxFixedUpdateInterval = 0.1;
-
-    Game::Game(irr::core::dimension2d<irr::u32> a_Resolution)
-        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL,a_Resolution)),
-		m_MazeGenerator(m_Device,60,60, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24), irr::core::vector2df(30.,30.)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+    Game::Game(irr::IrrlichtDevice* a_Device) : BaseGame(a_Device),
+		m_MazeGenerator(m_Device,40,40, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24), irr::core::vector2df(30.,30.)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
         m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamBlue, true),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed),
@@ -53,8 +50,10 @@ namespace Confus
         }
     }
 
-    void Game::run()
+    void Game::start()
     {
+        m_Device->setWindowCaption(L"Game");
+
         initializeConnection();
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
@@ -64,7 +63,7 @@ namespace Confus
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
         m_Device->setEventReceiver(&m_EventManager);
-        
+
         processTriangleSelectors();
 
         m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
@@ -95,19 +94,6 @@ namespace Confus
         {
             updateOtherPlayer(a_Data);
         });
-
-
-
-
-      
-        while(m_Device->run())
-        {
-            m_Connection->processPackets();
-            handleInput();
-            update();
-            processFixedUpdates();
-            render();
-        }
     }
 
     void Game::processTriangleSelectors()
@@ -192,40 +178,19 @@ namespace Confus
             inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
             inputStream.Read(a_TeamIdentifier);
 
-            auto text = m_Device->getGUIEnvironment()->addStaticText(L"Resetting Game", { 10, 240, 10 + 150, 240 + 80 });
+            WinScreen winScreen(m_Device, a_TeamIdentifier);
+            winScreen.run();
+            m_Device->setWindowCaption(L"Game");
+            m_Device->setEventReceiver(&m_EventManager);
 
-            // Values to calculate time with
-            irr::u32 currentTicks = m_Device->getTimer()->getRealTime();
-            irr::u32 previousTicks = currentTicks;
-            double time = 0;
-            double breakTime = 60;
-            while(time < breakTime && !m_EventManager.IsKeyDown(irr::KEY_SPACE))
+            if(winScreen.ShouldRestart)
             {
-                // Show text on GUI
-                if(a_TeamIdentifier == ETeamIdentifier::TeamBlue) 
-                {
-                    text->setText((L"Blue team won! \nPress space to restart now! \nRestarting in: " + std::to_wstring(breakTime - time)).c_str());
-                }
-                else if(a_TeamIdentifier == ETeamIdentifier::TeamRed) 
-                {
-                    text->setText((L"Red team won! \nPress space to restart now! \nRestarting in: " + std::to_wstring(breakTime - time)).c_str());
-                }
-
-                // Call render to update GUI text
-                m_Device->run();
-                m_Connection->processPackets();
-                m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 100, 100));
-                m_Device->getGUIEnvironment()->drawAll();
-                m_Device->getVideoDriver()->endScene();
-
-                // Calculate time to see if we've been here longer than breaktime
-                previousTicks = currentTicks;
-                currentTicks = m_Device->getTimer()->getRealTime();
-                time += ((currentTicks - previousTicks) / 1000.0);
-                std::this_thread::sleep_for(std::chrono::milliseconds((1 / 60) * 1000));
+                reset();
             }
-            text->remove();
-            reset();
+            else
+            {
+                m_ShouldRun = false;
+            }
         });
     }
 
@@ -236,9 +201,8 @@ namespace Confus
 
     void Game::update()
     {
-        m_PreviousTicks = m_CurrentTicks;
-        m_CurrentTicks = m_Device->getTimer()->getTime();
-        m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
+        m_Connection->processPackets();
+        handleInput();
 
         m_PlayerNode.update();
 		m_GUI.update();
@@ -248,18 +212,8 @@ namespace Confus
         //Todo: Fix rotations
         irr::core::vector3df upVector = playerRotation * irr::core::vector3df( 0, 1, 0 );
         irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
-        m_Listener.setDirection(forwardVector, upVector);     
-    }
+        m_Listener.setDirection(forwardVector, upVector);    
 
-    void Game::processFixedUpdates()
-    {
-        m_FixedUpdateTimer += m_DeltaTime;
-        m_FixedUpdateTimer = irr::core::min_(m_FixedUpdateTimer, MaxFixedUpdateInterval);
-        while(m_FixedUpdateTimer >= FixedUpdateInterval)
-        {
-            m_FixedUpdateTimer -= FixedUpdateInterval;
-            fixedUpdate();
-        }
     }
 
     void Game::reset()
@@ -267,9 +221,9 @@ namespace Confus
         // We actually would not need to call this method since the server will send score, and new positions.
         m_BlueFlag.returnToStartPosition();
         m_RedFlag.returnToStartPosition();
+        m_PlayerNode.respawn();
         ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, 0);
         ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, 0);
-        m_PlayerNode.respawn();
     }
 
     void Game::fixedUpdate()
@@ -288,6 +242,10 @@ namespace Confus
             m_RedRespawnFloor.disableCollision();
         }
         m_MazeGenerator.fixedUpdate();
+    }
+
+    void Game::end()
+    {
     }
 
     void Game::updateOtherPlayer(RakNet::Packet* a_Data)
@@ -383,13 +341,5 @@ namespace Confus
                 break;
             }
         }
-    }
-
-    void Game::render()
-    {
-        m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
-        m_Device->getSceneManager()->drawAll();
-        m_Device->getGUIEnvironment()->drawAll();
-        m_Device->getVideoDriver()->endScene();
     }
 }

@@ -11,6 +11,7 @@
 #include "RespawnFloor.h"
 #include "GUI.h"
 #include "ClientTeamScore.h"
+#include "BaseGame.h"
 
 namespace Confus
 {    
@@ -19,23 +20,9 @@ namespace Confus
     /// the Game to the Irrlicht instance, so that these can communicate through this
     /// with the active Irrlicht instance 
     /// </summary>
-    class Game
+    class Game : public BaseGame
     {
     private:
-        /// <summary>
-        /// The rate at which fixed updates are carried out
-        /// </summary>
-        static const double FixedUpdateInterval;
-        /// <summary>
-        /// The interval to clamp to if the delay between sequential fixed updates is too long
-        /// </summary>
-        static const double MaxFixedUpdateInterval;
-
-        /// <summary>
-        /// The instance of the IrrlichtDevice
-		/// Statics are avoided to make code clearer, hence this is not a static
-        /// </summary>
-        irr::IrrlichtDevice* m_Device;
         /// <summary>
         /// MazeGenerator that hasa accesible maze
         /// </summary>
@@ -65,22 +52,6 @@ namespace Confus
         /// The Red Flag.
         /// </summary>
         Flag m_RedFlag;
-        /// <summary>
-        /// The delay between the last and future fixed update
-        /// </summary>
-        double m_FixedUpdateTimer = 0.0;
-        /// <summary>
-		/// The time interval between the last update and the second-last
-        /// </summary>
-        double m_DeltaTime = 0.0;
-        /// <summary>
-		/// The total elapsed game ticks in milliseconds in the last frame
-        /// </summary>
-        irr::u32 m_PreviousTicks = 0;
-        /// <summary>
-        /// The total elapsed game ticks in the current frame
-        /// </summary>
-        irr::u32 m_CurrentTicks = 0;
         irr::scene::ISceneNode* m_LevelRootNode;
 		/// <summary>
 		/// The connection as a client to the server that we are currently connected to
@@ -90,16 +61,11 @@ namespace Confus
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
         /// </summary>
-        Game(irr::core::dimension2d<irr::u32> a_Resolution);
+        Game(irr::IrrlichtDevice* a_Device);
         /// <summary>
         /// Finalizes an instance of the <see cref="Game"/> class.
         /// </summary>
         virtual ~Game();
-
-        /// <summary>
-        /// Starts the game and gameloop
-        /// </summary>
-        void run();
 
         /// <summary>
         /// Resets the game and gameloop
@@ -119,22 +85,7 @@ namespace Confus
         /// Processes the input data
         /// </summary>
         void handleInput();
-        /// <summary>
-        /// Updates the state of the objects in the game
-        /// </summary>
-        void update();
-        /// <summary>
-        /// Runs a set of fixed update calls based on the tim elapsed since the last
-        /// </summary>
-        void processFixedUpdates();
-        /// <summary>
-        /// Updates the state of objects that require frame-rate independence
-        /// </summary>
-        void fixedUpdate();
-        /// <summary>
-        /// Renders the objects in the game
-        /// </summary>
-        void render();
+
         /// <summary>
         /// Creates a new Player object for this user, this player will be regarded as THEIR player.
         /// </summary>
@@ -148,5 +99,18 @@ namespace Confus
         /// </summary>
         void updateOtherPlayer(RakNet::Packet* a_Data);
         void removePlayer(RakNet::Packet* a_Data);
-    };
+
+        // Inherited via BaseGame
+        virtual void start() override;
+        /// <summary>
+        /// Updates the state of the objects in the game
+        /// </summary>
+        virtual void update() override;
+        /// <summary>
+        /// Updates the state of objects that require frame-rate independence
+        /// </summary>
+        virtual void fixedUpdate() override;
+        virtual void end() override;
+
+};
 }

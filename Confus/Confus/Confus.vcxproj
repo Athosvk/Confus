@@ -191,6 +191,7 @@ lib /out:Confus.lib *.obj</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseGame.cpp" />
     <ClCompile Include="ClientTeamScore.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="EventManager.cpp" />
@@ -203,6 +204,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="MazeGenerator.cpp" />
     <ClCompile Include="MazeTile.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MoveableWall.cpp" />
     <ClCompile Include="Networking\ClientConnection.cpp" />
     <ClCompile Include="OpenAL\Framework\aldlist.cpp" />
@@ -217,10 +219,12 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="StaticWall.cpp" />
     <ClCompile Include="WalledMazeTile.cpp" />
     <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="WinScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\Debug.h" />
     <ClInclude Include="..\Common\TeamIdentifier.h" />
+    <ClInclude Include="BaseGame.h" />
     <ClInclude Include="ClientTeamScore.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="EventManager.h" />
@@ -233,6 +237,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="Maze.h" />
     <ClInclude Include="MazeGenerator.h" />
     <ClInclude Include="MazeTile.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="MoveableWall.h" />
     <ClInclude Include="Networking\ClientConnection.h" />
     <ClInclude Include="OpenAL\Framework\aldlist.h" />
@@ -247,6 +252,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="StaticWall.h" />
     <ClInclude Include="WalledMazeTile.h" />
     <ClInclude Include="Weapon.h" />
+    <ClInclude Include="WinScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
