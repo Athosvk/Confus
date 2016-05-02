@@ -23,7 +23,7 @@ namespace Confus
 			bool m_Loop = false;
 			ALuint m_Buffer;
 			AudioManager* m_AudioManager;
-			OpenALSource* m_Source;
+			OpenALSource* m_Source = nullptr;
 
 		public:
 			Sound(const std::string& a_FilePath, AudioManager* a_AudioManager);

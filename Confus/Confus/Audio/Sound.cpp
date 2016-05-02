@@ -18,7 +18,7 @@ namespace Confus
 
 		Sound::~Sound()
 		{
-			alDeleteBuffers(1, &m_Buffer);
+			//alDeleteBuffers(1, &m_Buffer);
 		}
 
 		void Sound::play()

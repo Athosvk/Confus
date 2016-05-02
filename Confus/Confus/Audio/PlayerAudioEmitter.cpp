@@ -33,7 +33,6 @@ namespace Confus
             }
         }
 
-
         void PlayerAudioEmitter::playAttackSound(bool a_HeavyAttack)
         {
             if(!a_HeavyAttack)
@@ -113,13 +112,13 @@ namespace Confus
             {
                 if(i < 3)
                 {
-                    m_AudioSourceFootsteps.push_back(a_AudioManager->createSound("Footstep" + std::to_string(i) + "_Concrete.wav"));
+                    m_AudioSourceFootsteps.push_back(a_AudioManager->createSound("Footstep" + std::to_string(i + 1) + "_Concrete.wav"));
                 }
                 if(i < 2)
                 {
-                    m_AudioSourceGrunts.push_back(a_AudioManager->createSound("Grunt" + std::to_string(i) + ".wav"));
+                    m_AudioSourceGrunts.push_back(a_AudioManager->createSound("Grunt" + std::to_string(i + 1) + ".wav"));
                 }
-                m_AudioSourceSwordSwoshes.push_back(a_AudioManager->createSound("Sword_swing_" + std::to_string(i) + ".wav"));
+                m_AudioSourceSwordSwoshes.push_back(a_AudioManager->createSound("Sword_swing_" + std::to_string(i + 1) + ".wav"));
             }
 
             m_AudioSourceGrunts.push_back(a_AudioManager->createSound("GruntHeavy.wav"));

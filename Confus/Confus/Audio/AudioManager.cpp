@@ -7,8 +7,11 @@ namespace Confus
 	namespace Audio
 	{
 		AudioManager::AudioManager()
-			: m_Sources(4, std::make_unique<OpenALSource>())
 		{
+			for(int i = 0; i < 4; ++i)
+			{
+				createNewAudioSource();
+			}
 		}
 
 		void AudioManager::update()

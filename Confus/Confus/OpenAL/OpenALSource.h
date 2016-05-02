@@ -100,5 +100,6 @@ namespace Confus
 		/// </summary>
 		void stop();
 		void updatePlayingState();
+		void printError();
 	};
 }
