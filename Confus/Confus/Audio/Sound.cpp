@@ -53,11 +53,19 @@ namespace Confus
 
 		void Sound::setPosition(irr::core::vector3df a_Position)
 		{
+            if(m_Source != nullptr)
+            {
+                m_Source->setPosition(a_Position);
+            }
 			m_Position = a_Position;
 		}
 
 		void Sound::setVelocity(irr::core::vector3df a_Velocity)
 		{
+            if(m_Source != nullptr)
+            {
+                m_Source->setVelocity(a_Velocity);
+            }
 			m_Velocity = a_Velocity;
 		}
 

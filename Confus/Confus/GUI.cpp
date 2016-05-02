@@ -47,7 +47,10 @@ namespace Confus
 		}
 		else if(m_AudioSourceLowHealth.isPlaying())
 		{
-			m_AudioSourceLowHealth.stop();
+            if(m_AudioSourceLowHealth.isPlaying())
+            {
+                m_AudioSourceLowHealth.stop();
+            }
 		}
 	}
 

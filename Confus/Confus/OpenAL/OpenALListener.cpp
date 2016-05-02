@@ -37,16 +37,7 @@ namespace Confus {
 
     void OpenALListener::setDirection(float a_AtX, float a_AtY, float a_AtZ, float a_UpX, float a_UpY, float a_UpZ) 
     {
-        ALfloat direction[6];
-        //Forward Vector
-        direction[0] = a_AtX;
-        direction[1] = a_AtY;
-        direction[2] = a_AtZ;
-
-        //Up Vector
-        direction[3] = a_UpX;
-        direction[4] = a_UpY;
-        direction[5] = a_UpZ;
+        const ALfloat direction[] = { a_AtX, a_AtY, a_AtZ, a_UpX, a_UpY, a_UpZ };
         alListenerfv(AL_ORIENTATION, direction);
     }
 

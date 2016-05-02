@@ -23,10 +23,12 @@ namespace Confus {
         alGenSources(1, m_Source);
     }
 
+
     void OpenALSource::setPosition(float a_PositionX, float a_PositionY, float a_PositionZ)
 	{
         alSource3f(*m_Source, AL_POSITION, a_PositionX, a_PositionY, a_PositionZ);
     }
+
 
     void OpenALSource::setPosition(irr::core::vector3df a_Position)
 	{
@@ -43,15 +45,18 @@ namespace Confus {
 		alSourcei(*m_Source, AL_LOOPING, AL_FALSE);
 	}
 
-	void OpenALSource::setVolume(float a_Volume)
+
+    void OpenALSource::setVolume(float a_Volume)
 	{
 		alSourcef(*m_Source, AL_GAIN, a_Volume);
 	}
 
-	void OpenALSource::setPitch(float a_Pitch)
+
+    void OpenALSource::setPitch(float a_Pitch)
 	{
 		alSourcef(*m_Source, AL_PITCH, a_Pitch);
 	}
+
 
     void OpenALSource::setDirection(irr::core::vector3df a_ForwardVector, irr::core::vector3df a_UpVector)
 	{
@@ -60,28 +65,22 @@ namespace Confus {
 
     void OpenALSource::setDirection(float a_AtX, float a_AtY, float a_AtZ, float a_UpX, float a_UpY, float a_UpZ)
 	{
-        ALfloat direction[6];
-        //Forward Vector
-        direction[0] = a_AtX;
-        direction[1] = a_AtY;
-        direction[2] = a_AtZ;
-
-        //Up Vector
-        direction[3] = a_UpX;
-        direction[4] = a_UpY;
-        direction[5] = a_UpZ;
+        const ALfloat direction[] = { a_AtX, a_AtY, a_AtZ, a_UpX, a_UpY, a_UpZ };
         alSourcefv(*m_Source, AL_DIRECTION, direction);
     }
+
 
     void OpenALSource::setVelocity(float a_VelocityX, float a_VelocityY, float a_VelocityZ)
 	{
         alSource3f(*m_Source, AL_VELOCITY, a_VelocityX, a_VelocityY, a_VelocityZ);
     }
 
+
     void OpenALSource::setVelocity(irr::core::vector3df a_Velocity)
 	{
         alSource3f(*m_Source, AL_VELOCITY, a_Velocity.X, a_Velocity.Y, a_Velocity.Z);
     }
+
 
     void OpenALSource::setPlaySpeed(float a_Speed)
 	{
@@ -131,6 +130,7 @@ namespace Confus {
             }
 		}
 	}
+
 
     void OpenALSource::play(ALuint a_Buffer, std::function<void()> a_FinishedCallback)
 	{

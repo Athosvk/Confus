@@ -7,7 +7,7 @@ namespace Confus
 {
     namespace Audio
     {
-        PlayerAudioEmitter::PlayerAudioEmitter(irr::scene::IAnimatedMeshSceneNode* a_AttachedPlayer, AudioManager* a_AudioManager)
+        PlayerAudioEmitter::PlayerAudioEmitter(irr::scene::ISceneNode* a_AttachedPlayer, AudioManager* a_AudioManager)
 			: m_AttachedPlayer(a_AttachedPlayer)
         {
 			createAudioSources(a_AudioManager);
@@ -90,19 +90,35 @@ namespace Confus
 
         void PlayerAudioEmitter::updatePosition() const
         {
+            m_AttachedPlayer->updateAbsolutePosition();
             for(auto sound : m_AudioSourceFootsteps)
             {
                 sound.setPosition(m_AttachedPlayer->getAbsolutePosition());
+
+                irr::core::matrix4 playerRotation(m_AttachedPlayer->getAbsoluteTransformation());
+                irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10]);
+                irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
+                sound.setDirection(forwardVector, upVector);
             }
 
             for (auto sound : m_AudioSourceGrunts)
             {
 				sound.setPosition(m_AttachedPlayer->getAbsolutePosition());
+
+                irr::core::matrix4 playerRotation(m_AttachedPlayer->getAbsoluteTransformation());
+                irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10]);
+                irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
+                sound.setDirection(forwardVector, upVector);
             }
 
             for(auto sound : m_AudioSourceSwordSwoshes)
             {
                 sound.setPosition(m_AttachedPlayer->getAbsolutePosition());
+
+                irr::core::matrix4 playerRotation(m_AttachedPlayer->getAbsoluteTransformation());
+                irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10]);
+                irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
+                sound.setDirection(forwardVector, upVector);
             }
         }
 

@@ -191,12 +191,11 @@ namespace Confus
 
         m_PlayerNode.update();
 		m_GUI.update();
-        m_Listener.setPosition(m_PlayerNode.CameraNode->getAbsolutePosition());
-        irr::core::quaternion playerRotation(m_PlayerNode.CameraNode->getRotation());
+        m_Listener.setPosition(m_PlayerNode.getAbsolutePosition());
 
-        //Todo: Fix rotations
-        irr::core::vector3df upVector = playerRotation * irr::core::vector3df( 0, 1, 0 );
-        irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
+        irr::core::matrix4 playerRotation(m_PlayerNode.getAbsoluteTransformation());
+        irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10] );
+        irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
         m_Listener.setDirection(forwardVector, upVector);     
 
 		m_AudioManager.update();

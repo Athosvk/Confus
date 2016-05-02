@@ -19,13 +19,13 @@ namespace Confus
             std::vector<Sound> m_AudioSourceGrunts;
             std::vector<Sound> m_AudioSourceSwordSwoshes;
             
-            irr::scene::IAnimatedMeshSceneNode* m_AttachedPlayer;
+            irr::scene::ISceneNode* m_AttachedPlayer;
         public:            
             /// <summary>
             /// Initializes a new instance of the <see cref="PlayerAudioEmitter"/> class.
             /// </summary>
             /// <param name="a_AttachedPlayer">The player that owns this emitter.</param>
-            PlayerAudioEmitter(irr::scene::IAnimatedMeshSceneNode* a_AttachedPlayer, AudioManager* a_AudioManager);
+            PlayerAudioEmitter(irr::scene::ISceneNode* a_AttachedPlayer, AudioManager* a_AudioManager);
             /// <summary>
             /// Finalizes an instance of the <see cref="PlayerAudioEmitter"/> class.
             /// </summary>

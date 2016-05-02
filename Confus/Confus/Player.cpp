@@ -75,7 +75,7 @@ namespace Confus
 		setParent(CameraNode);
         startWalking();
 
-        m_SoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode, a_AudioManager);
+        m_SoundEmitter = new Audio::PlayerAudioEmitter(this, a_AudioManager);
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
