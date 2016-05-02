@@ -14,15 +14,20 @@ namespace Confus
 
     void WinScreen::update()
     {
+
+        
+
         m_BreakTimer += m_DeltaTime;
+
+
         // Show text on GUI
         if(m_GameWinner == ETeamIdentifier::TeamBlue)
         {
-            m_WinningText->setText((L"Blue team won! \nPress space to restart now! \nRestarting in: " + std::to_wstring(BreakTime - m_BreakTimer)).c_str());
+            m_WinningText->setText((L"Blue team won! \nPress SPACE to restart now! \nPress ESCAPE to exit.\nExitting in: " + std::to_wstring(BreakTime - m_BreakTimer)).c_str());
         }
         else if(m_GameWinner == ETeamIdentifier::TeamRed)
         {
-            m_WinningText->setText((L"Red team won! \nPress space to restart now! \nRestarting in: " + std::to_wstring(BreakTime - m_BreakTimer)).c_str());
+            m_WinningText->setText((L"Red team won! \nPress SPACE to restart now! \nPress ESCAPE to exit.\nExitting in: " + std::to_wstring(BreakTime - m_BreakTimer)).c_str());
         }
 
         if(m_EventManager.IsKeyDown(irr::KEY_SPACE))
@@ -30,7 +35,7 @@ namespace Confus
             m_ShouldRun = false;
             ShouldRestart = true;
         } 
-        else if(m_BreakTimer >= BreakTime)
+        else if(m_EventManager.IsKeyDown(irr::KEY_ESCAPE) || m_BreakTimer >= BreakTime)
         {
             m_ShouldRun = false;
             ShouldRestart = false;

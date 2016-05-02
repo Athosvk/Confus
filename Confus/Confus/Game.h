@@ -31,7 +31,6 @@ namespace Confus
         /// The OpenAL listener that is attached to the camera.
         /// </summary>
         OpenALListener m_Listener;
-        EventManager m_EventManager;
 		/// <summary>
 		/// The GUI for the Player
 		/// </summary>
