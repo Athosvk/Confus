@@ -191,6 +191,7 @@ lib /out:Confus.lib *.obj</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Audio\AudioManager.cpp" />
     <ClCompile Include="ClientTeamScore.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="EventManager.cpp" />
@@ -214,6 +215,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Audio\PlayerAudioEmitter.cpp" />
     <ClCompile Include="RespawnFloor.cpp" />
+    <ClCompile Include="Audio\Sound.cpp" />
     <ClCompile Include="StaticWall.cpp" />
     <ClCompile Include="WalledMazeTile.cpp" />
     <ClCompile Include="Weapon.cpp" />
@@ -221,6 +223,7 @@ lib /out:Confus.lib *.obj</Command>
   <ItemGroup>
     <ClInclude Include="..\Common\Debug.h" />
     <ClInclude Include="..\Common\TeamIdentifier.h" />
+    <ClInclude Include="Audio\AudioManager.h" />
     <ClInclude Include="ClientTeamScore.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="EventManager.h" />
@@ -244,6 +247,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="Player.h" />
     <ClInclude Include="Audio\PlayerAudioEmitter.h" />
     <ClInclude Include="RespawnFloor.h" />
+    <ClInclude Include="Audio\Sound.h" />
     <ClInclude Include="StaticWall.h" />
     <ClInclude Include="WalledMazeTile.h" />
     <ClInclude Include="Weapon.h" />
