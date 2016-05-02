@@ -16,6 +16,6 @@ namespace Confus
         virtual void end() override;
         void runGame();
     public:
-        Menu(irr::IrrlichtDevice* a_Device) : BaseGame(a_Device) {}
+        Menu(irr::IrrlichtDevice* a_Device, EventManager* a_EventManager) : BaseGame(a_Device, a_EventManager) {}
     };
 }

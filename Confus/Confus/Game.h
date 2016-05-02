@@ -58,9 +58,12 @@ namespace Confus
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
     public:
         /// <summary>
-        /// Initializes a new instance of the <see cref="Game"/> class.
+        /// Initializes a new instance of the <see cref="Game" /> class.
         /// </summary>
-        Game(irr::IrrlichtDevice* a_Device);
+        /// <param name="a_Device">The a_ device.</param>
+        /// <param name="a_EventManager">The a_ event manager.</param>
+        Game(irr::IrrlichtDevice* a_Device, EventManager* a_EventManager);
+
         /// <summary>
         /// Finalizes an instance of the <see cref="Game"/> class.
         /// </summary>

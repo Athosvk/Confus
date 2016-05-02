@@ -1,7 +1,7 @@
 #include <Irrlicht\irrlicht.h>
 
 #include "Menu.h"
-#include "Game.h"
+#include "EventManager.h"
 
 int main()
 {
@@ -13,9 +13,10 @@ int main()
 
 	irr::core::dimension2d<irr::u32> fixedResolution = irr::core::dimension2d<irr::u32>(1366, 768);
 
-    auto device = irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL, desktopResolution);    
+    auto device = irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL, desktopResolution);
 
-    Confus::Menu menu(device);
+    Confus::EventManager eventManager;
+    Confus::Menu menu(device, &eventManager);
     menu.run();
     device->setEventReceiver(0);
 

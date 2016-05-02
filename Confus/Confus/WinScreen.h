@@ -21,8 +21,8 @@ namespace Confus
         virtual void render() override;
     public:
         bool ShouldRestart = false;
-        WinScreen(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier) : 
-            BaseGame(a_Device), 
+        WinScreen(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, EventManager* a_EventManager) : 
+            BaseGame(a_Device, a_EventManager),
             m_GameWinner(a_TeamIdentifier) {}
     };
 }

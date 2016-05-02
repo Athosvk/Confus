@@ -4,8 +4,6 @@
 #include <RakNet/BitStream.h>
 #include <RakNet/MessageIdentifiers.h>
 #include <RakNet/GetTime.h>
-#include <chrono>
-#include <thread>
 
 #include "Game.h"
 #include "Player.h"
@@ -20,7 +18,7 @@
 
 namespace Confus
 {
-    Game::Game(irr::IrrlichtDevice* a_Device) : BaseGame(a_Device),
+    Game::Game(irr::IrrlichtDevice* a_Device, EventManager* a_EventManager) : BaseGame(a_Device, a_EventManager),
 		m_MazeGenerator(m_Device,40,40, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24), irr::core::vector2df(30.,30.)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
         m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamBlue, true),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
@@ -48,6 +46,7 @@ namespace Confus
             //m_PlayerArray[i]->remove();
             //delete(m_PlayerArray[i]);
         }
+        m_Device->getSceneManager()->clear();
     }
 
     void Game::start()
@@ -62,7 +61,6 @@ namespace Confus
         sceneManager->loadScene("Media/IrrlichtScenes/Bases2.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
-        m_Device->setEventReceiver(&m_EventManager);
 
         processTriangleSelectors();
 
@@ -178,10 +176,9 @@ namespace Confus
             inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
             inputStream.Read(a_TeamIdentifier);
 
-            WinScreen winScreen(m_Device, a_TeamIdentifier);
+            WinScreen winScreen(m_Device, a_TeamIdentifier, m_EventManager);
             winScreen.run();
             m_Device->setWindowCaption(L"Game");
-            m_Device->setEventReceiver(&m_EventManager);
 
             if(winScreen.ShouldRestart)
             {
@@ -196,7 +193,11 @@ namespace Confus
 
     void Game::handleInput()
     {
-        m_PlayerNode.handleInput(m_EventManager);
+        m_PlayerNode.handleInput(*m_EventManager);
+        if(m_EventManager->IsKeyDown(irr::KEY_ESCAPE))
+        {
+            m_ShouldRun = false;
+        }
     }
 
     void Game::update()
@@ -213,7 +214,6 @@ namespace Confus
         irr::core::vector3df upVector = playerRotation * irr::core::vector3df( 0, 1, 0 );
         irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
         m_Listener.setDirection(forwardVector, upVector);    
-
     }
 
     void Game::reset()
@@ -246,6 +246,8 @@ namespace Confus
 
     void Game::end()
     {
+        m_BlueFlag.returnToStartPosition();
+        m_RedFlag.returnToStartPosition();
     }
 
     void Game::updateOtherPlayer(RakNet::Packet* a_Data)

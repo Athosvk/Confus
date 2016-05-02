@@ -4,7 +4,10 @@
 #include "EventManager.h"
 
 namespace Confus
-{
+{    
+    /// <summary>
+    /// Base Game class, scenes can use this to run a scene
+    /// </summary>
     class BaseGame
     {
     protected:
@@ -39,9 +42,15 @@ namespace Confus
         irr::IrrlichtDevice* m_Device;
         /// <summary> Will stop the game loop </summary>
         bool m_ShouldRun = true;
-        EventManager m_EventManager;
-    public:
-        BaseGame(irr::IrrlichtDevice* a_Device);
+        EventManager* m_EventManager;
+    public:        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseGame"/> class.
+        /// </summary>
+        /// <param name="a_Device">The a_ device.</param>
+        /// <param name="a_EventManager">The a_ event manager.</param>
+        BaseGame(irr::IrrlichtDevice* a_Device, EventManager* a_EventManager);
+
         /// <summary>
         /// Starts the game and gameloop
         /// </summary>

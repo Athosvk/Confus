@@ -5,10 +5,11 @@ namespace Confus
     const double BaseGame::FixedUpdateInterval = 0.02;
     const double BaseGame::MaxFixedUpdateInterval = 0.1;
 
-    BaseGame::BaseGame(irr::IrrlichtDevice* a_Device)
+    BaseGame::BaseGame(irr::IrrlichtDevice* a_Device, EventManager* a_EventManager)
     {
         m_Device = a_Device;
-        m_Device->setEventReceiver(&m_EventManager);
+        m_EventManager = a_EventManager;
+        m_Device->setEventReceiver(m_EventManager);
     }
 
     void BaseGame::run()

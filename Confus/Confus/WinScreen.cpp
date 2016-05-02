@@ -30,12 +30,12 @@ namespace Confus
             m_WinningText->setText((L"Red team won! \nPress SPACE to restart now! \nPress ESCAPE to exit.\nExitting in: " + std::to_wstring(BreakTime - m_BreakTimer)).c_str());
         }
 
-        if(m_EventManager.IsKeyDown(irr::KEY_SPACE))
+        if(m_EventManager->IsKeyDown(irr::KEY_SPACE))
         {
             m_ShouldRun = false;
             ShouldRestart = true;
         } 
-        else if(m_EventManager.IsKeyDown(irr::KEY_ESCAPE) || m_BreakTimer >= BreakTime)
+        else if(m_EventManager->IsKeyDown(irr::KEY_ESCAPE) || m_BreakTimer >= BreakTime)
         {
             m_ShouldRun = false;
             ShouldRestart = false;

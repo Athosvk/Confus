@@ -215,7 +215,6 @@ namespace Confus {
 	}
 
 	Flag::~Flag() {
-        m_FlagNode->setParent(m_FlagOldParent);
 		delete(m_Collider);
 	}
 }
