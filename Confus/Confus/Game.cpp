@@ -23,12 +23,12 @@ namespace Confus
     Game::Game(irr::core::dimension2d<irr::u32> a_Resolution)
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL,a_Resolution)),
 		m_MazeGenerator(m_Device,60,60, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24), irr::core::vector2df(30.,30.)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-        m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamBlue, true),
+        m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamBlue, true, &m_AudioManager),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed),
         m_RedRespawnFloor(m_Device),
         m_BlueRespawnFloor(m_Device),
-		m_GUI(m_Device, &m_PlayerNode)
+		m_GUI(m_Device, &m_PlayerNode, &m_AudioManager)
     {
 		auto videoDriver = m_Device->getVideoDriver();
 		m_GUI.addElement<FlagGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(50, 50),
@@ -280,7 +280,7 @@ namespace Confus
             inputStream.Read(id);
             inputStream.Read(teamID);
 
-            Player* newPlayer = new Player(m_Device, id, teamID, false);
+            Player* newPlayer = new Player(m_Device, id, teamID, false, &m_AudioManager);
             
             newPlayer->setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
             m_PlayerArray.push_back(newPlayer);
@@ -300,7 +300,7 @@ namespace Confus
         inputStream.Read(id);
         inputStream.Read(teamID);
 
-        Player* newPlayer = new Player(m_Device, id, teamID, false);
+        Player* newPlayer = new Player(m_Device, id, teamID, false, &m_AudioManager);
         newPlayer->setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_PlayerArray.push_back(newPlayer);
     }

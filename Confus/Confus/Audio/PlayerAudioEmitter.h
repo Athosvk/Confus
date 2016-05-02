@@ -15,9 +15,9 @@ namespace Confus
         /// </summary>
         class PlayerAudioEmitter
         {
-            Sound m_AudioSourceFootsteps[3];
-			Sound m_AudioSourceGrunts[3];
-            Sound m_AudioSourceSwordSwoshes[4];
+            std::vector<Sound> m_AudioSourceFootsteps;
+            std::vector<Sound> m_AudioSourceGrunts;
+            std::vector<Sound> m_AudioSourceSwordSwoshes;
             
             irr::scene::IAnimatedMeshSceneNode* m_AttachedPlayer;
         public:            
@@ -33,20 +33,20 @@ namespace Confus
             /// <summary>
             /// Plays a random footstep sound.
             /// </summary>
-            void playFootStepSound() const;            
+            void playFootStepSound();            
             /// <summary>
             /// Plays a random attack sound.
             /// </summary>
             /// <param name="a_HeavyAttack">Is it a heavy attack?</param>
-            void playAttackSound(bool a_HeavyAttack) const;
+            void playAttackSound(bool a_HeavyAttack);
             /// <summary>
             /// Plays a random grunt.
             /// </summary>
-            void playRandomGrunt() const;            
+            void playRandomGrunt();            
             /// <summary>
             /// Plays a random sword swosh.
             /// </summary>
-            void playRandomSwordSwosh() const;
+            void playRandomSwordSwosh();
             /// <summary>
             /// Updates the position of this instance.
             /// </summary>

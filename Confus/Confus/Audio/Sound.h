@@ -6,6 +6,8 @@
 
 namespace Confus
 {
+    class OpenALSource;
+
 	namespace Audio
 	{
 		class AudioManager;
@@ -26,8 +28,15 @@ namespace Confus
 		public:
 			Sound(const std::string& a_FilePath, AudioManager* a_AudioManager);
 			~Sound();
-
-			void play();
+            
+            /// <summary>
+            /// Plays this instance.
+            /// </summary>
+            void play();
+            /// <summary>
+            /// Stops this instance.
+            /// </summary>
+            void stop();
 			bool isPlaying() const;
 
 			/// <summary>

@@ -123,8 +123,11 @@ namespace Confus {
 		alGetSourcei(*m_Source, static_cast<ALenum>(AL_SOURCE_STATE), m_PlayingState);
 		if(*m_PlayingState == AL_STOPPED)
 		{
-			m_FinishedPlayingCallback();
-			m_FinishedPlayingCallback = [] {};
+            if(m_FinishedPlayingCallback != nullptr)
+            {
+                m_FinishedPlayingCallback();
+                m_FinishedPlayingCallback = nullptr;
+            }
 		}
 	}
 

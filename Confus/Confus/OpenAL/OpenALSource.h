@@ -15,8 +15,8 @@ namespace Confus
 	{
     private:
         ALuint* m_Source;
-        ALint* m_PlayingState;
-		std::function<void()> m_FinishedPlayingCallback;
+        ALint* m_PlayingState; 
+        std::function<void()> m_FinishedPlayingCallback = nullptr;
 
 	public:
 		OpenALSource();

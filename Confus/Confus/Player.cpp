@@ -1,4 +1,5 @@
 #include <IrrAssimp/IrrAssimp.h>
+
 #include "Audio\PlayerAudioEmitter.h"
 #include "Player.h"
 #include "EventManager.h"
@@ -9,11 +10,12 @@ namespace Confus
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-	Player::Player(irr::IrrlichtDevice* a_Device, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
-		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
-		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
-		TeamIdentifier(a_TeamIdentifier),
-		CarryingFlag(EFlagEnum::None)
+
+    Player::Player(irr::IrrlichtDevice* a_Device, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Audio::AudioManager* a_AudioManager)
+        : m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
+        irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
+        TeamIdentifier(a_TeamIdentifier),
+        CarryingFlag(EFlagEnum::None)     
     {
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
@@ -71,15 +73,16 @@ namespace Confus
         }
 	    PlayerNode->setParent(this);
 		setParent(CameraNode);
-
-        createAudioEmitter();
         startWalking();
+
+        m_SoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode, a_AudioManager);
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
     }
 
 	Player::~Player() {
+        delete(m_SoundEmitter);
 	}
 
     void Player::handleInput(EventManager& a_EventManager)
@@ -237,8 +240,4 @@ namespace Confus
         CameraNode->setRotation(a_NewRotation);
     }
 
-    void Player::createAudioEmitter()
-    {
-        m_SoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
-    }
 }

@@ -2,10 +2,12 @@
 
 #include "GUI.h"
 #include "Game.h"
+#include "Audio\AudioManager.h"
 
 namespace Confus
 {
-	GUI::GUI(irr::IrrlichtDevice* a_Device, Player* a_Player)
+    GUI::GUI(irr::IrrlichtDevice* a_Device, Player* a_Player, Audio::AudioManager* a_AudioManager)
+        : m_AudioSourceLowHealth(a_AudioManager->createSound("heartbeat.wav"))
 	{
 		m_Device = a_Device;
 		m_GUIEnvironment = a_Device->getGUIEnvironment();
@@ -14,12 +16,10 @@ namespace Confus
 		m_BloodOverlay = m_GUIEnvironment->addImage(m_BloodImage, irr::core::position2d<int>(0, 0));
 		m_PlayerNode = a_Player;
 		m_HealthTextBox = m_GUIEnvironment->addStaticText(L"", irr::core::rect<irr::s32>(10, 10, 100, 25), false);
-		m_AudioSourceLowHealth = new OpenALSource("heartbeat.wav");
 	}
 
 	GUI::~GUI()
 	{
-		delete(m_AudioSourceLowHealth);
 	}
 
 	void GUI::update()
@@ -43,11 +43,11 @@ namespace Confus
 	{
 		if (m_PlayerNode->PlayerHealth.getHealth() <= 25)
 		{
-			m_AudioSourceLowHealth->play();
+			m_AudioSourceLowHealth.play();
 		}
 		else
 		{
-			m_AudioSourceLowHealth->stop();
+			m_AudioSourceLowHealth.stop();
 		}
 	}
 
