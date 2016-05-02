@@ -39,9 +39,9 @@ namespace Confus
 
         void Sound::stop()
         {
-            if(m_Source == nullptr)
+            if(!isPlaying())
             {
-                throw std::logic_error("Source does not exist and can not be stopped");
+                throw std::logic_error("Sound is not being played");
             }
             m_Source->stop();
         }

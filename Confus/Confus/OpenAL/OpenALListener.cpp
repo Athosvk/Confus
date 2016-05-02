@@ -47,7 +47,7 @@ namespace Confus {
         direction[3] = a_UpX;
         direction[4] = a_UpY;
         direction[5] = a_UpZ;
-        alListenerfv(AL_DIRECTION, direction);
+        alListenerfv(AL_ORIENTATION, direction);
     }
 
     void OpenALListener::setDirection(irr::core::vector3df a_ForwardVector, irr::core::vector3df a_UpVector) {

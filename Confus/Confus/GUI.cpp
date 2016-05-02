@@ -41,11 +41,11 @@ namespace Confus
 
 	void GUI::lowHealthAudio()
 	{
-		if (m_PlayerNode->PlayerHealth.getHealth() <= 25)
+		if (m_PlayerNode->PlayerHealth.getHealth() <= 25 && !m_AudioSourceLowHealth.isPlaying())
 		{
 			m_AudioSourceLowHealth.play();
 		}
-		else
+		else if(m_AudioSourceLowHealth.isPlaying())
 		{
 			m_AudioSourceLowHealth.stop();
 		}
