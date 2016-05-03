@@ -67,7 +67,7 @@ namespace Confus
                 sound.setDirection(forwardVector, upVector);
             }
 
-            for (auto sound : m_AudioSourceGrunts)
+            for (auto sound : m_Grunts)
             {
 				sound.setPosition(m_AttachedPlayer->getAbsolutePosition());
 
@@ -77,7 +77,7 @@ namespace Confus
                 sound.setDirection(forwardVector, upVector);
             }
 
-            for(auto sound : m_AudioSourceSwordSwoshes)
+            for(auto sound : m_SwordSwoshes)
             {
                 sound.setPosition(m_AttachedPlayer->getAbsolutePosition());
 
