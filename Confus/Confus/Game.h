@@ -44,7 +44,7 @@ namespace Confus
         /// <summary>
         /// The OpenAL listener that is attached to the camera.
         /// </summary>
-        Audio::OpenALListener m_Listener;
+        Audio::OpenAL::OpenALListener m_Listener;
 		Audio::AudioManager m_AudioManager;
 
         EventManager m_EventManager;

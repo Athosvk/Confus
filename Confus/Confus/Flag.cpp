@@ -7,7 +7,7 @@
 #include "Collider.h"
 
 #define Debug_Console
-#include "../Common/Debug.h"
+#include "../ConfusShared/Debug.h"
 
 
 
