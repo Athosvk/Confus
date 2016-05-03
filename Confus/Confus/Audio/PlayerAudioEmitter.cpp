@@ -13,10 +13,6 @@ namespace Confus
 			createAudioSources(a_AudioManager);
         }
 
-        PlayerAudioEmitter::~PlayerAudioEmitter()
-        {
-        }
-
         void PlayerAudioEmitter::playFootStepSound()
         {
             if(!m_AudioSourceFootsteps[0].isPlaying())
@@ -49,43 +45,13 @@ namespace Confus
         void PlayerAudioEmitter::playRandomGrunt()
         {
             std::srand(static_cast<int>(time(NULL)));
-            auto randomNumber = std::rand() % 2;
-
-            switch(randomNumber)
-            {
-            case 0:
-                m_AudioSourceGrunts[0].play();
-                break;
-            case 1:
-                m_AudioSourceGrunts[1].play();
-                break;
-            default:
-                break;
-            }
+			m_AudioSourceGrunts[std::rand() % 2].play();
         }
 
         void PlayerAudioEmitter::playRandomSwordSwosh()
         {
-            std::srand(static_cast<int>(time(NULL)));
-            auto randomNumber = std::rand() % 4;
-
-            switch(randomNumber)
-            {
-            case 0:
-                m_AudioSourceSwordSwoshes[0].play();
-                break;
-            case 1:
-                m_AudioSourceSwordSwoshes[1].play();
-                break;
-            case 2:
-                m_AudioSourceSwordSwoshes[2].play();
-                break;
-            case 3:
-                m_AudioSourceSwordSwoshes[3].play();
-                break;
-            default:
-                break;
-            }
+			std::srand(static_cast<int>(time(NULL)));
+			m_AudioSourceSwordSwoshes[std::rand() % 4].play();
         }
 
         void PlayerAudioEmitter::updatePosition() const

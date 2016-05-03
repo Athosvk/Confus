@@ -27,10 +27,6 @@ namespace Confus
             /// <param name="a_AttachedPlayer">The player that owns this emitter.</param>
             PlayerAudioEmitter(irr::scene::ISceneNode* a_AttachedPlayer, AudioManager* a_AudioManager);
             /// <summary>
-            /// Finalizes an instance of the <see cref="PlayerAudioEmitter"/> class.
-            /// </summary>
-            ~PlayerAudioEmitter();
-            /// <summary>
             /// Plays a random footstep sound.
             /// </summary>
             void playFootStepSound();            
