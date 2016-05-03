@@ -2,10 +2,12 @@
 #include <Irrlicht/irrlicht.h>
 #include <string>
 
-#include "../OpenAL/Framework/Framework.h"
-
 namespace Confus
 {
+	namespace OpenAL
+	{
+		class OpenALBuffer;
+	}
     class OpenALSource;
 
 	namespace Audio
@@ -21,13 +23,12 @@ namespace Confus
 			float m_PlaySpeed = 1.0f;
 			float m_Volume = 1.0f;
 			bool m_Loop = false;
-			ALuint m_Buffer;
+			OpenAL::OpenALBuffer* m_Buffer;
 			AudioManager* m_AudioManager;
 			OpenALSource* m_Source = nullptr;
 
 		public:
-			Sound(const std::string& a_FilePath, AudioManager* a_AudioManager);
-			~Sound();
+			Sound(OpenAL::OpenALBuffer* a_Buffer, AudioManager* a_AudioManager);
             
             /// <summary>
             /// Plays this instance.

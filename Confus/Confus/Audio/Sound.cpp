@@ -5,20 +5,10 @@ namespace Confus
 {
 	namespace Audio
 	{
-		Sound::Sound(const std::string& a_FilePath, AudioManager* a_AudioManager)
-			: m_AudioManager(a_AudioManager)
+		Sound::Sound(OpenAL::OpenALBuffer* a_Buffer, AudioManager* a_AudioManager)
+			: m_AudioManager(a_AudioManager),
+			m_Buffer(a_Buffer)
 		{
-			alGenBuffers(1, &m_Buffer);
-
-			if(!OpenAL::ALFWLoadWaveToBuffer(OpenAL::ALFWaddMediaPath(a_FilePath.c_str()), m_Buffer))
-			{
-				throw std::invalid_argument("Path was invalid");
-			}
-		}
-
-		Sound::~Sound()
-		{
-			//alDeleteBuffers(1, &m_Buffer);
 		}
 
 		void Sound::play()

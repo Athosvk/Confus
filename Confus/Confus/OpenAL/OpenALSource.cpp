@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "OpenALSource.h"
+#include "OpenALBuffer.h"
 
 namespace Confus {
 
@@ -23,12 +24,10 @@ namespace Confus {
         alGenSources(1, m_Source);
     }
 
-
     void OpenALSource::setPosition(float a_PositionX, float a_PositionY, float a_PositionZ)
 	{
         alSource3f(*m_Source, AL_POSITION, a_PositionX, a_PositionY, a_PositionZ);
     }
-
 
     void OpenALSource::setPosition(irr::core::vector3df a_Position)
 	{
@@ -45,18 +44,15 @@ namespace Confus {
 		alSourcei(*m_Source, AL_LOOPING, AL_FALSE);
 	}
 
-
     void OpenALSource::setVolume(float a_Volume)
 	{
 		alSourcef(*m_Source, AL_GAIN, a_Volume);
 	}
 
-
     void OpenALSource::setPitch(float a_Pitch)
 	{
 		alSourcef(*m_Source, AL_PITCH, a_Pitch);
 	}
-
 
     void OpenALSource::setDirection(irr::core::vector3df a_ForwardVector, irr::core::vector3df a_UpVector)
 	{
@@ -75,12 +71,10 @@ namespace Confus {
         alSource3f(*m_Source, AL_VELOCITY, a_VelocityX, a_VelocityY, a_VelocityZ);
     }
 
-
     void OpenALSource::setVelocity(irr::core::vector3df a_Velocity)
 	{
         alSource3f(*m_Source, AL_VELOCITY, a_Velocity.X, a_Velocity.Y, a_Velocity.Z);
     }
-
 
     void OpenALSource::setPlaySpeed(float a_Speed)
 	{
@@ -131,11 +125,10 @@ namespace Confus {
 		}
 	}
 
-
-    void OpenALSource::play(ALuint a_Buffer, std::function<void()> a_FinishedCallback)
+    void OpenALSource::play(OpenAL::OpenALBuffer* a_Buffer, std::function<void()> a_FinishedCallback)
 	{
 		m_FinishedPlayingCallback = a_FinishedCallback;
-		alSourcei(*m_Source, AL_BUFFER, a_Buffer);
+		alSourcei(*m_Source, AL_BUFFER, a_Buffer->getID());
         alSourcePlay(*m_Source);
     }
 

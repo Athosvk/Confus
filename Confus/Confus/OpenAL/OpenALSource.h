@@ -7,6 +7,11 @@
 
 namespace Confus 
 {
+	namespace OpenAL
+	{
+		class OpenALBuffer;
+	}
+
 	/// <summary>
 	/// OpenAL Sound Source class.
 	/// Needs the init() function to load a wave file.
@@ -115,9 +120,9 @@ namespace Confus
         /// <summary>
         /// Start playing the sound if it's not
         /// </summary>
-        /// <param name="a_Buffer">The a_ buffer.</param>
-        /// <param name="a_FinishedCallback">The a_ finished callback.</param>
-        void play(ALuint a_Buffer, std::function<void()> a_FinishedCallback);
+        /// <param name="a_Buffer">The buffer containing the sound to play</param>
+        /// <param name="a_FinishedCallback">The callback to trigger once the sound has finished playing</param>
+        void play(OpenAL::OpenALBuffer* a_Buffer, std::function<void()> a_FinishedCallback);
 
 		/// <summary>
 		/// Returns if the sound is currently playing

@@ -45,6 +45,8 @@ namespace Confus
         /// The OpenAL listener that is attached to the camera.
         /// </summary>
         OpenALListener m_Listener;
+		Audio::AudioManager m_AudioManager;
+
         EventManager m_EventManager;
 		/// <summary>
 		/// The GUI for the Player
@@ -87,7 +89,6 @@ namespace Confus
 		/// The connection as a client to the server that we are currently connected to
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
-		Audio::AudioManager m_AudioManager;
 
     public:
         /// <summary>

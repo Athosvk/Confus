@@ -210,6 +210,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="OpenAL\Framework\CWaves.cpp" />
     <ClCompile Include="OpenAL\Framework\Framework.cpp" />
     <ClCompile Include="OpenAL\Framework\LoadOAL.cpp" />
+    <ClCompile Include="OpenAL\OpenALBuffer.cpp" />
     <ClCompile Include="OpenAL\OpenALListener.cpp" />
     <ClCompile Include="OpenAL\OpenALSource.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -242,6 +243,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="OpenAL\Framework\CWaves.h" />
     <ClInclude Include="OpenAL\Framework\Framework.h" />
     <ClInclude Include="OpenAL\Framework\LoadOAL.h" />
+    <ClInclude Include="OpenAL\OpenALBuffer.h" />
     <ClInclude Include="OpenAL\OpenALListener.h" />
     <ClInclude Include="OpenAL\OpenALSource.h" />
     <ClInclude Include="Player.h" />
