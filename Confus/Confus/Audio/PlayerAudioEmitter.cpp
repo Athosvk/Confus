@@ -1,4 +1,5 @@
 #include <time.h> 
+#include <algorithm>
 
 #include "PlayerAudioEmitter.h"
 #include "AudioManager.h"
@@ -15,18 +16,12 @@ namespace Confus
 
         void PlayerAudioEmitter::playFootStepSound()
         {
-            if(!m_Footsteps[0].isPlaying())
-            {
-                m_Footsteps[0].play();
-            }
-            else if(!m_Footsteps[1].isPlaying())
-            {
-				m_Footsteps[1].play();
-            }
-            else
-            {
-				m_Footsteps[2].play();
-            }
+			auto soundIterator = std::find_if(m_Footsteps.begin(), m_Footsteps.end(), [](const Sound& a_Sound)->bool
+			{
+				return !a_Sound.isPlaying();
+			});
+			
+			soundIterator != m_Footsteps.end() ? soundIterator->play() : m_Footsteps.back().play();
         }
 
         void PlayerAudioEmitter::playAttackSound(bool a_HeavyAttack)
@@ -57,33 +52,24 @@ namespace Confus
         void PlayerAudioEmitter::updatePosition() const
         {
             m_AttachedPlayer->updateAbsolutePosition();
+			irr::core::matrix4 playerRotation = m_AttachedPlayer->getAbsoluteTransformation();
+			irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10]);
+			irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
             for(auto sound : m_Footsteps)
             {
                 sound.setPosition(m_AttachedPlayer->getAbsolutePosition());
-
-                irr::core::matrix4 playerRotation(m_AttachedPlayer->getAbsoluteTransformation());
-                irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10]);
-                irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
                 sound.setDirection(forwardVector, upVector);
             }
 
-            for (auto sound : m_Grunts)
+            for(auto sound : m_Grunts)
             {
 				sound.setPosition(m_AttachedPlayer->getAbsolutePosition());
-
-                irr::core::matrix4 playerRotation(m_AttachedPlayer->getAbsoluteTransformation());
-                irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10]);
-                irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
                 sound.setDirection(forwardVector, upVector);
             }
 
             for(auto sound : m_SwordSwoshes)
             {
                 sound.setPosition(m_AttachedPlayer->getAbsolutePosition());
-
-                irr::core::matrix4 playerRotation(m_AttachedPlayer->getAbsoluteTransformation());
-                irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10]);
-                irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
                 sound.setDirection(forwardVector, upVector);
             }
         }
