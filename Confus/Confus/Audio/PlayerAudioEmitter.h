@@ -14,12 +14,15 @@ namespace Confus
         /// Class PlayerAudioEmitter emits sounds like footsteps and attacking sounds from each individual player.
         /// </summary>
         class PlayerAudioEmitter
-        {
-            std::vector<Sound> m_AudioSourceFootsteps;
-            std::vector<Sound> m_AudioSourceGrunts;
-            std::vector<Sound> m_AudioSourceSwordSwoshes;
-            
-            irr::scene::ISceneNode* m_AttachedPlayer;
+		{
+			/// <summary> The footstep sounds </summary>
+			std::vector<Sound> m_Footsteps;
+			/// <summary> The grunt sounds </summary>
+			std::vector<Sound> m_Grunts;			
+			/// <summary> The sword slash sounds </summary>
+			std::vector<Sound> m_SwordSwoshes;            
+			/// <summary> The player emmitting the sounds </summary>
+			irr::scene::ISceneNode* m_AttachedPlayer;
         public:            
             /// <summary>
             /// Initializes a new instance of the <see cref="PlayerAudioEmitter"/> class.

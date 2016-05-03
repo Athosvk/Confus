@@ -15,17 +15,17 @@ namespace Confus
 
         void PlayerAudioEmitter::playFootStepSound()
         {
-            if(!m_AudioSourceFootsteps[0].isPlaying())
+            if(!m_Footsteps[0].isPlaying())
             {
-                m_AudioSourceFootsteps[0].play();
+                m_Footsteps[0].play();
             }
-            else if(!m_AudioSourceFootsteps[1].isPlaying())
+            else if(!m_Footsteps[1].isPlaying())
             {
-                m_AudioSourceFootsteps[1].play();
+				m_Footsteps[1].play();
             }
             else
             {
-                m_AudioSourceFootsteps[2].play();
+				m_Footsteps[2].play();
             }
         }
 
@@ -37,7 +37,7 @@ namespace Confus
             }
             else
             {
-                m_AudioSourceGrunts[2].play();
+                m_Footsteps[2].play();
             }
             playRandomSwordSwosh();
         }
@@ -45,19 +45,19 @@ namespace Confus
         void PlayerAudioEmitter::playRandomGrunt()
         {
             std::srand(static_cast<int>(time(NULL)));
-			m_AudioSourceGrunts[std::rand() % 2].play();
+			m_Grunts[std::rand() % 2].play();
         }
 
         void PlayerAudioEmitter::playRandomSwordSwosh()
         {
 			std::srand(static_cast<int>(time(NULL)));
-			m_AudioSourceSwordSwoshes[std::rand() % 4].play();
+			m_SwordSwoshes[std::rand() % 4].play();
         }
 
         void PlayerAudioEmitter::updatePosition() const
         {
             m_AttachedPlayer->updateAbsolutePosition();
-            for(auto sound : m_AudioSourceFootsteps)
+            for(auto sound : m_Footsteps)
             {
                 sound.setPosition(m_AttachedPlayer->getAbsolutePosition());
 
@@ -94,18 +94,18 @@ namespace Confus
             {
                 if(i < 3)
                 {
-                    m_AudioSourceFootsteps.push_back(a_AudioManager->createSound("Footstep" + std::to_string(i + 1) + "_Concrete.wav"));
+					m_Footsteps.push_back(a_AudioManager->createSound("Footstep" + std::to_string(i + 1) + "_Concrete.wav"));
                 }
                 if(i < 2)
                 {
-                    m_AudioSourceGrunts.push_back(a_AudioManager->createSound("Grunt" + std::to_string(i + 1) + ".wav"));
+                    m_Grunts.push_back(a_AudioManager->createSound("Grunt" + std::to_string(i + 1) + ".wav"));
                 }
-                m_AudioSourceSwordSwoshes.push_back(a_AudioManager->createSound("Sword_swing_" + std::to_string(i + 1) + ".wav"));
+                m_SwordSwoshes.push_back(a_AudioManager->createSound("Sword_swing_" + std::to_string(i + 1) + ".wav"));
             }
 
-            m_AudioSourceGrunts.push_back(a_AudioManager->createSound("GruntHeavy.wav"));
+            m_Grunts.push_back(a_AudioManager->createSound("GruntHeavy.wav"));
 
-            for(auto sound : m_AudioSourceGrunts)
+            for(auto sound : m_Grunts)
             {
 				sound.setVolume(0.1f);
             }
