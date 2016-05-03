@@ -47,17 +47,13 @@ namespace Confus {
 		alSourcef(m_Source, AL_GAIN, a_Volume);
 	}
 
-    void OpenALSource::setPitch(float a_Pitch)
-	{
-		alSourcef(m_Source, AL_PITCH, a_Pitch);
-	}
-
     void OpenALSource::setDirection(irr::core::vector3df a_ForwardVector, irr::core::vector3df a_UpVector)
 	{
         setDirection(a_ForwardVector.X, a_ForwardVector.Y, a_ForwardVector.Z, a_UpVector.X, a_UpVector.Y, a_UpVector.Z);
 	}
 
-    void OpenALSource::setDirection(float a_AtX, float a_AtY, float a_AtZ, float a_UpX, float a_UpY, float a_UpZ)
+
+	void OpenALSource::setDirection(float a_AtX, float a_AtY, float a_AtZ, float a_UpX, float a_UpY, float a_UpZ)
 	{
         const ALfloat direction[] = { a_AtX, a_AtY, a_AtZ, a_UpX, a_UpY, a_UpZ };
         alSourcefv(m_Source, AL_DIRECTION, direction);
