@@ -63,7 +63,6 @@ namespace Confus {
         alSourcefv(m_Source, AL_DIRECTION, direction);
     }
 
-
     void OpenALSource::setVelocity(float a_VelocityX, float a_VelocityY, float a_VelocityZ)
 	{
         alSource3f(m_Source, AL_VELOCITY, a_VelocityX, a_VelocityY, a_VelocityZ);
