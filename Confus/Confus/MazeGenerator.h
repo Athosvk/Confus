@@ -2,6 +2,8 @@
 #include <stack>
 
 #include "Maze.h"
+#include "Audio/Sound.h"
+
 namespace Confus
 {
 	/// <summary>
@@ -44,6 +46,9 @@ namespace Confus
         /// A bool that checks if the maze fill request has been fulfilled yet
         /// </summary>
         bool hasBeenRefilled = true;
+
+		/// <summary> The sound played when the maze changes/refills </summary>
+		Audio::Sound m_MazeChangeSound;
 	public:
         /// <summary> Initializes a new instance of the <see cref="MazeGenerator"/> class </summary>
         /// <param name="a_Device">The instance of the IrrlichtDevice</param>
@@ -52,7 +57,8 @@ namespace Confus
         /// <param name="a_StartPosition">The startposition for walls.</param>
         /// <param name="a_InitialSeed">The initial seed used to generate the first maze.</param>
         /// <param name="a_GenerateStartPoint">The generation start point.</param>
-        MazeGenerator(irr::IrrlichtDevice * a_Device, int a_MazeSizeX, int a_MazeSizeY, irr::core::vector3df a_StartPosition, int a_InitialSeed, irr::core::vector2df a_GenerateStartPoint);
+		MazeGenerator(irr::IrrlichtDevice * a_Device, int a_MazeSizeX, int a_MazeSizeY, irr::core::vector3df a_StartPosition, 
+			int a_InitialSeed, irr::core::vector2df a_GenerateStartPoint, Audio::AudioManager* a_AudioManager);
 
 		/// <summary>
 		/// The fixed update used to update the state of the main maze

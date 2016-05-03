@@ -38,14 +38,14 @@ namespace Confus
         /// </summary>
         irr::IrrlichtDevice* m_Device;
         /// <summary>
-        /// MazeGenerator that hasa accesible maze
-        /// </summary>
-        MazeGenerator m_MazeGenerator;
-        /// <summary>
         /// The OpenAL listener that is attached to the camera.
         /// </summary>
         Audio::OpenALListener m_Listener;
 		Audio::AudioManager m_AudioManager;
+		/// <summary>
+		/// MazeGenerator that hasa accesible maze
+		/// </summary>
+		MazeGenerator m_MazeGenerator;
 
         EventManager m_EventManager;
 		/// <summary>
