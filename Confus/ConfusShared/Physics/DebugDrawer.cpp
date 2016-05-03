@@ -16,7 +16,7 @@ namespace Confus
 
 		void DebugDrawer::draw() const
 		{
-#define DEBUG_DRAW
+//#define DEBUG_DRAW
 #ifdef DEBUG_DRAW
 			irr::video::SMaterial debugMaterial;
 			debugMaterial.Lighting = false;
