@@ -4,15 +4,16 @@
 
 namespace Confus
 {
-	namespace OpenAL
-	{
-		class OpenALBuffer;
-	}
-
 	namespace Audio
 	{
+        namespace OpenAL
+        {
+            class OpenALBuffer;
+            class OpenALSource;
+        }
+
 		class AudioManager;
-        class OpenALSource;
+
 
 		/// <summary> 
 		/// Represents a sound that can be used to play loaded files, given a buffer that contains the 
@@ -39,7 +40,7 @@ namespace Confus
 			/// <summary> The audio manager to use for retrieving an audio source </summary>
 			AudioManager* m_AudioManager;
 			/// <summary> The audio source to play this sound at </summary>
-			OpenALSource* m_Source = nullptr;
+			OpenAL::OpenALSource* m_Source = nullptr;
 
 		public:
 			/// <summary> Initializes a new instance of the <see cref="Sound"/> class </summary>

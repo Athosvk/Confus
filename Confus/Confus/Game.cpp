@@ -11,8 +11,8 @@
 #include "FlagGUI.h"
 
 #define DEBUG_CONSOLE
-#include "../Common/Debug.h"
-#include "../Common/TeamIdentifier.h"
+#include "../ConfusShared/Debug.h"
+#include "../ConfusShared/TeamIdentifier.h"
 
 
 namespace Confus

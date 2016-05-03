@@ -22,9 +22,9 @@ namespace Confus
 			}
 		}
 
-		OpenALSource* Confus::Audio::AudioManager::getAudioSource()
+		OpenAL::OpenALSource* Confus::Audio::AudioManager::getAudioSource()
 		{
-			OpenALSource* freeSource = nullptr;
+			OpenAL::OpenALSource* freeSource = nullptr;
 			for(auto& source : m_Sources)
 			{
 				if(!source->isPlaying())
@@ -44,13 +44,13 @@ namespace Confus
 			return Sound(getBuffer(a_FilePath), this);
 		}
 
-		OpenALSource* AudioManager::createNewAudioSource()
+		OpenAL::OpenALSource* AudioManager::createNewAudioSource()
 		{
 			if(m_Sources.size() >= 16)
 			{
 				throw std::length_error("Cannot exceed hardware limit of 16 sources");
 			}
-			m_Sources.emplace_back(std::make_unique<OpenALSource>());
+			m_Sources.emplace_back(std::make_unique<OpenAL::OpenALSource>());
 			return m_Sources.back().get();
 		}
 
