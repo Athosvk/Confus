@@ -3,8 +3,8 @@
 #include <memory>
 #include <unordered_map>
 
-#include "../OpenAL/OpenALSource.h"
-#include "../OpenAL/OpenALBuffer.h"
+#include "OpenAL/OpenALSource.h"
+#include "OpenAL/OpenALBuffer.h"
 #include "Sound.h"
 
 namespace Confus
@@ -53,7 +53,7 @@ namespace Confus
 			/// <returns> The new or cached buffer containing the audio data </returns>
 			OpenAL::OpenALBuffer* getBuffer(const std::string& a_FilePath);
 
-			/// <summary> Creates a buffer form the audio data at the given file(path) and places it into the cache </summary>
+			/// <summary> Creates a buffer from the audio data at the given file(path) and places it into the cache </summary>
 			/// <param name="a_FilePath">The file path </param>
 			/// <returns> The newly allocated buffer </returns>
 			OpenAL::OpenALBuffer* createBuffer(const std::string& a_FilePath);

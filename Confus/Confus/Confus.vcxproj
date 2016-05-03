@@ -192,6 +192,13 @@ lib /out:Confus.lib *.obj</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Audio\AudioManager.cpp" />
+    <ClCompile Include="Audio\OpenAL\Framework\aldlist.cpp" />
+    <ClCompile Include="Audio\OpenAL\Framework\CWaves.cpp" />
+    <ClCompile Include="Audio\OpenAL\Framework\Framework.cpp" />
+    <ClCompile Include="Audio\OpenAL\Framework\LoadOAL.cpp" />
+    <ClCompile Include="Audio\OpenAL\OpenALBuffer.cpp" />
+    <ClCompile Include="Audio\OpenAL\OpenALListener.cpp" />
+    <ClCompile Include="Audio\OpenAL\OpenALSource.cpp" />
     <ClCompile Include="ClientTeamScore.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="EventManager.cpp" />
@@ -225,6 +232,13 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="..\Common\Debug.h" />
     <ClInclude Include="..\Common\TeamIdentifier.h" />
     <ClInclude Include="Audio\AudioManager.h" />
+    <ClInclude Include="Audio\OpenAL\Framework\aldlist.h" />
+    <ClInclude Include="Audio\OpenAL\Framework\CWaves.h" />
+    <ClInclude Include="Audio\OpenAL\Framework\Framework.h" />
+    <ClInclude Include="Audio\OpenAL\Framework\LoadOAL.h" />
+    <ClInclude Include="Audio\OpenAL\OpenALBuffer.h" />
+    <ClInclude Include="Audio\OpenAL\OpenALListener.h" />
+    <ClInclude Include="Audio\OpenAL\OpenALSource.h" />
     <ClInclude Include="ClientTeamScore.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="EventManager.h" />

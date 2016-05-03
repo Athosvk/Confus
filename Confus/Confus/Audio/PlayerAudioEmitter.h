@@ -2,7 +2,7 @@
 #include <irrlicht/irrlicht.h>
 #include <vector>
 
-#include "../Audio/Sound.h"
+#include "Sound.h"
 
 namespace Confus
 {

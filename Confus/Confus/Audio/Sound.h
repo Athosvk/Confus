@@ -8,11 +8,11 @@ namespace Confus
 	{
 		class OpenALBuffer;
 	}
-    class OpenALSource;
 
 	namespace Audio
 	{
 		class AudioManager;
+        class OpenALSource;
 
 		/// <summary> 
 		/// Represents a sound that can be used to play loaded files, given a buffer that contains the 
