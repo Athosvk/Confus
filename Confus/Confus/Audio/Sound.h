@@ -14,6 +14,10 @@ namespace Confus
 	{
 		class AudioManager;
 
+		/// <summary> 
+		/// Represents a sound that can be used to play loaded files, given a buffer that contains the 
+		/// audio data and an audio manager to output it to an audiosource/audio channel
+		/// </summary>
 		class Sound
 		{
 		private:
