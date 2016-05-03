@@ -19,8 +19,8 @@ namespace Confus
 	class OpenALSource 
 	{
     private:
-        ALuint* m_Source;
-        ALint* m_PlayingState; 
+        ALuint m_Source = 0;
+        ALint m_PlayingState = 0; 
         std::function<void()> m_FinishedPlayingCallback = nullptr;
 
 	public:        
