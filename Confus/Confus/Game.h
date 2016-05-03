@@ -3,7 +3,7 @@
 
 #include "Networking/ClientConnection.h"
 #include "MazeGenerator.h"
-#include "OpenAL\OpenALListener.h"
+#include "Audio/OpenAL\OpenALListener.h"
 #include "Player.h"
 #include "Audio\PlayerAudioEmitter.h"
 #include "EventManager.h"
@@ -11,6 +11,7 @@
 #include "RespawnFloor.h"
 #include "GUI.h"
 #include "ClientTeamScore.h"
+#include "Audio/AudioManager.h"
 
 namespace Confus
 {    
@@ -43,7 +44,9 @@ namespace Confus
         /// <summary>
         /// The OpenAL listener that is attached to the camera.
         /// </summary>
-        OpenALListener m_Listener;
+        Audio::OpenALListener m_Listener;
+		Audio::AudioManager m_AudioManager;
+
         EventManager m_EventManager;
 		/// <summary>
 		/// The GUI for the Player
@@ -86,6 +89,7 @@ namespace Confus
 		/// The connection as a client to the server that we are currently connected to
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
+
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.

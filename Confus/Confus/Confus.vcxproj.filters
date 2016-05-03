@@ -24,24 +24,6 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OpenAL\OpenALListener.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OpenAL\OpenALSource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OpenAL\Framework\aldlist.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OpenAL\Framework\CWaves.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OpenAL\Framework\Framework.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OpenAL\Framework\LoadOAL.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -93,27 +75,39 @@
     <ClCompile Include="ClientTeamScore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FlagGUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\Sound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\AudioManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\OpenAL\Framework\aldlist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\OpenAL\Framework\CWaves.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\OpenAL\Framework\Framework.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\OpenAL\Framework\LoadOAL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\OpenAL\OpenALBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\OpenAL\OpenALListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\OpenAL\OpenALSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OpenAL\OpenALListener.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OpenAL\OpenALSource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OpenAL\Framework\aldlist.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OpenAL\Framework\CWaves.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OpenAL\Framework\Framework.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OpenAL\Framework\LoadOAL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
@@ -183,6 +177,42 @@
       <Filter>Shared Files</Filter>
     </ClInclude>
     <ClInclude Include="ClientTeamScore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\TeamIdentifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Sound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\AudioManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenAL\OpenALBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\OpenAL\Framework\aldlist.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\OpenAL\Framework\CWaves.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\OpenAL\Framework\Framework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\OpenAL\Framework\LoadOAL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\OpenAL\OpenALBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\OpenAL\OpenALListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\OpenAL\OpenALSource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
