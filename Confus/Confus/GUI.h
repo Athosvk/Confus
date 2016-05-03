@@ -5,7 +5,6 @@
 
 #include "Player.h"
 #include "IUIElement.h"
-#include "OpenAL\OpenALSource.h"
 #include "Audio\Sound.h"
 
 namespace Confus
