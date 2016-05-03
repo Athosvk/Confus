@@ -43,20 +43,20 @@ namespace Confus
 
 		void Sound::setPosition(irr::core::vector3df a_Position)
 		{
-            if(m_Source != nullptr)
-            {
-                m_Source->setPosition(a_Position);
-            }
 			m_Position = a_Position;
+			if(m_Source != nullptr)
+			{
+				m_Source->setPosition(m_Position);
+			}
 		}
 
 		void Sound::setVelocity(irr::core::vector3df a_Velocity)
 		{
-            if(m_Source != nullptr)
-            {
-                m_Source->setVelocity(a_Velocity);
-            }
 			m_Velocity = a_Velocity;
+			if(m_Source != nullptr)
+			{
+				m_Source->setVelocity(m_Velocity);
+			}
 		}
 
 		void Sound::setDirection(irr::core::vector3df a_ForwardVector, irr::core::vector3df a_UpVector)
@@ -68,26 +68,47 @@ namespace Confus
 			m_Direction[4] = a_UpVector.X;
 			m_Direction[5] = a_UpVector.Y;
 			m_Direction[6] = a_UpVector.Z;
+
+			if(m_Source != nullptr)
+			{
+				m_Source->setDirection(a_ForwardVector, a_UpVector);
+			}
 		}
 
 		void Sound::setPlaySpeed(float a_Speed)
 		{
 			m_PlaySpeed = a_Speed;
+			if(m_Source != nullptr)
+			{
+				m_Source->setPlaySpeed(m_PlaySpeed);
+			}
 		}
 
 		void Sound::setVolume(float a_Volume)
 		{
 			m_Volume = a_Volume;
+			if(m_Source != nullptr)
+			{
+				m_Source->setVolume(m_Volume);
+			}
 		}
 
 		void Sound::enableLoop()
 		{
 			m_Loop = true;
+			if(m_Source != nullptr)
+			{
+				m_Source->enableLoop();
+			}
 		}
 
 		void Sound::disableLoop()
 		{
 			m_Loop = false;
+			if(m_Source != nullptr)
+			{
+				m_Source->disableLoop();
+			}
 		}
 	}
 }
