@@ -13,21 +13,23 @@
 #define DEBUG_CONSOLE
 #include "../Common/Debug.h"
 #include "../Common/TeamIdentifier.h"
-
+#include "../ConfusShared/Physics/BoxCollider.h"
 
 namespace Confus
 {
-    const double Game::FixedUpdateInterval = 0.02;
+    const double Game::FixedUpdateInterval = 0.03;
     const double Game::MaxFixedUpdateInterval = 0.1;
 
     Game::Game(irr::core::dimension2d<irr::u32> a_Resolution)
-        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL,a_Resolution)),
-		m_MazeGenerator(m_Device,60,60, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24), irr::core::vector2df(30.,30.)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-        m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamBlue, true),
-        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
-        m_RedFlag(m_Device, ETeamIdentifier::TeamRed),
-        m_RedRespawnFloor(m_Device),
-        m_BlueRespawnFloor(m_Device),
+        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL, a_Resolution)),
+		m_PhysicsWorld(m_Device),
+		m_MazeGenerator(m_Device, 41, 40,(19+20+21+22+23+24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+			irr::core::vector2df(19., 20.), m_PhysicsWorld),
+        m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true),
+        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_PhysicsWorld),
+        m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_PhysicsWorld),
+        m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
+        m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, -83.f)),
 		m_GUI(m_Device, &m_PlayerNode)
     {
 		auto videoDriver = m_Device->getVideoDriver();
@@ -61,16 +63,11 @@ namespace Confus
         sceneManager->loadScene("Media/IrrlichtScenes/Bases2.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
-        m_Device->setEventReceiver(&m_EventManager);
         
-        processTriangleSelectors();
+        m_Device->setEventReceiver(&m_EventManager);
 
-        m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-        m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-        m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-
-        m_BlueRespawnFloor.setPosition(irr::core::vector3df(0.f, 3.45f, 11.f));
-        m_RedRespawnFloor.setPosition(irr::core::vector3df(0.f, 3.45f, -83.f));
+		updateSceneTransformations();
+        initializeLevelColliders();
 
         m_Device->getCursorControl()->setVisible(false);
 
@@ -93,10 +90,6 @@ namespace Confus
         {
             updateOtherPlayer(a_Data);
         });
-
-
-
-
       
         while(m_Device->run())
         {
@@ -108,46 +101,48 @@ namespace Confus
         }
     }
 
-    void Game::processTriangleSelectors()
-    {
-        auto sceneManager = m_Device->getSceneManager();
-        auto metatriangleSelector = sceneManager->createMetaTriangleSelector();
-        
-        irr::core::array<irr::scene::ISceneNode*> nodes;
-        sceneManager->getSceneNodesFromType(irr::scene::ESNT_ANY, nodes);
-        for(irr::u32 i = 0; i < nodes.size(); ++i)
-        {
-            irr::scene::ISceneNode* node = nodes[i];
-            irr::scene::ITriangleSelector* selector = nullptr;
+	void Game::initializeLevelColliders()
+	{
+		irr::core::array<irr::scene::ISceneNode*> nodes;
+		m_Device->getSceneManager()->getSceneNodesFromType(irr::scene::ESNT_ANY, nodes, m_LevelRootNode);
+		for(irr::u32 i = 0; i < nodes.size(); ++i)
+		{
+			irr::scene::ISceneNode* node = nodes[i];
+			Physics::Collider* collider = nullptr;
 
-            switch(node->getType())
-            {
-            case irr::scene::ESNT_CUBE:
-            case irr::scene::ESNT_ANIMATED_MESH:
-                selector = m_Device->getSceneManager()->createTriangleSelectorFromBoundingBox(node);
-                break;
-            case irr::scene::ESNT_MESH:
-            case irr::scene::ESNT_SPHERE:
-                selector = sceneManager->createTriangleSelector(((irr::scene::IMeshSceneNode*)node)->getMesh(), node);
-                break;
-            case irr::scene::ESNT_TERRAIN:
-                selector = sceneManager->createTerrainTriangleSelector((irr::scene::ITerrainSceneNode*)node);
-                break;
-            case irr::scene::ESNT_OCTREE:
-                selector = sceneManager->createOctreeTriangleSelector(((irr::scene::IMeshSceneNode*)node)->getMesh(), node);
-                break;
-            default:
-                break;
-            }
-            
-            if(selector)
-            {
-                metatriangleSelector->addTriangleSelector(selector);
-                selector->drop();
-            }
-        }
-        m_LevelRootNode->setTriangleSelector(metatriangleSelector);
-    }
+			if(node->isVisible())
+			{
+				switch(node->getType())
+				{
+				case irr::scene::ESNT_CUBE:
+				case irr::scene::ESNT_ANIMATED_MESH:
+				case irr::scene::ESNT_MESH:
+					if(std::string(node->getName()).find("Ground", 0) != std::string::npos)
+					{
+						collider = m_PhysicsWorld.createBoxCollider(node, Physics::ECollisionFilter::LevelStatic,
+							Physics::ECollisionFilter::Player);
+					}
+					else if (std::string(node->getName()).find("Basefolder", 0) == std::string::npos)
+					{
+						collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, Physics::ECollisionFilter::LevelStatic,
+							Physics::ECollisionFilter::Player);
+                    }
+                    else
+                    {
+                        break;
+                    }
+					collider->getRigidBody()->makeStatic();
+					break;
+				case irr::scene::ESNT_SPHERE:
+				case irr::scene::ESNT_TERRAIN:
+				case irr::scene::ESNT_OCTREE:
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
 
     void Game::initializeConnection()
     {
@@ -160,7 +155,8 @@ namespace Confus
         std::cin >> serverPort;
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Packet) {
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Packet) 
+		{
             int timeMazeChanges, mazeSeed;
             RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
             inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -170,7 +166,8 @@ namespace Confus
             m_MazeGenerator.refillMainMazeRequest(mazeSeed, timeMazeChanges);
         });
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [](RakNet::Packet* a_Packet) {
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [](RakNet::Packet* a_Packet) 
+		{
             int redScore, blueScore;
             RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
             inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -202,6 +199,21 @@ namespace Confus
         irr::core::vector3df upVector = playerRotation * irr::core::vector3df( 0, 1, 0 );
         irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
         m_Listener.setDirection(forwardVector, upVector);     
+
+		static float timer = 0.0f;
+		timer += static_cast<float>(m_DeltaTime);
+		if(timer >= 3.0f)
+		{
+			m_BlueRespawnFloor.enableCollision();
+			m_RedRespawnFloor.enableCollision();
+		}
+		if(timer >= 20.0f)
+		{
+			timer = 0.0f;
+			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
+			m_BlueRespawnFloor.disableCollision();
+			m_RedRespawnFloor.disableCollision();
+		}
     }
 
     void Game::processFixedUpdates()
@@ -217,20 +229,8 @@ namespace Confus
 
     void Game::fixedUpdate()
     {
-        static float timer = 0.0f;
-        timer += static_cast<float>(m_DeltaTime);
-        if(timer >= 3.0f && timer <= 8.0f)
-        {
-            m_BlueRespawnFloor.enableCollision();
-            m_RedRespawnFloor.enableCollision();
-        }
-        if(timer >= 9.0f)
-        {
-            timer = 0.0f;
-            m_BlueRespawnFloor.disableCollision();
-            m_RedRespawnFloor.disableCollision();
-        }
-        m_MazeGenerator.fixedUpdate();
+		m_MazeGenerator.fixedUpdate();
+		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
     }
 
     void Game::updateOtherPlayer(RakNet::Packet* a_Data)
@@ -259,6 +259,19 @@ namespace Confus
         }
     }
 
+	void Game::updateSceneTransformations()
+	{
+		std::function<void(irr::scene::ISceneNode* a_Node)> updateDownwards = [&updateDownwards](irr::scene::ISceneNode* a_Node)
+		{
+			a_Node->updateAbsolutePosition();
+			auto children = a_Node->getChildren();
+			for(auto child : children)
+			{
+				updateDownwards(child);
+			}
+		};
+		updateDownwards(m_Device->getSceneManager()->getRootSceneNode());
+	}
 
     //need to test of the guid.g is the right one, and not the one from the server
     void Game::addOwnPlayer(RakNet::Packet* a_Data)
@@ -282,9 +295,8 @@ namespace Confus
             inputStream.Read(id);
             inputStream.Read(teamID);
 
-            Player* newPlayer = new Player(m_Device, id, teamID, false);
+            Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false);
             
-            newPlayer->setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
             m_PlayerArray.push_back(newPlayer);
         }
 
@@ -302,8 +314,7 @@ namespace Confus
         inputStream.Read(id);
         inputStream.Read(teamID);
 
-        Player* newPlayer = new Player(m_Device, id, teamID, false);
-        newPlayer->setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+        Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false);
         m_PlayerArray.push_back(newPlayer);
     }
 
@@ -333,6 +344,7 @@ namespace Confus
         m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
         m_Device->getSceneManager()->drawAll();
         m_Device->getGUIEnvironment()->drawAll();
+		m_PhysicsWorld.drawDebugInformation();
         m_Device->getVideoDriver()->endScene();
     }
 }
