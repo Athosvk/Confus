@@ -12,6 +12,7 @@
 #include "GUI.h"
 #include "ClientTeamScore.h"
 #include "BaseGame.h"
+#include "../ConfusShared/Physics/PhysicsWorld.h"
 
 namespace Confus
 {    
@@ -24,6 +25,8 @@ namespace Confus
     {
     private:
         /// <summary>
+		/// <summary> The currently active physics world </summary>
+		Physics::PhysicsWorld m_PhysicsWorld;
         /// MazeGenerator that hasa accesible maze
         /// </summary>
         MazeGenerator m_MazeGenerator;
@@ -56,6 +59,7 @@ namespace Confus
 		/// The connection as a client to the server that we are currently connected to
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
+
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game" /> class.
@@ -74,11 +78,8 @@ namespace Confus
         /// </summary>
         void reset();
     private:
-        /// <summary>
-        /// Processes the triangle selectors.
-        /// </summary>
-        void processTriangleSelectors();
-        irr::scene::IMetaTriangleSelector* processLevelMetaTriangles();        
+        /// <summary> Creates all the colliders for the level </summary>
+        void initializeLevelColliders();
         /// <summary>
         /// Initializes the connection to the server.
         /// </summary>
@@ -87,6 +88,9 @@ namespace Confus
         /// Processes the input data
         /// </summary>
         void handleInput();
+        /// <summary> Updates the (absolute) transformations of all the scene nodes recursively downwards </summary>
+        void updateSceneTransformations();
+
 
         /// <summary>
         /// Creates a new Player object for this user, this player will be regarded as THEIR player.
@@ -100,6 +104,7 @@ namespace Confus
         /// Updates positions and rotations of all other players.
         /// </summary>
         void updateOtherPlayer(RakNet::Packet* a_Data);
+
         void removePlayer(RakNet::Packet* a_Data);
 
         // Inherited via BaseGame
@@ -113,6 +118,7 @@ namespace Confus
         /// </summary>
         virtual void fixedUpdate() override;
         virtual void end() override;
+        virtual void render() override;
 
 };
 }

@@ -50,7 +50,8 @@ namespace Confus
 		/// <param name="a_Device"> The instance of the IrrlichtDevice </param>
 		/// <param name="a_StartPosition">The startposition for walls.</param>
 		/// <param name="a_InitialSeed">The initial seed used to generate the first maze.</param>
-		MazeGenerator(irr::IrrlichtDevice * a_Device, int a_MazeSizeX, int a_MazeSizeY, irr::core::vector3df a_StartPosition, int a_InitialSeed, irr::core::vector2df a_GenerateStartPoint);
+		MazeGenerator(irr::IrrlichtDevice * a_Device, int a_MazeSizeX, int a_MazeSizeY, int a_InitialSeed, 
+			irr::core::vector2df a_GenerateStartPoint, Physics::PhysicsWorld& a_PhysicsWorld);
 
 		/// <summary>
 		/// The fixed update used to update the state of the main maze
