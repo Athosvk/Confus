@@ -1,16 +1,16 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
-
-#include "Audio\PlayerAudioEmitter.h"
 #include "Health.h"
 #include "Weapon.h"
-#include "../Common/TeamIdentifier.h"
+#include "../ConfusShared/TeamIdentifier.h"
+
 
 namespace Confus 
 {
 	namespace Audio 
     {
 		class PlayerAudioEmitter;
+        class AudioManager;
 	}
 	namespace Physics
 	{
@@ -43,24 +43,28 @@ namespace Confus
         Audio::PlayerAudioEmitter* m_SoundEmitter;
 		Physics::BoxCollider* m_Collider;
 
-        void createAudioEmitter();
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
         static const unsigned LightAttackDamage;
         static const unsigned HeavyAttackDamage;
+
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
+
         /// <summary> Whether the player is currently attacking or not </summary>
         bool m_Attacking = false;
+
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
     public:
         /// <summary> Player class constructor. </summary>
         /// <param name="a_Device">The active Irrlicht Device.</param>
+        /// <param name="a_PhysicsWorld">The a_ physics world.</param>
         /// <param name="a_ID">The ID of the scenenode.</param>
         /// <param name="a_TeamIdentifier">The team's identifier the player should have.</param>
         /// <param name="a_MainPlayer">A boolean to identify the player the user controls.</param>
-		Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
+        /// <param name="a_AudioManager">The audio manager.</param>
+        Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Audio::AudioManager* a_AudioManager);
         /// <summary> Player class destructor. </summary>
 		~Player();
         /// <summary> Update function, any tasks that need to be done every frame go here. </summary>

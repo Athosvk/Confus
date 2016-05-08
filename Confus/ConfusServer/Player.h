@@ -2,7 +2,7 @@
 #include <irrlicht/irrlicht.h>
 #include "Health.h"
 #include "Weapon.h"
-#include "../Common/TeamIdentifier.h"
+#include "../ConfusShared/TeamIdentifier.h"
 
 namespace ConfusServer {
 
