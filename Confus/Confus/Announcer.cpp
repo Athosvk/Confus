@@ -1,10 +1,19 @@
 #include "Announcer.h"
+#include "Audio\AudioManager.h"
 
 namespace Confus
 {
 
-	Announcer::Announcer(Flag* a_RedFlag, Flag* a_BlueFlag, Player* a_Player)
-		: m_RedFlag(a_RedFlag), m_BlueFlag(a_BlueFlag), m_Player(a_Player)
+	Announcer::Announcer(Flag* a_RedFlag, Flag* a_BlueFlag, Player* a_Player, Audio::AudioManager* a_AudioManager)
+		: m_RedFlag(a_RedFlag),
+		m_BlueFlag(a_BlueFlag),
+		m_Player(a_Player),
+		m_RedScoredSound(a_AudioManager->createSound("SFX/FlagSounds/red_scores.wav")),
+		m_FlagRedTakenSound(a_AudioManager->createSound("SFX/FlagSounds/red_flag_taken.wav")),
+		m_FlagRedReturnedSound(a_AudioManager->createSound("SFX/FlagSounds/red_flag_returned.wav")),
+		m_BlueScoredSound(a_AudioManager->createSound("SFX/FlagSounds/blue_scores.wav")),
+		m_FlagBlueTakenSound(a_AudioManager->createSound("SFX/FlagSounds/blue_flag_taken.wav")),
+		m_FlagBlueReturnedSound(a_AudioManager->createSound("SFX/FlagSounds/blue_flag_returned.wav"))
 	{
 
 		auto flagChangedEvents = [this](ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum) -> void 
@@ -14,13 +23,6 @@ namespace Confus
 		m_RedFlag->FlagStatusChangedEvent += flagChangedEvents;
 		m_BlueFlag->FlagStatusChangedEvent += flagChangedEvents;
 
-		m_RedScoredSource = std::make_unique<OpenALSource>("SFX/FlagSounds/red_scores.wav");
-		m_FlagRedTakenSource = std::make_unique<OpenALSource>("stereo.wav");
-		m_FlagRedReturnedSource = std::make_unique<OpenALSource>("SFX/FlagSounds/red_flag_returned.wav");
-
-		m_BlueScoredSource = std::make_unique<OpenALSource>("SFX/FlagSounds/blue_flag_returned.wav");
-		m_FlagBlueTakenSource = std::make_unique<OpenALSource>("SFX/FlagSounds/blue_flag_returned.wav");
-		m_FlagBlueReturnedSource = std::make_unique<OpenALSource>("SFX/FlagSounds/blue_flag_returned.wav");
 	}
 
 	void Announcer::playFlagEvent(ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum)
@@ -45,11 +47,11 @@ namespace Confus
 	{
 		if (a_TeamIdentifier == ETeamIdentifier::TeamBlue)
 		{
-			m_BlueScoredSource->play();
+			m_BlueScoredSound.play();
 		}
 		else if (a_TeamIdentifier == ETeamIdentifier::TeamRed)
 		{
-			m_RedScoredSource->play();
+			m_RedScoredSound.play();
 		}
 	}
 
@@ -57,11 +59,11 @@ namespace Confus
 	{
 		if (a_TeamIdentifier == ETeamIdentifier::TeamBlue)
 		{
-			m_FlagBlueReturnedSource->play();
+			m_FlagRedReturnedSound.play();
 		}
 		else if (a_TeamIdentifier == ETeamIdentifier::TeamRed)
 		{
-			m_FlagRedReturnedSource->play();
+			m_FlagBlueReturnedSound.play();
 		}
 	}
 
@@ -69,11 +71,11 @@ namespace Confus
 	{
 		if (a_TeamIdentifier == ETeamIdentifier::TeamBlue)
 		{
-			m_FlagBlueTakenSource->play();
+			m_FlagBlueTakenSound.play();
 		}
 		else if (a_TeamIdentifier == ETeamIdentifier::TeamRed)
 		{
-			m_FlagRedTakenSource->play();
+			m_FlagRedTakenSound.play();
 		}
 	}
 

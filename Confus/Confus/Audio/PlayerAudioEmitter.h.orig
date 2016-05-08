@@ -15,6 +15,15 @@ namespace Confus
         /// Class PlayerAudioEmitter emits sounds like footsteps and attacking sounds from each individual player.
         /// </summary>
         class PlayerAudioEmitter
+<<<<<<< HEAD
+        {
+            OpenALSource* m_AudioSourceFootsteps[3];
+            OpenALSource* m_AudioSourceGrunts[3];
+            OpenALSource* m_AudioSourceSwordSwoshes[4];
+			
+		public:          
+            irr::scene::IAnimatedMeshSceneNode* m_AttachedPlayer;
+=======
 		{
 			/// <summary> The footstep sounds </summary>
 			std::vector<Sound> m_Footsteps;
@@ -24,6 +33,7 @@ namespace Confus
 			std::vector<Sound> m_SwordSwoshes;            
 			/// <summary> The player emmitting the sounds </summary>
 			irr::scene::ISceneNode* m_AttachedPlayer;
+>>>>>>> 4dd1f0211080e6639b49a057199f24958ed5e332
         public:            
             /// <summary>
             /// Initializes a new instance of the <see cref="PlayerAudioEmitter"/> class.

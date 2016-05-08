@@ -1,7 +1,12 @@
 #pragma once
-#include "../ConfusShared/TeamIdentifier.h"
+<<<<<<< HEAD
 #include <Irrlicht\irrlicht.h>
+
+#include "../Common/TeamIdentifier.h"
 #include "Delegate.h"
+=======
+#include "../ConfusShared/TeamIdentifier.h"
+>>>>>>> 4dd1f0211080e6639b49a057199f24958ed5e332
 
 namespace Confus 
 {

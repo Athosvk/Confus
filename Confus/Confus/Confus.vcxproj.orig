@@ -222,8 +222,11 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="Networking\ClientConnection.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RespawnFloor.cpp" />
-    <ClCompile Include="Audio\Sound.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="ScoreGUI.cpp" />
+=======
+    <ClCompile Include="Audio\Sound.cpp" />
+>>>>>>> 4dd1f0211080e6639b49a057199f24958ed5e332
     <ClCompile Include="StaticWall.cpp" />
     <ClCompile Include="WalledMazeTile.cpp" />
     <ClCompile Include="Weapon.cpp" />
@@ -263,8 +266,11 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="MoveableWall.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RespawnFloor.h" />
-    <ClInclude Include="Audio\Sound.h" />
+<<<<<<< HEAD
     <ClInclude Include="ScoreGUI.h" />
+=======
+    <ClInclude Include="Audio\Sound.h" />
+>>>>>>> 4dd1f0211080e6639b49a057199f24958ed5e332
     <ClInclude Include="StaticWall.h" />
     <ClInclude Include="WalledMazeTile.h" />
     <ClInclude Include="Weapon.h" />

@@ -32,8 +32,12 @@ namespace Confus
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_PhysicsWorld),
         m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
         m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, -83.f)),
-        m_GUI(m_Device, &m_PlayerNode, &m_AudioManager),
-		m_Announcer(&m_RedFlag,&m_BlueFlag,&m_PlayerNode, &m_AudioManager)
+<<<<<<< HEAD
+		m_GUI(m_Device, &m_PlayerNode),
+		m_Announcer(&m_RedFlag,&m_BlueFlag,&m_PlayerNode)
+=======
+        m_GUI(m_Device, &m_PlayerNode, &m_AudioManager)
+>>>>>>> 4dd1f0211080e6639b49a057199f24958ed5e332
     {
 		auto videoDriver = m_Device->getVideoDriver();
 		m_GUI.addElement<FlagGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(50, 50),
@@ -204,9 +208,15 @@ namespace Confus
 		m_GUI.update();
         m_Listener.setPosition(m_PlayerNode.getAbsolutePosition());
 
+<<<<<<< HEAD
+        //Todo: Fix rotations
+        irr::core::vector3df upVector = playerRotation * irr::core::vector3df( 0, 1, 0 );
+        irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1); 
+=======
         irr::core::matrix4 playerRotation(m_PlayerNode.getAbsoluteTransformation());
         irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10] );
         irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
+>>>>>>> 4dd1f0211080e6639b49a057199f24958ed5e332
         m_Listener.setDirection(forwardVector, upVector);     
 
 		static float timer = 0.0f;

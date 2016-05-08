@@ -4,7 +4,7 @@
 #include "Flag.h"
 #include "Player.h"
 
-#include "OpenAL\OpenALSource.h"
+#include "Audio\Sound.h"
 namespace Confus
 {
 	class Announcer
@@ -14,19 +14,20 @@ namespace Confus
 		Flag* m_BlueFlag;
 		Player* m_Player;
 
-		std::unique_ptr<OpenALSource> m_RedScoredSource;
-		std::unique_ptr<OpenALSource> m_FlagRedTakenSource;
-		std::unique_ptr<OpenALSource> m_FlagRedReturnedSource;
+		Audio::Sound m_RedScoredSound;
+		Audio::Sound m_FlagRedTakenSound;
+		Audio::Sound m_FlagRedReturnedSound;
 
-		std::unique_ptr<OpenALSource> m_BlueScoredSource;
-		std::unique_ptr<OpenALSource> m_FlagBlueTakenSource;
-		std::unique_ptr<OpenALSource> m_FlagBlueReturnedSource;
+		Audio::Sound m_BlueScoredSound;
+		Audio::Sound m_FlagBlueTakenSound;
+		Audio::Sound m_FlagBlueReturnedSound;
+
 	private:
 		void playScoredSound(ETeamIdentifier a_TeamIdentifier);
 		void playFlagTakenSound(ETeamIdentifier a_TeamIdentifier);
 		void playFlagReturnedSound(ETeamIdentifier a_TeamIdentifier);
 	public:
-		Announcer(Flag* a_RedFlag, Flag* a_BlueFlag, Player* a_Player);
+		Announcer(Flag* a_RedFlag, Flag* a_BlueFlag, Player* a_Player, Audio::AudioManager* a_AudioManager);
 		void playFlagEvent(ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum);
 		~Announcer();
 	};

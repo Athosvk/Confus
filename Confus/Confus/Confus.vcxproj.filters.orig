@@ -254,12 +254,7 @@
     <ClInclude Include="..\ConfusShared\Physics\Collider.h">
       <Filter>Shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\ConfusShared\Debug.h">
-      <Filter>Shared Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ConfusShared\TeamIdentifier.h">
-      <Filter>Shared Files</Filter>
-    </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="ScoreGUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -274,6 +269,13 @@
     </ClInclude>
     <ClInclude Include="Delegate.h">
       <Filter>Header Files</Filter>
+=======
+    <ClInclude Include="..\ConfusShared\Debug.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\TeamIdentifier.h">
+      <Filter>Shared Files</Filter>
+>>>>>>> 4dd1f0211080e6639b49a057199f24958ed5e332
     </ClInclude>
   </ItemGroup>
 </Project>
