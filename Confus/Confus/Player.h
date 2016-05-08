@@ -7,20 +7,25 @@
 
 namespace Confus 
 {
-
 	namespace Audio 
     {
 		class PlayerAudioEmitter;
         class AudioManager;
 	}
+	namespace Physics
+	{
+		class BoxCollider;
+		class PhysicsWorld;
+	}
 
     enum class EFlagEnum;
     class EventManager;
     class Flag;
+
     /// <summary> 
     /// Player class
     /// </summary>
-    class Player : irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
+    class Player : public irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
     {   
     public:
 		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
@@ -36,6 +41,7 @@ namespace Confus
         long long ID;
 	private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
+		Physics::BoxCollider* m_Collider;
 
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
@@ -53,10 +59,12 @@ namespace Confus
     public:
         /// <summary> Player class constructor. </summary>
         /// <param name="a_Device">The active Irrlicht Device.</param>
+        /// <param name="a_PhysicsWorld">The a_ physics world.</param>
         /// <param name="a_ID">The ID of the scenenode.</param>
         /// <param name="a_TeamIdentifier">The team's identifier the player should have.</param>
         /// <param name="a_MainPlayer">A boolean to identify the player the user controls.</param>
-        Player(irr::IrrlichtDevice* a_Device, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Audio::AudioManager* a_AudioManager);
+        /// <param name="a_AudioManager">The audio manager.</param>
+        Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Audio::AudioManager* a_AudioManager);
         /// <summary> Player class destructor. </summary>
 		~Player();
         /// <summary> Update function, any tasks that need to be done every frame go here. </summary>
@@ -77,7 +85,6 @@ namespace Confus
         /// <summary> Handles the input based actions. </summary>
         /// <param name="a_EventManager">The current event manager. </param>
         void handleInput(EventManager& a_EventManager);
-        void setLevelCollider(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_Level);
     private:
         /// <summary> Starts the walking animation, which is the default animation. </summary>
         void startWalking() const;
@@ -95,7 +102,5 @@ namespace Confus
         /// <remarks> Generally used for the attack animations only </remarks>
         /// <param name="node">The node whoms animation finished</param>
         virtual void OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node) override;
-        /// <summary> KeyMap used for the controls of the player </summary>
-        irr::SKeyMap m_KeyMap[6];
     };
 }

@@ -12,6 +12,7 @@
 #include "GUI.h"
 #include "ClientTeamScore.h"
 #include "Audio/AudioManager.h"
+#include "../ConfusShared/Physics/PhysicsWorld.h"
 
 namespace Confus
 {    
@@ -37,6 +38,8 @@ namespace Confus
 		/// Statics are avoided to make code clearer, hence this is not a static
         /// </summary>
         irr::IrrlichtDevice* m_Device;
+		/// <summary> The currently active physics world </summary>
+		Physics::PhysicsWorld m_PhysicsWorld;
         /// <summary>
         /// MazeGenerator that hasa accesible maze
         /// </summary>
@@ -105,11 +108,8 @@ namespace Confus
         /// </summary>
         void run();
     private:
-        /// <summary>
-        /// Processes the triangle selectors.
-        /// </summary>
-        void processTriangleSelectors();
-        irr::scene::IMetaTriangleSelector* processLevelMetaTriangles();        
+        /// <summary> Creates all the colliders for the level </summary>
+        void initializeLevelColliders();
         /// <summary>
         /// Initializes the connection to the server.
         /// </summary>
@@ -134,6 +134,7 @@ namespace Confus
         /// Renders the objects in the game
         /// </summary>
         void render();
+
         /// <summary>
         /// Creates a new Player object for this user, this player will be regarded as THEIR player.
         /// </summary>
@@ -147,5 +148,8 @@ namespace Confus
         /// </summary>
         void updateOtherPlayer(RakNet::Packet* a_Data);
         void removePlayer(RakNet::Packet* a_Data);
+
+		/// <summary> Updates the (absolute) transformations of all the scene nodes recursively downwards </summary>
+		void updateSceneTransformations();
     };
 }

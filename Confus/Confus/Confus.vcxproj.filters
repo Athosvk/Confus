@@ -16,6 +16,9 @@
     <Filter Include="Shared Files">
       <UniqueIdentifier>{6c7301b9-3e78-43eb-ac58-5fadcf4cfc8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shared">
+      <UniqueIdentifier>{d008da72-1f50-47b9-a8a7-10b56404b168}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -34,9 +37,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EventManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Collider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Audio\PlayerAudioEmitter.cpp">
@@ -105,6 +105,27 @@
     <ClCompile Include="Audio\OpenAL\OpenALSource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ConfusShared\Physics\BoxCollider.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Physics\DebugDrawer.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Physics\PhysicsWorld.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Physics\RigidBody.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Physics\CollisionRegistrar.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="FlagGUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Physics\Collider.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -122,9 +143,6 @@
     <ClInclude Include="StaticWall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Collider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="EventManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -132,9 +150,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StaticWall.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Maze.h">
@@ -164,9 +179,6 @@
     <ClInclude Include="RespawnFloor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Networking\ClientConnection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -179,19 +191,10 @@
     <ClInclude Include="ClientTeamScore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\TeamIdentifier.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Audio\Sound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Audio\AudioManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OpenAL\OpenALBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Audio\OpenAL\Framework\aldlist.h">
@@ -214,6 +217,39 @@
     </ClInclude>
     <ClInclude Include="Audio\OpenAL\OpenALSource.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Physics\BoxCollider.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Physics\DebugDrawer.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Physics\ECollisionFilter.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Physics\PhysicsWorld.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Physics\RigidBody.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Physics\CollisionRegistrar.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\TeamIdentifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Physics\Collider.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Debug.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\TeamIdentifier.h">
+      <Filter>Shared Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

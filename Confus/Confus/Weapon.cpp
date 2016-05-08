@@ -2,44 +2,48 @@
 #include <math.h>
 
 #include "Weapon.h"
+#include "../ConfusShared/Physics/RigidBody.h"
+#include "../ConfusShared/Physics/PhysicsWorld.h"
+#include "Player.h"
 
 namespace Confus
 {
-    Weapon::Weapon(irr::scene::ISceneManager* a_SceneManager, irr::core::vector3df a_Dimensions)
+    Weapon::Weapon(irr::scene::ISceneManager* a_SceneManager, Physics::PhysicsWorld& a_World,
+		irr::core::vector3df a_Dimensions)
     {
         m_Node = a_SceneManager->addCubeSceneNode(1.0f, nullptr, -1, irr::core::vector3df(), irr::core::vector3df(),
             a_Dimensions);
         m_Node->setVisible(false);
+		m_Node->setPosition(irr::core::vector3df(0.0f, 0.0f, -1.2f));
 
-        m_TriangleSelector = a_SceneManager->createTriangleSelectorFromBoundingBox(m_Node);
-        m_Node->setTriangleSelector(m_TriangleSelector);
-
-        auto responseAnimator = a_SceneManager->createCollisionResponseAnimator(m_TriangleSelector, m_Node,
-            a_Dimensions, irr::core::vector3df());
-        m_Collider = std::make_unique<Collider>(responseAnimator);
-
-        m_Collider->setCallback([this](irr::scene::ISceneNode* a_CollidedNode)
+		m_Collider = a_World.createBoxCollider(a_Dimensions, m_Node, Physics::ECollisionFilter::Interactable,
+			Physics::ECollisionFilter::Player);
+		m_Collider->getRigidBody()->makeKinematic();
+		m_Collider->getRigidBody()->enableTriggerState();
+        m_Collider->setTriggerEnterCallback([this](Physics::BoxCollider* a_Other)
         {
             if(!m_Collided)
             {
-                m_Collided = true;
-                damagePlayer(a_CollidedNode);
+				auto playerNode = dynamic_cast<Player*>(*a_Other->getRigidBody()->getAttachedNode()->getChildren().begin());
+				if(playerNode != nullptr)
+				{
+					damagePlayer(playerNode);
+					m_Collided = true;
+				}
             }
-            return true;
         });
     }
 
-    void Weapon::damagePlayer(irr::scene::ISceneNode* a_CollidedNode) const
+    void Weapon::damagePlayer(Player* a_Player) const
     {
-        if(getAngle(a_CollidedNode->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle))
+        if(getAngle(a_Player->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle))
         {
-            backstabPlayer();
+			a_Player->PlayerHealth.damage(a_Player->PlayerHealth.getHealth());
         }
-    }
-
-    void Weapon::backstabPlayer() const
-    {
-
+		else
+		{
+			a_Player->PlayerHealth.damage(Damage);
+		}
     }
 
     float Weapon::getAngle(irr::core::vector3df a_Vector1, irr::core::vector3df a_Vector2) const
@@ -49,12 +53,12 @@ namespace Confus
 
     void Weapon::enableCollider()
     {
-        m_Node->setTriangleSelector(m_TriangleSelector);
+		m_Collider->getRigidBody()->activate();
     }
 
     void Weapon::disableCollider()
     {
-        m_Node->setTriangleSelector(nullptr);
+		m_Collider->getRigidBody()->deactivate();
     }
 
     void Weapon::resetCollider()

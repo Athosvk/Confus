@@ -13,7 +13,6 @@ namespace Confus
         loadMesh();
         setSceneNode(a_Position, a_Rotation);
         setTexture();
-        addMeshCollider();
         addLight(a_Position);
     }
 
@@ -41,26 +40,6 @@ namespace Confus
         m_SceneNode->setMaterialTexture(0, m_VideoDriver->getTexture("Media/Textures/Wall_texture.png"));
         // Enable dynamic lighting.
         m_SceneNode->setMaterialFlag(irr::video::EMF_LIGHTING, true);
-    }
-
-    void StaticWall::addMeshCollider()
-    {
-        irr::scene::IMetaTriangleSelector * meta = m_SceneManager->createMetaTriangleSelector();
-        irr::scene::ITriangleSelector * selector = 0;
-        selector = m_SceneManager->createTriangleSelector(static_cast<irr::scene::IMeshSceneNode*>(m_SceneNode)->getMesh(), m_SceneNode);
-
-        if(selector)
-        {
-            // Add it to the meta selector, which will take a reference to it
-            meta->addTriangleSelector(selector);
-            // And drop my reference to it, so that the meta selector owns it.
-            selector->drop();
-        }
-
-        irr::scene::ISceneNodeAnimator* anim = m_SceneManager->createCollisionResponseAnimator(meta, m_Camera, irr::core::vector3df(5, 5, 5), irr::core::vector3df(0, 0, 0));
-        meta->drop();
-
-        m_Camera->addAnimator(anim);
     }
 
     void StaticWall::addLight(irr::core::vector3df a_Position)

@@ -2,26 +2,29 @@
 
 #include "MoveableWall.h"
 #include "Game.h"
+#include "../ConfusShared/Physics/BoxCollider.h"
+#include "../ConfusShared/Physics/PhysicsWorld.h"
 
 namespace Confus
 {
-    MoveableWall::MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition,
-        irr::core::vector3df a_HiddenPosition)
-        : m_RegularPosition(a_RegularPosition),
-        HiddenPosition(a_HiddenPosition)
-    {
+
+	MoveableWall::MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition,
+		irr::core::vector3df a_Scale, Physics::PhysicsWorld& a_PhysicsWorld)
+        : m_RegularPosition(a_RegularPosition)
+	{
         loadMesh(a_Device->getSceneManager());
         loadTextures(a_Device->getVideoDriver());
         m_MeshNode->setPosition(m_RegularPosition);
+		m_MeshNode->setScale(a_Scale);
+		m_RigidBody = a_PhysicsWorld.createBoxCollider(m_MeshNode, Physics::ECollisionFilter::MoveableWall,
+			Physics::ECollisionFilter::Player)->getRigidBody();
+		m_RigidBody->makeKinematic();
+		m_RigidBody->setOffset(irr::core::vector3df(0.0f, 0.75f, 0.0f));
         solidify();
     }
 
     MoveableWall::~MoveableWall()
     {
-        //m_MeshNode->drop();
-        //m_TriangleSelector->drop();
-        //m_RegularTexture->drop();
-        //m_TransparentTexture->drop();
     }
 
     void MoveableWall::loadTextures(irr::video::IVideoDriver* a_VideoDriver)
@@ -32,16 +35,14 @@ namespace Confus
 
     void MoveableWall::loadMesh(irr::scene::ISceneManager* a_SceneManager)
     {
-        IrrAssimp importer(a_SceneManager);
         m_MeshNode = a_SceneManager->addAnimatedMeshSceneNode(a_SceneManager->getMesh("Media/Meshes/WallMeshSquare.irrmesh"));
-        m_TriangleSelector = a_SceneManager->createTriangleSelector(m_MeshNode);
     }
 
     void MoveableWall::hide()
     {
-		m_MeshNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_TRANSPARENT_ALPHA_CHANNEL);
         m_TargetPosition = HiddenPosition;
         m_Transitioning = true;
+		makeTransparent();
     }
 
     void MoveableWall::rise()
@@ -78,28 +79,30 @@ namespace Confus
     {
         m_MeshNode->setMaterialTexture(0, m_RegularTexture);
         enableCollision();
+		m_MeshNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_SOLID);
     }
 
     void MoveableWall::makeTransparent()
     {
+		m_MeshNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_TRANSPARENT_ALPHA_CHANNEL);
         m_MeshNode->setMaterialTexture(0, m_TransparentTexture);
         disableCollision();
     }
 
     void MoveableWall::enableCollision()
     {
-        m_MeshNode->setTriangleSelector(m_TriangleSelector);
+		m_RigidBody->activate();
     }
 
     void MoveableWall::disableCollision()
     {
-        m_MeshNode->setTriangleSelector(nullptr);
+		m_RigidBody->deactivate();
     }
 
     void MoveableWall::updatePosition()
     {
         auto distance = (m_TargetPosition - m_MeshNode->getPosition()).getLength();
-        if(distance > 0.0f)
+        if(distance > 0.01f)
         {
             auto clampedSpeed = irr::core::clamp(TransitionSpeed, 0.0f, distance);
             auto velocity = ((m_TargetPosition - m_MeshNode->getPosition()) / distance) * clampedSpeed;
@@ -115,7 +118,6 @@ namespace Confus
 		{
 			m_Raised = true;
 			m_Transitioning = false;
-			m_MeshNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_SOLID);
 		}
     }
 }

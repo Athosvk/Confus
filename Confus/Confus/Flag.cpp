@@ -1,20 +1,19 @@
-#include <irrlicht/irrlicht.h>
+#include <Irrlicht/irrlicht.h>
 #include <IrrAssimp/IrrAssimp.h>
 #include <iostream>
 
 #include "Flag.h"
 #include "Player.h"
-#include "Collider.h"
 
-#define Debug_Console
-#include "../ConfusShared/Debug.h"
+#include "../ConfusShared/Physics/PhysicsWorld.h"
+#include "../ConfusShared/Physics/BoxCollider.h"
 
-
-
-namespace Confus {
-
-	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier) : m_TeamIdentifier(a_TeamIdentifier),
-				m_FlagStatus(EFlagEnum::FlagBase) {
+namespace Confus 
+{
+	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, Physics::PhysicsWorld& a_PhysicsWorld) : 
+		m_TeamIdentifier(a_TeamIdentifier),
+		m_FlagStatus(EFlagEnum::FlagBase) 
+	{
         //Get drivers to load model
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
@@ -25,6 +24,19 @@ namespace Confus {
         m_FlagNode = sceneManager->addMeshSceneNode(mesh, 0, 2);
         m_FlagNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
         m_FlagNode->setScale({ 1.5f, 1.5f, 1.5f });
+		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(1.0f, 3.0f, 1.0f), m_FlagNode, Physics::ECollisionFilter::Interactable,
+			Physics::ECollisionFilter::All);
+		m_Collider->getRigidBody()->makeKinematic();
+		m_Collider->getRigidBody()->enableTriggerState();
+		m_Collider->setTriggerEnterCallback([this](Physics::BoxCollider* a_Other)
+		{
+			auto collidedNode = a_Other->getRigidBody()->getAttachedNode();
+			Player* player = dynamic_cast<Player*>(*collidedNode->getChildren().begin());
+			if(player != nullptr)
+			{
+				captureFlag(player);
+			}
+		});
 
         m_FlagOldParent = m_FlagNode->getParent();
 
@@ -34,28 +46,6 @@ namespace Confus {
         //Add colission box and particle system
         initParticleSystem(sceneManager);
 	}
-
-    void Flag::setCollisionTriangleSelector(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_TriangleSelector) 
-    {
-        auto animator = a_SceneManager->createCollisionResponseAnimator(a_TriangleSelector, m_FlagNode, { 1.25f, 1.f, 1.25f });
-        m_Collider = new Collider(animator);
-        m_Collider->setCallback([this](irr::scene::ISceneNode* a_CollidedNode)
-        {
-            if(Player* player = dynamic_cast<Player*>(a_CollidedNode->getParent())) 
-            {
-                captureFlag(player);
-                return true;
-            }
-            else if(a_CollidedNode->getID() == 1) 
-			{
-				std::cout << "Failed to get player class from attached node.";
-                return true;
-            }
-            return false;
-        });
-        animator->setCollisionCallback(m_Collider);
-        m_FlagNode->addAnimator(animator);
-    }
 
 	//Set color & position based on color of flag
 	void Flag::setColor(irr::video::IVideoDriver* a_VideoDriver) 
@@ -210,12 +200,7 @@ namespace Confus {
 		m_FlagStatus = EFlagEnum::FlagBase;
     }
 
-	irr::scene::ITriangleSelector* Flag::GetTriangleSelector(irr::scene::ISceneManager* a_SceneManager) {
-		return a_SceneManager->createTriangleSelectorFromBoundingBox(m_FlagNode);
-	}
-
 	Flag::~Flag() {
         m_FlagNode->setParent(m_FlagOldParent);
-		delete(m_Collider);
 	}
 }

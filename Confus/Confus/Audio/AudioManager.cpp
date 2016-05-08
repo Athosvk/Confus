@@ -48,7 +48,7 @@ namespace Confus
 		{
 			if(m_Sources.size() >= 16)
 			{
-				throw std::length_error("Cannot exceed hardware limit of 16 sources");
+				throw std::logic_error("Cannot exceed hardware limit of 16 sources");
 			}
 			m_Sources.emplace_back(std::make_unique<OpenAL::OpenALSource>());
 			return m_Sources.back().get();
