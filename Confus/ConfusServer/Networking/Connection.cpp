@@ -94,9 +94,14 @@ namespace ConfusServer
 
         void Connection::handlePacket(RakNet::BitStream* a_Data, unsigned char a_Event)
         {
-            RakNet::AddressOrGUID guid =  *a_Address;
+            /*RakNet::AddressOrGUID guid =  *a_Address;
             m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
-                PacketReliability::RELIABLE_ORDERED, 0, guid, false);
+                PacketReliability::RELIABLE_ORDERED, 0, guid, false);*/
+
+			for (size_t i = 0u; i < m_CallbackFunctionMap[a_Event].size(); i++)
+			{
+				m_CallbackFunctionMap[a_Event][i](a_Data);
+			}
         }
 
         void Connection::broadcastPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Excluded)
@@ -104,13 +109,6 @@ namespace ConfusServer
             RakNet::AddressOrGUID guid = a_Excluded != nullptr ? *a_Excluded : m_Interface->GetMyGUID();
             m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
                     PacketReliability::RELIABLE_ORDERED, 0, guid, true);
-        }
-
-        {
-            for(size_t i = 0u; i < m_CallbackFunctionMap[a_Event].size(); i++)
-            {
-                m_CallbackFunctionMap[a_Event][i](a_Data);
-            }
         }
 
 		void Connection::printMessage(RakNet::BitStream& a_InputStream)

@@ -209,7 +209,7 @@ namespace ConfusServer
     void Player::updateClient()
     {
         RakNet::BitStream bitstreamOut;
-        bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::Connection::EPacketType::Player));
+        bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
         bitstreamOut.Write(CameraNode->getAbsolutePosition());
         
         m_Connection->sendMessage(bitstreamOut, PacketReliability::UNRELIABLE);
@@ -220,7 +220,7 @@ namespace ConfusServer
     {
         m_Connection = a_Connection;
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::Connection::EPacketType::Player), [this](RakNet::BitStream* a_Data)
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::BitStream* a_Data)
         {
             unsigned int playerID;
             irr::core::vector3df position;

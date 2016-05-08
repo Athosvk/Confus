@@ -22,7 +22,7 @@ namespace ConfusServer
 {
     namespace Networking
     {
-        /// <summary> The type of packet </summary>
+		/// <summary> The type of packet </summary>
         enum class EPacketType : unsigned char
         {
             Message = 1 + ID_USER_PACKET_ENUM,
