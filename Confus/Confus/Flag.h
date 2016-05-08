@@ -3,36 +3,42 @@
 
 namespace Confus 
 {
-class Player;
-class Collider;
+	class Player;
+	namespace Physics
+	{
+		class BoxCollider;
+		class PhysicsWorld;
+	}
 
-/// <summary> The Flag's status. A player can have flagtaken or no flag. A flag can be taken, dropped or at base. </summary>
-enum class EFlagEnum
-{ 
-    None, ///< Player is carrying nothing		  
-	FlagBase, ///< Flag is at the base
-    FlagTaken, ///< The flag is taken. / A player is carrying a flag.
-    FlagDropped ///< The flag is dropped.
-};
+	/// <summary> The Flag's status. A player can have flagtaken or no flag. A flag can be taken, dropped or at base. </summary>
+	enum class EFlagEnum
+	{ 
+		None, ///< Player is carrying nothing		  
+		FlagBase, ///< Flag is at the base
+		FlagTaken, ///< The flag is taken. / A player is carrying a flag.
+		FlagDropped ///< The flag is dropped.
+	};
 
 	///Flag Class, every flag should have this class, contains info about a flag
 	/// Flag class with status and team id
 	class Flag 
     {
     private:		
-		irr::core::vector3df* m_StartPosition;
-		irr::core::vector3df* m_StartRotation;
-        ETeamIdentifier* m_TeamIdentifier;
+		irr::core::vector3df m_StartPosition = irr::core::vector3df(0.f);
+		irr::core::vector3df m_StartRotation = irr::core::vector3df(0.f);
+        ETeamIdentifier m_TeamIdentifier;
+		EFlagEnum m_FlagStatus;
         irr::scene::IMeshSceneNode* m_FlagNode;
-        Collider* m_Collider;
+        Physics::BoxCollider* m_Collider;
         irr::scene::ISceneNode* m_FlagOldParent = nullptr;
-		EFlagEnum* m_FlagStatus;
+
 
     public: 
         /// <summary> Flag class constructor. </summary>
         /// <param name="a_Device">The active Irrlicht Device.</param>
         /// <param name="a_TeamIdentifier">The team's identifier the flag should have.</param>
-        Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier);
+        Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier,
+			Physics::PhysicsWorld& a_PhysicsWorld);
 
         /// <summary> Flag class destructor </summary>
         ~Flag();
@@ -60,17 +66,8 @@ enum class EFlagEnum
 		/// <param name="a_PlayerObject"> Score a point for the player object. </param>
 		void score(Player* a_PlayerObject);
 
-		/// <summary> Set the collision of the level and players and add an physics animation. </summary>
-		/// <param name="a_SceneManager"> Pass the scenemanager to add a physics animator. </param>
-		/// <param name="a_TriangleSelector"> The triangle seletor that has the level and players. </param>
-        void setCollisionTriangleSelector(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_TriangleSelector);
-
-		/// <summary> Get the triangle selector of the flag mesh. </summary>
-		/// <param name="a_SceneManager"> Pass the scenemanager to get the triangle selector. </param>
-		irr::scene::ITriangleSelector* GetTriangleSelector(irr::scene::ISceneManager* a_SceneManager);
-
 		const irr::video::SColor getColor()const;
-		const EFlagEnum* getFlagStatus() const;
+		const EFlagEnum getFlagStatus() const;
     private:
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
 		void setColor(irr::video::IVideoDriver* a_VideoDriver);

@@ -11,6 +11,7 @@
 #include "RespawnFloor.h"
 #include "GUI.h"
 #include "ClientTeamScore.h"
+#include "../ConfusShared/Physics/PhysicsWorld.h"
 
 namespace Confus
 {    
@@ -36,6 +37,8 @@ namespace Confus
 		/// Statics are avoided to make code clearer, hence this is not a static
         /// </summary>
         irr::IrrlichtDevice* m_Device;
+		/// <summary> The currently active physics world </summary>
+		Physics::PhysicsWorld m_PhysicsWorld;
         /// <summary>
         /// MazeGenerator that hasa accesible maze
         /// </summary>
@@ -56,8 +59,7 @@ namespace Confus
         RespawnFloor m_RedRespawnFloor;
         RespawnFloor m_BlueRespawnFloor;
 
-        //use std::vector
-        //std::array<Player, 2> m_PlayerArray;
+        std::vector<Player*> m_PlayerArray;
         /// <summary>
         /// The Blue Flag.
         /// </summary>
@@ -87,6 +89,7 @@ namespace Confus
 		/// The connection as a client to the server that we are currently connected to
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
+
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
@@ -95,18 +98,15 @@ namespace Confus
         /// <summary>
         /// Finalizes an instance of the <see cref="Game"/> class.
         /// </summary>
-        virtual ~Game() = default;
+        virtual ~Game();
 
         /// <summary>
         /// Starts the game and gameloop
         /// </summary>
         void run();
     private:
-        /// <summary>
-        /// Processes the triangle selectors.
-        /// </summary>
-        void processTriangleSelectors();
-        irr::scene::IMetaTriangleSelector* processLevelMetaTriangles();        
+        /// <summary> Creates all the colliders for the level </summary>
+        void initializeLevelColliders();
         /// <summary>
         /// Initializes the connection to the server.
         /// </summary>
@@ -132,6 +132,21 @@ namespace Confus
         /// </summary>
         void render();
 
-        void updateOtherPlayers();
+        /// <summary>
+        /// Creates a new Player object for this user, this player will be regarded as THEIR player.
+        /// </summary>
+        void addOwnPlayer(RakNet::BitStream* a_Data);
+        /// <summary>
+        /// Creates a new Player object for a different user that just joined.
+        /// </summary>
+        void addOtherPlayer(RakNet::BitStream* a_Data);
+        /// <summary>
+        /// Updates positions and rotations of all other players.
+        /// </summary>
+        void updateOtherPlayer(RakNet::BitStream* a_Data);
+        void removePlayer(RakNet::BitStream* a_Data);
+
+		/// <summary> Updates the (absolute) transformations of all the scene nodes recursively downwards </summary>
+		void updateSceneTransformations();
     };
 }

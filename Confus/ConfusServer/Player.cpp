@@ -14,8 +14,8 @@ namespace ConfusServer
 	Player::Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
 		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
 		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
-		TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
-		CarryingFlag(new EFlagEnum(EFlagEnum::None))
+		TeamIdentifier(a_TeamIdentifier),
+		CarryingFlag(EFlagEnum::None)
     {
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
@@ -61,13 +61,26 @@ namespace ConfusServer
         m_KeyMap[4].Action = irr::EKA_JUMP_UP;
         m_KeyMap[4].KeyCode = irr::KEY_SPACE;
 
-		if (a_MainPlayer) 
+        if(a_MainPlayer)
         {
-			CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.15f, false);
-			CameraNode->setPosition(irr::core::vector3df(2.5f, 5.f, -30.0f));
-			PlayerNode->setParent(this);
-			setParent(CameraNode);
-		}
+            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, true);
+            CameraNode->setFOV(70.f);
+            CameraNode->setNearValue(0.1f);
+        }
+        else
+        {
+            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, false);
+        }
+        if(a_TeamIdentifier == ETeamIdentifier::TeamBlue)
+        {
+            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
+        }
+        else if(a_TeamIdentifier == ETeamIdentifier::TeamRed)
+        {
+            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
+        }
+        PlayerNode->setParent(this);
+        setParent(CameraNode);
 
         createAudioEmitter();
         startWalking();
@@ -78,8 +91,6 @@ namespace ConfusServer
 
 	Player::~Player() 
     {
-		delete(CarryingFlag);
-		delete(TeamIdentifier);
     }
 
     const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const

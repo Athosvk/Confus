@@ -14,6 +14,7 @@ namespace RakNet
     struct SystemAddress;
     struct Packet;
     class BitStream;
+    struct AddressOrGUID;
 }
 
 namespace Confus
@@ -23,10 +24,15 @@ namespace Confus
         /// <summary> The type of packet </summary>
         enum class EPacketType : unsigned char
         {
-            Message = ID_USER_PACKET_ENUM + 1,
-            ScoreUpdate = Message + 1,
-            Player = ScoreUpdate + 1,
-            MazeChange = Player + 1
+            Message = 1 + ID_USER_PACKET_ENUM,
+            MainPlayerJoined = 2 + ID_USER_PACKET_ENUM,
+            OtherPlayerJoined = 3 + ID_USER_PACKET_ENUM,
+            PlayerLeft = 4 + ID_USER_PACKET_ENUM,
+            UpdatePosition = 5 + ID_USER_PACKET_ENUM,
+            ScoreUpdate = 6 + ID_USER_PACKET_ENUM,
+            PlayerAttack = 7 + ID_USER_PACKET_ENUM,
+            MazeChange = 8 + ID_USER_PACKET_ENUM,
+			Player = 9 + ID_USER_PACKET_ENUM
         };
         /// <summary>
         /// Represents a connection to the server that this clients is connected to.
@@ -42,6 +48,7 @@ namespace Confus
         class ClientConnection
         {
 		private:
+            /// <summary> The RakNet interface for interacting with RakNet </summary>
 			RakNet::RakPeerInterface* m_Interface;
 			/// <summary> The messages it was not able to send yet due to not having a connection established </summary>
 			std::queue<RakNet::BitStream> m_StalledMessages;

@@ -112,7 +112,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib;MSVCRTD.LIB;RakNet.lib;ws2_32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;MSVCRTD.LIB;RakNet.lib;ws2_32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\Lansenou\Desktop\Confus\Libraries\32 bit\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -159,7 +159,7 @@ lib /out:Confus.lib *.obj</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib;MSVCRT.LIB;RakNet.lib;ws2_32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;MSVCRT.LIB;RakNet.lib;ws2_32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>cd "$(SolutionDir)Confus/$(ConfigurationName)/"
@@ -192,7 +192,12 @@ lib /out:Confus.lib *.obj</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ClientTeamScore.cpp" />
-    <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\BoxCollider.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\CollisionRegistrar.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\DebugDrawer.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\Collider.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\PhysicsWorld.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\RigidBody.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Flag.cpp" />
     <ClCompile Include="FlagGUI.cpp" />
@@ -222,7 +227,13 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="..\Common\Debug.h" />
     <ClInclude Include="..\Common\TeamIdentifier.h" />
     <ClInclude Include="ClientTeamScore.h" />
-    <ClInclude Include="Collider.h" />
+    <ClInclude Include="..\ConfusShared\Physics\BoxCollider.h" />
+    <ClInclude Include="..\ConfusShared\Physics\CollisionRegistrar.h" />
+    <ClInclude Include="..\ConfusShared\Physics\DebugDrawer.h" />
+    <ClInclude Include="..\ConfusShared\Physics\ECollisionFilter.h" />
+    <ClInclude Include="..\ConfusShared\Physics\Collider.h" />
+    <ClInclude Include="..\ConfusShared\Physics\PhysicsWorld.h" />
+    <ClInclude Include="..\ConfusShared\Physics\RigidBody.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="Flag.h" />
     <ClInclude Include="FlagGUI.h" />

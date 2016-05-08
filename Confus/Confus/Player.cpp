@@ -9,6 +9,9 @@
 #include "EventManager.h"
 #include "Flag.h"
 #include <RakNet/PacketPriority.h>
+#include "../Confusshared/Physics/PhysicsWorld.h"
+#include "../Confusshared/Physics/BoxCollider.h"
+#include "../Confusshared/Physics/RigidBody.h"
 
 namespace Confus
 {
@@ -16,11 +19,12 @@ namespace Confus
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-	Player::Player(irr::IrrlichtDevice* a_Device, irr::s32 a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
-		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
-		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), a_ID),
-		TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
-		CarryingFlag(new EFlagEnum(EFlagEnum::None))
+
+	Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
+		: m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f)),
+		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
+		TeamIdentifier(a_TeamIdentifier),
+		CarryingFlag(EFlagEnum::None)
     {
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
@@ -43,31 +47,16 @@ namespace Confus
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
         }
 
-        m_KeyMap[0].Action = irr::EKA_MOVE_FORWARD;
-        m_KeyMap[0].KeyCode = irr::KEY_KEY_W;
-
-        m_KeyMap[1].Action = irr::EKA_MOVE_BACKWARD;
-        m_KeyMap[1].KeyCode = irr::KEY_KEY_S;
-
-        m_KeyMap[2].Action = irr::EKA_STRAFE_LEFT;
-        m_KeyMap[2].KeyCode = irr::KEY_KEY_A;
-
-        m_KeyMap[3].Action = irr::EKA_STRAFE_RIGHT;
-        m_KeyMap[3].KeyCode = irr::KEY_KEY_D;
-
-        m_KeyMap[4].Action = irr::EKA_JUMP_UP;
-        m_KeyMap[4].KeyCode = irr::KEY_SPACE;
-
         if(a_MainPlayer) 
         {
-            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, true);
+            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.0f, 1, nullptr, 0, true, 0.0f);
             CameraNode->setFOV(70.f);
             CameraNode->setNearValue(0.1f);
             m_IsMainPlayer = true;
         }
         else 
         {
-            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, false);
+            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.0f, 1, nullptr, 0, true, 0.0f, false, false);
         }
         if(a_TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
@@ -80,17 +69,20 @@ namespace Confus
 	    PlayerNode->setParent(this);
         
 		setParent(CameraNode);
+		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.6f, 2.7f, 0.6f), CameraNode,
+			Physics::ECollisionFilter::Player, ~Physics::ECollisionFilter::Player);
+		m_Collider->getRigidBody()->disableSleeping();
+		m_Collider->getRigidBody()->setOffset(irr::core::vector3df(0.0f, -0.65f, -0.2f));
 
         createAudioEmitter();
         startWalking();
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
+		PlayerNode->setAnimationEndCallback(this);
     }
 
 	Player::~Player() {
-		delete(CarryingFlag);
-		delete(TeamIdentifier);
 	}
 
     void Player::handleInput(EventManager& a_EventManager)
@@ -106,6 +98,34 @@ namespace Confus
                 startLightAttack();
             }
         }
+
+		auto movementDirection = irr::core::vector3df();
+		if(a_EventManager.IsKeyDown(irr::KEY_KEY_W))
+		{
+			movementDirection.Z = 1.0f;
+		}
+		else if(a_EventManager.IsKeyDown(irr::KEY_KEY_S))
+		{
+			movementDirection.Z = -1.0f;
+		}
+		if(a_EventManager.IsKeyDown(irr::KEY_KEY_A))
+		{
+			movementDirection.X = -1.0f;
+		}
+		else if(a_EventManager.IsKeyDown(irr::KEY_KEY_D))
+		{
+			movementDirection.X = 1.0f;
+		}
+		//Rotate with the negative xz-rotation (around the Y axis), as
+		//the scene node convention seems to be clockwise while the rotate function
+		//is counter-clockwise
+		movementDirection.rotateXZBy(-CameraNode->getRotation().Y);
+		movementDirection = movementDirection.normalize();
+		auto rigidBody = m_Collider->getRigidBody();
+		const float Speed = 15.0f;
+		auto resultingVelocity = irr::core::vector3df(movementDirection.X, 0.0f, movementDirection.Z) * Speed
+			+ irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
+		rigidBody->setVelocity(resultingVelocity);
     }
 
     void Player::render()
@@ -116,17 +136,6 @@ namespace Confus
     const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const
     {
         return m_Mesh->getBoundingBox();
-    }
-
-    void Player::setLevelCollider(irr::scene::ISceneManager* a_SceneManager,
-        irr::scene::ITriangleSelector* a_Level)
-    {
-        CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level, PlayerNode, {0.1f, 0.2f, 0.1f}, { 0, -1, 0 }, {0, 1.5f, 0}, 1));
-        
-        irr::scene::ITriangleSelector* selector = nullptr;
-        selector = a_SceneManager->createTriangleSelector(PlayerNode);
-        CameraNode->setTriangleSelector(selector);
-        selector->drop();
     }
 
     void Player::startWalking() const
@@ -181,6 +190,17 @@ namespace Confus
         }
     }
 
+    void Player::updateColor(irr::IrrlichtDevice* a_Device)
+    {
+        auto videoDriver = a_Device->getVideoDriver();
+        if(TeamIdentifier == ETeamIdentifier::TeamBlue) {
+            PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
+        }
+        else if(TeamIdentifier == ETeamIdentifier::TeamRed) {
+            PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
+        }
+    }
+
     void Player::update()
     {
         m_SoundEmitter->updatePosition();
@@ -212,26 +232,14 @@ namespace Confus
 
     void Player::respawn()
     {
-        irr::scene::ISceneNodeAnimatorCollisionResponse * animator = 0;
-
-        irr::core::list<irr::scene::ISceneNodeAnimator*>::ConstIterator iterator = CameraNode->getAnimators().begin();
-
-        for(; iterator != CameraNode->getAnimators().end(); ++iterator)
+		PlayerHealth.reset();
+        if(TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
-            animator = (irr::scene::ISceneNodeAnimatorCollisionResponse*)(*iterator);
-            if(animator->getType() == irr::scene::ESNAT_COLLISION_RESPONSE)
-                break;
+            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
         }
-
-        if(*TeamIdentifier == ETeamIdentifier::TeamBlue)
-        {
-             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
-             animator->setTargetNode(CameraNode);
-        }
-        else if(*TeamIdentifier == ETeamIdentifier::TeamRed)
+        else if(TeamIdentifier == ETeamIdentifier::TeamRed)
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
-            animator->setTargetNode(CameraNode);
         }
     }
 
