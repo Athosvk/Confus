@@ -31,7 +31,7 @@ namespace Confus
 
 	void FlagGUI::changeFlagState()
 	{
-		if (*(m_Flag->getFlagStatus()) != EFlagEnum::FlagBase)
+		if ((m_Flag->getFlagStatus()) != EFlagEnum::FlagBase)
 		{
 			m_ExclamationMarkImage->setVisible(true);
 		}

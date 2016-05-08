@@ -5,7 +5,6 @@
 #include "Player.h"
 
 #include "OpenAL\OpenALSource.h"
-#include "Audio\AudioLibrary.h"
 namespace Confus
 {
 	class Announcer
@@ -14,7 +13,14 @@ namespace Confus
 		Flag* m_RedFlag;
 		Flag* m_BlueFlag;
 		Player* m_Player;
-		Audio::AudioLibrary* m_lib;
+
+		std::unique_ptr<OpenALSource> m_RedScoredSource;
+		std::unique_ptr<OpenALSource> m_FlagRedTakenSource;
+		std::unique_ptr<OpenALSource> m_FlagRedReturnedSource;
+
+		std::unique_ptr<OpenALSource> m_BlueScoredSource;
+		std::unique_ptr<OpenALSource> m_FlagBlueTakenSource;
+		std::unique_ptr<OpenALSource> m_FlagBlueReturnedSource;
 	private:
 		void playScoredSound(ETeamIdentifier a_TeamIdentifier);
 		void playFlagTakenSound(ETeamIdentifier a_TeamIdentifier);

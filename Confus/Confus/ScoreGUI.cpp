@@ -22,7 +22,7 @@ namespace Confus
 
 	void ScoreGUI::update()
 	{
-		int score = ClientTeamScore::getTeamScore(*m_Flag->getTeamIdentifier());
+		int score = ClientTeamScore::getTeamScore(m_Flag->getTeamIdentifier());
 		for (int i = 0; i < Game::MaxScore; i++)
 		{
 			if (score > i)

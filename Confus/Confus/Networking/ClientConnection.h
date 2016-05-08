@@ -12,6 +12,7 @@ namespace RakNet
     struct SystemAddress;
     struct Packet;
     class BitStream;
+    struct AddressOrGUID;
 }
 
 namespace Confus
@@ -21,10 +22,14 @@ namespace Confus
         /// <summary> The type of packet </summary>
         enum class EPacketType : unsigned char
         {
-            Message = ID_USER_PACKET_ENUM + 1,
-            ScoreUpdate = Message + 1,
-            PlayerAttack = ScoreUpdate + 1,
-            MazeChange = PlayerAttack + 1
+            Message = 1 + ID_USER_PACKET_ENUM,
+            MainPlayerJoined = 2 + ID_USER_PACKET_ENUM,
+            OtherPlayerJoined = 3 + ID_USER_PACKET_ENUM,
+            PlayerLeft = 4 + ID_USER_PACKET_ENUM,
+            UpdatePosition = 5 + ID_USER_PACKET_ENUM,
+            ScoreUpdate = 6 + ID_USER_PACKET_ENUM,
+            PlayerAttack = 7 + ID_USER_PACKET_ENUM,
+            MazeChange = 8 + ID_USER_PACKET_ENUM
         };
         /// <summary>
         /// Represents a connection to the server that this clients is connected to.
@@ -48,7 +53,6 @@ namespace Confus
 			bool m_Connected = false;
             /// <summary> The map thast contains the server events and the functions that involve them. </summary>
             std::map<unsigned char, std::vector<std::function<void(RakNet::Packet* a_Data)>>> m_CallbackFunctionMap;
-
         public:
             /// <summary> Initializes a new instance of the <see cref="ClientConnection"/> class. </summary>
             /// <param name="a_ServerIP">The ip address of the server to connect to.</param>

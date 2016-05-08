@@ -101,7 +101,7 @@ namespace Confus
 
         void PlayerAudioEmitter::updatePosition() const
         {
- /*           for(auto audioSource : m_AudioSourceFootsteps)
+            for(auto audioSource : m_AudioSourceFootsteps)
             {
                 audioSource->setPosition(m_AttachedPlayer->getAbsolutePosition());
             }
@@ -114,7 +114,7 @@ namespace Confus
             for(auto audioSource : m_AudioSourceSwordSwoshes)
             {
                 audioSource->setPosition(m_AttachedPlayer->getAbsolutePosition());
-            }*/
+            }
         }
 
         void PlayerAudioEmitter::createAudioSources()
@@ -136,15 +136,6 @@ namespace Confus
             m_AudioSourceSwordSwoshes[1] = new OpenALSource("Sword_swing_2.wav");
             m_AudioSourceSwordSwoshes[2] = new OpenALSource("Sword_swing_3.wav");
             m_AudioSourceSwordSwoshes[3] = new OpenALSource("Sword_swing_4.wav");
-
-			m_RedScoredSource = std::make_unique<OpenALSource>("SFX/FlagSounds/red_scores.wav");
-			m_FlagRedTakenSource = std::make_unique<OpenALSource>("stereo.wav");
-			m_FlagRedReturnedSource = std::make_unique<OpenALSource>("SFX/FlagSounds/red_flag_returned.wav");
-
-			m_BlueScoredSource = std::make_unique<OpenALSource>("SFX/FlagSounds/blue_flag_returned.wav");
-			m_FlagBlueTakenSource = std::make_unique<OpenALSource>("SFX/FlagSounds/blue_flag_returned.wav");
-			m_FlagBlueReturnedSource = std::make_unique<OpenALSource>("SFX/FlagSounds/blue_flag_returned.wav");
-			test = new AudioLibrary();
         }
     }
 }

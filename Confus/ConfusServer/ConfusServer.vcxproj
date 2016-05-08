@@ -113,7 +113,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib;MSVCRTD.LIB;RakNet.lib;ws2_32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;MSVCRTD.LIB;RakNet.lib;ws2_32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\Lansenou\Desktop\Confus\Libraries\32 bit\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -160,7 +160,7 @@ lib /out:ConfusServer.lib *.obj</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib;MSVCRT.LIB;RakNet.lib;ws2_32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;MSVCRT.LIB;RakNet.lib;ws2_32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>cd "$(SolutionDir)ConfusServer/$(ConfigurationName)/"
@@ -192,7 +192,6 @@ lib /out:ConfusServer.lib *.obj</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Collider.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Flag.cpp" />
     <ClCompile Include="Game.cpp" />

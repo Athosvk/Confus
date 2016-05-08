@@ -13,7 +13,14 @@ namespace Confus
 		};
 		m_RedFlag->FlagStatusChangedEvent += flagChangedEvents;
 		m_BlueFlag->FlagStatusChangedEvent += flagChangedEvents;
-		m_lib = new Audio::AudioLibrary();
+
+		m_RedScoredSource = std::make_unique<OpenALSource>("SFX/FlagSounds/red_scores.wav");
+		m_FlagRedTakenSource = std::make_unique<OpenALSource>("stereo.wav");
+		m_FlagRedReturnedSource = std::make_unique<OpenALSource>("SFX/FlagSounds/red_flag_returned.wav");
+
+		m_BlueScoredSource = std::make_unique<OpenALSource>("SFX/FlagSounds/blue_flag_returned.wav");
+		m_FlagBlueTakenSource = std::make_unique<OpenALSource>("SFX/FlagSounds/blue_flag_returned.wav");
+		m_FlagBlueReturnedSource = std::make_unique<OpenALSource>("SFX/FlagSounds/blue_flag_returned.wav");
 	}
 
 	void Announcer::playFlagEvent(ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum)
@@ -38,11 +45,11 @@ namespace Confus
 	{
 		if (a_TeamIdentifier == ETeamIdentifier::TeamBlue)
 		{
-			m_lib->m_BlueScoredSource->play();
+			m_BlueScoredSource->play();
 		}
 		else if (a_TeamIdentifier == ETeamIdentifier::TeamRed)
 		{
-			m_lib->m_RedScoredSource->play();
+			m_RedScoredSource->play();
 		}
 	}
 
@@ -50,11 +57,11 @@ namespace Confus
 	{
 		if (a_TeamIdentifier == ETeamIdentifier::TeamBlue)
 		{
-			m_lib->m_FlagBlueReturnedSource->play();
+			m_FlagBlueReturnedSource->play();
 		}
 		else if (a_TeamIdentifier == ETeamIdentifier::TeamRed)
 		{
-			m_lib->m_FlagRedReturnedSource->play();
+			m_FlagRedReturnedSource->play();
 		}
 	}
 
@@ -62,18 +69,16 @@ namespace Confus
 	{
 		if (a_TeamIdentifier == ETeamIdentifier::TeamBlue)
 		{
-			m_lib->m_FlagBlueTakenSource->play();
+			m_FlagBlueTakenSource->play();
 		}
 		else if (a_TeamIdentifier == ETeamIdentifier::TeamRed)
 		{
-			//m_Player->m_SoundEmitter->m_FlagRedTakenSource->play();// m_FlagRedTakenSource->play();
-			m_Player->m_SoundEmitter->test->m_FlagRedTakenSource->play();
+			m_FlagRedTakenSource->play();
 		}
 	}
 
 
 	Announcer::~Announcer()
 	{
-		delete(m_lib);
 	}
 }
