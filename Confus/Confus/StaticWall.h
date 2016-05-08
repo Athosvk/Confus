@@ -8,6 +8,8 @@ namespace Confus
     /// </summary>
     class StaticWall
     {
+        friend class StaticWallTest;
+
         irr::scene::ISceneManager* m_SceneManager;
         irr::scene::IAnimatedMesh* m_MeshNode;
         irr::scene::ISceneNode* m_SceneNode;
@@ -31,7 +33,7 @@ namespace Confus
         /// <summary>
         /// Loads the mesh.
         /// </summary>
-        void loadMesh();
+        void loadMesh(irr::io::path filePath);
         /// <summary>
         /// Assigns the texture to the scene node.
         /// </summary>

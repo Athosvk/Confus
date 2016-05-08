@@ -1,5 +1,6 @@
 #include <IrrAssimp/IrrAssimp.h>
-
+#include <iostream>
+#include <exception>
 #include "StaticWall.h"
 
 namespace Confus
@@ -10,7 +11,7 @@ namespace Confus
         m_VideoDriver = a_Device->getVideoDriver();
         m_Camera = a_Camera;
 
-        loadMesh();
+        loadMesh("Media/Models/Wall.3DS");
         setSceneNode(a_Position, a_Rotation);
         setTexture();
         addMeshCollider();
@@ -23,10 +24,10 @@ namespace Confus
         m_SceneNode->drop();
     }
 
-    void StaticWall::loadMesh()
+    void StaticWall::loadMesh(irr::io::path filePath)
     {
         IrrAssimp irrAssimp(m_SceneManager);
-        m_MeshNode = irrAssimp.getMesh("Media/Models/Wall.3DS");
+        m_MeshNode = irrAssimp.getMesh(filePath);
     }
 
     void StaticWall::setSceneNode(irr::core::vector3d<float> a_Position, irr::core::vector3d<float> a_Rotation)
