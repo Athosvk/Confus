@@ -226,6 +226,7 @@ lib /out:Confus.lib *.obj</Command>
   <ItemGroup>
     <ClInclude Include="..\Common\Debug.h" />
     <ClInclude Include="..\Common\TeamIdentifier.h" />
+    <ClInclude Include="..\ConfusShared\Networking\BitStreamStruct.h" />
     <ClInclude Include="ClientTeamScore.h" />
     <ClInclude Include="..\ConfusShared\Physics\BoxCollider.h" />
     <ClInclude Include="..\ConfusShared\Physics\CollisionRegistrar.h" />

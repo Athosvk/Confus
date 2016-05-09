@@ -4,6 +4,8 @@
 #include "Networking\Connection.h"
 #include "Health.h"
 #include "Weapon.h"
+
+#include "../ConfusShared/Networking/BitStreamStruct.h"
 #include "../Common/TeamIdentifier.h"
 
 namespace ConfusServer {
@@ -21,11 +23,7 @@ namespace ConfusServer {
     enum class EFlagEnum;
     class EventManager;
     class Flag;
-    
-    enum class EPlayerState : unsigned char
-    {
-        Alive, CarryingFlag, HeavyAttacking, LightAttacking, Dead
-    };
+   
     class Player : irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
     {   
     public:
@@ -38,11 +36,7 @@ namespace ConfusServer {
         long long ID;
    
 	private:
-        Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
-
-        void createAudioEmitter();
-        void updateClient();
-        void moveOnButtonPress(irr::EKEY_CODE a_Key);
+		Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
         static const unsigned LightAttackDamage;
@@ -56,6 +50,8 @@ namespace ConfusServer {
         irr::scene::IAnimatedMesh* m_Mesh;
         /// <summary> A pointer to the connection to the client. </summary>
         Networking::Connection* m_Connection;
+		irr::SKeyMap m_KeyMap[6];
+		ConfusShared::Networking::EPlayerState m_PlayerState = ConfusShared::Networking::EPlayerState::Alive;
     public:
         Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
 		~Player();
@@ -82,10 +78,13 @@ namespace ConfusServer {
         /// <summary> Initializes the shared attack variables </summary>
         void initializeAttack();
 
+		void createAudioEmitter();
+		void updateClient();
+		void moveOnButtonPress(irr::EKEY_CODE a_Key);
+
         /// <summary> Called when the animation finishes </summary>
         /// <remarks> Generally used for the attack animations only </remarks>
         /// <param name="node">The node whoms animation finished</param>
         virtual void OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node) override;
-        irr::SKeyMap m_KeyMap[6];
     };
 }

@@ -158,9 +158,6 @@
     <ClInclude Include="StaticWall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Collider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Maze.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -234,6 +231,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ConfusShared\Physics\Collider.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Networking\BitStreamStruct.h">
       <Filter>Shared</Filter>
     </ClInclude>
   </ItemGroup>

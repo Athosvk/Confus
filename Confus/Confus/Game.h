@@ -143,7 +143,7 @@ namespace Confus
         /// <summary>
         /// Updates positions and rotations of all other players.
         /// </summary>
-        void updateOtherPlayer(RakNet::BitStream* a_Data);
+        void updatePlayers(RakNet::BitStream* a_Data);
         void removePlayer(RakNet::BitStream* a_Data);
 
 		/// <summary> Updates the (absolute) transformations of all the scene nodes recursively downwards </summary>

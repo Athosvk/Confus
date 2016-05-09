@@ -91,7 +91,7 @@ namespace Confus
 
         m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdatePosition), [this](RakNet::BitStream* a_Data)
         {
-            updateOtherPlayer(a_Data);
+            updatePlayers(a_Data);
         });
       
         while(m_Device->run())
@@ -236,7 +236,7 @@ namespace Confus
 		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
     }
 
-    void Game::updateOtherPlayer(RakNet::BitStream* a_Data)
+    void Game::updatePlayers(RakNet::BitStream* a_Data)
     {
 		a_Data->IgnoreBytes(sizeof(RakNet::MessageID));
 
@@ -246,17 +246,18 @@ namespace Confus
 
         for(size_t i = 0u; i < m_PlayerArray.size(); i++)
         {
-            if(m_PlayerArray[i]->MainPlayer == false && m_PlayerArray[i]->ID == id)
+            if(m_PlayerArray[i]->ID == id)
             {
-                irr::core::vector3df pos;
-                irr::core::vector3df rot;
+                irr::core::vector3df position;
+				a_Data->Read(position);
+				m_PlayerArray[i]->setPosition(position);
 
-				a_Data->Read(pos);
-				a_Data->Read(rot);
-
-                m_PlayerArray[i]->setPosition(pos);
-                m_PlayerArray[i]->setRotation(rot);
-                break;
+				if (m_PlayerArray[i]->MainPlayer == false)
+				{
+					irr::core::vector3df rotation;
+					a_Data->Read(rotation);
+					m_PlayerArray[i]->setRotation(rotation);
+				}
             }
         }
     }

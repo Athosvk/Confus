@@ -39,7 +39,6 @@ namespace ConfusServer
     void Game::run()
     {
         initializeConnection();
-        m_PlayerNode.setConnection(m_Connection.get());
 
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
@@ -60,10 +59,10 @@ namespace ConfusServer
             addPlayer(a_Data);
         });*/
 
-        m_Connection->addFunctionToMap(ID_DISCONNECTION_NOTIFICATION, [this](RakNet::Packet* a_Data)
-        {
-            removePlayer(a_Data);
-        });
+        //m_Connection->addFunctionToMap(ID_DISCONNECTION_NOTIFICATION, [this](RakNet::Packet* a_Data)
+        //{
+        //    removePlayer(a_Data);
+        //});
 
         m_Device->getCursorControl()->setVisible(false);
       
@@ -210,6 +209,7 @@ namespace ConfusServer
         ETeamIdentifier teamID = m_PlayerArray.size() % 2 == 0 ? ETeamIdentifier::TeamRed : ETeamIdentifier::TeamBlue;
 
         Player* newPlayer = new Player(m_Device, id, teamID, false);
+		newPlayer->setConnection(m_Connection.get());
         m_PlayerArray.push_back(newPlayer);
 
         RakNet::BitStream stream;
@@ -223,7 +223,7 @@ namespace ConfusServer
             stream.Write(static_cast<ETeamIdentifier>(m_PlayerArray[i]->TeamIdentifier));
         }
         RakNet::AddressOrGUID guid = a_Data->guid;
-        m_Connection->sendPacket(&stream, &guid);
+        m_Connection->broadcastBitstream(stream);
 
         RakNet::BitStream broadcastStream;
         broadcastStream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::OtherPlayerJoined));
@@ -232,7 +232,7 @@ namespace ConfusServer
 
         m_Connection->broadcastPacket(&broadcastStream, &guid);
 
-        m_PlayerArray.push_back(&newPlayer);
+        m_PlayerArray.push_back(newPlayer);
         std::cout << id << " joined" << std::endl;
     }
 

@@ -12,6 +12,7 @@
 #include "../Confusshared/Physics/PhysicsWorld.h"
 #include "../Confusshared/Physics/BoxCollider.h"
 #include "../Confusshared/Physics/RigidBody.h"
+#include "../ConfusShared/Networking/BitStreamStruct.h"
 
 namespace Confus
 {
@@ -165,7 +166,6 @@ namespace Confus
         m_Weapon.Damage = LightAttackDamage;
         m_SoundEmitter->playAttackSound(false);
         initializeAttack();
-
     }
 
     void Player::startHeavyAttack()
@@ -275,19 +275,20 @@ namespace Confus
 
      void Player::updateServer() const
 	{
-        RakNet::BitStream bitstreamOut;
+		ConfusShared::Networking::PlayerInfo playerInfo;
+		playerInfo.playerID = m_PlayerID;
+		playerInfo.rotation = CameraNode->getRotation();
+		playerInfo.stateChangeTime = m_StateChangeTime;
+		playerInfo.forwardKeyPressed = m_EventManager->IsKeyDown(irr::KEY_KEY_W);
+		playerInfo.backwardKeyPressed = m_EventManager->IsKeyDown(irr::KEY_KEY_S);
+		playerInfo.leftKeyPressed = m_EventManager->IsKeyDown(irr::KEY_KEY_A);
+		playerInfo.rightKeyPressed = m_EventManager->IsKeyDown(irr::KEY_KEY_D);
+		playerInfo.leftMouseButtonPressed = m_EventManager->IsLeftMouseDown();
+		playerInfo.rightMouseButtonPressed = m_EventManager->IsRightMouseDown();
 
+        RakNet::BitStream bitstreamOut;
         bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
-        bitstreamOut.Write(m_PlayerID);
-        bitstreamOut.Write(CameraNode->getPosition());
-        bitstreamOut.Write(CameraNode->getRotation());
-        bitstreamOut.Write(Player::m_PlayerState);
-        bitstreamOut.Write(m_StateChangeTime);
-        bitstreamOut.Write(m_PlayerHealth);
-        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_W));
-        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_S));
-        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_A));
-        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_D));
+		bitstreamOut.Write(playerInfo);
 
         m_Connection->sendMessage(&bitstreamOut, PacketReliability::UNRELIABLE);
 	}

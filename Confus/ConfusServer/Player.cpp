@@ -6,6 +6,8 @@
 #include "EventManager.h"
 #include "Flag.h"
 
+#include "../ConfusShared/Networking/BitStreamStruct.h"
+
 namespace ConfusServer
 {
     const irr::u32 Player::WeaponJointIndex = 14u;
@@ -222,57 +224,40 @@ namespace ConfusServer
 
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::BitStream* a_Data)
         {
-            unsigned int playerID;
-            irr::core::vector3df position;
-            irr::core::vector3df rotation;
-            EPlayerState state;
-            RakNet::Time stateChangeTime;
-            int8_t playerHealth;
-            bool forwardKeyPressed;
-            bool backwardKeyPressed;
-            bool leftKeyPressed;
-            bool rightKeyPressed;
-
+			ConfusShared::Networking::PlayerInfo playerInfo;
             a_Data->IgnoreBytes(sizeof(unsigned char));
-            a_Data->Read(playerID);
-            a_Data->Read(position);
-            a_Data->Read(rotation);
-            a_Data->Read(state);
-            a_Data->Read(stateChangeTime);
-            a_Data->Read(playerHealth);
-            a_Data->Read(forwardKeyPressed);
-            a_Data->Read(backwardKeyPressed);
-            a_Data->Read(leftKeyPressed);
-            a_Data->Read(rightKeyPressed);
+			a_Data->Read(playerInfo);
 
-            setRotation(rotation);
-             
-            if(state == EPlayerState::LightAttacking)
+            setRotation(playerInfo.rotation);
+						             
+            if(m_PlayerState != ConfusShared::Networking::EPlayerState::LightAttacking && playerInfo.newState == ConfusShared::Networking::EPlayerState::LightAttacking)
             {
                 startLightAttack();
             }
-            else if(state == EPlayerState::HeavyAttacking)
+            else if(m_PlayerState != ConfusShared::Networking::EPlayerState::HeavyAttacking && playerInfo.newState == ConfusShared::Networking::EPlayerState::HeavyAttacking)
             {
                 startHeavyAttack();
             }
 
+			m_PlayerState = playerInfo.newState;
+
             // Change this into something better when we are not using irrlichts FPS camera. 
-            if(forwardKeyPressed)
+            if(playerInfo.forwardKeyPressed)
             {
                 CameraNode->setPosition(irr::core::vector3df(getPosition().X, getPosition().Y, getPosition().Z) + 0.1f);
             } 
-            else if(backwardKeyPressed)
+            else if(playerInfo.backwardKeyPressed)
             {
                 CameraNode->setPosition(irr::core::vector3df(getPosition().X, getPosition().Y, getPosition().Z) - 0.1f);
             }
-            else if(leftKeyPressed)
+            else if(playerInfo.leftKeyPressed)
             {
                 CameraNode->setPosition(irr::core::vector3df(getPosition().X + 0.1f, getPosition().Y, getPosition().Z));
             }
-            else if(rightKeyPressed)
+            else if(playerInfo.rightKeyPressed)
             {
                 CameraNode->setPosition(irr::core::vector3df(getPosition().X - 0.1f, getPosition().Y, getPosition().Z));
-            }
-    });
+            }	
+	});
     }
 }
