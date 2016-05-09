@@ -54,7 +54,7 @@ namespace Confus
 
 		void PlayerAudioEmitter::playHitSound()
 		{
-			m_HitSound.play();
+			//m_HitSound.play();
 		}
 
         void PlayerAudioEmitter::updatePosition() const
@@ -84,7 +84,7 @@ namespace Confus
 
         void PlayerAudioEmitter::createAudioSources(AudioManager* a_AudioManager)
         {
-			m_HitSound = a_AudioManager->createSound("stereo.wav");
+			//m_HitSound = a_AudioManager->createSound("stereo.wav");
             for(int i = 0; i < 4; i++)
             {
                 if(i < 3)

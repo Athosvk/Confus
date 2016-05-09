@@ -141,6 +141,14 @@ namespace Confus
         PlayerNode->setAnimationSpeed(24);
     }
 
+    void Player::stopWalking() const
+    {
+        PlayerNode->setAnimationEndCallback(nullptr);
+        PlayerNode->setLoopMode(false);
+        PlayerNode->setCurrentFrame(7);
+        PlayerNode->setAnimationSpeed(0);
+    }
+
     void Player::initializeAttack()
     {
         PlayerNode->setLoopMode(false);
@@ -205,6 +213,20 @@ namespace Confus
 			if (FlagPointer != nullptr) {
 				FlagPointer->drop(this);
 			}
+        }
+
+        if(m_Collider->getRigidBody()->getVelocity().X != 0.0f && m_Collider->getRigidBody()->getVelocity().Z != 0.0f)
+        {
+            if(!m_Attacking && !m_Walking)
+            {
+                startWalking();
+                m_Walking = true;
+            }
+        }
+        else if(m_Walking && !m_Attacking)
+        {
+            stopWalking();
+            m_Walking = false;
         }
 
         if(CameraNode->getPosition().Y <= -10) {
