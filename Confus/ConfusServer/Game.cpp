@@ -232,7 +232,6 @@ namespace ConfusServer
 
         m_Connection->broadcastPacket(&broadcastStream, &guid);
 
-        m_PlayerArray.push_back(&newPlayer);
         std::cout << id << " joined" << std::endl;
     }
 

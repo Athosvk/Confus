@@ -222,6 +222,8 @@ namespace ConfusServer
 
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::Packet* a_Data)
         {
+            RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
+
             unsigned int playerID;
             irr::core::vector3df position;
             irr::core::vector3df rotation;
@@ -233,17 +235,17 @@ namespace ConfusServer
             bool leftKeyPressed;
             bool rightKeyPressed;
 
-            a_Data->IgnoreBytes(sizeof(unsigned char));
-            a_Data->Read(playerID);
-            a_Data->Read(position);
-            a_Data->Read(rotation);
-            a_Data->Read(state);
-            a_Data->Read(stateChangeTime);
-            a_Data->Read(playerHealth);
-            a_Data->Read(forwardKeyPressed);
-            a_Data->Read(backwardKeyPressed);
-            a_Data->Read(leftKeyPressed);
-            a_Data->Read(rightKeyPressed);
+            bitstreamIn.IgnoreBytes(sizeof(unsigned char));
+            bitstreamIn.Read(playerID);
+            bitstreamIn.Read(position);
+            bitstreamIn.Read(rotation);
+            bitstreamIn.Read(state);
+            bitstreamIn.Read(stateChangeTime);
+            bitstreamIn.Read(playerHealth);
+            bitstreamIn.Read(forwardKeyPressed);
+            bitstreamIn.Read(backwardKeyPressed);
+            bitstreamIn.Read(leftKeyPressed);
+            bitstreamIn.Read(rightKeyPressed);
 
             setRotation(rotation);
              

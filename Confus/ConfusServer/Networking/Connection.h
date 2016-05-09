@@ -51,7 +51,7 @@ namespace ConfusServer
             /// <summary> The RakNet interface for interacting with RakNet </summary>
             RakNet::RakPeerInterface* m_Interface; 
             /// <summary> The map thast contains the server events and the functions that involve them. </summary>
-            std::map<unsigned char, std::vector<std::function<void(RakNet::BitStream* a_Data)>>> m_CallbackFunctionMap;
+            std::map<unsigned char, std::vector<std::function<void(RakNet::Packet* a_Data)>>> m_CallbackFunctionMap;
             /// <summary> Is the server connected to any clients? </summary>
             bool m_Connected = false;
         public:
@@ -70,8 +70,8 @@ namespace ConfusServer
             /// <param name="a_Function">The function that should be added to the map.</param>
             void addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function);
             void sendMessage(RakNet::BitStream & a_InputStream, PacketReliability a_Reliability);
-            void broadcastPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Excluded = nullptr);
             void sendPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Address);
+            void broadcastPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Excluded = nullptr);
             /// <summary> Send Package to all clients </summary>
             /// <param name="a_BitStream">The packet to send.</param>
             void broadcastBitstream(RakNet::BitStream& a_BitStream);
@@ -88,7 +88,7 @@ namespace ConfusServer
 			/// </summary>
 			/// <param name="a_Data">The data.</param>
             /// <param name="a_Event">The server event.</param>
-            void handlePacket(RakNet::BitStream* a_Data, unsigned char a_Event);
+            void handlePacket(RakNet::Packet* a_Data, unsigned char a_Event);
 			/// <summary>
 			/// Prints the InputStream.
 			/// </summary>
@@ -98,9 +98,7 @@ namespace ConfusServer
             /// Processes the player packet: calls methods based on inputstream.
             /// <summary> Get all the open connections in a vector </summary>
             std::vector<RakNet::SystemAddress> getOpenConnections() const;
-            /// </summary>
-            /// <param name="a_Message">The inputstream.</param>
-            void processPlayerPacket(RakNet::BitStream& a_InputStream);
+
         };
     }
 }
