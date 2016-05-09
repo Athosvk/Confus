@@ -33,10 +33,11 @@ namespace Confus
         bool m_Collided;
 
     public:        
-        /// <summary> Initializes a new instance of the <see cref="Weapon"/> class </summary>
-        /// <param name="a_SceneManager">The active scene manager </param>
-        /// <param name="a_Dimensions">The dimensions of the weapon </param>
-        Weapon(irr::scene::ISceneManager* a_SceneManager, Physics::PhysicsWorld& a_World,
+		/// <summary> Initializes a new instance of the <see cref="Weapon" /> class </summary>
+		/// <param name="a_SceneManager">The active scene manager</param>
+		/// <param name="a_World">The physics world </param>
+		/// <param name="a_Dimensions">The dimensions of the weapon</param>
+		Weapon(irr::scene::ISceneManager* a_SceneManager, Physics::PhysicsWorld& a_World,
 			irr::core::vector3df a_Dimensions);
 
         /// <summary> Enables the collider.of the weapon, making it possible to damage players </summary>

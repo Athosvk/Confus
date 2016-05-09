@@ -2,17 +2,20 @@
 
 #include "MazeGenerator.h"
 #include "WalledMazeTile.h"
+#include "Audio/AudioManager.h"
 
 namespace Confus
 {
 
-	MazeGenerator::MazeGenerator(irr::IrrlichtDevice* a_Device, int a_MazeSizeX, int a_MazeSizeY, int a_InitialSeed, 
-		irr::core::vector2df a_GenerateStartPoint, Physics::PhysicsWorld& a_PhysicsWorld)
+	MazeGenerator::MazeGenerator(irr::IrrlichtDevice* a_Device, int a_MazeSizeX, int a_MazeSizeY, int a_InitialSeed,
+		irr::core::vector2df a_GenerateStartPoint, Physics::PhysicsWorld& a_PhysicsWorld, Audio::AudioManager* a_AudioManager)
 		: m_MainMaze(a_Device, a_MazeSizeX, a_MazeSizeY, a_PhysicsWorld, 1.5f, true), 
 		m_ReplacementMaze(a_Device, a_MazeSizeX, a_MazeSizeY, a_PhysicsWorld, 1.5f), 
-		m_Seed(a_InitialSeed), m_GenerateStartPoint(a_GenerateStartPoint)
+		m_Seed(a_InitialSeed), m_GenerateStartPoint(a_GenerateStartPoint),
+		m_MazeChangeSound(a_AudioManager->createSound("Wall rising.wav"))
 	{
 		generateMaze(m_MainMaze.MazeTiles, a_InitialSeed);
+		m_MazeChangeSound.setVolume(0.2f);
 	}
 
 	void MazeGenerator::fixedUpdate()
@@ -28,6 +31,7 @@ namespace Confus
 
 	void MazeGenerator::refillMainMaze(int a_Seed)
 	{
+		m_MazeChangeSound.play();
 		generateMaze(m_ReplacementMaze.MazeTiles, a_Seed);
 		replaceMainMaze();
 		m_ReplacementMaze.resetMaze(irr::core::vector2df(30,-7),false);

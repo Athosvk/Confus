@@ -8,7 +8,7 @@
 
 namespace ConfusServer {
 
-	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, TeamScore a_TeamScore) :
+	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, TeamScore* a_TeamScore) :
                 m_TeamIdentifier(a_TeamIdentifier),
 		        m_FlagStatus(EFlagEnum::FlagBase),
                 m_TeamScore(a_TeamScore) 
@@ -130,7 +130,7 @@ namespace ConfusServer {
 	void Flag::setFlagStatus(EFlagEnum a_FlagStatus)
 	{
 		//push delegate (m_FlagStatus,a_FlagStatus)
-		*m_FlagStatus = a_FlagStatus;
+		m_FlagStatus = a_FlagStatus;
 	}
 
 	//This class handles what to do on collision
@@ -141,7 +141,6 @@ namespace ConfusServer {
 		{
 			return;
 		}
-
 
 		if (a_PlayerObject->TeamIdentifier != m_TeamIdentifier && a_PlayerObject->CarryingFlag == EFlagEnum::None) 
         {
@@ -181,7 +180,7 @@ namespace ConfusServer {
 	void Flag::score(Player* a_PlayerObject) 
     {
         a_PlayerObject->CarryingFlag = EFlagEnum::None;
-        m_TeamScore.teamScoredPoint(a_PlayerObject->TeamIdentifier);
+        m_TeamScore->teamScoredPoint(a_PlayerObject->TeamIdentifier);
         returnToStartPosition();
         a_PlayerObject->FlagPointer = nullptr;
 	}

@@ -28,14 +28,14 @@ namespace ConfusServer
         irr::scene::IMeshSceneNode* m_FlagNode;
         Collider* m_Collider;
         irr::scene::ISceneNode* m_FlagOldParent = nullptr;
-        TeamScore m_TeamScore;
+        TeamScore* m_TeamScore;
 
     public: 
         /// <summary> Flag class constructor. </summary>
         /// <param name="a_Device">The active Irrlicht Device.</param>
         /// <param name="a_TeamIdentifier">The team's identifier the flag should have.</param>
         /// <param name="a_TeamScore">Reference to the teamscore class.</param>
-        Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, TeamScore a_TeamScore);
+        Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, TeamScore* a_TeamScore);
         /// <summary> Flag class destructor </summary>
         ~Flag();
 		/// <summary> Capture Flag a flag with the wanted playerobject parent. </summary>
