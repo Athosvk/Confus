@@ -15,7 +15,6 @@ namespace Confus
 		m_FlagBlueTakenSound(a_AudioManager->createSound("SFX/FlagSounds/blue_flag_taken.wav")),
 		m_FlagBlueReturnedSound(a_AudioManager->createSound("SFX/FlagSounds/blue_flag_returned.wav"))
 	{
-
 		auto flagChangedEvents = [this](ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum) -> void 
 		{ 
 			playFlagEvent(a_TeamIdentifier, a_PreviousFlagEnum, a_CurrentFlagEnum); 
@@ -78,7 +77,6 @@ namespace Confus
 			m_FlagRedTakenSound.play();
 		}
 	}
-
 
 	Announcer::~Announcer()
 	{

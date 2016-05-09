@@ -45,6 +45,7 @@ namespace Confus
 	{
 		changeFlagState();
 	}
+
 	FlagGUI::~FlagGUI()
 	{
 	}

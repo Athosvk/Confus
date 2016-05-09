@@ -1,7 +1,6 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
 #include <vector>
-#include <memory>
 
 #include "Sound.h"
 

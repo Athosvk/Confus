@@ -1,10 +1,8 @@
 #pragma once
-#include <memory>
-
 #include "Flag.h"
 #include "Player.h"
-
 #include "Audio\Sound.h"
+
 namespace Confus
 {
 	class Announcer
