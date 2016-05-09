@@ -12,8 +12,8 @@
 #include "WinScreen.h"
 
 #define DEBUG_CONSOLE
-#include "../Common/Debug.h"
-#include "../Common/TeamIdentifier.h"
+#include "../ConfusShared/Debug.h"
+#include "../ConfusShared/TeamIdentifier.h"
 #include "../ConfusShared/Physics/BoxCollider.h"
 
 namespace Confus
@@ -22,12 +22,12 @@ namespace Confus
         m_PhysicsWorld(m_Device),
         m_MazeGenerator(m_Device, 41, 40, (19 + 20 + 21 + 22 + 23 + 24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
             irr::core::vector2df(19., 20.), m_PhysicsWorld),
-        m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true),
+        m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true, &m_AudioManager),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_PhysicsWorld),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_PhysicsWorld),
         m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
         m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, -83.f)),
-		m_GUI(m_Device, &m_PlayerNode)
+        m_GUI(m_Device, &m_PlayerNode, &m_AudioManager)
     {
 		auto videoDriver = m_Device->getVideoDriver();
 		m_GUI.addElement<FlagGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(50, 50),
@@ -205,12 +205,11 @@ namespace Confus
 
         m_PlayerNode.update();
 		m_GUI.update();
-        m_Listener.setPosition(m_PlayerNode.CameraNode->getAbsolutePosition());
-        irr::core::quaternion playerRotation(m_PlayerNode.CameraNode->getRotation());
+        m_Listener.setPosition(m_PlayerNode.getAbsolutePosition());
 
-        //Todo: Fix rotations
-        irr::core::vector3df upVector = playerRotation * irr::core::vector3df( 0, 1, 0 );
-        irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
+        irr::core::matrix4 playerRotation(m_PlayerNode.getAbsoluteTransformation());
+        irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10] );
+        irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
         m_Listener.setDirection(forwardVector, upVector);    
 
 		static float timer = 0.0f;
@@ -313,8 +312,7 @@ namespace Confus
             inputStream.Read(id);
             inputStream.Read(teamID);
 
-            Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false);
-            
+            Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false, &m_AudioManager);
             m_PlayerArray.push_back(newPlayer);
         }
 
@@ -332,7 +330,7 @@ namespace Confus
         inputStream.Read(id);
         inputStream.Read(teamID);
 
-        Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false);
+        Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false, &m_AudioManager);
         m_PlayerArray.push_back(newPlayer);
     }
 

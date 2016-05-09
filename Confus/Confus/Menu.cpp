@@ -4,7 +4,7 @@
 #define DEBUG_CONSOLE
 
 #include "Menu.h"
-#include "../Common/Debug.h"
+#include "../ConfusShared/Debug.h"
 #include "Game.h"
 
 namespace Confus

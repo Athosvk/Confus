@@ -1,8 +1,7 @@
 #pragma once
-#include <vector>
+#include "../ConfusShared/TeamIdentifier.h"
 #include <functional>
 
-#include "../Common/TeamIdentifier.h"
 #include "Networking/Connection.h"
 
 namespace ConfusServer

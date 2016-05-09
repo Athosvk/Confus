@@ -3,7 +3,7 @@
 
 #include "Networking/ClientConnection.h"
 #include "MazeGenerator.h"
-#include "OpenAL\OpenALListener.h"
+#include "Audio/OpenAL\OpenALListener.h"
 #include "Player.h"
 #include "Audio\PlayerAudioEmitter.h"
 #include "EventManager.h"
@@ -12,6 +12,7 @@
 #include "GUI.h"
 #include "ClientTeamScore.h"
 #include "BaseGame.h"
+#include "Audio/AudioManager.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 
 namespace Confus
@@ -33,7 +34,9 @@ namespace Confus
         /// <summary>
         /// The OpenAL listener that is attached to the camera.
         /// </summary>
-        OpenALListener m_Listener;
+        Audio::OpenAL::OpenALListener m_Listener;
+		Audio::AudioManager m_AudioManager;
+
 		/// <summary>
 		/// The GUI for the Player
 		/// </summary>

@@ -1,6 +1,6 @@
 #pragma once
 #include "BaseGame.h"
-#include "../Common/TeamIdentifier.h"
+#include "../ConfusShared/TeamIdentifier.h"
 
 namespace Confus
 {

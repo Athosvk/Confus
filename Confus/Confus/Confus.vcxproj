@@ -192,6 +192,15 @@ lib /out:Confus.lib *.obj</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseGame.cpp" />
+    <ClCompile Include="Audio\AudioManager.cpp" />
+    <ClCompile Include="Audio\OpenAL\Framework\aldlist.cpp" />
+    <ClCompile Include="Audio\OpenAL\Framework\CWaves.cpp" />
+    <ClCompile Include="Audio\OpenAL\Framework\Framework.cpp" />
+    <ClCompile Include="Audio\OpenAL\Framework\LoadOAL.cpp" />
+    <ClCompile Include="Audio\OpenAL\OpenALBuffer.cpp" />
+    <ClCompile Include="Audio\OpenAL\OpenALListener.cpp" />
+    <ClCompile Include="Audio\OpenAL\OpenALSource.cpp" />
+    <ClCompile Include="Audio\PlayerAudioEmitter.cpp" />
     <ClCompile Include="ClientTeamScore.cpp" />
     <ClCompile Include="..\ConfusShared\Physics\BoxCollider.cpp" />
     <ClCompile Include="..\ConfusShared\Physics\CollisionRegistrar.cpp" />
@@ -212,24 +221,27 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MoveableWall.cpp" />
     <ClCompile Include="Networking\ClientConnection.cpp" />
-    <ClCompile Include="OpenAL\Framework\aldlist.cpp" />
-    <ClCompile Include="OpenAL\Framework\CWaves.cpp" />
-    <ClCompile Include="OpenAL\Framework\Framework.cpp" />
-    <ClCompile Include="OpenAL\Framework\LoadOAL.cpp" />
-    <ClCompile Include="OpenAL\OpenALListener.cpp" />
-    <ClCompile Include="OpenAL\OpenALSource.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Audio\PlayerAudioEmitter.cpp" />
     <ClCompile Include="RespawnFloor.cpp" />
+    <ClCompile Include="Audio\Sound.cpp" />
     <ClCompile Include="StaticWall.cpp" />
     <ClCompile Include="WalledMazeTile.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="WinScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Common\Debug.h" />
-    <ClInclude Include="..\Common\TeamIdentifier.h" />
+    <ClInclude Include="..\ConfusShared\Debug.h" />
+    <ClInclude Include="..\ConfusShared\TeamIdentifier.h" />
     <ClInclude Include="BaseGame.h" />
+    <ClInclude Include="Audio\AudioManager.h" />
+    <ClInclude Include="Audio\OpenAL\Framework\aldlist.h" />
+    <ClInclude Include="Audio\OpenAL\Framework\CWaves.h" />
+    <ClInclude Include="Audio\OpenAL\Framework\Framework.h" />
+    <ClInclude Include="Audio\OpenAL\Framework\LoadOAL.h" />
+    <ClInclude Include="Audio\OpenAL\OpenALBuffer.h" />
+    <ClInclude Include="Audio\OpenAL\OpenALListener.h" />
+    <ClInclude Include="Audio\OpenAL\OpenALSource.h" />
+    <ClInclude Include="Audio\PlayerAudioEmitter.h" />
     <ClInclude Include="ClientTeamScore.h" />
     <ClInclude Include="..\ConfusShared\Physics\BoxCollider.h" />
     <ClInclude Include="..\ConfusShared\Physics\CollisionRegistrar.h" />
@@ -250,16 +262,9 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="MazeTile.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MoveableWall.h" />
-    <ClInclude Include="Networking\ClientConnection.h" />
-    <ClInclude Include="OpenAL\Framework\aldlist.h" />
-    <ClInclude Include="OpenAL\Framework\CWaves.h" />
-    <ClInclude Include="OpenAL\Framework\Framework.h" />
-    <ClInclude Include="OpenAL\Framework\LoadOAL.h" />
-    <ClInclude Include="OpenAL\OpenALListener.h" />
-    <ClInclude Include="OpenAL\OpenALSource.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Audio\PlayerAudioEmitter.h" />
     <ClInclude Include="RespawnFloor.h" />
+    <ClInclude Include="Audio\Sound.h" />
     <ClInclude Include="StaticWall.h" />
     <ClInclude Include="WalledMazeTile.h" />
     <ClInclude Include="Weapon.h" />
