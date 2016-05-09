@@ -63,7 +63,7 @@ namespace ConfusServer
 
         if(a_MainPlayer)
         {
-            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, true);
+            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, nullptr, 5, true, 0.5f, false, true);
             CameraNode->setFOV(70.f);
             CameraNode->setNearValue(0.1f);
         }
@@ -261,6 +261,7 @@ namespace ConfusServer
             // Change this into something better when we are not using irrlichts FPS camera. 
             if(forwardKeyPressed)
             {
+                std::cout << "Forward key pressed by player: " << std::endl;
                 CameraNode->setPosition(irr::core::vector3df(getPosition().X, getPosition().Y, getPosition().Z) + 0.1f);
             } 
             else if(backwardKeyPressed)
