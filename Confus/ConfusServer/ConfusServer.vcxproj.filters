@@ -158,12 +158,6 @@
     <ClInclude Include="WalledMazeTile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Debug.h">
-      <Filter>Shared Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\TeamIdentifier.h">
-      <Filter>Shared Files</Filter>
-    </ClInclude>
     <ClInclude Include="TeamScore.h">
       <Filter>Header Files</Filter>
     </ClInclude>

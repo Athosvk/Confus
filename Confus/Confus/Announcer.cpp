@@ -32,7 +32,7 @@ namespace Confus
 			playScoredSound(a_TeamIdentifier);
 		}
 
-		if (a_PreviousFlagEnum != EFlagEnum::FlagBase && a_CurrentFlagEnum == EFlagEnum::FlagBase)
+		if (a_PreviousFlagEnum == EFlagEnum::FlagDropped && a_CurrentFlagEnum == EFlagEnum::FlagBase)
 		{
 			playFlagReturnedSound(a_TeamIdentifier);
 		}

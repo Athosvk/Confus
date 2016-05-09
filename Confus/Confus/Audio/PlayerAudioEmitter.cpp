@@ -21,7 +21,10 @@ namespace Confus
 				return !a_Sound.isPlaying();
 			});
 			
-			soundIterator != m_Footsteps.end() ? soundIterator->play() : m_Footsteps.back().play();
+			if (soundIterator != m_Footsteps.end())
+			{
+				soundIterator->play();
+			}
         }
 
         void PlayerAudioEmitter::playAttackSound(bool a_HeavyAttack)

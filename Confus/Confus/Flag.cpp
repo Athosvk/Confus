@@ -33,10 +33,13 @@ namespace Confus
 		m_Collider->setTriggerEnterCallback([this](Physics::BoxCollider* a_Other)
 		{
 			auto collidedNode = a_Other->getRigidBody()->getAttachedNode();
-			Player* player = dynamic_cast<Player*>(*collidedNode->getChildren().begin());
-			if(player != nullptr)
+			if (!collidedNode->getChildren().empty())
 			{
-				captureFlag(player);
+				Player* player = dynamic_cast<Player*>(*collidedNode->getChildren().begin());
+				if (player != nullptr)
+				{
+					captureFlag(player);
+				}
 			}
 		});
 
@@ -56,13 +59,13 @@ namespace Confus
 		{
 		case ETeamIdentifier::TeamBlue:
             m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_BLUE.png"));
-			m_StartPosition.set({ -2.0f, 15.f, -2.f });
+			m_StartPosition.set({ -2.0f, 5.f, -2.f });
 			m_StartRotation.set({ 0.f, 0.f, 0.f });
 			returnToStartPosition();
 			break;
 		case ETeamIdentifier::TeamRed:
             m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_RED.png"));
-			m_StartPosition.set({ 1.5f, 15.f, -72.f });
+			m_StartPosition.set({ 1.5f, 5.f, -72.f });
 			m_StartRotation.set({ 0.f, 180.f, 0.f });
             returnToStartPosition();
 			break;

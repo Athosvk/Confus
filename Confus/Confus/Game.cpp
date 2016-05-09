@@ -130,11 +130,11 @@ namespace Confus
 					if(std::string(node->getName()).find("Ground", 0) != std::string::npos)
 					{
 						collider = m_PhysicsWorld.createBoxCollider(node, Physics::ECollisionFilter::LevelStatic,
-							Physics::ECollisionFilter::Player);
+							Physics::ECollisionFilter::Player | Physics::ECollisionFilter::Interactable);
 					}
 					else if (std::string(node->getName()).find("Basefolder", 0) == std::string::npos)
 					{
-						collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, Physics::ECollisionFilter::LevelStatic,
+						collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, Physics::ECollisionFilter::LevelStatic | Physics::ECollisionFilter::Interactable,
 							Physics::ECollisionFilter::Player);
                     }
                     else
