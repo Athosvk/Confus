@@ -215,15 +215,15 @@ namespace Confus
 			}
         }
 
-        if(CameraNode->getPosition() == m_PreviousPosition && m_Attacking == false)
-        {
-            stopWalking();
-            m_Walking = false;
-        }
-        else if(m_Walking == false && m_Attacking == false)
+        if(m_Collider->getRigidBody()->getVelocity() > irr::core::vector3df(0.0, 0.0, 0.0) && m_Attacking == false && m_Walking == false)
         {
             startWalking();
             m_Walking = true;
+        }
+        else if(m_Walking == true && m_Attacking == false)
+        {
+            stopWalking();
+            m_Walking = false;
         }
 
         if(CameraNode->getPosition().Y <= -10) {
@@ -232,8 +232,6 @@ namespace Confus
 				FlagPointer->returnToStartPosition();
 			}
         }
-
-        m_PreviousPosition = CameraNode->getPosition();
     }
 
     void Player::respawn()

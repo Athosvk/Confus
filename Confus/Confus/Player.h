@@ -43,7 +43,6 @@ namespace Confus
 	private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
 		Physics::BoxCollider* m_Collider;
-        irr::core::vector3df m_PreviousPosition;
 
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
