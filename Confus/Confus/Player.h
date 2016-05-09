@@ -38,6 +38,7 @@ namespace Confus
 		Health PlayerHealth;
         /// <summary> Determines if this player is this users player or not </summary>
         bool MainPlayer = false;
+
         long long ID;
 	private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
@@ -53,6 +54,9 @@ namespace Confus
 
         /// <summary> Whether the player is currently attacking or not </summary>
         bool m_Attacking = false;
+
+        /// <summary> Whether the player is currently walking or not </summary>
+        bool m_Walking = false;
 
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
@@ -88,7 +92,8 @@ namespace Confus
     private:
         /// <summary> Starts the walking animation, which is the default animation. </summary>
         void startWalking() const;
-        
+        /// <summary> Stops the walking animation. </summary>
+        void stopWalking() const;
         /// <summary> Initializes the shared attack variables. </summary>
         void initializeAttack();
 

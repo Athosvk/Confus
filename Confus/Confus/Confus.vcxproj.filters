@@ -126,6 +126,15 @@
     <ClCompile Include="..\ConfusShared\Physics\Collider.cpp">
       <Filter>Shared</Filter>
     </ClCompile>
+    <ClCompile Include="ScoreGUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Announcer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FlagGUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -251,12 +260,6 @@
     <ClInclude Include="..\ConfusShared\Physics\CollisionRegistrar.h">
       <Filter>Shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\TeamIdentifier.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\ConfusShared\Physics\Collider.h">
       <Filter>Shared</Filter>
     </ClInclude>
@@ -265,6 +268,21 @@
     </ClInclude>
     <ClInclude Include="..\ConfusShared\TeamIdentifier.h">
       <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreGUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Announcer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\TeamIdentifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Delegate.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

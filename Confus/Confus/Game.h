@@ -14,6 +14,7 @@
 #include "BaseGame.h"
 #include "Audio/AudioManager.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
+#include "Announcer.h"
 
 namespace Confus
 {    
@@ -24,6 +25,11 @@ namespace Confus
     /// </summary>
     class Game : public BaseGame
     {
+	public:
+		/// <summary>
+		/// The maximum score used to determine if someone has won
+		/// </summary>
+		static const int MaxScore;
     private:
         /// <summary>
 		/// <summary> The currently active physics world </summary>
@@ -45,8 +51,7 @@ namespace Confus
         /// The Players to test with.
         /// </summary>
         Player m_PlayerNode;
-        RespawnFloor m_RedRespawnFloor;
-        RespawnFloor m_BlueRespawnFloor;
+
 
         std::vector<Player*> m_PlayerArray;
         /// <summary>
@@ -57,12 +62,18 @@ namespace Confus
         /// The Red Flag.
         /// </summary>
         Flag m_RedFlag;
+
+		Announcer m_Announcer;
+		RespawnFloor m_RedRespawnFloor;
+		RespawnFloor m_BlueRespawnFloor;
+
         irr::scene::ISceneNode* m_LevelRootNode;
 		/// <summary>
 		/// The connection as a client to the server that we are currently connected to
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
 
+		
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game" /> class.

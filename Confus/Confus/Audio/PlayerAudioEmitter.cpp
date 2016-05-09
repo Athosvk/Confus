@@ -21,7 +21,10 @@ namespace Confus
 				return !a_Sound.isPlaying();
 			});
 			
-			soundIterator != m_Footsteps.end() ? soundIterator->play() : m_Footsteps.back().play();
+			if (soundIterator != m_Footsteps.end())
+			{
+				soundIterator->play();
+			}
         }
 
         void PlayerAudioEmitter::playAttackSound(bool a_HeavyAttack)
@@ -48,6 +51,11 @@ namespace Confus
 			std::srand(static_cast<int>(time(NULL)));
 			m_SwordSwoshes[std::rand() % 4].play();
         }
+
+		void PlayerAudioEmitter::playHitSound()
+		{
+			//m_HitSound.play();
+		}
 
         void PlayerAudioEmitter::updatePosition() const
         {
@@ -76,6 +84,7 @@ namespace Confus
 
         void PlayerAudioEmitter::createAudioSources(AudioManager* a_AudioManager)
         {
+			//m_HitSound = a_AudioManager->createSound("stereo.wav");
             for(int i = 0; i < 4; i++)
             {
                 if(i < 3)
