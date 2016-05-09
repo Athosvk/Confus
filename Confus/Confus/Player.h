@@ -38,10 +38,12 @@ namespace Confus
 		Health PlayerHealth;
         /// <summary> Determines if this player is this users player or not </summary>
         bool MainPlayer = false;
+
         long long ID;
 	private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
 		Physics::BoxCollider* m_Collider;
+        
 
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;

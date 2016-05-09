@@ -15,6 +15,8 @@ namespace Confus
         /// </summary>
         class PlayerAudioEmitter
 		{
+			/// <summary> Sound u emit when hit </summary>
+			Sound m_HitSound;
 			/// <summary> The footstep sounds </summary>
 			std::vector<Sound> m_Footsteps;
 			/// <summary> The grunt sounds </summary>
@@ -46,7 +48,11 @@ namespace Confus
             /// Plays a random sword swosh.
             /// </summary>
             void playRandomSwordSwosh();
-            /// <summary>
+			/// <summary>
+			/// Plays a random sword swosh.
+			/// </summary>
+			void playHitSound();
+			/// <summary>
             /// Updates the position of this instance.
             /// </summary>
             void updatePosition() const;            

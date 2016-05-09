@@ -13,6 +13,7 @@
 #include "ClientTeamScore.h"
 #include "Audio/AudioManager.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
+#include "Announcer.h"
 
 namespace Confus
 {    
@@ -23,6 +24,11 @@ namespace Confus
     /// </summary>
     class Game
     {
+	public:
+		/// <summary>
+		/// The maximum score used to determine if someone has won
+		/// </summary>
+		static const int MaxScore;
     private:
         /// <summary>
         /// The rate at which fixed updates are carried out
@@ -59,8 +65,7 @@ namespace Confus
         /// The Players to test with.
         /// </summary>
         Player m_PlayerNode;
-        RespawnFloor m_RedRespawnFloor;
-        RespawnFloor m_BlueRespawnFloor;
+
 
         std::vector<Player*> m_PlayerArray;
         /// <summary>
@@ -71,6 +76,11 @@ namespace Confus
         /// The Red Flag.
         /// </summary>
         Flag m_RedFlag;
+
+		Announcer m_Announcer;
+		RespawnFloor m_RedRespawnFloor;
+		RespawnFloor m_BlueRespawnFloor;
+
         /// <summary>
         /// The delay between the last and future fixed update
         /// </summary>
@@ -93,6 +103,7 @@ namespace Confus
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
 
+		
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
