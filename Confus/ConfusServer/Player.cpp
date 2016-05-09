@@ -220,7 +220,7 @@ namespace ConfusServer
     {
         m_Connection = a_Connection;
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::BitStream* a_Data)
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::Packet* a_Data)
         {
             unsigned int playerID;
             irr::core::vector3df position;

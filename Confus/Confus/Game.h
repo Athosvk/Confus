@@ -135,16 +135,16 @@ namespace Confus
         /// <summary>
         /// Creates a new Player object for this user, this player will be regarded as THEIR player.
         /// </summary>
-        void addOwnPlayer(RakNet::BitStream* a_Data);
+        void addOwnPlayer(RakNet::Packet* a_Data);
         /// <summary>
         /// Creates a new Player object for a different user that just joined.
         /// </summary>
-        void addOtherPlayer(RakNet::BitStream* a_Data);
+        void addOtherPlayer(RakNet::Packet* a_Data);
         /// <summary>
         /// Updates positions and rotations of all other players.
         /// </summary>
-        void updateOtherPlayer(RakNet::BitStream* a_Data);
-        void removePlayer(RakNet::BitStream* a_Data);
+        void updateOtherPlayer(RakNet::Packet* a_Data);
+        void removePlayer(RakNet::Packet* a_Data);
 
 		/// <summary> Updates the (absolute) transformations of all the scene nodes recursively downwards </summary>
 		void updateSceneTransformations();

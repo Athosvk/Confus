@@ -74,22 +74,22 @@ namespace Confus
         m_PlayerNode.setEventManager(&m_EventManager);
         m_Device->getCursorControl()->setVisible(false);
 
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::MainPlayerJoined), [this](RakNet::BitStream* a_Data)
+        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::MainPlayerJoined), [this](RakNet::Packet* a_Data)
         {
             addOwnPlayer(a_Data);
         });
 
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::PlayerLeft), [this](RakNet::BitStream* a_Data)
+        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::PlayerLeft), [this](RakNet::Packet* a_Data)
         {
             removePlayer(a_Data);
         });
 
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::OtherPlayerJoined), [this](RakNet::BitStream* a_Data)
+        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::OtherPlayerJoined), [this](RakNet::Packet* a_Data)
         {
             addOtherPlayer(a_Data);
         });
 
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdatePosition), [this](RakNet::BitStream* a_Data)
+        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdatePosition), [this](RakNet::Packet* a_Data)
         {
             updateOtherPlayer(a_Data);
         });
@@ -158,24 +158,27 @@ namespace Confus
         std::cin >> serverPort;
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::BitStream* a_InputStream)
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Data)
 		{
+            RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
+
             int timeMazeChanges, mazeSeed;
-           // RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
-            a_InputStream->IgnoreBytes(sizeof(RakNet::MessageID));
-            a_InputStream->Read(timeMazeChanges);
-            a_InputStream->Read(mazeSeed);
+            bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
+            bitstreamIn.Read(timeMazeChanges);
+            bitstreamIn.Read(mazeSeed);
             std::cout << "Update is in " << (timeMazeChanges - static_cast<int>(RakNet::GetTimeMS())) << " ms, the seed is:\t" << mazeSeed << std::endl;
             m_MazeGenerator.refillMainMazeRequest(mazeSeed, timeMazeChanges);
         });
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [](RakNet::BitStream* a_InputStream)
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [](RakNet::Packet* a_Data)
 		{
+            RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
+
             int redScore, blueScore;
             
-            a_InputStream->IgnoreBytes(sizeof(RakNet::MessageID));
-            a_InputStream->Read(redScore);
-            a_InputStream->Read(blueScore);
+            bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
+            bitstreamIn.Read(redScore);
+            bitstreamIn.Read(blueScore);
             ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, redScore);
             ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, blueScore);
             std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
@@ -236,13 +239,15 @@ namespace Confus
 		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
     }
 
-    void Game::updateOtherPlayer(RakNet::BitStream* a_Data)
+    void Game::updateOtherPlayer(RakNet::Packet* a_Data)
     {
-		a_Data->IgnoreBytes(sizeof(RakNet::MessageID));
+        RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
+        
+        bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
 
         long long id;
 
-		a_Data->Read(id);
+        bitstreamIn.Read(id);
 
         for(size_t i = 0u; i < m_PlayerArray.size(); i++)
         {
@@ -251,8 +256,8 @@ namespace Confus
                 irr::core::vector3df pos;
                 irr::core::vector3df rot;
 
-				a_Data->Read(pos);
-				a_Data->Read(rot);
+                bitstreamIn.Read(pos);
+                bitstreamIn.Read(rot);
 
                 m_PlayerArray[i]->setPosition(pos);
                 m_PlayerArray[i]->setRotation(rot);
@@ -276,25 +281,27 @@ namespace Confus
 	}
 
     //need to test of the guid.g is the right one, and not the one from the server
-    void Game::addOwnPlayer(RakNet::BitStream* a_Data)
+    void Game::addOwnPlayer(RakNet::Packet* a_Data)
     {
-		a_Data->IgnoreBytes(sizeof(RakNet::MessageID));
+        RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
 
-		a_Data->Read(m_PlayerNode.ID);
-		a_Data->Read(m_PlayerNode.TeamIdentifier);
+        bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
+
+        bitstreamIn.Read(m_PlayerNode.ID);
+        bitstreamIn.Read(m_PlayerNode.TeamIdentifier);
         m_PlayerNode.respawn();
         m_PlayerNode.updateColor(m_Device);
 
         size_t size;
-		a_Data->Read(size);
+        bitstreamIn.Read(size);
 
         for(size_t i = 0u; i < size; i++)
         {
             long long id;
             ETeamIdentifier teamID;
 
-			a_Data->Read(id);
-			a_Data->Read(teamID);
+            bitstreamIn.Read(id);
+            bitstreamIn.Read(teamID);
 
             Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false);
             
@@ -304,27 +311,31 @@ namespace Confus
         m_PlayerArray.push_back(&m_PlayerNode);
     }
 
-    void Game::addOtherPlayer(RakNet::BitStream* a_Data)
+    void Game::addOtherPlayer(RakNet::Packet* a_Data)
     {
-		a_Data->IgnoreBytes(sizeof(RakNet::MessageID));
+        RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
+
+        bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
 
         long long id;
         ETeamIdentifier teamID;
 
-		a_Data->Read(id);
-		a_Data->Read(teamID);
+        bitstreamIn.Read(id);
+        bitstreamIn.Read(teamID);
 
         Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false);
         m_PlayerArray.push_back(newPlayer);
     }
 
-    void Game::removePlayer(RakNet::BitStream* a_Data)
+    void Game::removePlayer(RakNet::Packet* a_Data)
     {
-		a_Data->IgnoreBytes(sizeof(RakNet::MessageID));
+        RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
+
+        bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
 
         long long id;
 
-		a_Data->Read(id);
+        bitstreamIn.Read(id);
 
         for(size_t i = 0u; i < m_PlayerArray.size(); i++)
         {

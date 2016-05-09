@@ -68,7 +68,7 @@ namespace ConfusServer
             /// <summary> Adds a function to the event in the callback function map. </summary>
             /// <param name="a_Event">The server event that should trigger the function.</param>
             /// <param name="a_Function">The function that should be added to the map.</param>
-            void addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::BitStream* a_Data)> a_Function);
+            void addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function);
             void sendMessage(RakNet::BitStream & a_InputStream, PacketReliability a_Reliability);
             void broadcastPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Excluded = nullptr);
             void sendPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Address);

@@ -60,7 +60,7 @@ namespace ConfusServer
             return openConnections;
         }
 
-        void Connection::addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::BitStream* a_Data)> a_Function)
+        void Connection::addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function)
         {
             m_CallbackFunctionMap[a_Event].push_back(a_Function);
         }

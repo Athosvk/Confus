@@ -262,12 +262,14 @@ namespace Confus
 	{
         m_Connection = a_Connection;
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::BitStream* a_Data)
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::Packet* a_Data)
         {
+            RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
+
             irr::core::vector3df newPosition;
 
-            a_Data->IgnoreBytes(sizeof(unsigned char));
-            a_Data->Read(newPosition);
+            bitstreamIn.IgnoreBytes(sizeof(unsigned char));
+            bitstreamIn.Read(newPosition);
 
             CameraNode->setPosition(newPosition);
         });
