@@ -245,12 +245,6 @@
     <ClInclude Include="..\ConfusShared\Physics\CollisionRegistrar.h">
       <Filter>Shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\TeamIdentifier.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\ConfusShared\Physics\Collider.h">
       <Filter>Shared</Filter>
     </ClInclude>
