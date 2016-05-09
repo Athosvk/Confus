@@ -20,7 +20,7 @@ namespace Confus
 		private:
 			/// <summary> The audio source pool used for the playing of sounds </summary>
 			/// <remarks> Individual sources allocated on the heap so that we can pass pointers to them around </remarks>
-			std::vector<std::unique_ptr<OpenALSource>> m_Sources;
+			std::vector<std::unique_ptr<OpenAL::OpenALSource>> m_Sources;
 			/// <summary> The cache that keep strack of the used buffers by filename </summary>
 			/// <remarks> Individual buffers allocated on the heap, so that we can pass pointers to them around </remarks>
 			std::unordered_map<std::string, std::unique_ptr<OpenAL::OpenALBuffer>> m_BufferCache;
@@ -34,7 +34,7 @@ namespace Confus
 
 			/// <summary> Gets an inactive audiosource to play sounds with </summary>
 			/// <returns> An inactive audiosource </returns>
-			OpenALSource* getAudioSource();
+			OpenAL::OpenALSource* getAudioSource();
 			
 			/// <summary>
 			/// Creates a sound to play from
@@ -46,7 +46,7 @@ namespace Confus
 			/// <summary> Creates a new audio audio source in the pool </summary>
 			/// <returns> The newly allocated audio source </returns>
 			/// <remarks> Throws if the pool would exceed 16 audio sources, which is usually the hardware limit in terms of channels </remarks>
-			OpenALSource* createNewAudioSource();
+			OpenAL::OpenALSource* createNewAudioSource();
 
 			/// <summary> Retrieves the buffer associated with a given file(path) </summary>
 			/// <param name="a_FilePath">The filepath to the buffer/file</param>

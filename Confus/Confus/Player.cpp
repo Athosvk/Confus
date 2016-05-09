@@ -4,6 +4,9 @@
 #include "Player.h"
 #include "EventManager.h"
 #include "Flag.h"
+#include "../Confusshared/Physics/PhysicsWorld.h"
+#include "../Confusshared/Physics/BoxCollider.h"
+#include "../Confusshared/Physics/RigidBody.h"
 
 namespace Confus
 {
@@ -11,8 +14,9 @@ namespace Confus
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
 
-    Player::Player(irr::IrrlichtDevice* a_Device, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Audio::AudioManager* a_AudioManager)
-        : m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
+
+    Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Confus::Audio::AudioManager* a_AudioManager)
+		: m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f)),
         irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
         TeamIdentifier(a_TeamIdentifier),
         CarryingFlag(EFlagEnum::None)     
@@ -38,30 +42,15 @@ namespace Confus
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
         }
 
-        m_KeyMap[0].Action = irr::EKA_MOVE_FORWARD;
-        m_KeyMap[0].KeyCode = irr::KEY_KEY_W;
-
-        m_KeyMap[1].Action = irr::EKA_MOVE_BACKWARD;
-        m_KeyMap[1].KeyCode = irr::KEY_KEY_S;
-
-        m_KeyMap[2].Action = irr::EKA_STRAFE_LEFT;
-        m_KeyMap[2].KeyCode = irr::KEY_KEY_A;
-
-        m_KeyMap[3].Action = irr::EKA_STRAFE_RIGHT;
-        m_KeyMap[3].KeyCode = irr::KEY_KEY_D;
-
-        m_KeyMap[4].Action = irr::EKA_JUMP_UP;
-        m_KeyMap[4].KeyCode = irr::KEY_SPACE;
-
         if(a_MainPlayer) 
         {
-            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, true);
+            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.0f, 1, nullptr, 0, true, 0.0f);
             CameraNode->setFOV(70.f);
             CameraNode->setNearValue(0.1f);
         }
         else 
         {
-            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, false);
+            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.0f, 1, nullptr, 0, true, 0.0f, false, false);
         }
         if(a_TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
@@ -73,12 +62,17 @@ namespace Confus
         }
 	    PlayerNode->setParent(this);
 		setParent(CameraNode);
+		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.6f, 2.7f, 0.6f), CameraNode,
+			Physics::ECollisionFilter::Player, ~Physics::ECollisionFilter::Player);
+		m_Collider->getRigidBody()->disableSleeping();
+		m_Collider->getRigidBody()->setOffset(irr::core::vector3df(0.0f, -0.65f, -0.2f));
         startWalking();
 
         m_SoundEmitter = new Audio::PlayerAudioEmitter(this, a_AudioManager);
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
+		PlayerNode->setAnimationEndCallback(this);
     }
 
 	Player::~Player() {
@@ -98,6 +92,34 @@ namespace Confus
                 startLightAttack();
             }
         }
+
+		auto movementDirection = irr::core::vector3df();
+		if(a_EventManager.IsKeyDown(irr::KEY_KEY_W))
+		{
+			movementDirection.Z = 1.0f;
+		}
+		else if(a_EventManager.IsKeyDown(irr::KEY_KEY_S))
+		{
+			movementDirection.Z = -1.0f;
+		}
+		if(a_EventManager.IsKeyDown(irr::KEY_KEY_A))
+		{
+			movementDirection.X = -1.0f;
+		}
+		else if(a_EventManager.IsKeyDown(irr::KEY_KEY_D))
+		{
+			movementDirection.X = 1.0f;
+		}
+		//Rotate with the negative xz-rotation (around the Y axis), as
+		//the scene node convention seems to be clockwise while the rotate function
+		//is counter-clockwise
+		movementDirection.rotateXZBy(-CameraNode->getRotation().Y);
+		movementDirection = movementDirection.normalize();
+		auto rigidBody = m_Collider->getRigidBody();
+		const float Speed = 15.0f;
+		auto resultingVelocity = irr::core::vector3df(movementDirection.X, 0.0f, movementDirection.Z) * Speed
+			+ irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
+		rigidBody->setVelocity(resultingVelocity);
     }
 
     void Player::render()
@@ -110,17 +132,6 @@ namespace Confus
         return m_Mesh->getBoundingBox();
     }
 
-    void Player::setLevelCollider(irr::scene::ISceneManager* a_SceneManager,
-        irr::scene::ITriangleSelector* a_Level)
-    {
-        CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level, PlayerNode, {0.1f, 0.2f, 0.1f}, { 0, -1, 0 }, {0, 1.5f, 0}, 1));
-        
-        irr::scene::ITriangleSelector* selector = nullptr;
-        selector = a_SceneManager->createTriangleSelector(PlayerNode);
-        CameraNode->setTriangleSelector(selector);
-        selector->drop();
-    }
-
     void Player::startWalking() const
     {
         PlayerNode->setAnimationEndCallback(nullptr);
@@ -128,6 +139,14 @@ namespace Confus
         PlayerNode->setFrameLoop(0, 13);
         PlayerNode->setCurrentFrame(7);
         PlayerNode->setAnimationSpeed(24);
+    }
+
+    void Player::stopWalking() const
+    {
+        PlayerNode->setAnimationEndCallback(nullptr);
+        PlayerNode->setLoopMode(false);
+        PlayerNode->setCurrentFrame(7);
+        PlayerNode->setAnimationSpeed(0);
     }
 
     void Player::initializeAttack()
@@ -147,7 +166,6 @@ namespace Confus
         m_Weapon.Damage = LightAttackDamage;
         m_SoundEmitter->playAttackSound(false);
         initializeAttack();
-
     }
 
     void Player::startHeavyAttack()
@@ -197,6 +215,20 @@ namespace Confus
 			}
         }
 
+        if(m_Collider->getRigidBody()->getVelocity().X != 0.0f && m_Collider->getRigidBody()->getVelocity().Z != 0.0f)
+        {
+            if(!m_Attacking && !m_Walking)
+            {
+                startWalking();
+                m_Walking = true;
+            }
+        }
+        else if(m_Walking && !m_Attacking)
+        {
+            stopWalking();
+            m_Walking = false;
+        }
+
         if(CameraNode->getPosition().Y <= -10) {
             respawn();
 			if (FlagPointer != nullptr) {
@@ -207,26 +239,14 @@ namespace Confus
 
     void Player::respawn()
     {
-        irr::scene::ISceneNodeAnimatorCollisionResponse * animator = 0;
-
-        irr::core::list<irr::scene::ISceneNodeAnimator*>::ConstIterator iterator = CameraNode->getAnimators().begin();
-
-        for(; iterator != CameraNode->getAnimators().end(); ++iterator)
-        {
-            animator = (irr::scene::ISceneNodeAnimatorCollisionResponse*)(*iterator);
-            if(animator->getType() == irr::scene::ESNAT_COLLISION_RESPONSE)
-                break;
-        }
-
+		PlayerHealth.reset();
         if(TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
-             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
-             animator->setTargetNode(CameraNode);
+            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
         }
         else if(TeamIdentifier == ETeamIdentifier::TeamRed)
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
-            animator->setTargetNode(CameraNode);
         }
     }
 

@@ -12,10 +12,14 @@ namespace Confus
 		if (a_Damage > 0)
 		{
 			m_Health -= a_Damage;
+			// play hit sound
 			if (m_Health <= 0)
 			{
 				m_Health = 0;
-				m_DeathCallback(m_AttachedNode);
+				if(m_DeathCallback)
+				{
+					m_DeathCallback(m_AttachedNode);
+				}
 			}
 		}
 	}
@@ -40,5 +44,10 @@ namespace Confus
 	int Health::getHealth()
 	{
 		return m_Health;
+	}
+
+	void Health::reset()
+	{
+		m_Health = m_MaxHealth;
 	}
 }

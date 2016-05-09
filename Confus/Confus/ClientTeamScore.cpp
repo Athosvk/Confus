@@ -10,7 +10,7 @@ namespace Confus
 
     void ClientTeamScore::setTeamScore(ETeamIdentifier a_TeamIdentifier, int a_Score)
     {
-        switch(a_TeamIdentifier)
+         switch(a_TeamIdentifier)
         {
         case ConfusShared::ETeamIdentifier::TeamRed:
             RedTeamScore = a_Score;

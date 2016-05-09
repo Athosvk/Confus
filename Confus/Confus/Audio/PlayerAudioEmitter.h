@@ -14,22 +14,23 @@ namespace Confus
         /// Class PlayerAudioEmitter emits sounds like footsteps and attacking sounds from each individual player.
         /// </summary>
         class PlayerAudioEmitter
-        {
-            std::vector<Sound> m_AudioSourceFootsteps;
-            std::vector<Sound> m_AudioSourceGrunts;
-            std::vector<Sound> m_AudioSourceSwordSwoshes;
-            
-            irr::scene::ISceneNode* m_AttachedPlayer;
+		{
+			/// <summary> Sound u emit when hit </summary>
+			//Sound m_HitSound;
+			/// <summary> The footstep sounds </summary>
+			std::vector<Sound> m_Footsteps;
+			/// <summary> The grunt sounds </summary>
+			std::vector<Sound> m_Grunts;			
+			/// <summary> The sword slash sounds </summary>
+			std::vector<Sound> m_SwordSwoshes;            
+			/// <summary> The player emmitting the sounds </summary>
+			irr::scene::ISceneNode* m_AttachedPlayer;
         public:            
             /// <summary>
             /// Initializes a new instance of the <see cref="PlayerAudioEmitter"/> class.
             /// </summary>
             /// <param name="a_AttachedPlayer">The player that owns this emitter.</param>
             PlayerAudioEmitter(irr::scene::ISceneNode* a_AttachedPlayer, AudioManager* a_AudioManager);
-            /// <summary>
-            /// Finalizes an instance of the <see cref="PlayerAudioEmitter"/> class.
-            /// </summary>
-            ~PlayerAudioEmitter();
             /// <summary>
             /// Plays a random footstep sound.
             /// </summary>
@@ -47,7 +48,11 @@ namespace Confus
             /// Plays a random sword swosh.
             /// </summary>
             void playRandomSwordSwosh();
-            /// <summary>
+			/// <summary>
+			/// Plays a random sword swosh.
+			/// </summary>
+			void playHitSound();
+			/// <summary>
             /// Updates the position of this instance.
             /// </summary>
             void updatePosition() const;            

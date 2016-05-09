@@ -31,6 +31,7 @@ namespace Confus
         ClientConnection::~ClientConnection()
         {
 			//True is sent to notify the server so we can exit gracefully
+			if(m_Connected)
 			m_Interface->CloseConnection(getServerAddress(), true);
             //spin wait to allow CloseConnection to finish
             while(getConnectionCount() > 0)

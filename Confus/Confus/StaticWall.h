@@ -43,10 +43,6 @@ namespace Confus
         /// <param name="a_Rotation">The world rotation of the scene node.</param>
         void setSceneNode(irr::core::vector3d<float> a_Position, irr::core::vector3d<float> a_Rotation);
         /// <summary>
-        /// Creates a collision response animator between the player and the wall.
-        /// </summary>
-        void addMeshCollider();
-        /// <summary>
         /// Adds the light to the front of the wall.
         /// </summary>
         /// <param name="a_Position">The position of the light relative to the wall.</param>

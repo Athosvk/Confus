@@ -1,20 +1,20 @@
-#include <irrlicht/irrlicht.h>
+#include <Irrlicht/irrlicht.h>
 #include <IrrAssimp/IrrAssimp.h>
 #include <iostream>
 
 #include "Flag.h"
 #include "Player.h"
-#include "Collider.h"
+#include "ClientTeamScore.h"
 
-#define Debug_Console
-#include "../Common/Debug.h"
+#include "../ConfusShared/Physics/PhysicsWorld.h"
+#include "../ConfusShared/Physics/BoxCollider.h"
 
-
-
-namespace Confus {
-
-	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier) : m_TeamIdentifier(a_TeamIdentifier),
-				m_FlagStatus(EFlagEnum::FlagBase) {
+namespace Confus 
+{
+	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, Physics::PhysicsWorld& a_PhysicsWorld) : 
+		m_TeamIdentifier(a_TeamIdentifier),
+		m_FlagStatus(EFlagEnum::FlagBase) 
+	{
         //Get drivers to load model
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
@@ -25,6 +25,22 @@ namespace Confus {
         m_FlagNode = sceneManager->addMeshSceneNode(mesh, 0, 2);
         m_FlagNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
         m_FlagNode->setScale({ 1.5f, 1.5f, 1.5f });
+		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(1.0f, 3.0f, 1.0f), m_FlagNode, Physics::ECollisionFilter::Interactable,
+			Physics::ECollisionFilter::All);
+		m_Collider->getRigidBody()->makeKinematic();
+		m_Collider->getRigidBody()->enableTriggerState();
+		m_Collider->setTriggerEnterCallback([this](Physics::BoxCollider* a_Other)
+		{
+			auto collidedNode = a_Other->getRigidBody()->getAttachedNode();
+			if (!collidedNode->getChildren().empty())
+			{
+				Player* player = dynamic_cast<Player*>(*collidedNode->getChildren().begin());
+				if (player != nullptr)
+				{
+					captureFlag(player);
+				}
+			}
+		});
 
         m_FlagOldParent = m_FlagNode->getParent();
 
@@ -35,28 +51,6 @@ namespace Confus {
         initParticleSystem(sceneManager);
 	}
 
-    void Flag::setCollisionTriangleSelector(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_TriangleSelector) 
-    {
-        auto animator = a_SceneManager->createCollisionResponseAnimator(a_TriangleSelector, m_FlagNode, { 1.25f, 1.f, 1.25f });
-        m_Collider = new Collider(animator);
-        m_Collider->setCallback([this](irr::scene::ISceneNode* a_CollidedNode)
-        {
-            if(Player* player = dynamic_cast<Player*>(a_CollidedNode->getParent())) 
-            {
-                captureFlag(player);
-                return true;
-            }
-            else if(a_CollidedNode->getID() == 1) 
-			{
-				std::cout << "Failed to get player class from attached node.";
-                return true;
-            }
-            return false;
-        });
-        animator->setCollisionCallback(m_Collider);
-        m_FlagNode->addAnimator(animator);
-    }
-
 	//Set color & position based on color of flag
 	void Flag::setColor(irr::video::IVideoDriver* a_VideoDriver) 
 	{
@@ -64,13 +58,13 @@ namespace Confus {
 		{
 		case ETeamIdentifier::TeamBlue:
             m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_BLUE.png"));
-			m_StartPosition.set({ -2.0f, 15.f, -2.f });
+			m_StartPosition.set({ -2.0f, 5.f, -2.f });
 			m_StartRotation.set({ 0.f, 0.f, 0.f });
 			returnToStartPosition();
 			break;
 		case ETeamIdentifier::TeamRed:
             m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_RED.png"));
-			m_StartPosition.set({ 1.5f, 15.f, -72.f });
+			m_StartPosition.set({ 1.5f, 5.f, -72.f });
 			m_StartRotation.set({ 0.f, 180.f, 0.f });
             returnToStartPosition();
 			break;
@@ -81,7 +75,13 @@ namespace Confus {
 		}
 	}
 
-    void Flag::initParticleSystem(irr::scene::ISceneManager* a_SceneManager) 
+	void Flag::setFlagStatus(EFlagEnum a_FlagStatus)
+	{
+ 		FlagStatusChangedEvent(m_TeamIdentifier, m_FlagStatus, a_FlagStatus);
+		m_FlagStatus = a_FlagStatus;
+	}
+
+	void Flag::initParticleSystem(irr::scene::ISceneManager* a_SceneManager)
     {
         //Create Particle System
         irr::scene::IParticleSystemSceneNode* particleSystem = a_SceneManager->addParticleSystemSceneNode(false);
@@ -127,7 +127,12 @@ namespace Confus {
         }
     }
 
-	 const EFlagEnum Flag::getFlagStatus() const
+	 const ETeamIdentifier Flag::getTeamIdentifier() const
+	 {
+		 return m_TeamIdentifier;
+	 }
+
+	 const EFlagEnum  Flag::getFlagStatus() const
 	 {
 		 return m_FlagStatus;
 	 }
@@ -146,7 +151,7 @@ namespace Confus {
         {
             // Capturing flag if player has no flag
             m_FlagNode->setParent(a_PlayerObject->PlayerNode);            
-            m_FlagStatus = EFlagEnum::FlagTaken;
+            setFlagStatus(EFlagEnum::FlagTaken);
             a_PlayerObject->FlagPointer = this;
             a_PlayerObject->CarryingFlag = EFlagEnum::FlagTaken;
 		}
@@ -182,6 +187,7 @@ namespace Confus {
 		a_PlayerObject->FlagPointer->returnToStartPosition();
 		a_PlayerObject->FlagPointer = nullptr;
         a_PlayerObject->CarryingFlag = EFlagEnum::None;
+		 ClientTeamScore::setTeamScore(a_PlayerObject->TeamIdentifier, ClientTeamScore::getTeamScore(a_PlayerObject->TeamIdentifier) + 1);
 	}
 
 	void Flag::drop(Player* a_PlayerObject) 
@@ -189,8 +195,8 @@ namespace Confus {
         m_FlagNode->setParent(m_FlagOldParent);
         m_FlagNode->setPosition(a_PlayerObject->PlayerNode->getAbsolutePosition());
         a_PlayerObject->FlagPointer = nullptr;
-        m_FlagStatus = EFlagEnum::FlagDropped;
         a_PlayerObject->CarryingFlag = EFlagEnum::None;
+		setFlagStatus(EFlagEnum::FlagDropped);
 	}
 
     void Flag::setStartPosition(irr::core::vector3df a_Position) 
@@ -207,15 +213,10 @@ namespace Confus {
         m_FlagNode->setParent(m_FlagOldParent);
         m_FlagNode->setPosition(m_StartPosition);
         m_FlagNode->setRotation(m_StartRotation);
-		m_FlagStatus = EFlagEnum::FlagBase;
+		setFlagStatus(EFlagEnum::FlagBase);
     }
-
-	irr::scene::ITriangleSelector* Flag::GetTriangleSelector(irr::scene::ISceneManager* a_SceneManager) {
-		return a_SceneManager->createTriangleSelectorFromBoundingBox(m_FlagNode);
-	}
 
 	Flag::~Flag() {
         m_FlagNode->setParent(m_FlagOldParent);
-		delete(m_Collider);
 	}
 }

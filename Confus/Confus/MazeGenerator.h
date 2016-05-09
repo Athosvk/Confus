@@ -50,15 +50,16 @@ namespace Confus
 		/// <summary> The sound played when the maze changes/refills </summary>
 		Audio::Sound m_MazeChangeSound;
 	public:
-        /// <summary> Initializes a new instance of the <see cref="MazeGenerator"/> class </summary>
-        /// <param name="a_Device">The instance of the IrrlichtDevice</param>
-        /// <param name="a_MazeSizeX">The maze size width.</param>
-        /// <param name="a_MazeSizeY">The maze size length.</param>
-        /// <param name="a_StartPosition">The startposition for walls.</param>
-        /// <param name="a_InitialSeed">The initial seed used to generate the first maze.</param>
-        /// <param name="a_GenerateStartPoint">The generation start point.</param>
-		MazeGenerator(irr::IrrlichtDevice * a_Device, int a_MazeSizeX, int a_MazeSizeY, irr::core::vector3df a_StartPosition, 
-			int a_InitialSeed, irr::core::vector2df a_GenerateStartPoint, Audio::AudioManager* a_AudioManager);
+		/// <summary> Initializes a new instance of the <see cref="MazeGenerator" /> class </summary>
+		/// <param name="a_Device">The instance of the IrrlichtDevice</param>
+		/// <param name="a_MazeSizeX">The maze size width.</param>
+		/// <param name="a_MazeSizeY">The maze size length.</param>
+		/// <param name="a_InitialSeed">The initial seed used to generate the first maze.</param>
+		/// <param name="a_GenerateStartPoint">The generation start point.</param>
+		/// <param name="a_PhysicsWorld">The physics world </param>
+		/// <param name="a_AudioManager">The audio manager </param>
+		MazeGenerator(irr::IrrlichtDevice * a_Device, int a_MazeSizeX, int a_MazeSizeY, int a_InitialSeed,
+			irr::core::vector2df a_GenerateStartPoint, Physics::PhysicsWorld& a_PhysicsWorld, Audio::AudioManager* a_AudioManager);
 
 		/// <summary>
 		/// The fixed update used to update the state of the main maze

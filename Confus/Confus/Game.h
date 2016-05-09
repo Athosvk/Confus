@@ -12,6 +12,8 @@
 #include "GUI.h"
 #include "ClientTeamScore.h"
 #include "Audio/AudioManager.h"
+#include "../ConfusShared/Physics/PhysicsWorld.h"
+#include "Announcer.h"
 
 namespace Confus
 {    
@@ -22,6 +24,11 @@ namespace Confus
     /// </summary>
     class Game
     {
+	public:
+		/// <summary>
+		/// The maximum score used to determine if someone has won
+		/// </summary>
+		static const int MaxScore;
     private:
         /// <summary>
         /// The rate at which fixed updates are carried out
@@ -37,10 +44,12 @@ namespace Confus
 		/// Statics are avoided to make code clearer, hence this is not a static
         /// </summary>
         irr::IrrlichtDevice* m_Device;
+		/// <summary> The currently active physics world </summary>
+		Physics::PhysicsWorld m_PhysicsWorld;
         /// <summary>
         /// The OpenAL listener that is attached to the camera.
         /// </summary>
-        Audio::OpenALListener m_Listener;
+        Audio::OpenAL::OpenALListener m_Listener;
 		Audio::AudioManager m_AudioManager;
 		/// <summary>
 		/// MazeGenerator that hasa accesible maze
@@ -56,8 +65,7 @@ namespace Confus
         /// The Players to test with.
         /// </summary>
         Player m_PlayerNode;
-        RespawnFloor m_RedRespawnFloor;
-        RespawnFloor m_BlueRespawnFloor;
+
 
         std::vector<Player*> m_PlayerArray;
         /// <summary>
@@ -68,6 +76,11 @@ namespace Confus
         /// The Red Flag.
         /// </summary>
         Flag m_RedFlag;
+
+		Announcer m_Announcer;
+		RespawnFloor m_RedRespawnFloor;
+		RespawnFloor m_BlueRespawnFloor;
+
         /// <summary>
         /// The delay between the last and future fixed update
         /// </summary>
@@ -90,6 +103,7 @@ namespace Confus
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
 
+		
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
@@ -105,11 +119,8 @@ namespace Confus
         /// </summary>
         void run();
     private:
-        /// <summary>
-        /// Processes the triangle selectors.
-        /// </summary>
-        void processTriangleSelectors();
-        irr::scene::IMetaTriangleSelector* processLevelMetaTriangles();        
+        /// <summary> Creates all the colliders for the level </summary>
+        void initializeLevelColliders();
         /// <summary>
         /// Initializes the connection to the server.
         /// </summary>
@@ -134,6 +145,7 @@ namespace Confus
         /// Renders the objects in the game
         /// </summary>
         void render();
+
         /// <summary>
         /// Creates a new Player object for this user, this player will be regarded as THEIR player.
         /// </summary>
@@ -147,5 +159,8 @@ namespace Confus
         /// </summary>
         void updateOtherPlayer(RakNet::Packet* a_Data);
         void removePlayer(RakNet::Packet* a_Data);
+
+		/// <summary> Updates the (absolute) transformations of all the scene nodes recursively downwards </summary>
+		void updateSceneTransformations();
     };
 }

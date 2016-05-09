@@ -7,8 +7,8 @@
 #include "Game.h"
 #include "Player.h"
 #include "Flag.h"
-#include "../Common/Debug.h"
-#include "../Common/TeamIdentifier.h"
+#include "../ConfusShared/Debug.h"
+#include "../ConfusShared/TeamIdentifier.h"
 
 namespace ConfusServer
 {
