@@ -10,6 +10,7 @@
 #include "Flag.h"
 #include "FlagGUI.h"
 
+#include "ScoreGUI.h"
 #define DEBUG_CONSOLE
 #include "../ConfusShared/Debug.h"
 #include "../ConfusShared/TeamIdentifier.h"
@@ -19,6 +20,7 @@ namespace Confus
 {
     const double Game::FixedUpdateInterval = 0.03;
     const double Game::MaxFixedUpdateInterval = 0.1;
+	const int Game::MaxScore = 3; // dont change this for now. Breaks redside score.
 
     Game::Game(irr::core::dimension2d<irr::u32> a_Resolution)
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL, a_Resolution)),
@@ -30,7 +32,8 @@ namespace Confus
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_PhysicsWorld),
         m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
         m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, -83.f)),
-        m_GUI(m_Device, &m_PlayerNode, &m_AudioManager)
+        m_GUI(m_Device, &m_PlayerNode, &m_AudioManager),
+		m_Announcer(&m_RedFlag,&m_BlueFlag,&m_PlayerNode, &m_AudioManager)
     {
 		auto videoDriver = m_Device->getVideoDriver();
 		m_GUI.addElement<FlagGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(50, 50),
@@ -42,6 +45,12 @@ namespace Confus
 			videoDriver->getTexture("Media/Textures/MirroredFlagUIImage.png"),
 			videoDriver->getTexture("Media/Textures/MirroredExclamationMark.png"),
 			irr::core::vector2df(0.56f, 0.0f), true);
+
+		m_GUI.addElement<ScoreGUI>(m_Device, &m_RedFlag, irr::core::dimension2du(30, 30),
+			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.59f, 0.061f));
+
+		m_GUI.addElement<ScoreGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(30, 30),
+			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.45f, 0.061f));
     }
 
     Game::~Game()
@@ -55,6 +64,7 @@ namespace Confus
 
     void Game::run()
     {
+		//m_Listener.init();
         initializeConnection();
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
@@ -120,11 +130,11 @@ namespace Confus
 					if(std::string(node->getName()).find("Ground", 0) != std::string::npos)
 					{
 						collider = m_PhysicsWorld.createBoxCollider(node, Physics::ECollisionFilter::LevelStatic,
-							Physics::ECollisionFilter::Player);
+							Physics::ECollisionFilter::Player | Physics::ECollisionFilter::Interactable);
 					}
 					else if (std::string(node->getName()).find("Basefolder", 0) == std::string::npos)
 					{
-						collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, Physics::ECollisionFilter::LevelStatic,
+						collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, Physics::ECollisionFilter::LevelStatic | Physics::ECollisionFilter::Interactable,
 							Physics::ECollisionFilter::Player);
                     }
                     else

@@ -38,6 +38,7 @@ namespace Confus
 		Health PlayerHealth;
         /// <summary> Determines if this player is this users player or not </summary>
         bool MainPlayer = false;
+
         long long ID;
 	private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
