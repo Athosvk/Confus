@@ -14,13 +14,8 @@ namespace Confus
 
     void WinScreen::update()
     {
-
-        
-
         m_BreakTimer += m_DeltaTime;
 
-
-        // Show text on GUI
         if(m_GameWinner == ETeamIdentifier::TeamBlue)
         {
             m_WinningText->setText((L"Blue team won! \nPress SPACE to restart now! \nPress ESCAPE to exit.\nExitting in: " + std::to_wstring(BreakTime - m_BreakTimer)).c_str());

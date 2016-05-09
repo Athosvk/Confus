@@ -107,7 +107,6 @@ namespace Confus
 
         void removePlayer(RakNet::Packet* a_Data);
 
-        // Inherited via BaseGame
         virtual void start() override;
         /// <summary>
         /// Updates the state of the objects in the game

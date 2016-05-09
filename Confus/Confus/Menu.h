@@ -9,7 +9,6 @@ namespace Confus
     private:
         irr::gui::IGUIStaticText* m_Text;
     private:
-        // Inherited via BaseGame
         virtual void start() override;
         virtual void update() override;
         virtual void fixedUpdate() override;

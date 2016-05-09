@@ -45,11 +45,10 @@ namespace ConfusServer
         m_TeamScoreManager.resetScore();
         m_MazeTimer = 0;
         broadcastMazeChange(19 + 20 + 21 + 22 + 23 + 24);
-
-        //Discuss: Communicate team identifier?
-        //for(Player* player : m_PlayerArray) {
-        //    player->resetPlayer();
-        //}
+		
+        for(Player* player : m_PlayerArray) {
+			player->resetPlayer();            
+        }
     }
 
     void Game::run()
@@ -187,7 +186,6 @@ namespace ConfusServer
             {
                 currentSeed = static_cast<int>(time(0)) % 1000;
                 broadcastMazeChange(currentSeed);
-                //m_TeamScoreManager.teamScoredPoint(static_cast<ETeamIdentifier>(1 + (rand() % 2)));
             }
             currentDelay += static_cast<float>(m_DeltaTime);
         }

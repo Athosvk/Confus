@@ -13,7 +13,6 @@ namespace Confus
         double m_BreakTimer = 0.0;
 
     private:
-        // Inherited via BaseGame
         virtual void start() override;
         virtual void update() override;
         virtual void fixedUpdate() override;
