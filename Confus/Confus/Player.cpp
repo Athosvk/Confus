@@ -15,11 +15,12 @@ namespace Confus
     const unsigned Player::HeavyAttackDamage = 30u;
 
 
-    Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Confus::Audio::AudioManager* a_AudioManager)
+	Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Confus::Audio::AudioManager* a_AudioManager)
 		: m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f)),
-        irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
-        TeamIdentifier(a_TeamIdentifier),
-        CarryingFlag(EFlagEnum::None)     
+		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
+		TeamIdentifier(a_TeamIdentifier),
+		CarryingFlag(EFlagEnum::None),
+		PlayerHealth(m_SoundEmitter)
     {
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
