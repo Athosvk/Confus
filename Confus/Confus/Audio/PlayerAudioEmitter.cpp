@@ -52,6 +52,11 @@ namespace Confus
 			m_SwordSwoshes[std::rand() % 4].play();
         }
 
+		void PlayerAudioEmitter::playHitSound()
+		{
+			m_HitSound.play();
+		}
+
         void PlayerAudioEmitter::updatePosition() const
         {
             m_AttachedPlayer->updateAbsolutePosition();
@@ -79,6 +84,7 @@ namespace Confus
 
         void PlayerAudioEmitter::createAudioSources(AudioManager* a_AudioManager)
         {
+			m_HitSound = a_AudioManager->createSound("stereo.wav");
             for(int i = 0; i < 4; i++)
             {
                 if(i < 3)
