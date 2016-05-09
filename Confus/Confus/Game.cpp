@@ -237,6 +237,7 @@ namespace Confus
     {
 		m_MazeGenerator.fixedUpdate();
 		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
+        m_PlayerNode.fixedUpdate();
     }
 
     void Game::updateOtherPlayer(RakNet::Packet* a_Data)
