@@ -2,7 +2,8 @@
 
 namespace Confus
 {
-	Health::Health()
+	Health::Health(Audio::PlayerAudioEmitter* a_AudioEmitter)
+		: m_PlayerEmitter(a_AudioEmitter)
 	{
 		m_Health = m_MaxHealth;
 	}
@@ -12,7 +13,7 @@ namespace Confus
 		if (a_Damage > 0)
 		{
 			m_Health -= a_Damage;
-			// play hit sound
+			//m_PlayerEmitter->playHitSound();
 			if (m_Health <= 0)
 			{
 				m_Health = 0;

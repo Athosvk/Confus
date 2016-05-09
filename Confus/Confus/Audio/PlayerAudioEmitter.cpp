@@ -9,7 +9,7 @@ namespace Confus
     namespace Audio
     {
         PlayerAudioEmitter::PlayerAudioEmitter(irr::scene::ISceneNode* a_AttachedPlayer, AudioManager* a_AudioManager)
-			: m_AttachedPlayer(a_AttachedPlayer)
+			: m_AttachedPlayer(a_AttachedPlayer), m_HitSound(a_AudioManager->createSound("stereo.wav"))
         {
 			createAudioSources(a_AudioManager);
         }
@@ -84,7 +84,6 @@ namespace Confus
 
         void PlayerAudioEmitter::createAudioSources(AudioManager* a_AudioManager)
         {
-			m_HitSound = a_AudioManager->createSound("stereo.wav");
             for(int i = 0; i < 4; i++)
             {
                 if(i < 3)
