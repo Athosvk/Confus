@@ -16,15 +16,15 @@ namespace ConfusServer
     const double Game::MaxFixedUpdateInterval = 0.1;
 	const double Game::ProcessPacketsInterval = 0.03;
     const double Game::MazeDelay = 2.0;
-    const double Game::MazeChangeInterval = 10.0 - MazeDelay;
+    const double Game::MazeChangeInterval = 60.0 - MazeDelay;
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),
 		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
         m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, true),        
         m_SecondPlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, false),
-        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_TeamScoreManager),
-        m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_TeamScoreManager)
+        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, &m_TeamScoreManager),
+        m_RedFlag(m_Device, ETeamIdentifier::TeamRed, &m_TeamScoreManager)
     {
     }
 
@@ -171,7 +171,6 @@ namespace ConfusServer
             if(currentDelay == 0.0f)
             {
                 currentSeed = static_cast<int>(time(0)) % 1000;
-                m_TeamScoreManager.teamScoredPoint(static_cast<ETeamIdentifier>(1 + rand() % 2));
                 broadcastMazeChange(currentSeed);
             }
             currentDelay += static_cast<float>(m_DeltaTime);
