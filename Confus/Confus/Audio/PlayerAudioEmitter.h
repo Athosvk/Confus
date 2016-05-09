@@ -16,7 +16,7 @@ namespace Confus
         class PlayerAudioEmitter
 		{
 			/// <summary> Sound u emit when hit </summary>
-			Sound m_HitSound;
+			//Sound m_HitSound;
 			/// <summary> The footstep sounds </summary>
 			std::vector<Sound> m_Footsteps;
 			/// <summary> The grunt sounds </summary>

@@ -215,12 +215,15 @@ namespace Confus
 			}
         }
 
-        if(m_Collider->getRigidBody()->getVelocity() > irr::core::vector3df(0.0, 0.0, 0.0) && m_Attacking == false && m_Walking == false)
+        if(m_Collider->getRigidBody()->getVelocity().X != 0.0f && m_Collider->getRigidBody()->getVelocity().Z != 0.0f)
         {
-            startWalking();
-            m_Walking = true;
+            if(!m_Attacking && !m_Walking)
+            {
+                startWalking();
+                m_Walking = true;
+            }
         }
-        else if(m_Walking == true && m_Attacking == false)
+        else if(m_Walking && !m_Attacking)
         {
             stopWalking();
             m_Walking = false;
