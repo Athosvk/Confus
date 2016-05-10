@@ -289,12 +289,13 @@ namespace ConfusServer
                 movementDirection.rotateXZBy(-CameraNode->getRotation().Y);
                 movementDirection = movementDirection.normalize();
                 //TODO: Make the player on the server have new physics as well.
-
-              /* auto rigidBody = m_Collider->getRigidBody();
+                /*
+               auto rigidBody = m_Collider->getRigidBody();
                 const float Speed = 15.0f;
                 auto resultingVelocity = irr::core::vector3df(movementDirection.X, 0.0f, movementDirection.Z) * Speed
                     + irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
-                rigidBody->setVelocity(resultingVelocity);*/
+                rigidBody->setVelocity(resultingVelocity);
+                */
             }
     });
     }

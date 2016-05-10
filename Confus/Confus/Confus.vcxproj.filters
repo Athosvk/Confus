@@ -158,9 +158,6 @@
     <ClInclude Include="StaticWall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Collider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Maze.h">
       <Filter>Header Files</Filter>
     </ClInclude>
