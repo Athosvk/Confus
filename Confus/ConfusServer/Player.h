@@ -8,6 +8,12 @@
 
 namespace ConfusServer {
 
+    namespace Physics
+    {
+        class BoxCollider;
+        class PhysicsWorld;
+    }
+
 	namespace Audio 
     {
 		class PlayerAudioEmitter;
@@ -39,7 +45,7 @@ namespace ConfusServer {
    
 	private:
         Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
-
+        Physics::BoxCollider* m_Collider;
         void createAudioEmitter();
         void updateClient();
         void moveOnButtonPress(irr::EKEY_CODE a_Key);

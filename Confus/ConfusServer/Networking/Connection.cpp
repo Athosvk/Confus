@@ -43,10 +43,6 @@ namespace ConfusServer
                 {
                     m_Connected = true;
                 }
-                if(packet->data[0] == static_cast<unsigned char>(EPacketType::Player))
-                {
-                    std::cout << "Receiving a player packet.";
-                }
 
                 handlePacket(packet, static_cast<unsigned char>(packet->data[0]));
                 m_Interface->DeallocatePacket(packet);

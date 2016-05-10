@@ -1,10 +1,14 @@
-#include <IrrAssimp/IrrAssimp.h>
+ #include <IrrAssimp/IrrAssimp.h>
 #include <iostream>
 #include "Audio\PlayerAudioEmitter.h"
-#include "Player.h"
 #include <RakNet/BitStream.h>
 #include "EventManager.h"
 #include "Flag.h"
+#include "../Confusshared/Physics/PhysicsWorld.h"
+#include "../Confusshared/Physics/BoxCollider.h"
+#include "../Confusshared/Physics/RigidBody.h"
+
+#include "Player.h"
 
 namespace ConfusServer
 {
@@ -224,57 +228,73 @@ namespace ConfusServer
         {
             RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
 
-            unsigned int playerID;
-            irr::core::vector3df position;
-            irr::core::vector3df rotation;
-            EPlayerState state;
-            RakNet::Time stateChangeTime;
-            int8_t playerHealth;
-            bool forwardKeyPressed;
-            bool backwardKeyPressed;
-            bool leftKeyPressed;
-            bool rightKeyPressed;
-
+            RakNet::RakNetGUID playerID;
             bitstreamIn.IgnoreBytes(sizeof(unsigned char));
             bitstreamIn.Read(playerID);
-            bitstreamIn.Read(position);
-            bitstreamIn.Read(rotation);
-            bitstreamIn.Read(state);
-            bitstreamIn.Read(stateChangeTime);
-            bitstreamIn.Read(playerHealth);
-            bitstreamIn.Read(forwardKeyPressed);
-            bitstreamIn.Read(backwardKeyPressed);
-            bitstreamIn.Read(leftKeyPressed);
-            bitstreamIn.Read(rightKeyPressed);
+            
+            // Only continue if the playerID in the packet matches ours.
+            if(playerID == static_cast<RakNet::RakNetGUID>(ID))
+            {
+                irr::core::vector3df position;
+                irr::core::vector3df rotation;
+                EPlayerState state;
+                RakNet::Time stateChangeTime;
+                int8_t playerHealth;
+                bool forwardKeyPressed;
+                bool backwardKeyPressed;
+                bool leftKeyPressed;
+                bool rightKeyPressed;
 
-            setRotation(rotation);
-             
-            if(state == EPlayerState::LightAttacking)
-            {
-                startLightAttack();
-            }
-            else if(state == EPlayerState::HeavyAttacking)
-            {
-                startHeavyAttack();
-            }
+                bitstreamIn.Read(position);
+                bitstreamIn.Read(rotation);
+                bitstreamIn.Read(state);
+                bitstreamIn.Read(stateChangeTime);
+                bitstreamIn.Read(playerHealth);
+                bitstreamIn.Read(forwardKeyPressed);
+                bitstreamIn.Read(backwardKeyPressed);
+                bitstreamIn.Read(leftKeyPressed);
+                bitstreamIn.Read(rightKeyPressed);
+                
+                setRotation(rotation);
 
-            // Change this into something better when we are not using irrlichts FPS camera. 
-            if(forwardKeyPressed)
-            {
-                std::cout << "Forward key pressed by player: " << std::endl;
-                CameraNode->setPosition(irr::core::vector3df(getPosition().X, getPosition().Y, getPosition().Z) + 0.1f);
-            } 
-            else if(backwardKeyPressed)
-            {
-                CameraNode->setPosition(irr::core::vector3df(getPosition().X, getPosition().Y, getPosition().Z) - 0.1f);
-            }
-            else if(leftKeyPressed)
-            {
-                CameraNode->setPosition(irr::core::vector3df(getPosition().X + 0.1f, getPosition().Y, getPosition().Z));
-            }
-            else if(rightKeyPressed)
-            {
-                CameraNode->setPosition(irr::core::vector3df(getPosition().X - 0.1f, getPosition().Y, getPosition().Z));
+                if(state == EPlayerState::LightAttacking)
+                {
+                    startLightAttack();
+                }
+                else if(state == EPlayerState::HeavyAttacking)
+                {
+                    startHeavyAttack();
+                }
+
+                auto movementDirection = irr::core::vector3df();
+                if(forwardKeyPressed)
+                {
+                    movementDirection.Z = 1.0f;
+                }
+                else if(backwardKeyPressed)
+                {
+                    movementDirection.Z = -1.0f;
+                }
+                if(leftKeyPressed)
+                {
+                    movementDirection.X = -1.0f;
+                }
+                else if(rightKeyPressed)
+                {
+                    movementDirection.X = 1.0f;
+                }
+                //Rotate with the negative xz-rotation (around the Y axis), as
+                //the scene node convention seems to be clockwise while the rotate function
+                //is counter-clockwise
+                movementDirection.rotateXZBy(-CameraNode->getRotation().Y);
+                movementDirection = movementDirection.normalize();
+                //TODO: Make the player on the server have new physics as well.
+
+              /* auto rigidBody = m_Collider->getRigidBody();
+                const float Speed = 15.0f;
+                auto resultingVelocity = irr::core::vector3df(movementDirection.X, 0.0f, movementDirection.Z) * Speed
+                    + irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
+                rigidBody->setVelocity(resultingVelocity);*/
             }
     });
     }

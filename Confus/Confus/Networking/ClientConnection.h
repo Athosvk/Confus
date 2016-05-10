@@ -48,8 +48,6 @@ namespace Confus
         class ClientConnection
         {
 		private:
-            /// <summary> The RakNet interface for interacting with RakNet </summary>
-			RakNet::RakPeerInterface* m_Interface;
 			/// <summary> The messages it was not able to send yet due to not having a connection established </summary>
 			std::queue<RakNet::BitStream> m_StalledMessages;
 			/// <summary> Whether we are connected to a server</summary>
@@ -58,7 +56,8 @@ namespace Confus
             std::map<unsigned char, std::vector<std::function<void(RakNet::Packet* a_Data)>>> m_CallbackFunctionMap;
 
         public:
-           
+            /// <summary> The RakNet interface for interacting with RakNet </summary>
+            RakNet::RakPeerInterface* m_Interface;
             /// <summary> Initializes a new instance of the <see cref="ClientConnection"/> class. </summary>
             /// <param name="a_ServerIP">The ip address of the server to connect to.</param>
             /// <param name="a_ServerPort">The port oft the server to connect to.</param>

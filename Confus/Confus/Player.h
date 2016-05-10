@@ -56,7 +56,7 @@ namespace Confus
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
         /// <summary> The player's unique ID. </summary>
-        unsigned int m_PlayerID = 0;
+        RakNet::RakNetGUID m_PlayerID;
         /// <summary> The player's active state. </summary>
         EPlayerState m_PlayerState = EPlayerState::Alive;
         /// <summary> The player's health, ranging from 127 to -127. </summary>

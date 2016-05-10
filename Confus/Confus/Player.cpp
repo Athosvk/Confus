@@ -1,8 +1,11 @@
 #include <IrrAssimp/IrrAssimp.h>
 #include <iostream>
+#include <string>
 #include <RakNet/MessageIdentifiers.h>
 #include <RakNet/BitStream.h>
 #include <RakNet/GetTime.h>
+#include <RakNet/RakPeer.h>
+#include <RakNet/RakNetTypes.h>
 #include "Audio\PlayerAudioEmitter.h"
 #include "Networking/ClientConnection.h"
 #include "Player.h"
@@ -99,38 +102,11 @@ namespace Confus
             }
         }
 
-		auto movementDirection = irr::core::vector3df();
-		if(a_EventManager.IsKeyDown(irr::KEY_KEY_W))
-		{
-			movementDirection.Z = 1.0f;
-		}
-		else if(a_EventManager.IsKeyDown(irr::KEY_KEY_S))
-		{
-			movementDirection.Z = -1.0f;
-		}
-		if(a_EventManager.IsKeyDown(irr::KEY_KEY_A))
-		{
-			movementDirection.X = -1.0f;
-		}
-		else if(a_EventManager.IsKeyDown(irr::KEY_KEY_D))
-		{
-			movementDirection.X = 1.0f;
-		}
-		//Rotate with the negative xz-rotation (around the Y axis), as
-		//the scene node convention seems to be clockwise while the rotate function
-		//is counter-clockwise
-		movementDirection.rotateXZBy(-CameraNode->getRotation().Y);
-		movementDirection = movementDirection.normalize();
-		auto rigidBody = m_Collider->getRigidBody();
-		const float Speed = 15.0f;
-		auto resultingVelocity = irr::core::vector3df(movementDirection.X, 0.0f, movementDirection.Z) * Speed
-			+ irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
-		rigidBody->setVelocity(resultingVelocity);
     }
 
     void Player::render()
     {
-
+       
     }
 
     const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const
@@ -261,6 +237,8 @@ namespace Confus
      void Player::setConnection(Networking::ClientConnection* a_Connection)
 	{
         m_Connection = a_Connection;
+
+        m_PlayerID = m_Connection->m_Interface->GetGuidFromSystemAddress(RakNet::UNASSIGNED_SYSTEM_ADDRESS);
 
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::Packet* a_Data)
         {
