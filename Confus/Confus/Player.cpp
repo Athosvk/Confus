@@ -1,6 +1,5 @@
 #include <IrrAssimp/IrrAssimp.h>
 #include <iostream>
-#include <RakNet/MessageIdentifiers.h>
 #include <RakNet/BitStream.h>
 #include <RakNet/GetTime.h>
 #include "Audio\PlayerAudioEmitter.h"
@@ -21,11 +20,12 @@ namespace Confus
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
 
-	Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
+
+    Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Confus::Audio::AudioManager* a_AudioManager)
 		: m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f)),
-		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
-		TeamIdentifier(a_TeamIdentifier),
-		CarryingFlag(EFlagEnum::None)
+        irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
+        TeamIdentifier(a_TeamIdentifier),
+        CarryingFlag(EFlagEnum::None)     
     {
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
@@ -74,9 +74,9 @@ namespace Confus
 			Physics::ECollisionFilter::Player, ~Physics::ECollisionFilter::Player);
 		m_Collider->getRigidBody()->disableSleeping();
 		m_Collider->getRigidBody()->setOffset(irr::core::vector3df(0.0f, -0.65f, -0.2f));
-
-        createAudioEmitter();
         startWalking();
+
+        m_SoundEmitter = new Audio::PlayerAudioEmitter(this, a_AudioManager);
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
@@ -84,6 +84,7 @@ namespace Confus
     }
 
 	Player::~Player() {
+        delete(m_SoundEmitter);
 	}
 
     void Player::handleInput(EventManager& a_EventManager)
@@ -146,6 +147,14 @@ namespace Confus
         PlayerNode->setFrameLoop(0, 13);
         PlayerNode->setCurrentFrame(7);
         PlayerNode->setAnimationSpeed(24);
+    }
+
+    void Player::stopWalking() const
+    {
+        PlayerNode->setAnimationEndCallback(nullptr);
+        PlayerNode->setLoopMode(false);
+        PlayerNode->setCurrentFrame(7);
+        PlayerNode->setAnimationSpeed(0);
     }
 
     void Player::initializeAttack()
@@ -217,6 +226,20 @@ namespace Confus
 				FlagPointer->drop(this);
 			}
         }
+        if(m_Collider->getRigidBody()->getVelocity().X != 0.0f && m_Collider->getRigidBody()->getVelocity().Z != 0.0f)
+        {
+            if(!m_Attacking && !m_Walking)
+            {
+                startWalking();
+                m_Walking = true;
+            }
+        }
+        else if(m_Walking && !m_Attacking)
+        {
+            stopWalking();
+            m_Walking = false;
+        }
+
         if(CameraNode->getPosition().Y <= -10) {
             respawn();
 			if (FlagPointer != nullptr) {
@@ -253,10 +276,6 @@ namespace Confus
         CameraNode->setRotation(a_NewRotation);
     }
 
-    void Player::createAudioEmitter()
-    {
-        m_SoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
-    }
 
      void Player::setConnection(Networking::ClientConnection* a_Connection)
 	{

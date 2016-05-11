@@ -1,5 +1,5 @@
 #pragma once
-#include "../Common/TeamIdentifier.h"
+#include "../ConfusShared/TeamIdentifier.h"
 #include "TeamScore.h"
 
 namespace ConfusServer 
@@ -28,14 +28,14 @@ namespace ConfusServer
         irr::scene::IMeshSceneNode* m_FlagNode;
         Collider* m_Collider;
         irr::scene::ISceneNode* m_FlagOldParent = nullptr;
-        TeamScore m_TeamScore;
+        TeamScore* m_TeamScore;
 
     public: 
         /// <summary> Flag class constructor. </summary>
         /// <param name="a_Device">The active Irrlicht Device.</param>
         /// <param name="a_TeamIdentifier">The team's identifier the flag should have.</param>
         /// <param name="a_TeamScore">Reference to the teamscore class.</param>
-        Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, TeamScore a_TeamScore);
+        Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, TeamScore* a_TeamScore);
         /// <summary> Flag class destructor </summary>
         ~Flag();
 		/// <summary> Capture Flag a flag with the wanted playerobject parent. </summary>
@@ -60,6 +60,7 @@ namespace ConfusServer
 		/// <param name="a_TriangleSelector"> The triangle seletor that has the level and players. </param>
         void setCollisionTriangleSelector(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_TriangleSelector);
     private:
+		void setFlagStatus(EFlagEnum a_FlagStatus);
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
 		void setColor(irr::video::IVideoDriver* a_VideoDriver);
 		irr::video::SColor getColor();

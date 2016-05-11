@@ -1,12 +1,12 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
+
 #include "RakNet/RakNetSocket2.h"
 #include "Networking\Connection.h"
 #include "Health.h"
 #include "Weapon.h"
-
+#include "../ConfusShared/TeamIdentifier.h"
 #include "../ConfusShared/Networking/BitStreamStruct.h"
-#include "../Common/TeamIdentifier.h"
 
 namespace ConfusServer {
 

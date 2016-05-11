@@ -10,27 +10,30 @@
 #include "Flag.h"
 #include "FlagGUI.h"
 
+#include "ScoreGUI.h"
 #define DEBUG_CONSOLE
-#include "../Common/Debug.h"
-#include "../Common/TeamIdentifier.h"
+#include "../ConfusShared/Debug.h"
+#include "../ConfusShared/TeamIdentifier.h"
 #include "../ConfusShared/Physics/BoxCollider.h"
 
 namespace Confus
 {
     const double Game::FixedUpdateInterval = 0.03;
     const double Game::MaxFixedUpdateInterval = 0.1;
+	const int Game::MaxScore = 3; // dont change this for now. Breaks redside score.
 
     Game::Game(irr::core::dimension2d<irr::u32> a_Resolution)
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL, a_Resolution)),
 		m_PhysicsWorld(m_Device),
 		m_MazeGenerator(m_Device, 41, 40,(19+20+21+22+23+24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-			irr::core::vector2df(19., 20.), m_PhysicsWorld),
-        m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true),
+			irr::core::vector2df(19., 20.), m_PhysicsWorld, &m_AudioManager),
+        m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true, &m_AudioManager),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_PhysicsWorld),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_PhysicsWorld),
         m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
         m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, -83.f)),
-		m_GUI(m_Device, &m_PlayerNode)
+        m_GUI(m_Device, &m_PlayerNode, &m_AudioManager),
+		m_Announcer(&m_RedFlag,&m_BlueFlag,&m_PlayerNode, &m_AudioManager)
     {
 		auto videoDriver = m_Device->getVideoDriver();
 		m_GUI.addElement<FlagGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(50, 50),
@@ -42,6 +45,12 @@ namespace Confus
 			videoDriver->getTexture("Media/Textures/MirroredFlagUIImage.png"),
 			videoDriver->getTexture("Media/Textures/MirroredExclamationMark.png"),
 			irr::core::vector2df(0.56f, 0.0f), true);
+
+		m_GUI.addElement<ScoreGUI>(m_Device, &m_RedFlag, irr::core::dimension2du(30, 30),
+			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.59f, 0.061f));
+
+		m_GUI.addElement<ScoreGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(30, 30),
+			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.45f, 0.061f));
     }
 
     Game::~Game()
@@ -55,6 +64,7 @@ namespace Confus
 
     void Game::run()
     {
+		//m_Listener.init();
         initializeConnection();
         m_PlayerNode.setConnection(m_Connection.get());
 
@@ -123,11 +133,11 @@ namespace Confus
 					if(std::string(node->getName()).find("Ground", 0) != std::string::npos)
 					{
 						collider = m_PhysicsWorld.createBoxCollider(node, Physics::ECollisionFilter::LevelStatic,
-							Physics::ECollisionFilter::Player);
+							Physics::ECollisionFilter::Player | Physics::ECollisionFilter::Interactable);
 					}
 					else if (std::string(node->getName()).find("Basefolder", 0) == std::string::npos)
 					{
-						collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, Physics::ECollisionFilter::LevelStatic,
+						collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, Physics::ECollisionFilter::LevelStatic | Physics::ECollisionFilter::Interactable,
 							Physics::ECollisionFilter::Player);
                     }
                     else
@@ -195,12 +205,11 @@ namespace Confus
 
         m_PlayerNode.update();
 		m_GUI.update();
-        m_Listener.setPosition(m_PlayerNode.CameraNode->getAbsolutePosition());
-        irr::core::quaternion playerRotation(m_PlayerNode.CameraNode->getRotation());
+        m_Listener.setPosition(m_PlayerNode.getAbsolutePosition());
 
-        //Todo: Fix rotations
-        irr::core::vector3df upVector = playerRotation * irr::core::vector3df( 0, 1, 0 );
-        irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
+        irr::core::matrix4 playerRotation(m_PlayerNode.getAbsoluteTransformation());
+        irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10] );
+        irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
         m_Listener.setDirection(forwardVector, upVector);     
 
 		static float timer = 0.0f;
@@ -275,7 +284,6 @@ namespace Confus
 		};
 		updateDownwards(m_Device->getSceneManager()->getRootSceneNode());
 	}
-
     //need to test of the guid.g is the right one, and not the one from the server
     void Game::addOwnPlayer(RakNet::BitStream* a_Data)
     {
@@ -297,8 +305,7 @@ namespace Confus
 			a_Data->Read(id);
 			a_Data->Read(teamID);
 
-            Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false);
-            
+            Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false, &m_AudioManager);
             m_PlayerArray.push_back(newPlayer);
         }
 
@@ -315,7 +322,7 @@ namespace Confus
 		a_Data->Read(id);
 		a_Data->Read(teamID);
 
-        Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false);
+        Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false, &m_AudioManager);
         m_PlayerArray.push_back(newPlayer);
     }
 

@@ -8,7 +8,7 @@
 
 namespace ConfusServer {
 
-	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, TeamScore a_TeamScore) :
+	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, TeamScore* a_TeamScore) :
                 m_TeamIdentifier(a_TeamIdentifier),
 		        m_FlagStatus(EFlagEnum::FlagBase),
                 m_TeamScore(a_TeamScore) 
@@ -127,6 +127,12 @@ namespace ConfusServer {
         }
     }
 
+	void Flag::setFlagStatus(EFlagEnum a_FlagStatus)
+	{
+		//push delegate (m_FlagStatus,a_FlagStatus)
+		m_FlagStatus = a_FlagStatus;
+	}
+
 	//This class handles what to do on collision
 	void Flag::captureFlag(Player* a_PlayerObject) 
     {
@@ -136,12 +142,11 @@ namespace ConfusServer {
 			return;
 		}
 
-
 		if (a_PlayerObject->TeamIdentifier != m_TeamIdentifier && a_PlayerObject->CarryingFlag == EFlagEnum::None) 
         {
             // Capturing flag if player has no flag
-            m_FlagNode->setParent(a_PlayerObject->PlayerNode);            
-            m_FlagStatus = EFlagEnum::FlagTaken;
+            m_FlagNode->setParent(a_PlayerObject->PlayerNode);
+			setFlagStatus(EFlagEnum::FlagTaken);
             a_PlayerObject->FlagPointer = this;
             a_PlayerObject->CarryingFlag = EFlagEnum::FlagTaken;
 		}
@@ -175,7 +180,7 @@ namespace ConfusServer {
 	void Flag::score(Player* a_PlayerObject) 
     {
         a_PlayerObject->CarryingFlag = EFlagEnum::None;
-        m_TeamScore.teamScoredPoint(a_PlayerObject->TeamIdentifier);
+        m_TeamScore->teamScoredPoint(a_PlayerObject->TeamIdentifier);
         returnToStartPosition();
         a_PlayerObject->FlagPointer = nullptr;
 	}
@@ -186,7 +191,7 @@ namespace ConfusServer {
         m_FlagNode->setParent(m_FlagOldParent);
         m_FlagNode->setPosition(a_PlayerObject->PlayerNode->getAbsolutePosition());
         a_PlayerObject->FlagPointer = nullptr;
-        m_FlagStatus = EFlagEnum::FlagDropped;
+		setFlagStatus(EFlagEnum::FlagDropped);
         a_PlayerObject->CarryingFlag = EFlagEnum::None;
 	}
 
@@ -204,7 +209,7 @@ namespace ConfusServer {
         m_FlagNode->setParent(m_FlagOldParent);
         m_FlagNode->setPosition(m_StartPosition);
         m_FlagNode->setRotation(m_StartRotation);
-		m_FlagStatus = EFlagEnum::FlagBase;
+		setFlagStatus(EFlagEnum::FlagBase);
     }
 
 	Flag::~Flag() {
