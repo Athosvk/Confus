@@ -17,7 +17,7 @@ namespace ConfusServer
     const double Game::MaxFixedUpdateInterval = 0.1;
 	const double Game::ProcessPacketsInterval = 0.03;
     const double Game::MazeDelay = 2.0;
-    const double Game::MazeChangeInterval = 10.0 - MazeDelay;
+    const double Game::MazeChangeInterval = 60.0 - MazeDelay;
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),

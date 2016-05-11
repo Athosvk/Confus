@@ -75,11 +75,13 @@ namespace Confus
         void update();
         ///<summary> Respawns the player to their base, public so round resets etc. can call this. </summary>
         void respawn();
-        void updateColor(irr::IrrlichtDevice* a_Device);
-        ///<summary> Updates the rotation of this player.  </summary>
-        /// <param name="a_NewPosition">The new rotation for this player.</param>
+		/// <summary> Updates the color </summary>
+		/// <param name="a_Device"> The active irrlicht device </param>
+		void updateColor(irr::IrrlichtDevice* a_Device);
+        /// <summary> Updates the rotation of this player </summary>
+        /// <param name="a_NewRotation">The new rotation for this player.</param>
         void updateRotation(irr::core::vector3df a_NewRotation);
-        ///<summary> Updates the position of this player. </summary>
+        /// <summary> Updates the position of this player. </summary>
         /// <param name="a_NewPosition">The new position for this player.</param>
         void updatePosition(irr::core::vector3df a_NewPosition);
         /// <summary> Required render function for the ISceneNode, does nothing as we render in the Game.cpp.</summary>

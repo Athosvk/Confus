@@ -131,7 +131,7 @@ namespace ConfusServer {
 	void Flag::setFlagStatus(EFlagEnum a_FlagStatus)
 	{
 		//push delegate (m_FlagStatus,a_FlagStatus)
-		*m_FlagStatus = a_FlagStatus;
+		m_FlagStatus = a_FlagStatus;
 	}
 
 	//This class handles what to do on collision
@@ -142,7 +142,6 @@ namespace ConfusServer {
 		{
 			return;
 		}
-
 
 		if (a_PlayerObject->TeamIdentifier != m_TeamIdentifier && a_PlayerObject->CarryingFlag == EFlagEnum::None) 
         {
