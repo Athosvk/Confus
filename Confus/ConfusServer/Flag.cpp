@@ -1,6 +1,6 @@
 #include <irrlicht/irrlicht.h>
 #include <IrrAssimp/IrrAssimp.h>
-
+#include <iostream>
 #include <RakNet\BitStream.h>
 
 #include "Flag.h"
@@ -220,7 +220,7 @@ namespace ConfusServer {
 
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Flag), [this](RakNet::Packet* a_Packet) 
         {
-            
+            std::cout << "Getting a flag package for client. Not handling it now" << std::endl;
         });
     }
 
@@ -231,6 +231,7 @@ namespace ConfusServer {
         // - Flag State 
         // - Flag position
         
+        // Only update when the flag is not at base.
        //if(m_FlagStatus != EFlagEnum::FlagBase) 
         RakNet::BitStream outputStream;
 
@@ -246,7 +247,6 @@ namespace ConfusServer {
     {
         updateClients();
     }
-
 
 	Flag::~Flag() {
         m_FlagNode->setParent(m_FlagOldParent);

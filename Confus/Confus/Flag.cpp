@@ -2,12 +2,14 @@
 #include <IrrAssimp/IrrAssimp.h>
 #include <iostream>
 
-#include "Flag.h"
+#include <RakNet/BitStream.h>
 #include "Player.h"
 #include "ClientTeamScore.h"
 
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "../ConfusShared/Physics/BoxCollider.h"
+
+#include "Flag.h"
 
 namespace Confus 
 {
@@ -209,6 +211,11 @@ namespace Confus
         m_StartRotation.set(a_Rotation);
     }
 
+    void Flag::setPosition(irr::core::vector3df a_Position)
+    {
+        m_FlagNode->setPosition(a_Position);
+    }
+
     void Flag::returnToStartPosition() {
         m_FlagNode->setParent(m_FlagOldParent);
         m_FlagNode->setPosition(m_StartPosition);
@@ -222,7 +229,23 @@ namespace Confus
 
          m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Flag), [this](RakNet::Packet* a_Packet)
         {
-            std::cout << "Getting a message with Flag enum!";
+            RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
+            
+            ETeamIdentifier teamIdentifier;
+            inputStream.IgnoreBytes(sizeof(unsigned char));
+            inputStream.Read(teamIdentifier);
+
+            // Only continue if the packet is for this flag color.
+            if(teamIdentifier == m_TeamIdentifier)
+            {
+                EFlagEnum flagStatus;
+                irr::core::vector3df flagPosition;
+                inputStream.Read(flagStatus);
+                inputStream.Read(flagPosition);
+                
+                setFlagStatus(flagStatus);
+                setPosition(flagPosition);
+            }
         });
     }
 

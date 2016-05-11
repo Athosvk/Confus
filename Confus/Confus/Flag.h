@@ -65,6 +65,10 @@ namespace Confus
 		/// <param name="a_Rotation"> The rotation the flag will reset to. </param>
         void setStartRotation(irr::core::vector3df a_Rotation);
 
+        /// <summary> Sets the position of the flagnode. </summary>
+        /// <param name="a_Rotation"> The new position to set the flag to. </param>
+        void setPosition(irr::core::vector3df a_Position);
+
 		/// <summary> Will drop the flag at the current position. </summary>
 		/// <param name="a_PlayerObject"> The player object that drops the flag. </param>
 		void drop(Player* a_PlayerObject);
@@ -79,8 +83,8 @@ namespace Confus
 		const irr::video::SColor getColor() const;
 		const ETeamIdentifier getTeamIdentifier() const;
 		const EFlagEnum getFlagStatus() const;
+        void setFlagStatus(EFlagEnum a_FlagStatus);
     private:
-		void setFlagStatus(EFlagEnum a_FlagStatus);
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
 		void setColor(irr::video::IVideoDriver* a_VideoDriver);
 	};

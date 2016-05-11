@@ -165,6 +165,10 @@ namespace Confus
         std::cin >> serverPort;
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
+
+        m_RedFlag.setConnection(m_Connection.get());
+        m_BlueFlag.setConnection(m_Connection.get());
+
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Packet) 
 		{
             int timeMazeChanges, mazeSeed;
