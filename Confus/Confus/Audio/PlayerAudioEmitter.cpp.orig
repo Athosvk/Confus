@@ -84,7 +84,10 @@ namespace Confus
 
         void PlayerAudioEmitter::createAudioSources(AudioManager* a_AudioManager)
         {
-			m_HitSound = a_AudioManager->createSound("stereo.wav");
+<<<<<<< HEAD
+=======
+			//m_HitSound = a_AudioManager->createSound("stereo.wav");
+>>>>>>> 065cd8236b1824ec6f37d792725e0dcc91833ab6
             for(int i = 0; i < 4; i++)
             {
                 if(i < 3)

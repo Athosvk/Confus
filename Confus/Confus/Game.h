@@ -47,14 +47,14 @@ namespace Confus
 		/// <summary> The currently active physics world </summary>
 		Physics::PhysicsWorld m_PhysicsWorld;
         /// <summary>
-        /// MazeGenerator that hasa accesible maze
-        /// </summary>
-        MazeGenerator m_MazeGenerator;
-        /// <summary>
         /// The OpenAL listener that is attached to the camera.
         /// </summary>
         Audio::OpenAL::OpenALListener m_Listener;
 		Audio::AudioManager m_AudioManager;
+		/// <summary>
+		/// MazeGenerator that hasa accesible maze
+		/// </summary>
+		MazeGenerator m_MazeGenerator;
 
         EventManager m_EventManager;
 		/// <summary>
