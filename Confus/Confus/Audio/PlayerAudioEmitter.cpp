@@ -54,7 +54,7 @@ namespace Confus
 
 		void PlayerAudioEmitter::playHitSound()
 		{
-			//m_HitSound.play();
+			m_HitSound.play();
 		}
 
         void PlayerAudioEmitter::updatePosition() const

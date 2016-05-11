@@ -13,7 +13,7 @@ namespace Confus
 		if (a_Damage > 0)
 		{
 			m_Health -= a_Damage;
-			//m_PlayerEmitter->playHitSound();
+			m_PlayerEmitter->playHitSound();
 			if (m_Health <= 0)
 			{
 				m_Health = 0;

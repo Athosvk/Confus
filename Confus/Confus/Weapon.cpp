@@ -38,11 +38,11 @@ namespace Confus
     {
         if(getAngle(a_Player->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle))
         {
-			a_Player->PlayerHealth.damage(a_Player->PlayerHealth.getHealth());
+			a_Player->getHealthInstance()->damage(a_Player->getHealthInstance()->getHealth());
         }
 		else
 		{
-			a_Player->PlayerHealth.damage(Damage);
+			a_Player->getHealthInstance()->damage(Damage);
 		}
     }
 

@@ -26,7 +26,7 @@ namespace Confus
     /// Player class
     /// </summary>
     class Player : public irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
-    {   
+    { 
     public:
 		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
@@ -35,13 +35,14 @@ namespace Confus
 		EFlagEnum CarryingFlag;
 		ETeamIdentifier TeamIdentifier;    
         Flag* FlagPointer = nullptr;
-		Health PlayerHealth;
         /// <summary> Determines if this player is this users player or not </summary>
         bool MainPlayer = false;
 
         long long ID;
 	private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
+		/// <summary> private value for health class </summary>
+		Health m_PlayerHealth;
 		Physics::BoxCollider* m_Collider;
 
         /// <summary> The weapon bone index of the animation for the weapon </summary>
@@ -91,6 +92,9 @@ namespace Confus
         /// <summary> Handles the input based actions. </summary>
         /// <param name="a_EventManager">The current event manager. </param>
         void handleInput(EventManager& a_EventManager);
+
+		/// <summary> get/setter for health. Should really turn into const but gave some weird errors </summary>
+		Health* getHealthInstance();
     private:
         /// <summary> Starts the walking animation, which is the default animation. </summary>
         void startWalking() const;

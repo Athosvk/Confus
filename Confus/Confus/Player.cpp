@@ -20,7 +20,8 @@ namespace Confus
 		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
 		TeamIdentifier(a_TeamIdentifier),
 		CarryingFlag(EFlagEnum::None),
-		PlayerHealth(m_SoundEmitter)
+		m_SoundEmitter(new Audio::PlayerAudioEmitter(this, a_AudioManager)),
+		m_PlayerHealth(m_SoundEmitter)
     {
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
@@ -68,8 +69,6 @@ namespace Confus
 		m_Collider->getRigidBody()->disableSleeping();
 		m_Collider->getRigidBody()->setOffset(irr::core::vector3df(0.0f, -0.65f, -0.2f));
         startWalking();
-
-        m_SoundEmitter = new Audio::PlayerAudioEmitter(this, a_AudioManager);
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
@@ -122,6 +121,11 @@ namespace Confus
 			+ irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
 		rigidBody->setVelocity(resultingVelocity);
     }
+
+	Health* Player::getHealthInstance()
+	{
+		return &m_PlayerHealth;
+	}
 
     void Player::render()
     {
@@ -209,7 +213,7 @@ namespace Confus
             m_SoundEmitter->playFootStepSound();
         }
 
-        if(PlayerHealth.getHealth() <= 0) {
+        if(m_PlayerHealth.getHealth() <= 0) {
             respawn();
 			if (FlagPointer != nullptr) {
 				FlagPointer->drop(this);
@@ -240,7 +244,7 @@ namespace Confus
 
     void Player::respawn()
     {
-		PlayerHealth.reset();
+		m_PlayerHealth.reset();
         if(TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
