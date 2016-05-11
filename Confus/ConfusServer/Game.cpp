@@ -84,6 +84,8 @@ namespace ConfusServer
     {
         m_Connection = std::make_unique<Networking::Connection>();
         m_TeamScoreManager.setConnection(m_Connection.get());
+        m_RedFlag.setConnection(m_Connection.get());
+        m_BlueFlag.setConnection(m_Connection.get());
     }
 
 	void Game::processConnection()

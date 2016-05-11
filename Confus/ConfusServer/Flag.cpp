@@ -218,10 +218,10 @@ namespace ConfusServer {
     {
         m_Connection = a_Connection;
 
-       /* m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::Connection::EPacketType::Flag), [this](RakNet::Bitstream* a_Packet) 
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Flag), [this](RakNet::Packet* a_Packet) 
         {
             
-        });*/
+        });
     }
 
     void Flag::updateClients()
@@ -234,7 +234,7 @@ namespace ConfusServer {
        //if(m_FlagStatus != EFlagEnum::FlagBase) 
         RakNet::BitStream outputStream;
 
-        outputStream.Write(Networking::Connection::EPacketType::Flag);
+        outputStream.Write(Networking::EPacketType::Flag);
         outputStream.Write(m_TeamIdentifier);
         outputStream.Write(m_FlagStatus);
         outputStream.Write(m_FlagNode->getPosition());

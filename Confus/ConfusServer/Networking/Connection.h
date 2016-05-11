@@ -43,9 +43,9 @@ namespace ConfusServer
         /// </remarks>
         class Connection
         {
+        private:
             /// <summary> Is the server connected to a client? </summary>
             bool m_Connected = false;
-        private:
             /// <summary> The RakNet interface for interacting with RakNet </summary>
             RakNet::RakPeerInterface* m_Interface; 
             /// <summary> The map thast contains the server events and the functions that involve them. </summary>
