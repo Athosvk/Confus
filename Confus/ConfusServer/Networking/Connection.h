@@ -7,7 +7,6 @@
 #include <RakNet/MessageIdentifiers.h>
 #include <RakNet/RakPeerInterface.h>
 #include <RakNet/RakNetTypes.h>
-#include "../Player.h"
 
 namespace RakNet 
 {

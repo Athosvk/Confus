@@ -9,7 +9,11 @@
 
 namespace Confus 
 {
+    namespace Audio
+    {
+        class PlayerAudioEmitter;
         class AudioManager;
+    }
 	namespace Physics
 	{
 		class BoxCollider;
