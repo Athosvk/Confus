@@ -3,7 +3,7 @@
 
 #include "Networking/ClientConnection.h"
 #include "MazeGenerator.h"
-#include "OpenAL\OpenALListener.h"
+#include "Audio/OpenAL\OpenALListener.h"
 #include "Player.h"
 #include "Audio\PlayerAudioEmitter.h"
 #include "EventManager.h"
@@ -11,6 +11,9 @@
 #include "RespawnFloor.h"
 #include "GUI.h"
 #include "ClientTeamScore.h"
+#include "Audio/AudioManager.h"
+#include "../ConfusShared/Physics/PhysicsWorld.h"
+#include "Announcer.h"
 
 namespace Confus
 {    
@@ -21,6 +24,11 @@ namespace Confus
     /// </summary>
     class Game
     {
+	public:
+		/// <summary>
+		/// The maximum score used to determine if someone has won
+		/// </summary>
+		static const int MaxScore;
     private:
         /// <summary>
         /// The rate at which fixed updates are carried out
@@ -36,14 +44,18 @@ namespace Confus
 		/// Statics are avoided to make code clearer, hence this is not a static
         /// </summary>
         irr::IrrlichtDevice* m_Device;
-        /// <summary>
-        /// MazeGenerator that hasa accesible maze
-        /// </summary>
-        MazeGenerator m_MazeGenerator;
+		/// <summary> The currently active physics world </summary>
+		Physics::PhysicsWorld m_PhysicsWorld;
         /// <summary>
         /// The OpenAL listener that is attached to the camera.
         /// </summary>
-        OpenALListener m_Listener;
+        Audio::OpenAL::OpenALListener m_Listener;
+		Audio::AudioManager m_AudioManager;
+		/// <summary>
+		/// MazeGenerator that hasa accesible maze
+		/// </summary>
+		MazeGenerator m_MazeGenerator;
+
         EventManager m_EventManager;
 		/// <summary>
 		/// The GUI for the Player
@@ -53,12 +65,9 @@ namespace Confus
         /// The Players to test with.
         /// </summary>
         Player m_PlayerNode;
-		Player m_SecondPlayerNode;
-        RespawnFloor m_RedRespawnFloor;
-        RespawnFloor m_BlueRespawnFloor;
 
-        //use std::vector
-        //std::array<Player, 2> m_PlayerArray;
+
+        std::vector<Player*> m_PlayerArray;
         /// <summary>
         /// The Blue Flag.
         /// </summary>
@@ -67,6 +76,11 @@ namespace Confus
         /// The Red Flag.
         /// </summary>
         Flag m_RedFlag;
+
+		Announcer m_Announcer;
+		RespawnFloor m_RedRespawnFloor;
+		RespawnFloor m_BlueRespawnFloor;
+
         /// <summary>
         /// The delay between the last and future fixed update
         /// </summary>
@@ -88,6 +102,8 @@ namespace Confus
 		/// The connection as a client to the server that we are currently connected to
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
+
+		
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
@@ -96,18 +112,15 @@ namespace Confus
         /// <summary>
         /// Finalizes an instance of the <see cref="Game"/> class.
         /// </summary>
-        virtual ~Game() = default;
+        virtual ~Game();
 
         /// <summary>
         /// Starts the game and gameloop
         /// </summary>
         void run();
     private:
-        /// <summary>
-        /// Processes the triangle selectors.
-        /// </summary>
-        void processTriangleSelectors();
-        irr::scene::IMetaTriangleSelector* processLevelMetaTriangles();        
+        /// <summary> Creates all the colliders for the level </summary>
+        void initializeLevelColliders();
         /// <summary>
         /// Initializes the connection to the server.
         /// </summary>
@@ -133,6 +146,21 @@ namespace Confus
         /// </summary>
         void render();
 
-        void updateOtherPlayers();
+        /// <summary>
+        /// Creates a new Player object for this user, this player will be regarded as THEIR player.
+        /// </summary>
+        void addOwnPlayer(RakNet::Packet* a_Data);
+        /// <summary>
+        /// Creates a new Player object for a different user that just joined.
+        /// </summary>
+        void addOtherPlayer(RakNet::Packet* a_Data);
+        /// <summary>
+        /// Updates positions and rotations of all other players.
+        /// </summary>
+        void updateOtherPlayer(RakNet::Packet* a_Data);
+        void removePlayer(RakNet::Packet* a_Data);
+
+		/// <summary> Updates the (absolute) transformations of all the scene nodes recursively downwards </summary>
+		void updateSceneTransformations();
     };
 }

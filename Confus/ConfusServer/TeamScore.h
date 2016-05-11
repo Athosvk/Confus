@@ -1,5 +1,5 @@
 #pragma once
-#include "../Common/TeamIdentifier.h"
+#include "../ConfusShared/TeamIdentifier.h"
 #include "Networking/Connection.h"
 
 namespace ConfusServer

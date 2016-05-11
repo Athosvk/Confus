@@ -1,5 +1,5 @@
 #pragma once
-#include "../Common/TeamIdentifier.h"
+#include "../ConfusShared/TeamIdentifier.h"
 #include "Networking\Connection.h"
 #include "TeamScore.h"
 
@@ -22,14 +22,14 @@ namespace ConfusServer
 	class Flag 
     {
     private:		
-		irr::core::vector3df* m_StartPosition;
-		irr::core::vector3df* m_StartRotation;
-		EFlagEnum* m_FlagStatus;
-        ETeamIdentifier* m_TeamIdentifier;
+		irr::core::vector3df m_StartPosition;
+		irr::core::vector3df m_StartRotation;
+		EFlagEnum m_FlagStatus;
+        ETeamIdentifier m_TeamIdentifier;
         irr::scene::IMeshSceneNode* m_FlagNode;
         Collider* m_Collider;
         irr::scene::ISceneNode* m_FlagOldParent = nullptr;
-        TeamScore m_TeamScore;
+        TeamScore* m_TeamScore;
         /// <summary> Pointer to the connection with the client(s). </summary>
         Networking::Connection* m_Connection;
     public: 
@@ -37,7 +37,7 @@ namespace ConfusServer
         /// <param name="a_Device">The active Irrlicht Device.</param>
         /// <param name="a_TeamIdentifier">The team's identifier the flag should have.</param>
         /// <param name="a_TeamScore">Reference to the teamscore class.</param>
-        Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, TeamScore a_TeamScore);
+        Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, TeamScore* a_TeamScore);
         /// <summary> Flag class destructor </summary>
         ~Flag();
 		/// <summary> Capture Flag a flag with the wanted playerobject parent. </summary>
@@ -68,6 +68,7 @@ namespace ConfusServer
         /// <summary> Updates the flag. </summary>
         void update();
     private:
+		void setFlagStatus(EFlagEnum a_FlagStatus);
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
 		void setColor(irr::video::IVideoDriver* a_VideoDriver);
 		irr::video::SColor getColor();

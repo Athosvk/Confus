@@ -31,7 +31,13 @@ namespace Confus
         ClientConnection::~ClientConnection()
         {
 			//True is sent to notify the server so we can exit gracefully
+			if(m_Connected)
 			m_Interface->CloseConnection(getServerAddress(), true);
+            //spin wait to allow CloseConnection to finish
+            while(getConnectionCount() > 0)
+            {
+
+            }
             RakNet::RakPeerInterface::DestroyInstance(m_Interface);
         }
 
@@ -49,15 +55,13 @@ namespace Confus
 
         void ClientConnection::handlePacket(RakNet::Packet* a_Data, unsigned char a_Event)
         {
-            RakNet::BitStream inputStream(a_Data->data, a_Data->length, false);
-            
             for(size_t i = 0u; i < m_CallbackFunctionMap[a_Event].size(); i++) 
             {
-                m_CallbackFunctionMap[a_Event][i](&inputStream);
+                m_CallbackFunctionMap[a_Event][i](a_Data);
             }
         }
 
-        void ClientConnection::addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::BitStream* a_Data)> a_Function)
+        void ClientConnection::addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function)
         {
             m_CallbackFunctionMap[a_Event].push_back(a_Function);
         }

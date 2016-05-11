@@ -2,7 +2,7 @@
 #include <irrlicht/irrlicht.h>
 #include "Health.h"
 #include "Weapon.h"
-#include "../Common/TeamIdentifier.h"
+#include "../ConfusShared/TeamIdentifier.h"
 
 namespace ConfusServer {
 
@@ -21,8 +21,8 @@ namespace ConfusServer {
 		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
         irr::scene::ICameraSceneNode* CameraNode = nullptr;
-		EFlagEnum* CarryingFlag;
-		ETeamIdentifier* TeamIdentifier;    
+		EFlagEnum CarryingFlag;
+		ETeamIdentifier TeamIdentifier;    
         Flag* FlagPointer;
         long long ID;
 	private:

@@ -1,10 +1,11 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
 #include <memory>
+#include <vector>
 
 #include "Player.h"
 #include "IUIElement.h"
-#include "OpenAL\OpenALSource.h"
+#include "Audio\Sound.h"
 
 namespace Confus
 {
@@ -19,11 +20,11 @@ namespace Confus
 		irr::video::IVideoDriver* m_Driver;
 		irr::video::ITexture* m_BloodImage;
 		irr::gui::IGUIImage* m_BloodOverlay;
-		OpenALSource* m_AudioSourceLowHealth;
 		std::vector<std::unique_ptr<IUIElement>> m_Elements;
+        Audio::Sound m_AudioSourceLowHealth;
 		
 	public:
-		GUI(irr::IrrlichtDevice* a_Device, Player* a_Player);
+		GUI(irr::IrrlichtDevice* a_Device, Player* a_Player, Audio::AudioManager* a_AudioManager);
 		~GUI();
 		void update();
 		void drawBloodOverlay();

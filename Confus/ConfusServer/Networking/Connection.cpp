@@ -8,7 +8,7 @@
 
 #include "Connection.h"
 #define DEBUG_CONSOLE
-#include "../../Common/Debug.h"
+#include "../../ConfusShared/Debug.h"
 
 namespace ConfusServer
 {
@@ -81,6 +81,20 @@ namespace ConfusServer
             {
                 m_Interface->CloseConnection(openConnections[i], true);
             }
+        }
+
+        void Connection::sendPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Address)
+        {
+            RakNet::AddressOrGUID guid =  *a_Address;
+            m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
+                PacketReliability::RELIABLE_ORDERED, 0, guid, false);
+        }
+
+        void Connection::broadcastPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Excluded)
+        {
+            RakNet::AddressOrGUID guid = a_Excluded != nullptr ? *a_Excluded : m_Interface->GetMyGUID();
+            m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
+                    PacketReliability::RELIABLE_ORDERED, 0, guid, true);
         }
 
         void Connection::handlePacket(RakNet::Packet* a_Data, unsigned char a_Event)

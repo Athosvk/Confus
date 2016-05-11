@@ -7,8 +7,8 @@
 #include "Game.h"
 #include "Player.h"
 #include "Flag.h"
-#include "../Common/Debug.h"
-#include "../Common/TeamIdentifier.h"
+#include "../ConfusShared/Debug.h"
+#include "../ConfusShared/TeamIdentifier.h"
 
 namespace ConfusServer
 {
@@ -16,16 +16,25 @@ namespace ConfusServer
     const double Game::MaxFixedUpdateInterval = 0.1;
 	const double Game::ProcessPacketsInterval = 0.03;
     const double Game::MazeDelay = 2.0;
-    const double Game::MazeChangeInterval = 10.0 - MazeDelay;
+    const double Game::MazeChangeInterval = 60.0 - MazeDelay;
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),
 		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
         m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, true),        
         m_SecondPlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, false),
-        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_TeamScoreManager),
-        m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_TeamScoreManager)
+        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, &m_TeamScoreManager),
+        m_RedFlag(m_Device, ETeamIdentifier::TeamRed, &m_TeamScoreManager)
     {
+    }
+
+    Game::~Game()
+    {
+        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        {
+            //m_PlayerArray[i]->remove();
+            //delete(m_PlayerArray[i]);
+        }
     }
 
     void Game::run()
@@ -51,6 +60,11 @@ namespace ConfusServer
         m_Connection->addFunctionToMap(ID_NEW_INCOMING_CONNECTION, [this](RakNet::Packet* a_Data)
         {
             addPlayer(a_Data);
+        });
+
+        m_Connection->addFunctionToMap(ID_DISCONNECTION_NOTIFICATION, [this](RakNet::Packet* a_Data)
+        {
+            removePlayer(a_Data);
         });
 
 
@@ -160,7 +174,6 @@ namespace ConfusServer
             if(currentDelay == 0.0f)
             {
                 currentSeed = static_cast<int>(time(0)) % 1000;
-                m_TeamScoreManager.teamScoredPoint(static_cast<ETeamIdentifier>(1 + rand() % 2));
                 broadcastMazeChange(currentSeed);
             }
             currentDelay += static_cast<float>(m_DeltaTime);
@@ -180,6 +193,7 @@ namespace ConfusServer
 
     void Game::fixedUpdate()
     {
+        updatePlayers();
 		m_MazeGenerator.fixedUpdate();
     }
 
@@ -188,7 +202,7 @@ namespace ConfusServer
         int newTime = static_cast<int>(RakNet::GetTimeMS()) + (static_cast<int>(MazeDelay * 1000));
 
         RakNet::BitStream bitStream;
-        bitStream.Write(static_cast<RakNet::MessageID>(Networking::Connection::EPacketType::MazeChange));
+        bitStream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::MazeChange));
         bitStream.Write(newTime);
         bitStream.Write(a_Seed);
         m_Connection->broadcastBitstream(bitStream);
@@ -197,11 +211,67 @@ namespace ConfusServer
     void Game::addPlayer(RakNet::Packet* a_Data)
     {
         long long id = static_cast<long long>(a_Data->guid.g);
+        ETeamIdentifier teamID = m_PlayerArray.size() % 2 == 0 ? ETeamIdentifier::TeamRed : ETeamIdentifier::TeamBlue;
 
-        Player newPlayer(m_Device, id, m_PlayerArray.size() % 2 == 0 ? ETeamIdentifier::TeamRed : ETeamIdentifier::TeamBlue, false);
+        Player* newPlayer = new Player(m_Device, id, teamID, false);
+        m_PlayerArray.push_back(newPlayer);
 
-        m_PlayerArray.push_back(&newPlayer);
+        RakNet::BitStream stream;
+        stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::MainPlayerJoined));
+        stream.Write(static_cast<long long>(id));
+        stream.Write(static_cast<ETeamIdentifier>(teamID));
+        stream.Write(static_cast<size_t>(m_PlayerArray.size()));
+        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        {
+            stream.Write(static_cast<long long>(m_PlayerArray[i]->ID));
+            stream.Write(static_cast<ETeamIdentifier>(m_PlayerArray[i]->TeamIdentifier));
+        }
+        RakNet::AddressOrGUID guid = a_Data->guid;
+        m_Connection->sendPacket(&stream, &guid);
+
+        RakNet::BitStream broadcastStream;
+        broadcastStream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::OtherPlayerJoined));
+        broadcastStream.Write(static_cast<long long>(id));
+        broadcastStream.Write(static_cast<ETeamIdentifier>(teamID));
+
+        m_Connection->broadcastPacket(&broadcastStream, &guid);
+
         std::cout << id << " joined" << std::endl;
+    }
+
+    void Game::removePlayer(RakNet::Packet* a_Data)
+    {
+        long long id = static_cast<long long>(a_Data->guid.g);
+        std::cout << id << " left" << std::endl;
+
+        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        {
+            if(m_PlayerArray[i]->ID == id)
+            {
+                m_PlayerArray[i]->remove();
+                delete(m_PlayerArray[i]);
+                m_PlayerArray.erase(m_PlayerArray.begin()+i);
+            }
+        }
+
+        RakNet::BitStream stream;
+        stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::PlayerLeft));
+        stream.Write(id);
+        RakNet::AddressOrGUID guid = a_Data->guid;
+        m_Connection->broadcastPacket(&stream, &guid);
+    }
+
+    void Game::updatePlayers()
+    {
+        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        {
+            RakNet::BitStream stream;
+            stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdatePosition));
+            stream.Write(static_cast<long long>(m_PlayerArray[i]->ID));
+            stream.Write(static_cast<irr::core::vector3df>(m_PlayerArray[i]->CameraNode->getPosition()));
+            stream.Write(static_cast<irr::core::vector3df>(m_PlayerArray[i]->CameraNode->getRotation()));
+            m_Connection->broadcastPacket(&stream, nullptr);
+        }
     }
 
     void Game::render()
