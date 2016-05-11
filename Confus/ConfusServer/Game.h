@@ -1,6 +1,5 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
-#include <RakNet/BitStream.h>
 
 #include "Networking/Connection.h"
 #include "MazeGenerator.h"

@@ -2,6 +2,7 @@
 #include <time.h>
 #include <iostream>
 #include <RakNet\GetTime.h>
+#include <RakNet\BitStream.h>
 
 #define DEBUG_CONSOLE
 #include "Game.h"
@@ -171,6 +172,8 @@ namespace ConfusServer
             }
             currentDelay += static_cast<float>(m_DeltaTime);
         }
+
+        updatePlayers();
     }
 
     void Game::processFixedUpdates()
@@ -186,7 +189,6 @@ namespace ConfusServer
 
     void Game::fixedUpdate()
     {
-        updatePlayers();
 		m_MazeGenerator.fixedUpdate();
         m_PlayerNode.fixedUpdate();
     }
@@ -262,7 +264,15 @@ namespace ConfusServer
         for(size_t i = 0u; i < m_PlayerArray.size(); i++)
         {
             RakNet::BitStream stream;
-            stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdatePosition));
+            stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
+
+            ConfusShared::Networking::PlayerInfo playerInfo;
+            playerInfo.playerID = static_cast<unsigned int>(m_PlayerArray[i]->ID);
+            playerInfo.position = m_PlayerArray[i]->CameraNode->getPosition();
+            playerInfo.rotation = m_PlayerArray[i]->CameraNode->getRotation();
+            playerInfo.newState = m_PlayerArray[i]->PlayerState;
+            playerInfo.playerHealth = static_cast<unsigned int>(m_PlayerArray[i]->PlayerHealth.getHealth());
+
             stream.Write(static_cast<long long>(m_PlayerArray[i]->ID));
             stream.Write(static_cast<irr::core::vector3df>(m_PlayerArray[i]->CameraNode->getPosition()));
             stream.Write(static_cast<irr::core::vector3df>(m_PlayerArray[i]->CameraNode->getRotation()));

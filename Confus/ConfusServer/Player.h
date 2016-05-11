@@ -1,25 +1,20 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
 
-#include "RakNet/RakNetSocket2.h"
-#include "Networking\Connection.h"
 #include "Health.h"
 #include "Weapon.h"
 #include "../ConfusShared/TeamIdentifier.h"
 #include "../ConfusShared/Networking/BitStreamStruct.h"
 
-namespace ConfusServer {
+#include "RakNet/RakNetSocket2.h"
+#include "Networking/Connection.h"
 
+namespace ConfusServer
+{
 	namespace Audio 
     {
 		class PlayerAudioEmitter;
 	}
-
-    namespace Networking
-    {
-        class Connection;
-    }
-
     enum class EFlagEnum;
     class EventManager;
     class Flag;
@@ -34,14 +29,15 @@ namespace ConfusServer {
 		ETeamIdentifier TeamIdentifier;    
         Flag* FlagPointer;
         long long ID;
+        ConfusShared::Networking::EPlayerState PlayerState = ConfusShared::Networking::EPlayerState::Alive;
+        Health PlayerHealth;
    
 	private:
 		Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
-        /// <summary> The weapon bone index of the animation for the weapon </summary>
+        /// <summary> The weapon bone index of the animation for the weapom_PlayerStaten </summary>
         static const irr::u32 WeaponJointIndex;
         static const unsigned LightAttackDamage;
         static const unsigned HeavyAttackDamage;
-	    Health PlayerHealth;
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
         /// <summary> Whether the player is currently attacking or not </summary>
@@ -51,7 +47,6 @@ namespace ConfusServer {
         /// <summary> A pointer to the connection to the client. </summary>
         Networking::Connection* m_Connection;
 		irr::SKeyMap m_KeyMap[6];
-		ConfusShared::Networking::EPlayerState m_PlayerState = ConfusShared::Networking::EPlayerState::Alive;
     public:
         Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
 		~Player();
@@ -69,7 +64,11 @@ namespace ConfusServer {
 
         /// <summary> Starts the heavy attack, which deals more damage </summary>
         void startHeavyAttack();
-
+        
+        /// <summary>
+        /// Sets the connection to submit the update bitstream to.
+        /// </summary>
+        /// <param name="a_Connection">The connection reference.</param>
         void setConnection(Networking::Connection* a_Connection);
     private:
         /// <summary> Starts the walking animation, which is the default animation </summary>

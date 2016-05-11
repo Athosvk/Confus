@@ -217,6 +217,10 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ConfusShared\Debug.h" />
+    <ClInclude Include="..\ConfusShared\EnumUtility.h" />
+    <ClInclude Include="..\ConfusShared\Networking\BitStreamStruct.h" />
+    <ClInclude Include="..\ConfusShared\TeamIdentifier.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="Flag.h" />

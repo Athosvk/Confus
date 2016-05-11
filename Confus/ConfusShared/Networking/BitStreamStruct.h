@@ -17,6 +17,7 @@ namespace ConfusShared
 		/// <summary>
 		/// Player information that gets networked
 		/// </summary>
+        #pragma pack(push, 1)
 		struct  PlayerInfo
 		{
 			unsigned int playerID = 0u;
@@ -24,7 +25,7 @@ namespace ConfusShared
 			irr::core::vector3df rotation = irr::core::vector3df(0.f);
 			EPlayerState newState;
 			RakNet::Time stateChangeTime;
-			int8_t playerHealth;
+			unsigned char playerHealth = 0u;
 			bool forwardKeyPressed = false;
 			bool backwardKeyPressed = false;
 			bool leftKeyPressed = false;
@@ -32,5 +33,6 @@ namespace ConfusShared
 			bool leftMouseButtonPressed = false;
 			bool rightMouseButtonPressed = false;
 		};
+        #pragma pack(pop)
 	}
 }

@@ -167,5 +167,17 @@
     <ClInclude Include="Networking\Connection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\ConfusShared\Debug.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\EnumUtility.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\TeamIdentifier.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Networking\BitStreamStruct.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

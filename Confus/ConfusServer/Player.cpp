@@ -196,25 +196,28 @@ namespace ConfusServer
         {
             m_FootstepSoundEmitter->playFootStepSound();
         }
+
+        updateClient();
     }
 
     void Player::fixedUpdate()
     {
-        updateClient();
+
     }
 
     void Player::createAudioEmitter()
     {
         m_FootstepSoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
     }
-
+      
+    //Why the duplicate also happens in game.cpp
     void Player::updateClient()
     {
-        RakNet::BitStream bitstreamOut;
-        bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
-        bitstreamOut.Write(CameraNode->getAbsolutePosition());
-        
-        m_Connection->sendMessage(bitstreamOut, PacketReliability::UNRELIABLE);
+        //RakNet::BitStream bitstreamOut;
+        //bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
+        //bitstreamOut.Write(CameraNode->getAbsolutePosition());
+        //
+        //m_Connection->broadcastBitstream(bitstreamOut);
     }
  
 
@@ -230,16 +233,16 @@ namespace ConfusServer
 
             setRotation(playerInfo.rotation);
 						             
-            if(m_PlayerState != ConfusShared::Networking::EPlayerState::LightAttacking && playerInfo.newState == ConfusShared::Networking::EPlayerState::LightAttacking)
+            if(PlayerState != ConfusShared::Networking::EPlayerState::LightAttacking && playerInfo.newState == ConfusShared::Networking::EPlayerState::LightAttacking)
             {
                 startLightAttack();
             }
-            else if(m_PlayerState != ConfusShared::Networking::EPlayerState::HeavyAttacking && playerInfo.newState == ConfusShared::Networking::EPlayerState::HeavyAttacking)
+            else if(PlayerState != ConfusShared::Networking::EPlayerState::HeavyAttacking && playerInfo.newState == ConfusShared::Networking::EPlayerState::HeavyAttacking)
             {
                 startHeavyAttack();
             }
 
-			m_PlayerState = playerInfo.newState;
+			PlayerState = playerInfo.newState;
 
             // Change this into something better when we are not using irrlichts FPS camera. 
             if(playerInfo.forwardKeyPressed)

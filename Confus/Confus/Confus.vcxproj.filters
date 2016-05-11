@@ -260,16 +260,11 @@
     <ClInclude Include="Announcer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\TeamIdentifier.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Delegate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ConfusShared\Networking\BitStreamStruct.h">
+      <Filter>Shared Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
