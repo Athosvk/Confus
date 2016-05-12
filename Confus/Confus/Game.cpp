@@ -98,11 +98,25 @@ namespace Confus
             updateOtherPlayer(a_Data);
         });
 
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdateHealth), [this](RakNet::Packet* a_Data)
-        {
-            updateHealth(a_Data);
-        });
-      
+		m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdateHealth), [this](RakNet::Packet* a_Data)
+		{
+			updateHealth(a_Data);
+		});
+        
+		m_Connection->addFunctionToMap(ID_NO_FREE_INCOMING_CONNECTIONS, [this](RakNet::Packet* a_Data)
+		{
+			denyConnection(a_Data);
+		});
+			
+		m_Connection->addFunctionToMap(ID_CONNECTION_ATTEMPT_FAILED, [this](RakNet::Packet* a_Data)
+		{
+			denyConnection(a_Data);
+		});
+
+		m_Connection->addFunctionToMap(ID_CONNECTION_LOST, [this](RakNet::Packet* a_Data)
+		{
+			denyConnection(a_Data);
+		});
     }
 
 	void Game::initializeLevelColliders()
@@ -151,7 +165,7 @@ namespace Confus
     void Game::initializeConnection()
     {
         std::string serverIP;
-        std::cout << "Enter the server's ip address: ";
+        std::cout << " loaded" << std::endl << "Enter the server's ip address: ";
         std::cin >> serverIP;
 
         unsigned short serverPort;
@@ -401,6 +415,24 @@ namespace Confus
             }
         }
     }
+
+	void Game::denyConnection(RakNet::Packet* a_Data)
+	{
+		RakNet::BitStream inputStream(a_Data->data, a_Data->length, false);
+		RakNet::MessageID messageID;
+
+		inputStream.Read(messageID);
+
+		switch (messageID)
+		{
+			case ID_NO_FREE_INCOMING_CONNECTIONS:
+				std::cout << "Server is full" << std::endl;
+			default:
+				std::cout << "Could not connect to the server" << std::endl;
+		}
+
+		m_ShouldRun = false;
+	}
 
     void Game::render()
     {
