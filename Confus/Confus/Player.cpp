@@ -175,7 +175,7 @@ namespace Confus
         PlayerNode->setFrameLoop(38, 41);
         PlayerNode->setCurrentFrame(38);
         m_Weapon.Damage = LightAttackDamage;
-        //m_SoundEmitter->playAttackSound(false);
+        m_SoundEmitter->playAttackSound(false);
         initializeAttack();
     }
 
@@ -184,7 +184,7 @@ namespace Confus
         PlayerNode->setFrameLoop(60, 66);
         PlayerNode->setCurrentFrame(60);
         m_Weapon.Damage = HeavyAttackDamage;
-        //m_SoundEmitter->playAttackSound(true);
+        m_SoundEmitter->playAttackSound(true);
         initializeAttack();
     }
 
