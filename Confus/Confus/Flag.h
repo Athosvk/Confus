@@ -7,11 +7,6 @@
 namespace Confus 
 {
 	class Player;
-	namespace Physics
-	{
-		class BoxCollider;
-		class PhysicsWorld;
-	}
 
 	/// <summary> The Flag's status. A player can have flagtaken or no flag. A flag can be taken, dropped or at base. </summary>
 	enum class EFlagEnum
@@ -34,10 +29,7 @@ namespace Confus
         ETeamIdentifier m_TeamIdentifier;
 		EFlagEnum m_FlagStatus;
         irr::scene::IMeshSceneNode* m_FlagNode;
-        Physics::BoxCollider* m_Collider;
         irr::scene::ISceneNode* m_FlagOldParent = nullptr;
-
-
         /// <summary> A pointer to the connection with the server. </summary>
         Networking::ClientConnection* m_Connection;
     public: 
@@ -47,9 +39,7 @@ namespace Confus
 		/// <param name="a_PhysicsWorld">The physics world </param>
 
         void setConnection(Networking::ClientConnection * a_Connection);
-		Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier,
-			Physics::PhysicsWorld& a_PhysicsWorld);
-
+		Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier);
         /// <summary> Flag class destructor </summary>
         ~Flag();
 

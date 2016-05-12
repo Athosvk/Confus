@@ -6,14 +6,11 @@
 #include "Player.h"
 #include "ClientTeamScore.h"
 
-#include "../ConfusShared/Physics/PhysicsWorld.h"
-#include "../ConfusShared/Physics/BoxCollider.h"
-
 #include "Flag.h"
 
 namespace Confus 
 {
-	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, Physics::PhysicsWorld& a_PhysicsWorld) : 
+	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier) : 
 		m_TeamIdentifier(a_TeamIdentifier),
 		m_FlagStatus(EFlagEnum::FlagBase) 
 	{
@@ -27,23 +24,6 @@ namespace Confus
         m_FlagNode = sceneManager->addMeshSceneNode(mesh, 0, 2);
         m_FlagNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
         m_FlagNode->setScale({ 1.5f, 1.5f, 1.5f });
-		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(1.0f, 3.0f, 1.0f), m_FlagNode, Physics::ECollisionFilter::Interactable,
-			Physics::ECollisionFilter::All);
-		m_Collider->getRigidBody()->makeKinematic();
-		m_Collider->getRigidBody()->enableTriggerState();
-		m_Collider->setTriggerEnterCallback([this](Physics::BoxCollider* a_Other)
-		{
-			auto collidedNode = a_Other->getRigidBody()->getAttachedNode();
-			if (!collidedNode->getChildren().empty())
-			{
-				Player* player = dynamic_cast<Player*>(*collidedNode->getChildren().begin());
-				if (player != nullptr)
-				{
-					captureFlag(player);
-				}
-			}
-		});
-
         m_FlagOldParent = m_FlagNode->getParent();
 
         //Set Color
@@ -139,50 +119,6 @@ namespace Confus
 		 return m_FlagStatus;
 	 }
 
-	//This class handles what to do on collision
-	void Flag::captureFlag(Player* a_PlayerObject) 
-    {
-		//Somebody is already carrying the flag
-		if (m_FlagStatus == EFlagEnum::FlagTaken) 
-		{
-			return;
-		}
-
-
-		if (a_PlayerObject->TeamIdentifier != m_TeamIdentifier && a_PlayerObject->CarryingFlag == EFlagEnum::None) 
-        {
-            // Capturing flag if player has no flag
-            m_FlagNode->setParent(a_PlayerObject->PlayerNode);            
-            setFlagStatus(EFlagEnum::FlagTaken);
-            a_PlayerObject->FlagPointer = this;
-            a_PlayerObject->CarryingFlag = EFlagEnum::FlagTaken;
-		}
-		else if (a_PlayerObject->TeamIdentifier == m_TeamIdentifier) 
-        {
-			//If flag has been dropped return flag to base
- 			if (m_FlagStatus == EFlagEnum::FlagDropped) 
-            {
-                returnToStartPosition();
-			}
-			//If flag is at base and player is carrying a flag
-			else if (m_FlagStatus == EFlagEnum::FlagBase) 
-            {
-				if (a_PlayerObject->CarryingFlag == EFlagEnum::FlagTaken) 
-                {					
-                    if(a_PlayerObject->FlagPointer != nullptr) 
-					{
-                        // Player scored a point!
-                        score(a_PlayerObject);
-                    }
-					else
-					{
-						throw std::exception("Failed to get the flag from the player object");
-					}
-				}
-			}
-		}
-	}
-
 	//TODO Score points to team of a_PlayerObject
 	void Flag::score(Player* a_PlayerObject) 
     {
@@ -245,6 +181,8 @@ namespace Confus
                 
                 setFlagStatus(flagStatus);
                 setPosition(flagPosition);
+
+                std::cout << std::to_string(flagPosition.Y);
             }
         });
     }

@@ -1,5 +1,6 @@
 #pragma once
 #include "../ConfusShared/TeamIdentifier.h"
+#include "EventManager.h"
 #include "Networking\Connection.h"
 #include "TeamScore.h"
 
@@ -27,7 +28,7 @@ namespace ConfusServer
 		EFlagEnum m_FlagStatus;
         ETeamIdentifier m_TeamIdentifier;
         irr::scene::IMeshSceneNode* m_FlagNode;
-        Collider* m_Collider;
+        Collider* m_Collider = nullptr;
         irr::scene::ISceneNode* m_FlagOldParent = nullptr;
         TeamScore* m_TeamScore;
         /// <summary> Pointer to the connection with the client(s). </summary>

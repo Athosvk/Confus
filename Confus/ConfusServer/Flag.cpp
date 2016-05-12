@@ -72,7 +72,7 @@ namespace ConfusServer {
 			break;
 		case ETeamIdentifier::TeamRed:
             m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_RED.png"));
-			m_StartPosition.set({ 1.5f, 15.f, -72.f });
+			m_StartPosition.set({ 1.5f, 15.0f, -72.f });
 			m_StartRotation.set({ 0.f, 180.f, 0.f });
             returnToStartPosition();
 			break;
@@ -226,21 +226,18 @@ namespace ConfusServer {
 
     void Flag::updateClients()
     {
-        // To update all clients we will send:
-        // - Flag Color (teamIdentifier)
-        // - Flag State 
-        // - Flag position
-        
         // Only update when the flag is not at base.
-       //if(m_FlagStatus != EFlagEnum::FlagBase) 
-        RakNet::BitStream outputStream;
+       if(m_FlagStatus != EFlagEnum::FlagBase) 
+       {
+           RakNet::BitStream outputStream;
 
-        outputStream.Write(Networking::EPacketType::Flag);
-        outputStream.Write(m_TeamIdentifier);
-        outputStream.Write(m_FlagStatus);
-        outputStream.Write(m_FlagNode->getPosition());
+           outputStream.Write(Networking::EPacketType::Flag);
+           outputStream.Write(m_TeamIdentifier);
+           outputStream.Write(m_FlagStatus);
+           outputStream.Write(m_FlagNode->getPosition());
 
-        m_Connection->broadcastBitstream(outputStream);
+           m_Connection->broadcastBitstream(outputStream);
+       }
     }
 
     void Flag::update()
@@ -250,6 +247,9 @@ namespace ConfusServer {
 
 	Flag::~Flag() {
         m_FlagNode->setParent(m_FlagOldParent);
-		delete(m_Collider);
+        if(m_Collider != nullptr)
+        {
+            delete(m_Collider);
+        }
 	}
 }

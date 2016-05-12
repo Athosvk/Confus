@@ -1,4 +1,5 @@
 #include <IrrAssimp/IrrAssimp.h>
+#include <iostream>
 #include "Audio\PlayerAudioEmitter.h"
 #include "Player.h"
 #include "EventManager.h"
@@ -98,7 +99,7 @@ namespace ConfusServer
 
     void Player::handleInput(EventManager& a_EventManager)
     {
-        if(!m_Attacking)
+       /* if(!m_Attacking)
         {
             if(a_EventManager.IsRightMouseDown())
             {
@@ -109,6 +110,8 @@ namespace ConfusServer
                 startLightAttack();
             }
         }
+        std::cout << std::to_string(a_EventManager.IsLeftMouseDown());
+        */
     }
 
     void Player::render()
