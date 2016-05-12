@@ -189,7 +189,6 @@ namespace Confus
             a_InputStream->IgnoreBytes(sizeof(RakNet::MessageID));
             a_InputStream->Read(timeMazeChanges);
             a_InputStream->Read(mazeSeed);
-            std::cout << "Update is in " << (timeMazeChanges - static_cast<int>(RakNet::GetTimeMS())) << " ms, the seed is:\t" << mazeSeed << std::endl;
             m_MazeGenerator.refillMainMazeRequest(mazeSeed, timeMazeChanges);
         });
 
@@ -202,7 +201,6 @@ namespace Confus
             a_InputStream->Read(blueScore);
             ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, redScore);
             ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, blueScore);
-            std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
         });
     }
 

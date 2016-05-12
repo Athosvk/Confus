@@ -1,13 +1,13 @@
 #include <IrrAssimp/IrrAssimp.h>
-#include <iostream>
 #include <RakNet/BitStream.h>
 #include <RakNet/GetTime.h>
+#include <RakNet/PacketPriority.h>
+
 #include "Audio\PlayerAudioEmitter.h"
 #include "Networking/ClientConnection.h"
 #include "Player.h"
 #include "EventManager.h"
 #include "Flag.h"
-#include <RakNet/PacketPriority.h>
 #include "../Confusshared/Physics/PhysicsWorld.h"
 #include "../Confusshared/Physics/BoxCollider.h"
 #include "../Confusshared/Physics/RigidBody.h"
@@ -327,7 +327,6 @@ namespace Confus
              }
 
              m_StateChangeTime = RakNet::GetTime();
-             std::cout << "State changed! Time of change is: " << m_StateChangeTime << std::endl;
          } 
      }
 

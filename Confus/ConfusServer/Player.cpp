@@ -155,7 +155,6 @@ namespace ConfusServer
         m_Attacking = true;
         m_Weapon.enableCollider();
         m_Weapon.resetCollider();
-        std::cout << "Attacking on server" << std::endl;
     }
 
     void Player::startLightAttack()
