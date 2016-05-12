@@ -287,5 +287,8 @@
     <ClInclude Include="..\ConfusShared\EHitIdentifier.h">
       <Filter>Shared</Filter>
     </ClInclude>
+    <ClInclude Include="Networking\ClientConnection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -274,15 +274,27 @@ namespace ConfusServer
 
     void Game::updatePlayers()
     {
+        RakNet::BitStream stream;
+        stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdatePosition));
         for(size_t i = 0u; i < m_PlayerArray.size(); i++)
         {
-            RakNet::BitStream stream;
-            stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdatePosition));
             stream.Write(static_cast<long long>(m_PlayerArray[i]->ID));
             stream.Write(static_cast<irr::core::vector3df>(m_PlayerArray[i]->CameraNode->getPosition()));
             stream.Write(static_cast<irr::core::vector3df>(m_PlayerArray[i]->CameraNode->getRotation()));
-            m_Connection->broadcastPacket(&stream, nullptr);
         }
+        m_Connection->broadcastPacket(&stream, nullptr);
+    }
+
+    void Game::updateHealth()
+    {
+        RakNet::BitStream stream;
+        stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdateHealth));
+        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        {
+            stream.Write(static_cast<long long>(m_PlayerArray[i]->ID));
+            stream.Write(static_cast<int>(m_PlayerArray[i]->PlayerHealth.getHealth()));
+        }
+        m_Connection->broadcastPacket(&stream, nullptr);
     }
 
     void Game::render()
