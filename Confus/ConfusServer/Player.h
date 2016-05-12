@@ -24,6 +24,7 @@ namespace ConfusServer {
 		EFlagEnum CarryingFlag;
 		ETeamIdentifier TeamIdentifier;    
         Flag* FlagPointer;
+        Health PlayerHealth;
         long long ID;
 	private:
         Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
@@ -33,7 +34,7 @@ namespace ConfusServer {
         static const irr::u32 WeaponJointIndex;
         static const unsigned LightAttackDamage;
         static const unsigned HeavyAttackDamage;
-	    Health PlayerHealth;
+	    
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
         /// <summary> Whether the player is currently attacking or not </summary>

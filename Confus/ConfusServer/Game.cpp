@@ -272,6 +272,18 @@ namespace ConfusServer
         }
     }
 
+    void Game::updateHealth()
+    {
+        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        {
+            RakNet::BitStream stream;
+            stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdateHealth));
+            stream.Write(static_cast<long long>(m_PlayerArray[i]->ID));
+            stream.Write(static_cast<int>(m_PlayerArray[i]->PlayerHealth.getHealth()));
+            m_Connection->broadcastPacket(&stream, nullptr);
+        }
+    }
+
     void Game::render()
     {
         m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
