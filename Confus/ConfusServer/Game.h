@@ -156,5 +156,7 @@ namespace ConfusServer
         /// Broadcast a maze change
         /// </summary>
         void broadcastMazeChange(int a_Seed);
+        /// <summary> Reset game </summary>
+        void resetGame();
     };
 }

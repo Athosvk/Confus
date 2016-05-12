@@ -3,10 +3,11 @@
 #include <iostream>
 #include <RakNet\GetTime.h>
 
-#define DEBUG_CONSOLE
 #include "Game.h"
 #include "Player.h"
 #include "Flag.h"
+
+#define DEBUG_CONSOLE
 #include "../ConfusShared/Debug.h"
 #include "../ConfusShared/TeamIdentifier.h"
 
@@ -20,6 +21,7 @@ namespace ConfusServer
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),
+        m_TeamScoreManager(),
 		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
         m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, true),        
         m_SecondPlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, false),
@@ -37,10 +39,22 @@ namespace ConfusServer
         }
     }
 
+    void Game::resetGame() {
+        m_BlueFlag.returnToStartPosition();
+        m_RedFlag.returnToStartPosition();
+        m_TeamScoreManager.resetScore();
+        m_MazeTimer = 0;
+        broadcastMazeChange(19 + 20 + 21 + 22 + 23 + 24);
+		
+        for(Player* player : m_PlayerArray) {
+			player->resetPlayer();            
+        }
+    }
+
     void Game::run()
     {
         initializeConnection();
-
+        m_TeamScoreManager.setResetCallback([this] {resetGame(); });
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 

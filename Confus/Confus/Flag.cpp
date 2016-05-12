@@ -188,6 +188,5 @@ namespace Confus
     }
 
 	Flag::~Flag() {
-        m_FlagNode->setParent(m_FlagOldParent);
 	}
 }

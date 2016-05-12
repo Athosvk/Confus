@@ -31,6 +31,7 @@ namespace Confus
             PlayerAttack = 7 + ID_USER_PACKET_ENUM,
             MazeChange = 8 + ID_USER_PACKET_ENUM,
             Flag = 13 + ID_USER_PACKET_ENUM
+            EndOfGame = 9 + ID_USER_PACKET_ENUM
         };
         /// <summary>
         /// Represents a connection to the server that this clients is connected to.

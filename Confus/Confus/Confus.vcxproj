@@ -191,6 +191,7 @@ lib /out:Confus.lib *.obj</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseGame.cpp" />
     <ClCompile Include="Audio\AudioManager.cpp" />
     <ClCompile Include="Audio\OpenAL\Framework\aldlist.cpp" />
     <ClCompile Include="Audio\OpenAL\Framework\CWaves.cpp" />
@@ -218,6 +219,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="MazeGenerator.cpp" />
     <ClCompile Include="MazeTile.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MoveableWall.cpp" />
     <ClCompile Include="Networking\ClientConnection.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -227,10 +229,12 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="StaticWall.cpp" />
     <ClCompile Include="WalledMazeTile.cpp" />
     <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="WinScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ConfusShared\Debug.h" />
     <ClInclude Include="..\ConfusShared\TeamIdentifier.h" />
+    <ClInclude Include="BaseGame.h" />
     <ClInclude Include="Audio\AudioManager.h" />
     <ClInclude Include="Audio\OpenAL\Framework\aldlist.h" />
     <ClInclude Include="Audio\OpenAL\Framework\CWaves.h" />
@@ -260,6 +264,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="Maze.h" />
     <ClInclude Include="MazeGenerator.h" />
     <ClInclude Include="MazeTile.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="MoveableWall.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RespawnFloor.h" />
@@ -268,6 +273,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="StaticWall.h" />
     <ClInclude Include="WalledMazeTile.h" />
     <ClInclude Include="Weapon.h" />
+    <ClInclude Include="WinScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
