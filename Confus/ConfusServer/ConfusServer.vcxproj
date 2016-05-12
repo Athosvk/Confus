@@ -192,6 +192,8 @@ lib /out:ConfusServer.lib *.obj</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ConfusShared\BaseGame.cpp" />
+    <ClCompile Include="..\ConfusShared\RespawnFloor.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Flag.cpp" />
@@ -217,8 +219,11 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ConfusShared\BaseGame.h" />
     <ClInclude Include="..\ConfusShared\Debug.h" />
+    <ClInclude Include="..\ConfusShared\Delegate.h" />
     <ClInclude Include="..\ConfusShared\EnumUtility.h" />
+    <ClInclude Include="..\ConfusShared\RespawnFloor.h" />
     <ClInclude Include="..\ConfusShared\TeamIdentifier.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="EventManager.h" />

@@ -8,7 +8,7 @@
 
 namespace ConfusServer {
 
-	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, TeamScore* a_TeamScore) :
+	Flag::Flag(irr::IrrlichtDevice* a_Device, ConfusShared::ETeamIdentifier a_TeamIdentifier, TeamScore* a_TeamScore) :
                 m_TeamIdentifier(a_TeamIdentifier),
 		        m_FlagStatus(EFlagEnum::FlagBase)
     {
@@ -63,13 +63,13 @@ namespace ConfusServer {
 	{
 		switch (m_TeamIdentifier)
 		{
-		case ETeamIdentifier::TeamBlue:
+		case ConfusShared::ETeamIdentifier::TeamBlue:
             m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_BLUE.png"));
 			m_StartPosition.set({ -2.0f, 15.f, -2.f });
 			m_StartRotation.set({ 0.f, 0.f, 0.f });
 			returnToStartPosition();
 			break;
-		case ETeamIdentifier::TeamRed:
+		case ConfusShared::ETeamIdentifier::TeamRed:
             m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_RED.png"));
 			m_StartPosition.set({ 1.5f, 15.f, -72.f });
 			m_StartRotation.set({ 0.f, 180.f, 0.f });
@@ -119,9 +119,9 @@ namespace ConfusServer {
     {
         switch(m_TeamIdentifier)
         {
-        case ETeamIdentifier::TeamBlue:
+		case ConfusShared::ETeamIdentifier::TeamBlue:
             return { 255, 0, 0, 255 };
-        case ETeamIdentifier::TeamRed:
+		case ConfusShared::ETeamIdentifier::TeamRed:
             return { 255, 255, 0, 0 };
         default:
             return { 255, 255, 255, 255 };

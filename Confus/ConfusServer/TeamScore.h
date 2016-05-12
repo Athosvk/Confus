@@ -30,19 +30,19 @@ namespace ConfusServer
         /// <summary >Update the score of a team that scored. </summary>
         /// <param name="a_TeamScored"> The team that achieved a point. </param>
         /// <param name="a_IncreasementValue"> The amount of points the value will be increased with. </param>
-        void teamScoredPoint(ETeamIdentifier a_TeamScored, int a_IncreasementValue = 1);
+        void teamScoredPoint(ConfusShared::ETeamIdentifier a_TeamScored, int a_IncreasementValue = 1);
         /// <summary > Reset the score. </summary>
         void resetScore();
         /// <summary> Check the amount of points a team has. </summary>
         /// <returns> Returns the amount of points a team has. </returns>
         /// <param name="a_Team"> The team you want to know the score of. </param>
-        int getPointsOfTeam(ETeamIdentifier a_Team);
+        int getPointsOfTeam(ConfusShared::ETeamIdentifier a_Team);
         /// <summary> Set the game reset callback </summary>
         void setResetCallback(const std::function<void()>& a_ResetGameCallback);
     private:
         /// <summary> TeamScore calls this to check if a team has score enough points to win. </summary>
         /// <returns> Returns if the team has enough points to win </returns>
         /// <param name="a_Team"> The team you want to know of if it has won. </param>
-        bool teamHasWon(ETeamIdentifier a_Team);
+        bool teamHasWon(ConfusShared::ETeamIdentifier a_Team);
     };
 }

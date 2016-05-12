@@ -26,13 +26,13 @@ namespace ConfusServer
         m_Connection->broadcastBitstream(bitStream);
     }
 
-    void TeamScore::teamScoredPoint(ETeamIdentifier a_TeamScored, int a_IncreasementValue)
+    void TeamScore::teamScoredPoint(ConfusShared::ETeamIdentifier a_TeamScored, int a_IncreasementValue)
     {
-        if(a_TeamScored == ETeamIdentifier::TeamBlue)
+        if(a_TeamScored == ConfusShared::ETeamIdentifier::TeamBlue)
         {
             m_BlueTeamScore += a_IncreasementValue;
         } 
-        else if(a_TeamScored == ETeamIdentifier::TeamRed)
+        else if(a_TeamScored == ConfusShared::ETeamIdentifier::TeamRed)
         {
             m_RedTeamScore += a_IncreasementValue;
         }
@@ -55,15 +55,15 @@ namespace ConfusServer
         m_BlueTeamScore = 0;
     }
 
-    int TeamScore::getPointsOfTeam(ETeamIdentifier a_Team) 
+    int TeamScore::getPointsOfTeam(ConfusShared::ETeamIdentifier a_Team)
     {
         int scoreAmount = 0;
         switch(a_Team)
         {
-        case ETeamIdentifier::TeamBlue:
+		case ConfusShared::ETeamIdentifier::TeamBlue:
             scoreAmount = m_BlueTeamScore;
             break;
-        case ETeamIdentifier::TeamRed:
+		case ConfusShared::ETeamIdentifier::TeamRed:
             scoreAmount = m_RedTeamScore;
             break;
         default:
@@ -78,7 +78,7 @@ namespace ConfusServer
         m_ResetGameCallback = a_ResetGameCallback;
     }
 
-    bool TeamScore::teamHasWon(ETeamIdentifier a_Team)
+    bool TeamScore::teamHasWon(ConfusShared::ETeamIdentifier a_Team)
     {
         return getPointsOfTeam(a_Team) == TeamMaxScore;
     }

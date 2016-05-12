@@ -1,5 +1,6 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
+
 #include "Health.h"
 #include "Weapon.h"
 #include "../ConfusShared/TeamIdentifier.h"
@@ -22,7 +23,7 @@ namespace ConfusServer {
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
         irr::scene::ICameraSceneNode* CameraNode = nullptr;
 		EFlagEnum CarryingFlag;
-		ETeamIdentifier TeamIdentifier;    
+		ConfusShared::ETeamIdentifier TeamIdentifier;
         Flag* FlagPointer;
         long long ID;
 	private:
@@ -41,7 +42,8 @@ namespace ConfusServer {
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
     public:
-        Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
+        Player(irr::IrrlichtDevice* a_Device, long long a_id, ConfusShared::ETeamIdentifier a_TeamIdentifier, 
+			bool a_MainPlayer);
 		~Player();
         void fixedUpdate();
         void update();

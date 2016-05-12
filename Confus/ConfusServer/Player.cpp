@@ -1,4 +1,5 @@
 #include <IrrAssimp/IrrAssimp.h>
+
 #include "Audio\PlayerAudioEmitter.h"
 #include "Player.h"
 #include "EventManager.h"
@@ -9,7 +10,7 @@ namespace ConfusServer
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-	Player::Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
+	Player::Player(irr::IrrlichtDevice* a_Device, long long a_id, ConfusShared::ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
 		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
 		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
 		TeamIdentifier(a_TeamIdentifier),
@@ -26,11 +27,11 @@ namespace ConfusServer
 
         ID = a_id;
 
-        if(a_TeamIdentifier == ETeamIdentifier::TeamBlue) 
+        if(a_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamBlue) 
 		{
 			PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
         }
-        else if(a_TeamIdentifier == ETeamIdentifier::TeamRed) 
+        else if(a_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamRed) 
 		{
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
         }
@@ -38,10 +39,10 @@ namespace ConfusServer
         PlayerNode->setPosition(irr::core::vector3df(0, -7.0f, -1.5f));
         PlayerNode->setName({"Player"});
 
-        if(a_TeamIdentifier == ETeamIdentifier::TeamBlue) {
+        if(a_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamBlue) {
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
         }
-        else if(a_TeamIdentifier == ETeamIdentifier::TeamRed) {
+        else if(a_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamRed) {
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
         }
 
@@ -70,11 +71,11 @@ namespace ConfusServer
         {
             CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, false);
         }
-        if(a_TeamIdentifier == ETeamIdentifier::TeamBlue)
+        if(a_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamBlue)
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
         }
-        else if(a_TeamIdentifier == ETeamIdentifier::TeamRed)
+        else if(a_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamRed)
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
         }
@@ -90,11 +91,11 @@ namespace ConfusServer
 
     void Player::resetPlayer() 
     {
-        if(TeamIdentifier == ETeamIdentifier::TeamBlue)
+        if(TeamIdentifier == ConfusShared::ETeamIdentifier::TeamBlue)
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 0.f));
         }
-        else if(TeamIdentifier == ETeamIdentifier::TeamRed)
+        else if(TeamIdentifier == ConfusShared::ETeamIdentifier::TeamRed)
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
         }
