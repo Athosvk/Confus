@@ -53,6 +53,8 @@ namespace ConfusServer {
         /// <param name="a_EventManager">The current event manager</param>
         void handleInput(EventManager& a_EventManager);
         void setLevelCollider(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_Level);
+        /// Reset the player
+        void resetPlayer();
     private:
         /// <summary> Starts the walking animation, which is the default animation </summary>
         void startWalking() const;

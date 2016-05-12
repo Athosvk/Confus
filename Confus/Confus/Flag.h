@@ -21,7 +21,7 @@ namespace Confus
 		FlagDropped ///< The flag is dropped.
 	};
 
-	///Flag Class, every flag should have this class, contains info about a flag
+	/// Flag Class, every flag should have this class, contains info about a flag
 	/// Flag class with status and team id
 	class Flag 
     {
@@ -38,10 +38,11 @@ namespace Confus
 
 
     public: 
-        /// <summary> Flag class constructor. </summary>
-        /// <param name="a_Device">The active Irrlicht Device.</param>
-        /// <param name="a_TeamIdentifier">The team's identifier the flag should have.</param>
-        Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier,
+		/// <summary> Flag class constructor </summary>
+		/// <param name="a_Device">The active Irrlicht Device.</param>
+		/// <param name="a_TeamIdentifier">The team's identifier the flag should have.</param>
+		/// <param name="a_PhysicsWorld">The physics world </param>
+		Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier,
 			Physics::PhysicsWorld& a_PhysicsWorld);
 
         /// <summary> Flag class destructor </summary>
