@@ -1,5 +1,7 @@
 #pragma once
-#include "../Common/TeamIdentifier.h"
+#include "../ConfusShared/TeamIdentifier.h"
+#include <Irrlicht\irrlicht.h>
+#include "Delegate.h"
 
 namespace Confus 
 {
@@ -19,10 +21,12 @@ namespace Confus
 		FlagDropped ///< The flag is dropped.
 	};
 
-	///Flag Class, every flag should have this class, contains info about a flag
+	/// Flag Class, every flag should have this class, contains info about a flag
 	/// Flag class with status and team id
 	class Flag 
     {
+	public:
+		Delegate<void(ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum)> FlagStatusChangedEvent;
     private:		
 		irr::core::vector3df m_StartPosition = irr::core::vector3df(0.f);
 		irr::core::vector3df m_StartRotation = irr::core::vector3df(0.f);
@@ -34,10 +38,11 @@ namespace Confus
 
 
     public: 
-        /// <summary> Flag class constructor. </summary>
-        /// <param name="a_Device">The active Irrlicht Device.</param>
-        /// <param name="a_TeamIdentifier">The team's identifier the flag should have.</param>
-        Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier,
+		/// <summary> Flag class constructor </summary>
+		/// <param name="a_Device">The active Irrlicht Device.</param>
+		/// <param name="a_TeamIdentifier">The team's identifier the flag should have.</param>
+		/// <param name="a_PhysicsWorld">The physics world </param>
+		Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier,
 			Physics::PhysicsWorld& a_PhysicsWorld);
 
         /// <summary> Flag class destructor </summary>
@@ -66,9 +71,11 @@ namespace Confus
 		/// <param name="a_PlayerObject"> Score a point for the player object. </param>
 		void score(Player* a_PlayerObject);
 
-		const irr::video::SColor getColor()const;
+		const irr::video::SColor getColor() const;
+		const ETeamIdentifier getTeamIdentifier() const;
 		const EFlagEnum getFlagStatus() const;
     private:
+		void setFlagStatus(EFlagEnum a_FlagStatus);
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
 		void setColor(irr::video::IVideoDriver* a_VideoDriver);
 	};

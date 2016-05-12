@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include <Confus/MoveableWall.h>
+#include <ConfusShared/Physics/PhysicsWorld.h>
 
 #include "CppUnitTest.h"
 
@@ -14,12 +15,19 @@ namespace ConfusTest
 		irr::core::vector3df m_HiddenPosition = irr::core::vector3df(0.0f);
 		irr::core::vector3df m_StartPosition = irr::core::vector3df(0.0f, 1.0f, 0.0f);
 		irr::core::vector3df m_MidPoint = irr::core::vector3df(0.0f, 0.5f, 0.0f);
+		Confus::Physics::PhysicsWorld m_PhysicsWorld;
 
 	public:
+		MoveableWallTest()
+			: m_PhysicsWorld(m_Device)
+		{
+
+		}
+
 		TEST_METHOD(testHiding)
 		{
 			Confus::MoveableWall moveableWall = 
-				Confus::MoveableWall(m_Device, m_StartPosition, m_HiddenPosition);
+				Confus::MoveableWall(m_Device, m_StartPosition, m_HiddenPosition, m_PhysicsWorld);
 			moveableWall.TransitionSpeed = 0.5f;
 			moveableWall.hide();
 			moveableWall.fixedUpdate();
@@ -31,7 +39,7 @@ namespace ConfusTest
 		TEST_METHOD(testRising)
 		{
 			Confus::MoveableWall moveableWall = 
-				Confus::MoveableWall(m_Device, m_StartPosition, m_HiddenPosition);
+				Confus::MoveableWall(m_Device, m_StartPosition, m_HiddenPosition, m_PhysicsWorld);
 			moveableWall.TransitionSpeed = 0.5f;
 			moveableWall.hide();
 			moveableWall.fixedUpdate();
@@ -46,7 +54,7 @@ namespace ConfusTest
 		TEST_METHOD(testHalfway)
 		{
 			Confus::MoveableWall moveableWall =
-				Confus::MoveableWall(m_Device, m_StartPosition, m_HiddenPosition);
+				Confus::MoveableWall(m_Device, m_StartPosition, m_HiddenPosition, m_PhysicsWorld);
 			moveableWall.TransitionSpeed = 0.5f;
 			moveableWall.hide();
 			moveableWall.fixedUpdate();
@@ -63,7 +71,7 @@ namespace ConfusTest
 		TEST_METHOD(testOvershoot)
 		{
 			Confus::MoveableWall moveableWall = Confus::MoveableWall(m_Device, 
-				m_StartPosition, m_HiddenPosition);
+				m_StartPosition, m_HiddenPosition, m_PhysicsWorld);
 			moveableWall.TransitionSpeed = 15.0f;
 			moveableWall.hide();
 			moveableWall.fixedUpdate();

@@ -33,7 +33,9 @@ namespace ConfusServer
             ScoreUpdate = 6 + ID_USER_PACKET_ENUM,
             PlayerAttack = 7 + ID_USER_PACKET_ENUM,
             MazeChange = 8 + ID_USER_PACKET_ENUM,
-            Player = 9 + ID_USER_PACKET_ENUM
+            Player = 9 + ID_USER_PACKET_ENUM,
+            EndOfGame = 11 + ID_USER_PACKET_ENUM,
+            UpdateHealth = 10 + ID_USER_PACKET_ENUM
         };
         /// <summary>
         /// Represents the outgoing connection/group of outgoing connections to the client(s)

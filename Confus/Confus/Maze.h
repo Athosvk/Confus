@@ -55,13 +55,14 @@ namespace Confus
 		/// </summary>
 		int const& mazeSizeY() const;
 
-		/// <summary>
-		/// Constructor for this class
-		/// </summary>
+		/// <summary> Constructor for this class </summary>
 		/// <param name="a_Device">The current Irrlicht device.</param>
+		/// <param name="a_MazeSizeX">The width </param>
+		/// <param name="a_MazeSizeY">The depth </param>
 		/// <param name="a_PhysicsWorld">The active physics world.</param>
+		/// <param name="a_MazeScalar">The scale of the maze</param>
 		/// <param name="a_NeedRender">Boolean that states if this maze needs to be rendered or not</param>
-		Maze(irr::IrrlichtDevice * a_Device,int a_MazeSizeX, int a_MazeSizeY, Physics::PhysicsWorld& a_PhysicsWorld,
+		Maze(irr::IrrlichtDevice * a_Device, int a_MazeSizeX, int a_MazeSizeY, Physics::PhysicsWorld& a_PhysicsWorld,
 			float a_MazeScalar = 1, bool a_NeedRender = false);
 
 		/// <summary>

@@ -8,7 +8,7 @@
 
 #include "Connection.h"
 #define DEBUG_CONSOLE
-#include "../../Common/Debug.h"
+#include "../../ConfusShared/Debug.h"
 
 namespace ConfusServer
 {

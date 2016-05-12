@@ -146,9 +146,12 @@ namespace ConfusServer
 	    void addPlayer(RakNet::Packet* a_Data);
         void removePlayer(RakNet::Packet* a_Data);
         void updatePlayers();
+        void updateHealth();
         /// <summary>
         /// Broadcast a maze change
         /// </summary>
         void broadcastMazeChange(int a_Seed);
+        /// <summary> Reset game </summary>
+        void resetGame();
     };
 }

@@ -4,7 +4,7 @@
 #include "Networking\Connection.h"
 #include "Health.h"
 #include "Weapon.h"
-#include "../Common/TeamIdentifier.h"
+#include "../ConfusShared/TeamIdentifier.h"
 
 namespace ConfusServer {
 
@@ -41,6 +41,7 @@ namespace ConfusServer {
 		EFlagEnum CarryingFlag;
 		ETeamIdentifier TeamIdentifier;    
         Flag* FlagPointer;
+        Health PlayerHealth;
         long long ID;
    
 	private:
@@ -53,7 +54,7 @@ namespace ConfusServer {
         static const irr::u32 WeaponJointIndex;
         static const unsigned LightAttackDamage;
         static const unsigned HeavyAttackDamage;
-	    Health PlayerHealth;
+	    
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
         /// <summary> Whether the player is currently attacking or not </summary>
@@ -76,6 +77,8 @@ namespace ConfusServer {
         void setLevelCollider(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_Level);
         /// <summary> Starts the light attack, dealing normal damage </summary>
         void startLightAttack();
+        /// Reset the player
+        void resetPlayer();
 
         /// <summary> Starts the heavy attack, which deals more damage </summary>
         void startHeavyAttack();
