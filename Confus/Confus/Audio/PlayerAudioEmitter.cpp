@@ -9,7 +9,8 @@ namespace Confus
     namespace Audio
     {
         PlayerAudioEmitter::PlayerAudioEmitter(irr::scene::ISceneNode* a_AttachedPlayer, AudioManager* a_AudioManager)
-			: m_AttachedPlayer(a_AttachedPlayer), m_HitSoundHeavy(a_AudioManager->createSound("SFX/Player/a_heavy_grunt.wav")),
+			: m_AttachedPlayer(a_AttachedPlayer),
+			m_HitSoundHeavy(a_AudioManager->createSound("SFX/Player/a_heavy_grunt.wav")),
 			m_HitSoundLight(a_AudioManager->createSound("SFX/Player/a_light_grunt.wav")),
 			m_HitSoundHeavyBackstab(a_AudioManager->createSound("SFX/Player/a_heavybackstab_grunt.wav")),
 			m_HitSoundLightBackstab(a_AudioManager->createSound("SFX/Player/a_lightbackstab_grunt.wav"))
