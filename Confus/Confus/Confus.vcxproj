@@ -266,6 +266,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="MazeTile.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MoveableWall.h" />
+    <ClInclude Include="Networking\ClientConnection.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RespawnFloor.h" />
     <ClInclude Include="Audio\Sound.h" />

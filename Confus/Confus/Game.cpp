@@ -97,16 +97,21 @@ namespace Confus
         {
             updateOtherPlayer(a_Data);
         });
-
-		m_Connection->addFunctionToMap(ID_NO_FREE_INCOMING_CONNECTIONS, [this](RakNet::Packet* a_Data)
-		{
-			denyConnection(a_Data);
-		});
-		
-		m_Connection->addFunctionToMap(ID_CONNECTION_ATTEMPT_FAILED, [this](RakNet::Packet* a_Data)
-		{
-			denyConnection(a_Data);
-		});
+        
+	m_Connection->addFunctionToMap(ID_NO_FREE_INCOMING_CONNECTIONS, [this](RakNet::Packet* a_Data)
+	{
+		denyConnection(a_Data);
+	});
+			
+        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdateHealth), [this](RakNet::Packet* a_Data)
+        {
+            updateHealth(a_Data);
+        });
+      
+	m_Connection->addFunctionToMap(ID_CONNECTION_ATTEMPT_FAILED, [this](RakNet::Packet* a_Data)
+	{
+		denyConnection(a_Data);
+	});
 
 		m_Connection->addFunctionToMap(ID_CONNECTION_LOST, [this](RakNet::Packet* a_Data)
 		{
@@ -281,23 +286,57 @@ namespace Confus
         inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
         long long id;
-
         inputStream.Read(id);
 
-        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        for(size_t j = 0u; j < m_PlayerArray.size(); j++)
         {
-            if(m_PlayerArray[i]->MainPlayer == false && m_PlayerArray[i]->ID == id)
+            for(size_t i = 0u; i < m_PlayerArray.size(); i++)
             {
-                irr::core::vector3df pos;
-                irr::core::vector3df rot;
+                if(m_PlayerArray[i]->ID == id)
+                {
+                    irr::core::vector3df pos;
+                    irr::core::vector3df rot;
 
-                inputStream.Read(pos);
-                inputStream.Read(rot);
+                    inputStream.Read(pos);
+                    inputStream.Read(rot);
 
-                m_PlayerArray[i]->setPosition(pos);
-                m_PlayerArray[i]->setRotation(rot);
-                break;
+                    m_PlayerArray[i]->setPosition(pos);
+                    m_PlayerArray[i]->setRotation(rot);
+                }
             }
+            inputStream.Read(id);
+        }
+    }
+
+    void Game::updateHealth(RakNet::Packet* a_Data)
+    {
+        RakNet::BitStream inputStream(a_Data->data, a_Data->length, false);
+        inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+
+        long long id;
+        inputStream.Read(id);
+
+        for(size_t j = 0u; j < m_PlayerArray.size(); j++)
+        {
+            for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+            {
+                if(m_PlayerArray[i]->ID == id)
+                {
+                    int health;
+
+                    inputStream.Read(health);
+
+                    if(health > m_PlayerArray[i]->PlayerHealth.getHealth())
+                    {
+                        m_PlayerArray[i]->PlayerHealth.heal(health - m_PlayerArray[i]->PlayerHealth.getHealth());
+                    }
+                    else if(health < m_PlayerArray[i]->PlayerHealth.getHealth())
+                    {
+                        m_PlayerArray[i]->PlayerHealth.damage(m_PlayerArray[i]->PlayerHealth.getHealth() - health);
+                    }
+                }
+            }
+            inputStream.Read(id);
         }
     }
 

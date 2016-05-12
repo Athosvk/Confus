@@ -122,6 +122,10 @@ namespace Confus
         /// Updates positions and rotations of all other players.
         /// </summary>
         void updateOtherPlayer(RakNet::Packet* a_Data);
+        /// <summary>
+        /// Updates health of all players
+        /// </summary>
+        void updateHealth(RakNet::Packet* a_Data);
 
         void removePlayer(RakNet::Packet* a_Data);
 
