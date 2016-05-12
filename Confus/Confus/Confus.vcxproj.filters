@@ -200,13 +200,7 @@
     <ClInclude Include="ClientTeamScore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Audio\Sound.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\TeamIdentifier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Audio\AudioManager.h">
