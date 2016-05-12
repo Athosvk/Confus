@@ -285,15 +285,19 @@ namespace ConfusServer
         m_Connection->broadcastPacket(&stream, nullptr);
     }
 
-    void Game::updateHealth()
+    void Game::updateHealth(EHitIdentifier a_HitType, Player* a_Player)
     {
         RakNet::BitStream stream;
+
+		//MessageID
         stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdateHealth));
-        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
-        {
-            stream.Write(static_cast<long long>(m_PlayerArray[i]->ID));
-            stream.Write(static_cast<int>(m_PlayerArray[i]->PlayerHealth.getHealth()));
-        }
+
+		//data
+		stream.Write(static_cast<long long>(a_Player->ID));
+		stream.Write(static_cast<int>(a_Player->PlayerHealth.getHealth()));
+		stream.Write(static_cast<EHitIdentifier>(a_HitType));
+		
+		//send packet
         m_Connection->broadcastPacket(&stream, nullptr);
     }
 
