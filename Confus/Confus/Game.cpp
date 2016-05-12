@@ -266,23 +266,25 @@ namespace Confus
         inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
         long long id;
-
         inputStream.Read(id);
 
-        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        for(size_t j = 0u; j < m_PlayerArray.size(); j++)
         {
-            if(m_PlayerArray[i]->MainPlayer == false && m_PlayerArray[i]->ID == id)
+            for(size_t i = 0u; i < m_PlayerArray.size(); i++)
             {
-                irr::core::vector3df pos;
-                irr::core::vector3df rot;
+                if(m_PlayerArray[i]->ID == id)
+                {
+                    irr::core::vector3df pos;
+                    irr::core::vector3df rot;
 
-                inputStream.Read(pos);
-                inputStream.Read(rot);
+                    inputStream.Read(pos);
+                    inputStream.Read(rot);
 
-                m_PlayerArray[i]->setPosition(pos);
-                m_PlayerArray[i]->setRotation(rot);
-                break;
+                    m_PlayerArray[i]->setPosition(pos);
+                    m_PlayerArray[i]->setRotation(rot);
+                }
             }
+            inputStream.Read(id);
         }
     }
 
