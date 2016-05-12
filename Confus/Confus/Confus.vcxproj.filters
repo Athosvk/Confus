@@ -30,9 +30,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MoveableWall.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="StaticWall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -40,30 +37,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Audio\PlayerAudioEmitter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Maze.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MazeGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MazeTile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Health.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Flag.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WalledMazeTile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RespawnFloor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Networking\ClientConnection.cpp">
@@ -117,9 +90,6 @@
     <ClCompile Include="FlagGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BaseGame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -144,6 +114,36 @@
     <ClCompile Include="..\ConfusShared\Physics\RigidBody.cpp">
       <Filter>Shared\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="..\ConfusShared\BaseGame.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Flag.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Health.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Maze.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\MazeGenerator.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\MazeTile.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\MoveableWall.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\RespawnFloor.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\WalledMazeTile.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Weapon.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -155,9 +155,6 @@
     <ClInclude Include="EventManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MoveableWall.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="StaticWall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -170,31 +167,7 @@
     <ClInclude Include="StaticWall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Maze.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MazeGenerator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MazeTile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Health.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Flag.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Audio\PlayerAudioEmitter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WalledMazeTile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RespawnFloor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GUI.h">
@@ -207,9 +180,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Menu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WinScreen.h">
@@ -254,13 +224,7 @@
     <ClInclude Include="..\Common\TeamIdentifier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Delegate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\ConfusShared\Debug.h">
-      <Filter>Shared</Filter>
-    </ClInclude>
-    <ClInclude Include="FlagGUI.h">
       <Filter>Shared</Filter>
     </ClInclude>
     <ClInclude Include="..\ConfusShared\TeamIdentifier.h">
@@ -286,6 +250,48 @@
     </ClInclude>
     <ClInclude Include="..\ConfusShared\Physics\RigidBody.h">
       <Filter>Shared\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\BaseGame.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Delegate.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\EnumUtility.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Flag.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Health.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Maze.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\MazeGenerator.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\MazeTile.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\MoveableWall.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\RespawnFloor.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\WalledMazeTile.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Weapon.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="FlagGUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Networking\ClientConnection.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

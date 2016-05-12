@@ -13,7 +13,7 @@ namespace Confus
 		/// <summary> The blue team score, static so it can accessed from anywhere. </summary>
 		static int BlueTeamScore;
     public:
-        static void setTeamScore(ETeamIdentifier a_TeamIdentifier, int a_Score);
-        static int getTeamScore(ETeamIdentifier a_TeamIdentifier);
+        static void setTeamScore(ConfusShared::ETeamIdentifier a_TeamIdentifier, int a_Score);
+        static int getTeamScore(ConfusShared::ETeamIdentifier a_TeamIdentifier);
 	};
 }

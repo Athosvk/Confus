@@ -2,7 +2,8 @@
 #include <stack>
 
 #include "Maze.h"
-#include "Audio/Sound.h"
+//Change to observer pattern
+#include "../Confus/Audio/Sound.h"
 #include "../ConfusShared/Physics/BoxCollider.h"
 
 namespace Confus

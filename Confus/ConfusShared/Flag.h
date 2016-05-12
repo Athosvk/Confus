@@ -1,6 +1,7 @@
 #pragma once
-#include "../ConfusShared/TeamIdentifier.h"
 #include <Irrlicht\irrlicht.h>
+
+#include "../ConfusShared/TeamIdentifier.h"
 #include "Delegate.h"
 
 namespace Confus 
@@ -26,11 +27,11 @@ namespace Confus
 	class Flag 
     {
 	public:
-		Delegate<void(ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum)> FlagStatusChangedEvent;
+		Delegate<void(ConfusShared::ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum)> FlagStatusChangedEvent;
     private:		
 		irr::core::vector3df m_StartPosition = irr::core::vector3df(0.f);
 		irr::core::vector3df m_StartRotation = irr::core::vector3df(0.f);
-        ETeamIdentifier m_TeamIdentifier;
+        ConfusShared::ETeamIdentifier m_TeamIdentifier;
 		EFlagEnum m_FlagStatus;
         irr::scene::IMeshSceneNode* m_FlagNode;
         Physics::BoxCollider* m_Collider;
@@ -42,7 +43,7 @@ namespace Confus
 		/// <param name="a_Device">The active Irrlicht Device.</param>
 		/// <param name="a_TeamIdentifier">The team's identifier the flag should have.</param>
 		/// <param name="a_PhysicsWorld">The physics world </param>
-		Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier,
+		Flag(irr::IrrlichtDevice* a_Device, ConfusShared::ETeamIdentifier a_TeamIdentifier,
 			Physics::PhysicsWorld& a_PhysicsWorld);
 
         /// <summary> Flag class destructor </summary>
@@ -72,7 +73,7 @@ namespace Confus
 		void score(Player* a_PlayerObject);
 
 		const irr::video::SColor getColor() const;
-		const ETeamIdentifier getTeamIdentifier() const;
+		const ConfusShared::ETeamIdentifier getTeamIdentifier() const;
 		const EFlagEnum getFlagStatus() const;
     private:
 		void setFlagStatus(EFlagEnum a_FlagStatus);

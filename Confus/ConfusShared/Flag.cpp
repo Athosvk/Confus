@@ -3,15 +3,16 @@
 #include <iostream>
 
 #include "Flag.h"
-#include "Player.h"
-#include "ClientTeamScore.h"
+//To remove
+#include "../Confus/Player.h"
+#include "../Confus/ClientTeamScore.h"
 
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "../ConfusShared/Physics/BoxCollider.h"
 
 namespace Confus 
 {
-	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, Physics::PhysicsWorld& a_PhysicsWorld) : 
+	Flag::Flag(irr::IrrlichtDevice* a_Device, ConfusShared::ETeamIdentifier a_TeamIdentifier, Physics::PhysicsWorld& a_PhysicsWorld) : 
 		m_TeamIdentifier(a_TeamIdentifier),
 		m_FlagStatus(EFlagEnum::FlagBase) 
 	{
@@ -56,13 +57,13 @@ namespace Confus
 	{
 		switch (m_TeamIdentifier)
 		{
-		case ETeamIdentifier::TeamBlue:
+		case ConfusShared::ETeamIdentifier::TeamBlue:
             m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_BLUE.png"));
 			m_StartPosition.set({ -2.0f, 5.f, -2.f });
 			m_StartRotation.set({ 0.f, 0.f, 0.f });
 			returnToStartPosition();
 			break;
-		case ETeamIdentifier::TeamRed:
+		case ConfusShared::ETeamIdentifier::TeamRed:
             m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_RED.png"));
 			m_StartPosition.set({ 1.5f, 5.f, -72.f });
 			m_StartRotation.set({ 0.f, 180.f, 0.f });
@@ -118,16 +119,16 @@ namespace Confus
     {
         switch(m_TeamIdentifier)
         {
-        case ETeamIdentifier::TeamBlue:
+		case ConfusShared::ETeamIdentifier::TeamBlue:
             return { 255, 0, 0, 255 };
-        case ETeamIdentifier::TeamRed:
+		case ConfusShared::ETeamIdentifier::TeamRed:
             return { 255, 255, 0, 0 };
         default:
             return { 255, 255, 255, 255 };
         }
     }
 
-	 const ETeamIdentifier Flag::getTeamIdentifier() const
+	 const ConfusShared::ETeamIdentifier Flag::getTeamIdentifier() const
 	 {
 		 return m_TeamIdentifier;
 	 }

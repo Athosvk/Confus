@@ -1,9 +1,9 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
-#include "Health.h"
-#include "Weapon.h"
-#include "../ConfusShared/TeamIdentifier.h"
 
+#include "../ConfusShared/Health.h"
+#include "../ConfusShared/Weapon.h"
+#include "../ConfusShared/TeamIdentifier.h"
 
 namespace Confus 
 {
@@ -33,7 +33,7 @@ namespace Confus
         /// <summary> The ICameraSceneNode for the player </summary>
         irr::scene::ICameraSceneNode* CameraNode = nullptr;
 		EFlagEnum CarryingFlag;
-		ETeamIdentifier TeamIdentifier;    
+		ConfusShared::ETeamIdentifier TeamIdentifier;    
         Flag* FlagPointer = nullptr;
 		Health PlayerHealth;
         /// <summary> Determines if this player is this users player or not </summary>
@@ -68,7 +68,9 @@ namespace Confus
         /// <param name="a_TeamIdentifier">The team's identifier the player should have.</param>
         /// <param name="a_MainPlayer">A boolean to identify the player the user controls.</param>
         /// <param name="a_AudioManager">The audio manager.</param>
-        Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Audio::AudioManager* a_AudioManager);
+        Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, 
+			ConfusShared::ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, 
+			Audio::AudioManager* a_AudioManager);
         /// <summary> Player class destructor. </summary>
 		~Player();
         /// <summary> Update function, any tasks that need to be done every frame go here. </summary>

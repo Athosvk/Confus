@@ -4,7 +4,8 @@
 #include "Weapon.h"
 #include "../ConfusShared/Physics/RigidBody.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
-#include "Player.h"
+//Refactor to shared player
+#include "../Confus/Player.h"
 
 namespace Confus
 {

@@ -1,4 +1,6 @@
 #include "BaseGame.h"
+//Move EventManager hookup to Main.cpp, so that we can re-use this for the server
+#include "../Confus/EventManager.h"
 
 namespace Confus
 {

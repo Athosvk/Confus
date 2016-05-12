@@ -7,7 +7,7 @@
 
 #include "Game.h"
 #include "Player.h"
-#include "Flag.h"
+#include "../ConfusShared/Flag.h"
 #include "FlagGUI.h"
 #include "WinScreen.h"
 
@@ -25,9 +25,9 @@ namespace Confus
         m_PhysicsWorld(m_Device),
         m_MazeGenerator(m_Device, 41, 40, (19 + 20 + 21 + 22 + 23 + 24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
             irr::core::vector2df(19., 20.), m_PhysicsWorld, &m_AudioManager),
-        m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true, &m_AudioManager),
-        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_PhysicsWorld),
-        m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_PhysicsWorld),
+        m_PlayerNode(m_Device, m_PhysicsWorld, 1, ConfusShared::ETeamIdentifier::TeamBlue, true, &m_AudioManager),
+        m_BlueFlag(m_Device, ConfusShared::ETeamIdentifier::TeamBlue, m_PhysicsWorld),
+        m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, m_PhysicsWorld),
         m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
         m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, -83.f)),
         m_GUI(m_Device, &m_PlayerNode, &m_AudioManager),
@@ -172,14 +172,14 @@ namespace Confus
             inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
             inputStream.Read(redScore);
             inputStream.Read(blueScore);
-            ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, redScore);
-            ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, blueScore);
+            ClientTeamScore::setTeamScore(ConfusShared::ETeamIdentifier::TeamRed, redScore);
+            ClientTeamScore::setTeamScore(ConfusShared::ETeamIdentifier::TeamBlue, blueScore);
             std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
         });
 
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::EndOfGame), [this](RakNet::Packet* a_Packet) 
         {
-            ETeamIdentifier a_TeamIdentifier;
+            ConfusShared::ETeamIdentifier a_TeamIdentifier;
             RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
             inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
             inputStream.Read(a_TeamIdentifier);
@@ -244,8 +244,8 @@ namespace Confus
         m_BlueFlag.returnToStartPosition();
         m_RedFlag.returnToStartPosition();
         m_PlayerNode.respawn();
-        ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, 0);
-        ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, 0);
+        ClientTeamScore::setTeamScore(ConfusShared::ETeamIdentifier::TeamBlue, 0);
+        ClientTeamScore::setTeamScore(ConfusShared::ETeamIdentifier::TeamRed, 0);
     }
 
     void Game::fixedUpdate()
@@ -316,7 +316,7 @@ namespace Confus
         for(size_t i = 0u; i < size; i++)
         {
             long long id;
-            ETeamIdentifier teamID;
+			ConfusShared::ETeamIdentifier teamID;
 
             inputStream.Read(id);
             inputStream.Read(teamID);
@@ -334,7 +334,7 @@ namespace Confus
         inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
         long long id;
-        ETeamIdentifier teamID;
+		ConfusShared::ETeamIdentifier teamID;
 
         inputStream.Read(id);
         inputStream.Read(teamID);

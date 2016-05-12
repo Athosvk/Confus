@@ -3,7 +3,7 @@
 #include "IUIElement.h"
 #include <vector>
 
-#include "Flag.h"
+#include "../ConfusShared/Flag.h"
 
 namespace Confus
 {

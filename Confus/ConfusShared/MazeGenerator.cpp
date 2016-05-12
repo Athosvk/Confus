@@ -2,11 +2,11 @@
 
 #include "MazeGenerator.h"
 #include "WalledMazeTile.h"
-#include "Audio/AudioManager.h"
+//Refactor to observer pattern
+#include "../Confus/Audio/AudioManager.h"
 
 namespace Confus
 {
-
 	MazeGenerator::MazeGenerator(irr::IrrlichtDevice* a_Device, int a_MazeSizeX, int a_MazeSizeY, int a_InitialSeed,
 		irr::core::vector2df a_GenerateStartPoint, Physics::PhysicsWorld& a_PhysicsWorld, Audio::AudioManager* a_AudioManager)
 		: m_MainMaze(a_Device, a_MazeSizeX, a_MazeSizeY, a_PhysicsWorld, 1.5f, true), 

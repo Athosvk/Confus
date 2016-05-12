@@ -1,6 +1,5 @@
 #pragma once
-
-#include "BaseGame.h"
+#include "../ConfusShared/BaseGame.h"
 
 namespace Confus
 {

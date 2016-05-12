@@ -8,7 +8,7 @@ namespace Confus
     int ClientTeamScore::RedTeamScore = 0;
     int ClientTeamScore::BlueTeamScore = 0;
 
-    void ClientTeamScore::setTeamScore(ETeamIdentifier a_TeamIdentifier, int a_Score)
+    void ClientTeamScore::setTeamScore(ConfusShared::ETeamIdentifier a_TeamIdentifier, int a_Score)
     {
          switch(a_TeamIdentifier)
         {
@@ -24,7 +24,7 @@ namespace Confus
         }
     }
 
-    int ClientTeamScore::getTeamScore(ETeamIdentifier a_TeamIdentifier)
+    int ClientTeamScore::getTeamScore(ConfusShared::ETeamIdentifier a_TeamIdentifier)
     {
         int teamScoreValue = 0;
         switch(a_TeamIdentifier)

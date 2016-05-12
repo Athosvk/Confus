@@ -1,11 +1,12 @@
 #include <string>
 
 #include "WinScreen.h"
+#include "../Confus/EventManager.h"
 
 namespace Confus
 {
-
     const double WinScreen::BreakTime = 10;
+
     void WinScreen::start()
     {
         m_WinningText = m_Device->getGUIEnvironment()->addStaticText(L"Resetting Game", { 10, 240, 10 + 150, 240 + 80 });
@@ -16,11 +17,11 @@ namespace Confus
     {
         m_BreakTimer += m_DeltaTime;
 
-        if(m_GameWinner == ETeamIdentifier::TeamBlue)
+        if(m_GameWinner == ConfusShared::ETeamIdentifier::TeamBlue)
         {
             m_WinningText->setText((L"Blue team won! \nPress SPACE to restart now! \nPress ESCAPE to exit.\nExitting in: " + std::to_wstring(BreakTime - m_BreakTimer)).c_str());
         }
-        else if(m_GameWinner == ETeamIdentifier::TeamRed)
+        else if(m_GameWinner == ConfusShared::ETeamIdentifier::TeamRed)
         {
             m_WinningText->setText((L"Red team won! \nPress SPACE to restart now! \nPress ESCAPE to exit.\nExitting in: " + std::to_wstring(BreakTime - m_BreakTimer)).c_str());
         }

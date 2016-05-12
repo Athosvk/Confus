@@ -1,10 +1,10 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
 
-#include "EventManager.h"
-
 namespace Confus
 {    
+	class EventManager;
+
     /// <summary>
     /// Base Game class, scenes can use this to run a scene
     /// </summary>

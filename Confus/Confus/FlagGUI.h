@@ -1,7 +1,8 @@
 #pragma once
 #include <Irrlicht\irrlicht.h>
 #include <string>
-#include "Flag.h"
+
+#include "../ConfusShared/Flag.h"
 #include "IUIElement.h"
 
 namespace Confus
