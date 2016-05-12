@@ -8,7 +8,7 @@ namespace ConfusShared
 		Light = 0,
 		Heavy = 1 << 0,
 		LightBackstab = 1 << 1,
-		HeavyBackstab = 1 << 3
+		HeavyBackstab = 1 << 2
 
 	};
 }
