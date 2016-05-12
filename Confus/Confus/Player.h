@@ -39,6 +39,9 @@ namespace Confus
         bool MainPlayer = false;
 
         long long ID;
+
+		static const unsigned LightAttackDamage;
+		static const unsigned HeavyAttackDamage;
 	private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
 		/// <summary> private value for health class </summary>
@@ -47,8 +50,6 @@ namespace Confus
 
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
-        static const unsigned LightAttackDamage;
-        static const unsigned HeavyAttackDamage;
 
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;

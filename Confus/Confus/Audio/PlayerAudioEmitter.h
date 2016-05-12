@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Sound.h"
+#include "../../ConfusShared/EHitIdentifier.h"
 
 namespace Confus
 {
@@ -16,7 +17,10 @@ namespace Confus
         class PlayerAudioEmitter
 		{
 			/// <summary> Sound u emit when hit </summary>
-			Sound m_HitSound;
+			Sound m_HitSoundHeavy;
+			Sound m_HitSoundLight;
+			Sound m_HitSoundHeavyBackstab;
+			Sound m_HitSoundLightBackstab;
 			/// <summary> The footstep sounds </summary>
 			std::vector<Sound> m_Footsteps;
 			/// <summary> The grunt sounds </summary>
@@ -49,9 +53,9 @@ namespace Confus
             /// </summary>
             void playRandomSwordSwosh();
 			/// <summary>
-			/// Plays a random sword swosh.
+			/// Plays a hit sound when you get hit.
 			/// </summary>
-			void playHitSound();
+			void playHitSound(EHitIdentifier a_HitIdentifier);
 			/// <summary>
             /// Updates the position of this instance.
             /// </summary>

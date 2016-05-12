@@ -2,18 +2,17 @@
 
 namespace Confus
 {
-	Health::Health(Audio::PlayerAudioEmitter* a_AudioEmitter)
-		: m_PlayerEmitter(a_AudioEmitter)
+	Health::Health()
 	{
 		m_Health = m_MaxHealth;
 	}
 
-	void Health::damage(int a_Damage)
+	void Health::damage(int a_Damage, EHitIdentifier a_HitIdentifier)
 	{
 		if (a_Damage > 0)
 		{
 			m_Health -= a_Damage;
-			m_PlayerEmitter->playHitSound();
+			DamageEvent(a_HitIdentifier);
 			if (m_Health <= 0)
 			{
 				m_Health = 0;

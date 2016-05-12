@@ -11,8 +11,8 @@
 namespace Confus
 {
     const irr::u32 Player::WeaponJointIndex = 14u;
-    const unsigned Player::LightAttackDamage = 10u;
-    const unsigned Player::HeavyAttackDamage = 30u;
+    const unsigned Player::LightAttackDamage = 25u;
+    const unsigned Player::HeavyAttackDamage = 50u;
 
 
 	Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Confus::Audio::AudioManager* a_AudioManager)
@@ -21,8 +21,14 @@ namespace Confus
 		TeamIdentifier(a_TeamIdentifier),
 		CarryingFlag(EFlagEnum::None),
 		m_SoundEmitter(new Audio::PlayerAudioEmitter(this, a_AudioManager)),
-		m_PlayerHealth(m_SoundEmitter)
+		m_PlayerHealth()
     {
+		auto damageEvents = [this](EHitIdentifier a_HitIdentifier) -> void
+		{
+			m_SoundEmitter->playHitSound(a_HitIdentifier);
+		};
+		m_PlayerHealth.DamageEvent += damageEvents;
+
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
 
@@ -169,7 +175,7 @@ namespace Confus
         PlayerNode->setFrameLoop(38, 41);
         PlayerNode->setCurrentFrame(38);
         m_Weapon.Damage = LightAttackDamage;
-        m_SoundEmitter->playAttackSound(false);
+        //m_SoundEmitter->playAttackSound(false);
         initializeAttack();
     }
 
@@ -178,7 +184,7 @@ namespace Confus
         PlayerNode->setFrameLoop(60, 66);
         PlayerNode->setCurrentFrame(60);
         m_Weapon.Damage = HeavyAttackDamage;
-        m_SoundEmitter->playAttackSound(true);
+        //m_SoundEmitter->playAttackSound(true);
         initializeAttack();
     }
 
