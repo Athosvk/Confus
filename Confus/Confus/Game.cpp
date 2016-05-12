@@ -97,27 +97,26 @@ namespace Confus
         {
             updateOtherPlayer(a_Data);
         });
+
+		m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdateHealth), [this](RakNet::Packet* a_Data)
+		{
+			updateHealth(a_Data);
+		});
         
-	m_Connection->addFunctionToMap(ID_NO_FREE_INCOMING_CONNECTIONS, [this](RakNet::Packet* a_Data)
-	{
-		denyConnection(a_Data);
-	});
+		m_Connection->addFunctionToMap(ID_NO_FREE_INCOMING_CONNECTIONS, [this](RakNet::Packet* a_Data)
+		{
+			denyConnection(a_Data);
+		});
 			
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdateHealth), [this](RakNet::Packet* a_Data)
-        {
-            updateHealth(a_Data);
-        });
-      
-	m_Connection->addFunctionToMap(ID_CONNECTION_ATTEMPT_FAILED, [this](RakNet::Packet* a_Data)
-	{
-		denyConnection(a_Data);
-	});
+		m_Connection->addFunctionToMap(ID_CONNECTION_ATTEMPT_FAILED, [this](RakNet::Packet* a_Data)
+		{
+			denyConnection(a_Data);
+		});
 
 		m_Connection->addFunctionToMap(ID_CONNECTION_LOST, [this](RakNet::Packet* a_Data)
 		{
 			denyConnection(a_Data);
 		});
-      
     }
 
 	void Game::initializeLevelColliders()
