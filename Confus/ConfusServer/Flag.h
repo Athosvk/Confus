@@ -29,7 +29,6 @@ namespace ConfusServer
         Collider* m_Collider;
         irr::scene::ISceneNode* m_FlagOldParent = nullptr;
         TeamScore* m_TeamScore;
-
     public: 
         /// <summary> Flag class constructor. </summary>
         /// <param name="a_Device">The active Irrlicht Device.</param>

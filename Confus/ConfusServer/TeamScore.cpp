@@ -38,9 +38,21 @@ namespace ConfusServer
         }
         if(teamHasWon(a_TeamScored))
         {
-            std::cout << "Team " << static_cast<int>(a_TeamScored) << " was the winner!" << std::endl;
+            RakNet::BitStream bitStream;
+            bitStream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::EndOfGame));
+            bitStream.Write(a_TeamScored);
+            m_Connection->broadcastBitstream(bitStream);
+            std::cout << "Team has won: " << static_cast<int>(a_TeamScored) << std::endl;
+            m_ResetGameCallback();
         }
+        std::cout << "Score updated\tRed score: " << m_RedTeamScore << "\t Blue score: " << m_BlueTeamScore << std::endl;
         sendScoreToClients();
+    }
+
+    void TeamScore::resetScore()
+    {
+        m_RedTeamScore = 0;
+        m_BlueTeamScore = 0;
     }
 
     int TeamScore::getPointsOfTeam(ETeamIdentifier a_Team) 
@@ -59,6 +71,11 @@ namespace ConfusServer
             break;
         }
         return scoreAmount;
+    }
+
+    void TeamScore::setResetCallback(const std::function<void()>& a_ResetGameCallback)
+    {
+        m_ResetGameCallback = a_ResetGameCallback;
     }
 
     bool TeamScore::teamHasWon(ETeamIdentifier a_Team)

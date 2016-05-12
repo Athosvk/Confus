@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Flag.h"
 #include "FlagGUI.h"
+#include "WinScreen.h"
 
 #include "ScoreGUI.h"
 #define DEBUG_CONSOLE
@@ -18,15 +19,12 @@
 
 namespace Confus
 {
-    const double Game::FixedUpdateInterval = 0.03;
-    const double Game::MaxFixedUpdateInterval = 0.1;
 	const int Game::MaxScore = 3; // dont change this for now. Breaks redside score.
 
-    Game::Game(irr::core::dimension2d<irr::u32> a_Resolution)
-        : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL, a_Resolution)),
-		m_PhysicsWorld(m_Device),
-		m_MazeGenerator(m_Device, 41, 40,(19+20+21+22+23+24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-			irr::core::vector2df(19., 20.), m_PhysicsWorld, &m_AudioManager),
+    Game::Game(irr::IrrlichtDevice* a_Device, EventManager* a_EventManager) : BaseGame(a_Device, a_EventManager),
+        m_PhysicsWorld(m_Device),
+        m_MazeGenerator(m_Device, 41, 40, (19 + 20 + 21 + 22 + 23 + 24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+            irr::core::vector2df(19., 20.), m_PhysicsWorld, &m_AudioManager),
         m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true, &m_AudioManager),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_PhysicsWorld),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_PhysicsWorld),
@@ -60,22 +58,21 @@ namespace Confus
             //m_PlayerArray[i]->remove();
             //delete(m_PlayerArray[i]);
         }
+        m_Device->getSceneManager()->clear();
     }
 
-    void Game::run()
+    void Game::start()
     {
-		//m_Listener.init();
+        m_Device->setWindowCaption(L"Game");
+
         initializeConnection();
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
-
         m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         sceneManager->loadScene("Media/IrrlichtScenes/Bases2.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
-        
-        m_Device->setEventReceiver(&m_EventManager);
-
+        m_Device->setEventReceiver(m_EventManager);
 		updateSceneTransformations();
         initializeLevelColliders();
 
@@ -101,14 +98,6 @@ namespace Confus
             updateOtherPlayer(a_Data);
         });
       
-        while(m_Device->run())
-        {
-            m_Connection->processPackets();
-			handleInput();
-            update();
-            processFixedUpdates();
-            render();
-        }
     }
 
 	void Game::initializeLevelColliders()
@@ -166,7 +155,7 @@ namespace Confus
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Packet) 
-		{
+        {
             int timeMazeChanges, mazeSeed;
             RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
             inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -177,7 +166,7 @@ namespace Confus
         });
 
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [](RakNet::Packet* a_Packet) 
-		{
+        {
             int redScore, blueScore;
             RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
             inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -187,18 +176,42 @@ namespace Confus
             ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, blueScore);
             std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
         });
+
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::EndOfGame), [this](RakNet::Packet* a_Packet) 
+        {
+            ETeamIdentifier a_TeamIdentifier;
+            RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
+            inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+            inputStream.Read(a_TeamIdentifier);
+
+            WinScreen winScreen(m_Device, a_TeamIdentifier, m_EventManager);
+            winScreen.run();
+            m_Device->setWindowCaption(L"Game");
+
+            if(winScreen.ShouldRestart)
+            {
+                reset();
+            }
+            else
+            {
+                m_ShouldRun = false;
+            }
+        });
     }
 
     void Game::handleInput()
     {
-        m_PlayerNode.handleInput(m_EventManager);
+        m_PlayerNode.handleInput(*m_EventManager);
+        if(m_EventManager->IsKeyDown(irr::KEY_ESCAPE))
+        {
+            m_ShouldRun = false;
+        }
     }
 
     void Game::update()
     {
-        m_PreviousTicks = m_CurrentTicks;
-        m_CurrentTicks = m_Device->getTimer()->getTime();
-        m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
+        m_Connection->processPackets();
+        handleInput();
 
         m_PlayerNode.update();
 		m_GUI.update();
@@ -207,7 +220,7 @@ namespace Confus
         irr::core::matrix4 playerRotation(m_PlayerNode.getAbsoluteTransformation());
         irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10] );
         irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
-        m_Listener.setDirection(forwardVector, upVector);     
+        m_Listener.setDirection(forwardVector, upVector);    
 
 		static float timer = 0.0f;
 		timer += static_cast<float>(m_DeltaTime);
@@ -225,21 +238,26 @@ namespace Confus
 		}
     }
 
-    void Game::processFixedUpdates()
+    void Game::reset()
     {
-        m_FixedUpdateTimer += m_DeltaTime;
-        m_FixedUpdateTimer = irr::core::min_(m_FixedUpdateTimer, MaxFixedUpdateInterval);
-        while(m_FixedUpdateTimer >= FixedUpdateInterval)
-        {
-            m_FixedUpdateTimer -= FixedUpdateInterval;
-            fixedUpdate();
-        }
+        // We actually would not need to call this method since the server will send score, and new positions.
+        m_BlueFlag.returnToStartPosition();
+        m_RedFlag.returnToStartPosition();
+        m_PlayerNode.respawn();
+        ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, 0);
+        ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, 0);
     }
 
     void Game::fixedUpdate()
     {
 		m_MazeGenerator.fixedUpdate();
 		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
+    }
+
+    void Game::end()
+    {
+        m_BlueFlag.returnToStartPosition();
+        m_RedFlag.returnToStartPosition();
     }
 
     void Game::updateOtherPlayer(RakNet::Packet* a_Data)
@@ -351,7 +369,7 @@ namespace Confus
         m_Device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
         m_Device->getSceneManager()->drawAll();
         m_Device->getGUIEnvironment()->drawAll();
-		m_PhysicsWorld.drawDebugInformation();
+        m_PhysicsWorld.drawDebugInformation();
         m_Device->getVideoDriver()->endScene();
     }
 }

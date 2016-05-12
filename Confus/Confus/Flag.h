@@ -21,7 +21,7 @@ namespace Confus
 		FlagDropped ///< The flag is dropped.
 	};
 
-	///Flag Class, every flag should have this class, contains info about a flag
+	/// Flag Class, every flag should have this class, contains info about a flag
 	/// Flag class with status and team id
 	class Flag 
     {
