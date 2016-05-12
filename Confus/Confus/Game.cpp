@@ -301,28 +301,27 @@ namespace Confus
         long long id;
         inputStream.Read(id);
 
-        for(size_t j = 0u; j < m_PlayerArray.size(); j++)
-        {
-            for(size_t i = 0u; i < m_PlayerArray.size(); i++)
-            {
-                if(m_PlayerArray[i]->ID == id)
-                {
-                    int health;
+		for (size_t i = 0u; i < m_PlayerArray.size(); i++)
+		{
+			if (m_PlayerArray[i]->ID == id)
+			{
+				int health;
+				EHitIdentifier hitIdentifier;
 
-                    inputStream.Read(health);
+				inputStream.Read(health);
+				inputStream.Read(hitIdentifier);
 
-                    if(health > m_PlayerArray[i]->PlayerHealth.getHealth())
-                    {
-                        m_PlayerArray[i]->PlayerHealth.heal(health - m_PlayerArray[i]->PlayerHealth.getHealth());
-                    }
-                    else if(health < m_PlayerArray[i]->PlayerHealth.getHealth())
-                    {
-                        m_PlayerArray[i]->PlayerHealth.damage(m_PlayerArray[i]->PlayerHealth.getHealth() - health);
-                    }
-                }
-            }
-            inputStream.Read(id);
-        }
+				if (health > m_PlayerArray[i]->getHealthInstance()->getHealth())
+				{
+					m_PlayerArray[i]->getHealthInstance()->heal(health - m_PlayerArray[i]->getHealthInstance()->getHealth());
+				}
+				else if (health < m_PlayerArray[i]->getHealthInstance()->getHealth())
+				{
+					m_PlayerArray[i]->getHealthInstance()->damage(m_PlayerArray[i]->getHealthInstance()->getHealth() - health, hitIdentifier);
+				}
+				break;
+			}
+		}
     }
 
 	void Game::updateSceneTransformations()
