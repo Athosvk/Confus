@@ -51,15 +51,7 @@ namespace ConfusServer
         /// MazeGenerator that hasa accesible maze
         /// </summary>
         MazeGenerator m_MazeGenerator;
-        /// <summary>
-        /// The OpenAL listener that is attached to the camera.
-        /// </summary>
-        OpenALListener m_Listener;
         EventManager m_EventManager;
-        /// <summary>
-        /// The Players to test with.
-        /// </summary>
-        Player m_PlayerNode;
 
         std::vector<Player*> m_PlayerArray;
         /// <summary>
@@ -147,8 +139,18 @@ namespace ConfusServer
 		/// Processes the packets connection
 		/// </summary>
 		void processConnection();
-	    void addPlayer(RakNet::Packet* a_Data);
-        void removePlayer(RakNet::Packet* a_Data);
+	    void addPlayer(RakNet::BitStream* a_Data);
+                
+        /// <summary>
+        /// Removes the player from the list and send network update
+        /// </summary>
+        /// <param name="a_Data">The data that the client tells us with that it closes the connection.</param>
+        void removePlayer(RakNet::BitStream* a_Data);        
+        /// <summary>
+        /// Removes the player from the list ourselves and send network update.
+        /// </summary>
+        /// <param name="a_PlayerID">The a_ player identifier.</param>
+        void deletePlayer(char a_PlayerID);
         void updatePlayers();
         /// <summary>
         /// Broadcast a maze change

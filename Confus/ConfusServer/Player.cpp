@@ -13,7 +13,9 @@ namespace ConfusServer
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-	Player::Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
+    const int Player::UserTimedOutTime = 10;
+
+	Player::Player(irr::IrrlichtDevice* a_Device, char a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
 		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
 		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
 		TeamIdentifier(a_TeamIdentifier),
@@ -89,6 +91,7 @@ namespace ConfusServer
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
+        m_LastUpdateTime = RakNet::GetTimeMS() / 1000;
     }
 
 	Player::~Player() 
@@ -189,15 +192,6 @@ namespace ConfusServer
 
     void Player::update()
     {
-        m_FootstepSoundEmitter->updatePosition();
-
-        int frameNumber = static_cast<int>(PlayerNode->getFrameNr());
-        if(frameNumber == 0 || frameNumber == 6)
-        {
-            m_FootstepSoundEmitter->playFootStepSound();
-        }
-
-        updateClient();
     }
 
     void Player::fixedUpdate()
@@ -207,17 +201,12 @@ namespace ConfusServer
 
     void Player::createAudioEmitter()
     {
-        m_FootstepSoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
     }
-      
-    //Why the duplicate also happens in game.cpp
-    void Player::updateClient()
+
+    bool Player::userTimedOut()
     {
-        //RakNet::BitStream bitstreamOut;
-        //bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
-        //bitstreamOut.Write(CameraNode->getAbsolutePosition());
-        //
-        //m_Connection->broadcastBitstream(bitstreamOut);
+        int currentTime = static_cast<int>((RakNet::GetTimeMS()) / 1000);
+        return currentTime > m_LastUpdateTime + UserTimedOutTime;
     }
  
 
@@ -231,13 +220,15 @@ namespace ConfusServer
             a_Data->IgnoreBytes(sizeof(unsigned char));
 			a_Data->Read(playerInfo);
 
+            m_LastUpdateTime = RakNet::GetTimeMS()/1000;
+
             setRotation(playerInfo.rotation);
 						             
-            if(PlayerState != ConfusShared::Networking::EPlayerState::LightAttacking && playerInfo.newState == ConfusShared::Networking::EPlayerState::LightAttacking)
+            if(PlayerState != EPlayerState::LightAttacking && playerInfo.newState == EPlayerState::LightAttacking)
             {
                 startLightAttack();
             }
-            else if(PlayerState != ConfusShared::Networking::EPlayerState::HeavyAttacking && playerInfo.newState == ConfusShared::Networking::EPlayerState::HeavyAttacking)
+            else if(PlayerState != EPlayerState::HeavyAttacking && playerInfo.newState == EPlayerState::HeavyAttacking)
             {
                 startHeavyAttack();
             }

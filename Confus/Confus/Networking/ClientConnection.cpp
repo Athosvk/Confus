@@ -32,8 +32,13 @@ namespace Confus
         ClientConnection::~ClientConnection()
         {
 			//True is sent to notify the server so we can exit gracefully
-			if(m_Connected)
-			m_Interface->CloseConnection(getServerAddress(), true);
+            if(m_Connected)
+            {
+                RakNet::BitStream bitStream;
+                bitStream.Write(static_cast<RakNet::MessageID>(EPacketType::PlayerLeft));
+                sendMessage(&bitStream, PacketReliability::RELIABLE);
+                m_Interface->CloseConnection(getServerAddress(), true);
+            }
             //spin wait to allow CloseConnection to finish
             while(getConnectionCount() > 0)
             {
@@ -81,11 +86,6 @@ namespace Confus
 			{
 				m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
 					a_Reliability, 0, getServerAddress(), false);
-			}
-			else
-			{
-                //TODO: Make this work with bitstreams. 
-                //m_StalledMessages.emplace(std::move(a_Stream));
 			}
 		}
 

@@ -154,10 +154,6 @@ namespace Confus
         /// Creates a new Player object for a different user that just joined.
         /// </summary>
         void addOtherPlayer(RakNet::BitStream* a_Data);
-        /// <summary>
-        /// Updates positions and rotations of all other players.
-        /// </summary>
-        void updatePlayers(RakNet::BitStream* a_Data);
         void removePlayer(RakNet::BitStream* a_Data);
 
 		/// <summary> Updates the (absolute) transformations of all the scene nodes recursively downwards </summary>

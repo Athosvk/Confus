@@ -28,12 +28,11 @@ namespace ConfusServer
 		EFlagEnum CarryingFlag;
 		ETeamIdentifier TeamIdentifier;    
         Flag* FlagPointer;
-        long long ID;
-        ConfusShared::Networking::EPlayerState PlayerState = ConfusShared::Networking::EPlayerState::Alive;
+        char ID;
+        EPlayerState PlayerState = EPlayerState::Alive;
         Health PlayerHealth;
    
 	private:
-		Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
         /// <summary> The weapon bone index of the animation for the weapom_PlayerStaten </summary>
         static const irr::u32 WeaponJointIndex;
         static const unsigned LightAttackDamage;
@@ -47,8 +46,10 @@ namespace ConfusServer
         /// <summary> A pointer to the connection to the client. </summary>
         Networking::Connection* m_Connection;
 		irr::SKeyMap m_KeyMap[6];
+        int m_LastUpdateTime;
+        static const int UserTimedOutTime;
     public:
-        Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
+        Player(irr::IrrlichtDevice* a_Device, char a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
 		~Player();
         void fixedUpdate();
         void update();
@@ -70,6 +71,12 @@ namespace ConfusServer
         /// </summary>
         /// <param name="a_Connection">The connection reference.</param>
         void setConnection(Networking::Connection* a_Connection);
+        
+        /// <summary>
+        /// The player didn't have a connection for the <see cref="UserTimedOutTime"/> seconds.
+        /// </summary>
+        /// <returns> Returns if the user has timed out. </returns>
+        bool userTimedOut();
     private:
         /// <summary> Starts the walking animation, which is the default animation </summary>
         void startWalking() const;
@@ -78,7 +85,6 @@ namespace ConfusServer
         void initializeAttack();
 
 		void createAudioEmitter();
-		void updateClient();
 		void moveOnButtonPress(irr::EKEY_CODE a_Key);
 
         /// <summary> Called when the animation finishes </summary>

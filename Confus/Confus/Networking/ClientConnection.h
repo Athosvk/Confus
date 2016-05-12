@@ -56,9 +56,7 @@ namespace Confus
 			bool m_Connected = false;
             /// <summary> The map thast contains the server events and the functions that involve them. </summary>
             std::map<unsigned char, std::vector<std::function<void(RakNet::BitStream* a_Data)>>> m_CallbackFunctionMap;
-
-        public:
-           
+        public:           
             /// <summary> Initializes a new instance of the <see cref="ClientConnection"/> class. </summary>
             /// <param name="a_ServerIP">The ip address of the server to connect to.</param>
             /// <param name="a_ServerPort">The port oft the server to connect to.</param>
@@ -79,6 +77,7 @@ namespace Confus
             /// <param name="a_Event">The server event that should trigger the function.</param>
             /// <param name="a_Function">The function that should be added to the map.</param>
             void addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::BitStream* a_Data)> a_Function);
+            unsigned char ClientID;
 		private:
 			/// <summary> Gets the amount of clients connected to this server instance </summary>
 			/// <returns> The amount of clients connected </returns>

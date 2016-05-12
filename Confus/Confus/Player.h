@@ -4,7 +4,9 @@
 #include "Networking\ClientConnection.h"
 #include "Health.h"
 #include "Weapon.h"
+
 #include "../ConfusShared/TeamIdentifier.h"
+#include "../ConfusShared/Networking/BitStreamStruct.h"
 
 
 namespace Confus 
@@ -20,12 +22,7 @@ namespace Confus
 		class PhysicsWorld;
 	}
     enum class EFlagEnum;
-    class EventManager;
     class Flag;
-    enum class EPlayerState : unsigned char
-    {
-        Alive, CarryingFlag, HeavyAttacking, LightAttacking, Dead
-    };
 
     class Player : public irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
     {   
@@ -41,11 +38,11 @@ namespace Confus
 
         /// <summary> Determines if this player is this users player or not </summary>
         bool MainPlayer = false;
-
-        long long ID;
+        char ID;
     private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
 		Physics::BoxCollider* m_Collider;
+        Networking::ClientConnection* m_Connection;
 
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
@@ -66,7 +63,7 @@ namespace Confus
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
         /// <summary> The player's unique ID. </summary>
-        unsigned int m_PlayerID = 0;
+        char m_PlayerID = 0;
         /// <summary> The player's active state. </summary>
         EPlayerState m_PlayerState = EPlayerState::Alive;
         /// <summary> The player's health, ranging from 127 to -127. </summary>
@@ -83,7 +80,8 @@ namespace Confus
         /// <param name="a_TeamIdentifier">The team's identifier the player should have.</param>
         /// <param name="a_MainPlayer">A boolean to identify the player the user controls.</param>
         /// <param name="a_AudioManager">The audio manager.</param>
-        Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Audio::AudioManager* a_AudioManager);
+        /// <param name="a_Connection">The connection reference.</param>
+        Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, char a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Audio::AudioManager* a_AudioManager);
         /// <summary> Player class destructor. </summary>
 		~Player();
         /// <summary> Update function, any tasks that need to be done every frame go here. </summary>
@@ -108,13 +106,23 @@ namespace Confus
         /// <summary> Handles the input based actions. </summary>
         /// <param name="a_EventManager">The current event manager. </param>
         void handleInput(EventManager& a_EventManager);
-        /// <summary> Sets the connection to the server. </summary>
+        
+        /// <summary>
+        /// Sets the connection.
+        /// </summary>
+        /// <param name="a_Connection">The connection reference.</param>
         void setConnection(Networking::ClientConnection* a_Connection);
         
         /// <summary> Sets the connection to the server. </summary>
         void updateServer() const;
         /// <summary> Sets the eventmanager. </summary>
         void setEventManager(EventManager* a_Manager);
+        
+        /// <summary>
+        /// Updates the player from the server.
+        /// </summary>
+        /// <param name="a_PlayerInfo">The a_ bit stream.</param>
+        void updateFromServer(ConfusShared::Networking::PlayerInfo a_PlayerInfo);
     private:
         /// <summary> Starts the walking animation, which is the default animation. </summary>
         void startWalking() const;

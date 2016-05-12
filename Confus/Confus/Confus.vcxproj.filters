@@ -266,5 +266,8 @@
     <ClInclude Include="..\ConfusShared\Networking\BitStreamStruct.h">
       <Filter>Shared Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\ConfusShared\PlayerState.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

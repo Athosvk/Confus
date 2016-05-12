@@ -11,21 +11,19 @@
 #include "../Confusshared/Physics/PhysicsWorld.h"
 #include "../Confusshared/Physics/BoxCollider.h"
 #include "../Confusshared/Physics/RigidBody.h"
-#include "../ConfusShared/Networking/BitStreamStruct.h"
 
 namespace Confus
 {
-    Networking::ClientConnection* m_Connection;
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
 
 
-    Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Confus::Audio::AudioManager* a_AudioManager)
-		: m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f)),
+    Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, char a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Audio::AudioManager* a_AudioManager)
+        : m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f)),
         irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
         TeamIdentifier(a_TeamIdentifier),
-        CarryingFlag(EFlagEnum::None)     
+        CarryingFlag(EFlagEnum::None)
     {
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
@@ -140,6 +138,17 @@ namespace Confus
         return m_Mesh->getBoundingBox();
     }
 
+    void Player::updateFromServer(ConfusShared::Networking::PlayerInfo a_PlayerInfo)
+    {
+        setPosition(a_PlayerInfo.position);
+        changeState(a_PlayerInfo.newState);
+
+        if(MainPlayer == false)
+        {
+            setRotation(a_PlayerInfo.rotation);
+        }
+    }
+
     void Player::startWalking() const
     {
         PlayerNode->setAnimationEndCallback(nullptr);
@@ -169,7 +178,7 @@ namespace Confus
 
     void Player::startLightAttack()
     {
-        changeState(EPlayerState::LightAttacking);
+        //changeState(EPlayerState::LightAttacking);
         PlayerNode->setFrameLoop(38, 41);
         PlayerNode->setCurrentFrame(38);
         m_Weapon.Damage = LightAttackDamage;
@@ -179,7 +188,7 @@ namespace Confus
 
     void Player::startHeavyAttack()
     {
-        changeState(EPlayerState::HeavyAttacking);
+        //changeState(EPlayerState::HeavyAttacking);
         PlayerNode->setFrameLoop(60, 66);
         PlayerNode->setCurrentFrame(60);
         m_Weapon.Damage = HeavyAttackDamage;
@@ -195,7 +204,7 @@ namespace Confus
             m_Weapon.disableCollider();
             startWalking();
             // Reset the player state.
-            changeState(EPlayerState::Alive);
+            //changeState(EPlayerState::Alive);
         }
     }
 
@@ -246,11 +255,11 @@ namespace Confus
 				FlagPointer->returnToStartPosition();
 			}
         }
+        updateServer();
     }
 
     void Player::fixedUpdate()
     {
-        updateServer();
     }
 
     void Player::respawn()
@@ -276,23 +285,12 @@ namespace Confus
         CameraNode->setRotation(a_NewRotation);
     }
 
-
-     void Player::setConnection(Networking::ClientConnection* a_Connection)
-	{
+    void Player::setConnection(Networking::ClientConnection * a_Connection)
+    {
         m_Connection = a_Connection;
+    }
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::BitStream* a_Data)
-        {
-            irr::core::vector3df newPosition;
-
-            a_Data->IgnoreBytes(sizeof(unsigned char));
-            a_Data->Read(newPosition);
-
-            CameraNode->setPosition(newPosition);
-        });
-	}
-
-     void Player::updateServer() const
+    void Player::updateServer() const
 	{
 		ConfusShared::Networking::PlayerInfo playerInfo;
 		playerInfo.playerID = m_PlayerID;
@@ -318,8 +316,18 @@ namespace Confus
          if(a_NewState != m_PlayerState) 
          {
              m_PlayerState = a_NewState;
+
+             if(m_PlayerState == EPlayerState::LightAttacking)
+             {
+                 startLightAttack();
+             } 
+             else if(m_PlayerState == EPlayerState::LightAttacking)
+             {
+                 startHeavyAttack();
+             }
+
              m_StateChangeTime = RakNet::GetTime();
-             std::cout << "State changed! Time of change is: " << m_StateChangeTime;
+             std::cout << "State changed! Time of change is: " << m_StateChangeTime << std::endl;
          } 
      }
 
