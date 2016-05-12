@@ -3,6 +3,7 @@
 
 #include "Maze.h"
 #include "Audio/Sound.h"
+#include "../ConfusShared/Physics/BoxCollider.h"
 
 namespace Confus
 {
@@ -27,7 +28,6 @@ namespace Confus
 		/// This stack is used by the maze generating algorithm to keep track of mazeTiles that might still have neighbours that can be accesed
 		/// </summary>
 		std::stack<MazeTile, std::vector<std::shared_ptr<MazeTile>>> m_TileStack;
-
 		/// <summary>
 		/// The seed used to randomly chose an available neighbour and thus the seed that determines the layout of the maze.
 		/// </summary>
