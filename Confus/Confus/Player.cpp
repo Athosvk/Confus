@@ -294,7 +294,7 @@ namespace Confus
         bitstreamOut.Write(CameraNode->getRotation());
         bitstreamOut.Write(Player::m_PlayerState);
         bitstreamOut.Write(m_StateChangeTime);
-        bitstreamOut.Write(m_PlayerHealth);
+        bitstreamOut.Write(m_PlayerHealthPoints);
         bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_W));
         bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_S));
         bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_A));
