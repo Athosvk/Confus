@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <exception>
+#include "CppUnitTest.h"
 #include <Confus\StaticWall.h>
 
 
@@ -20,26 +21,29 @@ namespace ConfusTest
             wall = new Confus::StaticWall(device, irr::core::vector3df(), irr::core::vector3df(), camera);
         }
 
-        TEST_METHOD_CLEANUP(DeleteStaticWall)
-        {
-           delete(wall);
-           camera->drop();
-        }
-
         TEST_METHOD(SetupTest)
         {
             Assert::IsNotNull(wall);
         }
 
-        TEST_METHOD(ExpectException)
+        TEST_METHOD(SetPositionTest)
         {
-            auto func = [this] { throwException(); };
-            Assert::ExpectException<int>(func);
+            wall->setSceneNode(irr::core::vector3df(1.1f, 2.2f, 3.3f), irr::core::vector3df());
+            irr::core::vector3df newPosition = wall->getPosition();
+            Assert::AreEqual(newPosition.X, 1.1f);
         }
 
-        void throwException()
+        TEST_METHOD(SetRotationTest)
         {
-            throw 5;
+            wall->setSceneNode(irr::core::vector3df(), irr::core::vector3df(10.1f, 200.2f, 165.3f));
+            irr::core::vector3df newRotation = wall->getRotation();
+            Assert::AreEqual(newRotation.Z, 165.3f);
         }
-    };
+
+        TEST_METHOD_CLEANUP(DeleteStaticWall)
+        {
+            delete(wall);
+            camera->drop();
+        }
+     };
 }

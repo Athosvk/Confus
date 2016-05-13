@@ -53,6 +53,8 @@ namespace Confus
         /// </summary>
         /// <param name="a_Position">The position of the light relative to the wall.</param>
         void addLight(irr::core::vector3df a_Position);
+        irr::core::vector3df getPosition();
+        irr::core::vector3df getRotation();
     };
 
 }

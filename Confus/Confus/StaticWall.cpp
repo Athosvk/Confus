@@ -70,6 +70,16 @@ namespace Confus
         m_SceneManager->addLightSceneNode(m_SceneNode, a_Position + lightOffset,
             irr::video::SColorf(1.0f, 1.0f, 1.0f), 50.0f);
     }
+
+    irr::core::vector3df StaticWall::getPosition()
+    {
+       return m_SceneNode->getPosition();
+    }
+
+    irr::core::vector3df StaticWall::getRotation()
+    {
+        return m_SceneNode->getRotation();
+    }
 }
 
 
