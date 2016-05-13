@@ -10,6 +10,7 @@
 #include "EventManager.h"
 #include "Flag.h"
 #include "TeamScore.h"
+#include "../ConfusShared/EHitIdentifier.h"
 
 namespace ConfusServer
 { 
@@ -146,7 +147,7 @@ namespace ConfusServer
 	    void addPlayer(RakNet::Packet* a_Data);
         void removePlayer(RakNet::Packet* a_Data);
         void updatePlayers();
-        void updateHealth();
+        void updateHealth(EHitIdentifier a_HitType, Player* a_Player);
         /// <summary>
         /// Broadcast a maze change
         /// </summary>

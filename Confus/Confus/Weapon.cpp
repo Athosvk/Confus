@@ -4,6 +4,7 @@
 #include "Weapon.h"
 #include "../ConfusShared/Physics/RigidBody.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
+#include "../ConfusShared/EHitIdentifier.h"
 #include "Player.h"
 
 namespace Confus
@@ -38,11 +39,17 @@ namespace Confus
     {
         if(getAngle(a_Player->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle))
         {
-			a_Player->PlayerHealth.damage(a_Player->PlayerHealth.getHealth());
+			if (Damage == Player::LightAttackDamage)
+				a_Player->getHealthInstance()->damage(Damage*2, EHitIdentifier::LightBackstab);
+			else
+				a_Player->getHealthInstance()->damage(Damage*2, EHitIdentifier::HeavyBackstab);
         }
 		else
 		{
-			a_Player->PlayerHealth.damage(Damage);
+			if(Damage == Player::LightAttackDamage)
+				a_Player->getHealthInstance()->damage(Damage,EHitIdentifier::Light);
+			else
+				a_Player->getHealthInstance()->damage(Damage, EHitIdentifier::Heavy);
 		}
     }
 

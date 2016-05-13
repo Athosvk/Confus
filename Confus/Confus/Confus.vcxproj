@@ -233,6 +233,7 @@ lib /out:Confus.lib *.obj</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ConfusShared\Debug.h" />
+    <ClInclude Include="..\ConfusShared\EHitIdentifier.h" />
     <ClInclude Include="..\ConfusShared\TeamIdentifier.h" />
     <ClInclude Include="BaseGame.h" />
     <ClInclude Include="Audio\AudioManager.h" />

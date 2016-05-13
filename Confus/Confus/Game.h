@@ -129,6 +129,8 @@ namespace Confus
 
         void removePlayer(RakNet::Packet* a_Data);
 
+		void denyConnection(RakNet::Packet* a_Data);
+
         virtual void start() override;
         /// <summary>
         /// Updates the state of the objects in the game

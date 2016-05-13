@@ -28,7 +28,7 @@ namespace Confus
 		{
 			uiElement->update();
 		}
-		m_HealthString = (L"Health: " + std::to_wstring(m_PlayerNode->PlayerHealth.getHealth()) + L"%").c_str();
+		m_HealthString = (L"Health: " + std::to_wstring(m_PlayerNode->getHealthInstance()->getHealth()) + L"%").c_str();
 		m_HealthTextBox->setText(m_HealthString.c_str());
 		drawBloodOverlay();
 		lowHealthAudio();
@@ -36,12 +36,12 @@ namespace Confus
 
 	void GUI::drawBloodOverlay()
 	{
-		m_BloodOverlay->setVisible(m_PlayerNode->PlayerHealth.getHealth() <= 50);
+		m_BloodOverlay->setVisible(m_PlayerNode->getHealthInstance()->getHealth() <= 50);
 	}
 
 	void GUI::lowHealthAudio()
 	{
-		if (m_PlayerNode->PlayerHealth.getHealth() <= 25 && !m_AudioSourceLowHealth.isPlaying())
+		if (m_PlayerNode->getHealthInstance()->getHealth() <= 25 && !m_AudioSourceLowHealth.isPlaying())
 		{
 			m_AudioSourceLowHealth.play();
 		}

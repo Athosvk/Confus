@@ -29,7 +29,7 @@ namespace Confus
     };
 
     class Player : public irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
-    {   
+    { 
     public:
 		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
@@ -38,20 +38,22 @@ namespace Confus
 		EFlagEnum CarryingFlag;
 		ETeamIdentifier TeamIdentifier;    
         Flag* FlagPointer = nullptr;
-		Health PlayerHealth;
 
         /// <summary> Determines if this player is this users player or not </summary>
         bool MainPlayer = false;
 
         long long ID;
+
+		static const unsigned LightAttackDamage;
+		static const unsigned HeavyAttackDamage;
     private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
+		/// <summary> private value for health class </summary>
+		Health m_PlayerHealth;
 		Physics::BoxCollider* m_Collider;
 
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
-        static const unsigned LightAttackDamage;
-        static const unsigned HeavyAttackDamage;
 
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
@@ -111,6 +113,9 @@ namespace Confus
         /// <summary> Sets the connection to the server. </summary>
         void setConnection(Networking::ClientConnection* a_Connection);
         
+
+		/// <summary> get/setter for health. Should really turn into const but gave some weird errors </summary>
+		Health* getHealthInstance();
         /// <summary> Sets the connection to the server. </summary>
         void updateServer() const;
         /// <summary> Sets the eventmanager. </summary>
