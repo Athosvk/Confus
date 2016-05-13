@@ -9,13 +9,13 @@
 namespace Confus
 {
     Weapon::Weapon(irr::scene::ISceneManager* a_SceneManager, Physics::PhysicsWorld& a_World,
-		irr::core::vector3df a_Dimensions)
+		irr::core::vector3df a_Dimensions, ETeamIdentifier a_TeamIdentifier)
     {
         m_Node = a_SceneManager->addCubeSceneNode(1.0f, nullptr, -1, irr::core::vector3df(), irr::core::vector3df(),
             a_Dimensions);
         m_Node->setVisible(false);
 		m_Node->setPosition(irr::core::vector3df(0.0f, 0.0f, -1.2f));
-
+        m_TeamIdentifier = a_TeamIdentifier;
 		m_Collider = a_World.createBoxCollider(a_Dimensions, m_Node, Physics::ECollisionFilter::Interactable,
 			Physics::ECollisionFilter::Player);
 		m_Collider->getRigidBody()->makeKinematic();
@@ -36,14 +36,18 @@ namespace Confus
 
     void Weapon::damagePlayer(Player* a_Player) const
     {
-        if(getAngle(a_Player->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle))
+        // Only do damage if the other player is in another team than us.
+        if(a_Player->TeamIdentifier != m_TeamIdentifier)
         {
-			a_Player->PlayerHealth.damage(a_Player->PlayerHealth.getHealth());
+            if(getAngle(a_Player->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle))
+            {
+                a_Player->PlayerHealth.damage(a_Player->PlayerHealth.getHealth());
+            }
+            else
+            {
+                a_Player->PlayerHealth.damage(Damage);
+            }
         }
-		else
-		{
-			a_Player->PlayerHealth.damage(Damage);
-		}
     }
 
     float Weapon::getAngle(irr::core::vector3df a_Vector1, irr::core::vector3df a_Vector2) const

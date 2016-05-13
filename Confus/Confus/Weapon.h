@@ -31,14 +31,15 @@ namespace Confus
         /// <summary> Whether a collision has been trigered between now and the call to <see cref="resetCollider"> </summary> 
         /// <remarks> Used to prevent the weapon from dealing damage multiple times to the same collided node </remarks>
         bool m_Collided;
-
+        /// <summary> The identifier of the player holding this weapon. </summary>
+        ETeamIdentifier m_TeamIdentifier;
     public:        
 		/// <summary> Initializes a new instance of the <see cref="Weapon" /> class </summary>
 		/// <param name="a_SceneManager">The active scene manager</param>
 		/// <param name="a_World">The physics world </param>
 		/// <param name="a_Dimensions">The dimensions of the weapon</param>
 		Weapon(irr::scene::ISceneManager* a_SceneManager, Physics::PhysicsWorld& a_World,
-			irr::core::vector3df a_Dimensions);
+			irr::core::vector3df a_Dimensions, ETeamIdentifier a_TeamIdentifier);
 
         /// <summary> Enables the collider.of the weapon, making it possible to damage players </summary>
         /// <remarks> 

@@ -16,7 +16,7 @@ namespace Confus
 
 
     Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Confus::Audio::AudioManager* a_AudioManager)
-		: m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f)),
+		: m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f), a_TeamIdentifier),
         irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
         TeamIdentifier(a_TeamIdentifier),
         CarryingFlag(EFlagEnum::None)     
