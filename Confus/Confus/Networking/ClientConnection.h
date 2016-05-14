@@ -50,8 +50,6 @@ namespace Confus
         class ClientConnection
         {
 		private:
-			/// <summary> The messages it was not able to send yet due to not having a connection established </summary>
-			std::queue<RakNet::BitStream> m_StalledMessages;
 			/// <summary> Whether we are connected to a server</summary>
 			bool m_Connected = false;
             /// <summary> The map thast contains the server events and the functions that involve them. </summary>
@@ -91,11 +89,6 @@ namespace Confus
 			/// </remarks>
 			RakNet::SystemAddress getServerAddress() const;			
 			/// <summary>
-			/// Dispatches the messages that the connection was not able to send yet
-			/// due to waiting for the connection to be established
-			/// </summary>
-			void dispatchStalledMessages();
-            /// <summary>
             /// Handles the incoming packet
             /// </summary>
             /// <param name="a_Data">The data.</param>

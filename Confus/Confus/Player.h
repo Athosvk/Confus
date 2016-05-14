@@ -64,7 +64,6 @@ namespace Confus
         /// <summary> Whether the player is currently walking or not </summary>
         bool m_Walking = false;
 
-        bool m_IsMainPlayer = false;
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
         /// <summary> The player's unique ID. </summary>

@@ -50,7 +50,6 @@ namespace Confus
                 if(packet->data[0] == ID_CONNECTION_REQUEST_ACCEPTED)
                 {
                     std::cout << "Connected to the server!\n";
-                    dispatchStalledMessages();
                     m_Connected = true;
                 }
 
@@ -80,11 +79,6 @@ namespace Confus
 				m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
 					a_Reliability, 0, getServerAddress(), false);
 			}
-			else
-			{
-                //TODO: Make this work with bitstreams. 
-                //m_StalledMessages.emplace(std::move(a_Stream));
-			}
 		}
 
 		unsigned short ClientConnection::getConnectionCount() const
@@ -109,19 +103,6 @@ namespace Confus
 			//We assume there is at most one connection, so it is safe to say that this
 			//is the server connection
 			return openConnections[0];
-		}
-
-		void ClientConnection::dispatchStalledMessages()
-		{
-			while(!m_StalledMessages.empty())
-			{
-				RakNet::BitStream stream;
-				stream.Write(static_cast<RakNet::MessageID>(EPacketType::Message));
-				stream.Write(m_StalledMessages.front());
-				m_Interface->Send(&stream, PacketPriority::HIGH_PRIORITY,
-					PacketReliability::RELIABLE_ORDERED, 0, getServerAddress(), false);
-				m_StalledMessages.pop();
-			}
 		}
     }
 }

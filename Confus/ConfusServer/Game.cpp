@@ -148,10 +148,7 @@ namespace ConfusServer
 
     void Game::handleInput()
     {
-        for(auto player : m_PlayerArray)
-        {
-            player->handleInput(m_EventManager);
-        }
+       
     }
 
     void Game::update()
@@ -228,10 +225,11 @@ namespace ConfusServer
 
     void Game::addPlayer(RakNet::Packet* a_Data)
     {
+        std::cout << a_Data->systemAddress.ToString() << "Is the address of the player that joined";
         long long id = static_cast<long long>(a_Data->guid.g);
         ETeamIdentifier teamID = m_PlayerArray.size() % 2 == 0 ? ETeamIdentifier::TeamRed : ETeamIdentifier::TeamBlue;
 
-        Player* newPlayer = new Player(m_Device, id, teamID, false);
+        Player* newPlayer = new Player(m_Device, id, teamID, false, a_Data->systemAddress);
         newPlayer->setConnection(m_Connection.get());
         newPlayer->setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
 

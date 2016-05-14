@@ -1,12 +1,13 @@
 #pragma once
+#include <RakNet/MessageIdentifiers.h>
+#include <RakNet/RakPeerInterface.h>
+#include <RakNet/RakNetTypes.h>
+
 #include <string>
 #include <queue>
 #include <map>
 #include <functional>
 
-#include <RakNet/MessageIdentifiers.h>
-#include <RakNet/RakPeerInterface.h>
-#include <RakNet/RakNetTypes.h>
 #include "../Player.h"
 
 namespace RakNet 
@@ -71,7 +72,8 @@ namespace ConfusServer
             /// <param name="a_Event">The server event that should trigger the function.</param>
             /// <param name="a_Function">The function that should be added to the map.</param>
             void addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function);
-            void sendMessage(RakNet::BitStream & a_InputStream, PacketReliability a_Reliability);
+            void sendPacket(RakNet::BitStream& a_InputStream, PacketReliability a_Reliability, RakNet::SystemAddress a_Address);
+            void sendPacket(RakNet::BitStream& a_InputStream, RakNet::SystemAddress a_Address);
             void sendPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Address);
             void broadcastPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Excluded = nullptr);
             /// <summary> Send Package to all clients </summary>
@@ -100,7 +102,6 @@ namespace ConfusServer
             /// Processes the player packet: calls methods based on inputstream.
             /// <summary> Get all the open connections in a vector </summary>
             std::vector<RakNet::SystemAddress> getOpenConnections() const;
-
         };
     }
 }

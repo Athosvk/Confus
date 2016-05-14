@@ -1,6 +1,6 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
-#include "RakNet/RakNetSocket2.h"
+#include <RakNet/RakNetSocket2.h>
 #include "Networking\Connection.h"
 #include "Health.h"
 #include "Weapon.h"
@@ -43,7 +43,8 @@ namespace ConfusServer {
         Flag* FlagPointer;
         Health PlayerHealth;
         long long ID;
-   
+        /// <summary> The systemaddress of the client player that matches this player. </summary>
+        RakNet::SystemAddress SystemAddress;
 	private:
         Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
         Physics::BoxCollider* m_Collider;
@@ -64,7 +65,7 @@ namespace ConfusServer {
         /// <summary> A pointer to the connection to the client. </summary>
         Networking::Connection* m_Connection;
     public:
-        Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
+        Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, RakNet::SystemAddress a_Address);
 		~Player();
         void fixedUpdate();
         void update();

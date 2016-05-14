@@ -15,11 +15,12 @@ namespace ConfusServer
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-	Player::Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
+	Player::Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, RakNet::SystemAddress a_SystemAddress)
 		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
 		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
 		TeamIdentifier(a_TeamIdentifier),
-		CarryingFlag(EFlagEnum::None)
+		CarryingFlag(EFlagEnum::None),
+        SystemAddress(a_SystemAddress)
     {
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
@@ -229,7 +230,7 @@ namespace ConfusServer
         bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
         bitstreamOut.Write(CameraNode->getAbsolutePosition());
         
-        m_Connection->sendMessage(bitstreamOut, PacketReliability::UNRELIABLE);
+        m_Connection->sendPacket(bitstreamOut, SystemAddress);
     }
  
 
@@ -296,19 +297,6 @@ namespace ConfusServer
                 {
                     movementDirection.X = 1.0f;
                 }
-                //Rotate with the negative xz-rotation (around the Y axis), as
-                //the scene node convention seems to be clockwise while the rotate function
-                //is counter-clockwise
-                movementDirection.rotateXZBy(-CameraNode->getRotation().Y);
-                movementDirection = movementDirection.normalize();
-                //TODO: Make the player on the server have new physics as well.
-                /*
-               auto rigidBody = m_Collider->getRigidBody();
-                const float Speed = 15.0f;
-                auto resultingVelocity = irr::core::vector3df(movementDirection.X, 0.0f, movementDirection.Z) * Speed
-                    + irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
-                rigidBody->setVelocity(resultingVelocity);
-                */
             }
     });
     }

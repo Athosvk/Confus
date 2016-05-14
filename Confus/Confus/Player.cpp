@@ -1,20 +1,22 @@
 #include <IrrAssimp/IrrAssimp.h>
-#include <iostream>
-#include <string>
-#include <RakNet/MessageIdentifiers.h>
 #include <RakNet/BitStream.h>
 #include <RakNet/GetTime.h>
 #include <RakNet/RakPeer.h>
 #include <RakNet/RakNetTypes.h>
-#include "Audio\PlayerAudioEmitter.h"
+#include <RakNet/PacketPriority.h>
+#include <RakNet/MessageIdentifiers.h>
+#include <iostream>
+#include <string>
+
+#include "Audio/PlayerAudioEmitter.h"
 #include "Networking/ClientConnection.h"
-#include "Player.h"
 #include "EventManager.h"
 #include "Flag.h"
-#include <RakNet/PacketPriority.h>
 #include "../Confusshared/Physics/PhysicsWorld.h"
 #include "../Confusshared/Physics/BoxCollider.h"
 #include "../Confusshared/Physics/RigidBody.h"
+
+#include "Player.h"
 
 namespace Confus
 {
@@ -64,7 +66,6 @@ namespace Confus
             CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.0f, 1, nullptr, 0, true, 0.0f);
             CameraNode->setFOV(70.f);
             CameraNode->setNearValue(0.1f);
-            m_IsMainPlayer = true;
         }
         else 
         {
@@ -274,7 +275,6 @@ namespace Confus
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::Packet* a_Data)
         {
             RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
-
             irr::core::vector3df newPosition;
 
             bitstreamIn.IgnoreBytes(sizeof(unsigned char));

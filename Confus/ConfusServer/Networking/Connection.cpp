@@ -115,12 +115,22 @@ namespace ConfusServer
 			std::cout << "Message received: " << contents << std::endl;
 		}
 
-        void Connection::sendMessage(RakNet::BitStream& a_InputStream, PacketReliability a_Reliability)
+        void Connection::sendPacket(RakNet::BitStream& a_InputStream, PacketReliability a_Reliability, RakNet::SystemAddress a_Address)
         {
             if(m_Connected)
             {
                 auto openConnections = getOpenConnections();
-                m_Interface->Send(&a_InputStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE, 0, openConnections[0], false);
+                m_Interface->Send(&a_InputStream, PacketPriority::HIGH_PRIORITY, a_Reliability, 0, a_Address, false);
+            }
+        }
+
+        // Overload method, sends the message with unreliable packetreliablitiy if no reliability is specified.
+        void Connection::sendPacket(RakNet::BitStream& a_InputStream, RakNet::SystemAddress a_Address)
+        {
+            if(m_Connected)
+            {
+                auto openConnections = getOpenConnections();
+                m_Interface->Send(&a_InputStream, PacketPriority::HIGH_PRIORITY, PacketReliability::UNRELIABLE, 0, a_Address, false);
             }
         }
 
