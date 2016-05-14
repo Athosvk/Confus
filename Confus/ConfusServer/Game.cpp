@@ -23,8 +23,6 @@ namespace ConfusServer
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),
         m_TeamScoreManager(),
 		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-        m_PlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, true),        
-        m_SecondPlayerNode(m_Device, 1, ETeamIdentifier::TeamRed, false),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, &m_TeamScoreManager),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed, &m_TeamScoreManager)
     {
@@ -65,11 +63,8 @@ namespace ConfusServer
         
         processTriangleSelectors();
 
-        m_PlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-        m_SecondPlayerNode.setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-
 
         m_Connection->addFunctionToMap(ID_NEW_INCOMING_CONNECTION, [this](RakNet::Packet* a_Data)
         {
@@ -80,7 +75,6 @@ namespace ConfusServer
         {
             removePlayer(a_Data);
         });
-
 
         m_Device->getCursorControl()->setVisible(false);
       
@@ -154,7 +148,7 @@ namespace ConfusServer
 
     void Game::handleInput()
     {
-        m_PlayerNode.handleInput(m_EventManager);
+       
     }
 
     void Game::update()
@@ -163,14 +157,20 @@ namespace ConfusServer
         m_CurrentTicks = m_Device->getTimer()->getTime();
         m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
 
-        m_PlayerNode.update();
-        m_Listener.setPosition(m_PlayerNode.CameraNode->getAbsolutePosition());
 
-        irr::core::quaternion playerRotation(m_PlayerNode.CameraNode->getRotation());
-        irr::core::vector3df upVector = playerRotation * irr::core::vector3df( 0, 1, 0 );
-        irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
-        m_Listener.setDirection(forwardVector, upVector);
-
+        for(auto player : m_PlayerArray)
+        {
+            player->update();
+        }
+        // Setting the listener position to the first player for debugging. 
+        if(!m_PlayerArray.empty())
+        {
+            m_Listener.setPosition(m_PlayerArray[0]->CameraNode->getAbsolutePosition());
+            irr::core::quaternion playerRotation(m_PlayerArray[0]->CameraNode->getRotation());
+            irr::core::vector3df upVector = playerRotation * irr::core::vector3df(0, 1, 0);
+            irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
+            m_Listener.setDirection(forwardVector, upVector);
+        }
         static float currentDelay = 0.0f;
         static int currentSeed;
         m_MazeTimer += m_DeltaTime;
@@ -206,6 +206,10 @@ namespace ConfusServer
     {
         updatePlayers();
 		m_MazeGenerator.fixedUpdate();
+        for(auto player : m_PlayerArray)
+        {
+            player->fixedUpdate();
+        }
     }
 
     void Game::broadcastMazeChange(int a_Seed)
@@ -221,10 +225,14 @@ namespace ConfusServer
 
     void Game::addPlayer(RakNet::Packet* a_Data)
     {
+        std::cout << a_Data->systemAddress.ToString() << "Is the address of the player that joined";
         long long id = static_cast<long long>(a_Data->guid.g);
         ETeamIdentifier teamID = m_PlayerArray.size() % 2 == 0 ? ETeamIdentifier::TeamRed : ETeamIdentifier::TeamBlue;
 
-        Player* newPlayer = new Player(m_Device, id, teamID, false);
+        Player* newPlayer = new Player(m_Device, id, teamID, false, a_Data->systemAddress);
+        newPlayer->setConnection(m_Connection.get());
+        newPlayer->setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+
         m_PlayerArray.push_back(newPlayer);
 
         RakNet::BitStream stream;

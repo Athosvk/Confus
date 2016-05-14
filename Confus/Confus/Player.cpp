@@ -1,15 +1,26 @@
 #include <IrrAssimp/IrrAssimp.h>
+#include <RakNet/BitStream.h>
+#include <RakNet/GetTime.h>
+#include <RakNet/RakPeer.h>
+#include <RakNet/RakNetTypes.h>
+#include <RakNet/PacketPriority.h>
+#include <RakNet/MessageIdentifiers.h>
+#include <iostream>
+#include <string>
 
-#include "Audio\PlayerAudioEmitter.h"
-#include "Player.h"
+#include "Audio/PlayerAudioEmitter.h"
+#include "Networking/ClientConnection.h"
 #include "EventManager.h"
 #include "Flag.h"
 #include "../Confusshared/Physics/PhysicsWorld.h"
 #include "../Confusshared/Physics/BoxCollider.h"
 #include "../Confusshared/Physics/RigidBody.h"
 
+#include "Player.h"
+
 namespace Confus
 {
+    Networking::ClientConnection* m_Connection;
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 25u;
     const unsigned Player::HeavyAttackDamage = 50u;
@@ -69,6 +80,7 @@ namespace Confus
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
         }
 	    PlayerNode->setParent(this);
+        
 		setParent(CameraNode);
 		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.6f, 2.7f, 0.6f), CameraNode,
 			Physics::ECollisionFilter::Player, ~Physics::ECollisionFilter::Player);
@@ -99,33 +111,6 @@ namespace Confus
             }
         }
 
-		auto movementDirection = irr::core::vector3df();
-		if(a_EventManager.IsKeyDown(irr::KEY_KEY_W))
-		{
-			movementDirection.Z = 1.0f;
-		}
-		else if(a_EventManager.IsKeyDown(irr::KEY_KEY_S))
-		{
-			movementDirection.Z = -1.0f;
-		}
-		if(a_EventManager.IsKeyDown(irr::KEY_KEY_A))
-		{
-			movementDirection.X = -1.0f;
-		}
-		else if(a_EventManager.IsKeyDown(irr::KEY_KEY_D))
-		{
-			movementDirection.X = 1.0f;
-		}
-		//Rotate with the negative xz-rotation (around the Y axis), as
-		//the scene node convention seems to be clockwise while the rotate function
-		//is counter-clockwise
-		movementDirection.rotateXZBy(-CameraNode->getRotation().Y);
-		movementDirection = movementDirection.normalize();
-		auto rigidBody = m_Collider->getRigidBody();
-		const float Speed = 15.0f;
-		auto resultingVelocity = irr::core::vector3df(movementDirection.X, 0.0f, movementDirection.Z) * Speed
-			+ irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
-		rigidBody->setVelocity(resultingVelocity);
     }
 
 	Health* Player::getHealthInstance()
@@ -135,7 +120,7 @@ namespace Confus
 
     void Player::render()
     {
-
+       
     }
 
     const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const
@@ -172,15 +157,18 @@ namespace Confus
 
     void Player::startLightAttack()
     {
+        changeState(EPlayerState::LightAttacking);
         PlayerNode->setFrameLoop(38, 41);
         PlayerNode->setCurrentFrame(38);
         m_Weapon.Damage = LightAttackDamage;
         m_SoundEmitter->playAttackSound(false);
         initializeAttack();
+
     }
 
     void Player::startHeavyAttack()
     {
+        changeState(EPlayerState::HeavyAttacking);
         PlayerNode->setFrameLoop(60, 66);
         PlayerNode->setCurrentFrame(60);
         m_Weapon.Damage = HeavyAttackDamage;
@@ -195,6 +183,8 @@ namespace Confus
             m_Attacking = false;
             m_Weapon.disableCollider();
             startWalking();
+            // Reset the player state.
+            changeState(EPlayerState::Alive);
         }
     }
 
@@ -225,7 +215,6 @@ namespace Confus
 				FlagPointer->drop(this);
 			}
         }
-
         if(m_Collider->getRigidBody()->getVelocity().X != 0.0f && m_Collider->getRigidBody()->getVelocity().Z != 0.0f)
         {
             if(!m_Attacking && !m_Walking)
@@ -246,6 +235,11 @@ namespace Confus
 				FlagPointer->returnToStartPosition();
 			}
         }
+    }
+
+    void Player::fixedUpdate()
+    {
+        updateServer();
     }
 
     void Player::respawn()
@@ -271,4 +265,57 @@ namespace Confus
         CameraNode->setRotation(a_NewRotation);
     }
 
+
+     void Player::setConnection(Networking::ClientConnection* a_Connection)
+	{
+        m_Connection = a_Connection;
+
+        m_PlayerID = m_Connection->m_Interface->GetGuidFromSystemAddress(RakNet::UNASSIGNED_SYSTEM_ADDRESS);
+
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::Packet* a_Data)
+        {
+            RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
+            irr::core::vector3df newPosition;
+
+            bitstreamIn.IgnoreBytes(sizeof(unsigned char));
+            bitstreamIn.Read(newPosition);
+
+            CameraNode->setPosition(newPosition);
+        });
+	}
+
+     void Player::updateServer() const
+	{
+        RakNet::BitStream bitstreamOut;
+
+        bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
+        bitstreamOut.Write(m_PlayerID);
+        bitstreamOut.Write(CameraNode->getPosition());
+        bitstreamOut.Write(CameraNode->getRotation());
+        bitstreamOut.Write(Player::m_PlayerState);
+        bitstreamOut.Write(m_StateChangeTime);
+        bitstreamOut.Write(m_PlayerHealthPoints);
+        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_W));
+        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_S));
+        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_A));
+        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_D));
+
+        m_Connection->sendMessage(&bitstreamOut, PacketReliability::UNRELIABLE);
+	}
+
+     void Player::changeState(EPlayerState a_NewState)
+     {
+         // Only change state is it is different from the player's current state.
+         if(a_NewState != m_PlayerState) 
+         {
+             m_PlayerState = a_NewState;
+             m_StateChangeTime = RakNet::GetTime();
+             std::cout << "State changed! Time of change is: " << m_StateChangeTime;
+         } 
+     }
+
+     void Player::setEventManager(EventManager* a_Manager) 
+     {
+         m_EventManager = a_Manager;
+     }
 }

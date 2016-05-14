@@ -58,12 +58,6 @@ namespace ConfusServer
         /// </summary>
         OpenALListener m_Listener;
         EventManager m_EventManager;
-        /// <summary>
-        /// The Players to test with.
-        /// </summary>
-        Player m_PlayerNode;
-		Player m_SecondPlayerNode;
-
         std::vector<Player*> m_PlayerArray;
         /// <summary>
         /// The Blue Flag.

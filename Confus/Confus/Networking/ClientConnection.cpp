@@ -5,6 +5,7 @@
 #include <RakNet/RakPeerInterface.h>
 
 #include "ClientConnection.h"
+#include "../Player.h"
 
 namespace Confus
 {
@@ -46,8 +47,13 @@ namespace Confus
             RakNet::Packet* packet = m_Interface->Receive();
             while(packet != nullptr)
             {
-                handlePacket(packet, static_cast<unsigned char>(packet->data[0]));
+                if(packet->data[0] == ID_CONNECTION_REQUEST_ACCEPTED)
+                {
+                    std::cout << "Connected to the server!\n";
+                    m_Connected = true;
+                }
 
+                handlePacket(packet, static_cast<unsigned char>(packet->data[0]));
                 m_Interface->DeallocatePacket(packet);
                 packet = m_Interface->Receive();
             }
@@ -66,19 +72,12 @@ namespace Confus
             m_CallbackFunctionMap[a_Event].push_back(a_Function);
         }
 
-		void ClientConnection::sendMessage(const std::string& a_Message)
+		void ClientConnection::sendMessage(RakNet::BitStream* a_Stream, PacketReliability a_Reliability) 
 		{
 			if(m_Connected)
 			{
-				RakNet::BitStream stream;
-				stream.Write(static_cast<RakNet::MessageID>(EPacketType::Message));
-				stream.Write(a_Message.c_str());
-				m_Interface->Send(&stream, PacketPriority::HIGH_PRIORITY,
-					PacketReliability::RELIABLE_ORDERED, 0, getServerAddress(), false);
-			}
-			else
-			{
-				m_StalledMessages.push(a_Message);
+				m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
+					a_Reliability, 0, getServerAddress(), false);
 			}
 		}
 
@@ -88,7 +87,7 @@ namespace Confus
             m_Interface->GetConnectionList(nullptr, &openConnections);
             return openConnections;
         }
-
+        
 		RakNet::SystemAddress ClientConnection::getServerAddress() const
 		{
 			auto connectionCount = getConnectionCount();
@@ -104,19 +103,6 @@ namespace Confus
 			//We assume there is at most one connection, so it is safe to say that this
 			//is the server connection
 			return openConnections[0];
-		}
-
-		void ClientConnection::dispatchStalledMessages()
-		{
-			while(!m_StalledMessages.empty())
-			{
-				RakNet::BitStream stream;
-				stream.Write(static_cast<RakNet::MessageID>(EPacketType::Message));
-				stream.Write(m_StalledMessages.front().c_str());
-				m_Interface->Send(&stream, PacketPriority::HIGH_PRIORITY,
-					PacketReliability::RELIABLE_ORDERED, 0, getServerAddress(), false);
-				m_StalledMessages.pop();
-			}
 		}
     }
 }
