@@ -1,6 +1,5 @@
 #pragma once
 #include <RakNet/MessageIdentifiers.h>
-#include <RakNet/RakPeerInterface.h>
 #include <RakNet/BitStream.h>
 #include <string>
 #include <queue>
@@ -16,6 +15,8 @@ namespace RakNet
     class BitStream;
     struct AddressOrGUID;
 }
+
+enum PacketReliability;
 
 namespace Confus
 {

@@ -1,5 +1,6 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
+
 #include "EventManager.h"
 #include "Networking\ClientConnection.h"
 #include "Health.h"

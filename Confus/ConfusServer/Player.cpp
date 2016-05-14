@@ -1,12 +1,13 @@
  #include <IrrAssimp/IrrAssimp.h>
-#include <iostream>
-#include "Audio\PlayerAudioEmitter.h"
+
 #include <RakNet/BitStream.h>
+#include <iostream>
 #include "EventManager.h"
 #include "Flag.h"
 #include "../Confusshared/Physics/PhysicsWorld.h"
 #include "../Confusshared/Physics/BoxCollider.h"
 #include "../Confusshared/Physics/RigidBody.h"
+#include "Audio/PlayerAudioEmitter.h"
 
 #include "Player.h"
 

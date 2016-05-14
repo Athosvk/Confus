@@ -1,5 +1,6 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
+
 #include <RakNet/RakNetSocket2.h>
 #include "Networking\Connection.h"
 #include "Health.h"
