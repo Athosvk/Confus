@@ -43,8 +43,6 @@ namespace ConfusServer
         bool m_Attacking = false;
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
-        /// <summary> A pointer to the connection to the client. </summary>
-        Networking::Connection* m_Connection;
 		irr::SKeyMap m_KeyMap[6];
         int m_LastUpdateTime;
         static const int UserTimedOutTime;
@@ -65,12 +63,12 @@ namespace ConfusServer
 
         /// <summary> Starts the heavy attack, which deals more damage </summary>
         void startHeavyAttack();
-        
-        /// <summary>
-        /// Sets the connection to submit the update bitstream to.
-        /// </summary>
-        /// <param name="a_Connection">The connection reference.</param>
-        void setConnection(Networking::Connection* a_Connection);
+		
+		/// <summary>
+		/// Updates from client.
+		/// </summary>
+		/// <param name="a_Data">The data the client sent.</param>
+		void updateFromClient(RakNet::BitStream* a_Data);
         
         /// <summary>
         /// The player didn't have a connection for the <see cref="UserTimedOutTime"/> seconds.

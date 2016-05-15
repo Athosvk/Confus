@@ -191,6 +191,10 @@ namespace ConfusServer
 
     void Player::update()
     {
+		if (!m_Attacking)
+		{
+			PlayerState = EPlayerState::Idle;
+		}
     }
 
     void Player::fixedUpdate()
@@ -207,50 +211,49 @@ namespace ConfusServer
         int currentTime = static_cast<int>((RakNet::GetTimeMS()) / 1000);
         return currentTime > m_LastUpdateTime + UserTimedOutTime;
     }
- 
 
-    void Player::setConnection(Networking::Connection* a_Connection)
-    {
-        m_Connection = a_Connection;
+	void Player::updateFromClient(RakNet::BitStream* a_Data)
+	{
+		ConfusShared::Networking::PlayerInfo playerInfo;
+		a_Data->IgnoreBytes(sizeof(unsigned char));
+		a_Data->Read(playerInfo);
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::BitStream* a_Data)
-        {
-			ConfusShared::Networking::PlayerInfo playerInfo;
-            a_Data->IgnoreBytes(sizeof(unsigned char));
-			a_Data->Read(playerInfo);
+		m_LastUpdateTime = RakNet::GetTimeMS() / 1000;
 
-            m_LastUpdateTime = RakNet::GetTimeMS()/1000;
+		setRotation(playerInfo.rotation);
 
-            setRotation(playerInfo.rotation);
-						             
-            if(PlayerState != EPlayerState::LightAttacking && playerInfo.newState == EPlayerState::LightAttacking)
-            {
-                startLightAttack();
-            }
-            else if(PlayerState != EPlayerState::HeavyAttacking && playerInfo.newState == EPlayerState::HeavyAttacking)
-            {
-                startHeavyAttack();
-            }
-
+		if (PlayerState != EPlayerState::LightAttacking && PlayerState != EPlayerState::HeavyAttacking)
+		{
 			PlayerState = playerInfo.newState;
+		}
 
-            // Change this into something better when we are not using irrlichts FPS camera. 
-            if(playerInfo.forwardKeyPressed)
-            {
-                CameraNode->setPosition(irr::core::vector3df(getPosition().X, getPosition().Y, getPosition().Z) + 0.1f);
-            } 
-            else if(playerInfo.backwardKeyPressed)
-            {
-                CameraNode->setPosition(irr::core::vector3df(getPosition().X, getPosition().Y, getPosition().Z) - 0.1f);
-            }
-            else if(playerInfo.leftKeyPressed)
-            {
-                CameraNode->setPosition(irr::core::vector3df(getPosition().X + 0.1f, getPosition().Y, getPosition().Z));
-            }
-            else if(playerInfo.rightKeyPressed)
-            {
-                CameraNode->setPosition(irr::core::vector3df(getPosition().X - 0.1f, getPosition().Y, getPosition().Z));
-            }	
-	});
-    }
+		if (PlayerState != EPlayerState::LightAttacking && playerInfo.leftMouseButtonPressed)
+		{
+			PlayerState = EPlayerState::LightAttacking;
+			startLightAttack();
+		}
+		else if (PlayerState != EPlayerState::HeavyAttacking && playerInfo.rightMouseButtonPressed)
+		{
+			PlayerState = EPlayerState::HeavyAttacking;
+			startHeavyAttack();
+		}
+
+		// Change this into something better when we are not using irrlichts FPS camera. 
+		if (playerInfo.forwardKeyPressed)
+		{
+			CameraNode->setPosition(irr::core::vector3df(CameraNode->getPosition().X, CameraNode->getPosition().Y, CameraNode->getPosition().Z + 0.1f));
+		}
+		else if (playerInfo.backwardKeyPressed)
+		{
+			CameraNode->setPosition(irr::core::vector3df(CameraNode->getPosition().X, CameraNode->getPosition().Y, CameraNode->getPosition().Z) - 0.1f);
+		}
+		else if (playerInfo.leftKeyPressed)
+		{
+			CameraNode->setPosition(irr::core::vector3df(CameraNode->getPosition().X - 0.1f, CameraNode->getPosition().Y, CameraNode->getPosition().Z));
+		}
+		else if (playerInfo.rightKeyPressed)
+		{
+			CameraNode->setPosition(irr::core::vector3df(CameraNode->getPosition().X + 0.1f, CameraNode->getPosition().Y, CameraNode->getPosition().Z));
+		}
+	}
 }

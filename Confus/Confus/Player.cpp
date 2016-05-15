@@ -39,7 +39,7 @@ namespace Confus
         PlayerNode->setPosition(irr::core::vector3df(0.f, -2.0f, -0.2f));
         PlayerNode->setName({"Player"});
 
-        if(a_TeamIdentifier == ETeamIdentifier::TeamBlue) {
+        if (a_TeamIdentifier == ETeamIdentifier::TeamBlue) {
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
         }
         else if(a_TeamIdentifier == ETeamIdentifier::TeamRed) {
@@ -59,7 +59,7 @@ namespace Confus
         }
         if(a_TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
-            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 0.f));
+            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
         }
         else if(a_TeamIdentifier == ETeamIdentifier::TeamRed)
         {
@@ -87,18 +87,6 @@ namespace Confus
 
     void Player::handleInput(EventManager& a_EventManager)
     {
-        if(!m_Attacking)
-        {
-            if(a_EventManager.IsRightMouseDown())
-            {
-                startHeavyAttack();
-            }
-            else if(a_EventManager.IsLeftMouseDown())
-            {
-                startLightAttack();
-            }
-        }
-
 		auto movementDirection = irr::core::vector3df();
 		if(a_EventManager.IsKeyDown(irr::KEY_KEY_W))
 		{
@@ -112,7 +100,7 @@ namespace Confus
 		{
 			movementDirection.X = -1.0f;
 		}
-		else if(a_EventManager.IsKeyDown(irr::KEY_KEY_D))
+		else if (a_EventManager.IsKeyDown(irr::KEY_KEY_D))
 		{
 			movementDirection.X = 1.0f;
 		}
@@ -140,12 +128,12 @@ namespace Confus
 
     void Player::updateFromServer(ConfusShared::Networking::PlayerInfo a_PlayerInfo)
     {
-        setPosition(a_PlayerInfo.position);
+        CameraNode->setPosition(a_PlayerInfo.position);
         changeState(a_PlayerInfo.newState);
 
         if(MainPlayer == false)
         {
-            setRotation(a_PlayerInfo.rotation);
+            CameraNode->setRotation(a_PlayerInfo.rotation);
         }
     }
 

@@ -57,6 +57,13 @@ namespace ConfusServer
         {
             addPlayer(a_Data);
         }); 
+		m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::BitStream* a_Data)
+		{
+			for (size_t i = 0; i < m_PlayerArray.size(); i++)
+			{
+				m_PlayerArray[static_cast<int>(i)]->updateFromClient(a_Data);
+			}
+		});
 
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::PlayerLeft), [this](RakNet::BitStream* a_Data)
         {
@@ -216,7 +223,6 @@ namespace ConfusServer
         ETeamIdentifier teamID = m_PlayerArray.size() % 2 == 0 ? ETeamIdentifier::TeamRed : ETeamIdentifier::TeamBlue;
 
         Player* newPlayer = new Player(m_Device, id, teamID, false);
-		newPlayer->setConnection(m_Connection.get());
         m_PlayerArray.push_back(newPlayer);
 
         RakNet::BitStream stream;
@@ -225,21 +231,12 @@ namespace ConfusServer
         stream.Write(static_cast<ETeamIdentifier>(teamID));
         stream.Write(static_cast<size_t>(m_PlayerArray.size()));
 
-
         for(size_t i = 0u; i < m_PlayerArray.size(); i++)
         {
             stream.Write(static_cast<char>(m_PlayerArray[i]->ID));
             stream.Write(static_cast<ETeamIdentifier>(m_PlayerArray[i]->TeamIdentifier));
         }
         m_Connection->broadcastBitstream(stream);
-
-        RakNet::BitStream broadcastStream;
-        broadcastStream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::OtherPlayerJoined));
-        broadcastStream.Write(static_cast<char>(id));
-        broadcastStream.Write(static_cast<ETeamIdentifier>(teamID));
-
-        m_Connection->broadcastBitstream(broadcastStream);
-
         std::cout << "[Game Class] Player id: " << static_cast<int>(id) << " joined." << std::endl;
     }
 
@@ -279,21 +276,24 @@ namespace ConfusServer
             stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdatePosition));
             Player* player = m_PlayerArray[i];
 
-            ConfusShared::Networking::PlayerInfo playerInfo;
-            playerInfo.playerID = static_cast<char>(player->ID);
-            playerInfo.position = player->CameraNode->getPosition();
-            playerInfo.rotation = player->CameraNode->getRotation();
-            playerInfo.newState = player->PlayerState;
-            playerInfo.playerHealth = static_cast<unsigned int>(player->PlayerHealth.getHealth());
-            stream.Write(playerInfo);
+			if (player != nullptr)
+			{
+				ConfusShared::Networking::PlayerInfo playerInfo;
+				playerInfo.playerID = static_cast<char>(player->ID);
+				playerInfo.position = player->CameraNode->getAbsolutePosition();
+				playerInfo.rotation = player->CameraNode->getRotation();
+				playerInfo.newState = player->PlayerState;
+				playerInfo.playerHealth = static_cast<unsigned int>(player->PlayerHealth.getHealth());
+				stream.Write(playerInfo);
 
-            m_Connection->broadcastPacket(&stream, nullptr);
+				m_Connection->broadcastPacket(&stream, nullptr);
 
-            if(player->userTimedOut())
-            {
-                deletePlayer(playerInfo.playerID);
-                std::cout << "[Game Class] Player id: " << static_cast<int>(playerInfo.playerID) << " timed out." << std::endl;
-            }
+				if (player->userTimedOut())
+				{
+					deletePlayer(playerInfo.playerID);
+					std::cout << "[Game Class] Player id: " << static_cast<int>(playerInfo.playerID) << " timed out." << std::endl;
+				}
+			}
         }
     }
 

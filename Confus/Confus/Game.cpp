@@ -85,17 +85,12 @@ namespace Confus
 
         m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::MainPlayerJoined), [this](RakNet::BitStream* a_Data)
         {
-            addOwnPlayer(a_Data);
+            addNewPlayer(a_Data);
         });
 
         m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::PlayerLeft), [this](RakNet::BitStream* a_Data)
         {
             removePlayer(a_Data);
-        });
-
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::OtherPlayerJoined), [this](RakNet::BitStream* a_Data)
-        {
-            addOtherPlayer(a_Data);
         });
 
         m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdatePosition), [this](RakNet::BitStream* a_Data)
@@ -105,15 +100,13 @@ namespace Confus
             ConfusShared::Networking::PlayerInfo playerInfo;
             a_Data->Read(playerInfo);
 
-            auto playerIterator = std::find_if(m_PlayerArray.begin(), m_PlayerArray.end(), [&](Player* player)-> bool
-            {
-                return player->ID == static_cast<int>(playerInfo.playerID); 
-            });
-
-            if(playerIterator != m_PlayerArray.end())
-            {
-                (*playerIterator)->updateFromServer(playerInfo);
-            }
+			for (size_t i = 0u; i < m_PlayerArray.size(); i++)
+			{
+				if (m_PlayerArray[i]->ID == playerInfo.playerID)
+				{
+					m_PlayerArray[i]->updateFromServer(playerInfo);
+				}
+			}
         });
       
         while(m_Device->run())
@@ -271,52 +264,47 @@ namespace Confus
 		updateDownwards(m_Device->getSceneManager()->getRootSceneNode());
 	}
 
-    void Game::addOwnPlayer(RakNet::BitStream* a_Data)
+	void Game::addNewPlayer (RakNet::BitStream* a_Data)
     {
-        if(m_Connection->ClientID <= 0)
-        {
-            a_Data->IgnoreBytes(sizeof(RakNet::MessageID));
-
-            a_Data->Read(m_PlayerNode.ID);
-
-            m_Connection->ClientID = m_PlayerNode.ID;
-
-            a_Data->Read(m_PlayerNode.TeamIdentifier);
-            m_PlayerNode.respawn();
-            m_PlayerNode.updateColor(m_Device);
-
-            size_t size;
-            a_Data->Read(size);
-
-            for(size_t i = 0u; i < size; i++)
-            {
-                char id;
-                ETeamIdentifier teamID;
-
-                a_Data->Read(id);
-                a_Data->Read(teamID);
-
-                Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false, &m_AudioManager);
-                m_PlayerArray.push_back(newPlayer);
-            }
-            m_PlayerArray.push_back(&m_PlayerNode);
-        }
-    }
-
-    void Game::addOtherPlayer(RakNet::BitStream* a_Data)
-    {
+		char newPlayerID;
+		ETeamIdentifier newPlayerIdentifier;
 		a_Data->IgnoreBytes(sizeof(RakNet::MessageID));
-        char id;
-		a_Data->Read(id);
+		a_Data->Read(newPlayerID);
+		a_Data->Read(newPlayerIdentifier);
 
-        if(id != m_PlayerNode.ID)
-        {
-            ETeamIdentifier teamID;
-            a_Data->Read(teamID);
+		if (m_Connection->ClientID <= 0)
+		{   //Set our own data
+			m_PlayerNode.ID = m_Connection->ClientID = newPlayerID;
+			m_PlayerNode.TeamIdentifier = newPlayerIdentifier;
+			m_PlayerNode.respawn();
+			m_PlayerNode.updateColor(m_Device);
 
-            Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false, &m_AudioManager);
-            m_PlayerArray.push_back(newPlayer);
-        }
+			// Add other players
+			size_t size;
+			a_Data->Read(size);
+
+			for (size_t i = 0u; i < size; i++)
+			{
+				char id;
+				ETeamIdentifier teamID;
+
+				a_Data->Read(id);
+				a_Data->Read(teamID);
+
+				if (id != m_PlayerNode.ID)
+				{
+					Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false, &m_AudioManager);
+					m_PlayerArray.push_back(newPlayer);
+				}
+			}
+			m_PlayerArray.push_back(&m_PlayerNode);
+		}
+		else
+		{   
+			// Add the player that just joined
+			Player* newPlayer = new Player(m_Device, m_PhysicsWorld, newPlayerID, newPlayerIdentifier, m_PlayerNode.ID == newPlayerID, &m_AudioManager);
+			m_PlayerArray.push_back(newPlayer);
+		}
     }
 
     void Game::removePlayer(RakNet::BitStream* a_Data)
@@ -329,7 +317,11 @@ namespace Confus
 
         for(size_t i = 0u; i < m_PlayerArray.size(); i++)
         {
-            if(m_PlayerArray[i]->ID == id)
+			if (m_PlayerNode.ID == id)
+			{
+				//m_ShouldRun = false; //TODO: Uncomment when merged with  develop
+			}
+            else if(m_PlayerArray[i]->ID == id)
             {
                 m_PlayerArray[i]->remove();
                 delete(m_PlayerArray[i]);
@@ -337,7 +329,6 @@ namespace Confus
                 break;
             }
         }
-        m_PlayerNode.fixedUpdate();
     }
 
     void Game::render()

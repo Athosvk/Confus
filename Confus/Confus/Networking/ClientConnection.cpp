@@ -36,6 +36,7 @@ namespace Confus
             {
                 RakNet::BitStream bitStream;
                 bitStream.Write(static_cast<RakNet::MessageID>(EPacketType::PlayerLeft));
+				bitStream.Write(ClientID);
                 sendMessage(&bitStream, PacketReliability::RELIABLE);
                 m_Interface->CloseConnection(getServerAddress(), true);
             }

@@ -38,7 +38,7 @@ namespace Confus
 
         /// <summary> Determines if this player is this users player or not </summary>
         bool MainPlayer = false;
-        char ID;
+        char ID = 0;
     private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
 		Physics::BoxCollider* m_Collider;

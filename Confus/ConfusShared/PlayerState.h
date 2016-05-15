@@ -8,11 +8,8 @@ namespace ConfusShared
     enum class EPlayerState : unsigned char
     {
         Idle = 0,
-		Alive = 1u,
-		CarryingFlag = 2u,
-		HeavyAttacking = 3u, 
-		LightAttacking = 4u,
-		Dead = 5u
+		HeavyAttacking = 1u, 
+		LightAttacking = 2u
     };
 }
 using ConfusShared::EPlayerState;
