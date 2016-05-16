@@ -1,49 +1,79 @@
 #include <Irrlicht/irrlicht.h>
 
 #include "GUI.h"
+#include "Game.h"
+#include "Audio\AudioManager.h"
 
 namespace Confus
 {
-	GUI::GUI(irr::IrrlichtDevice* a_Device, Player* a_Player)
+    GUI::GUI(irr::IrrlichtDevice* a_Device, Player* a_Player, Audio::AudioManager* a_AudioManager)
+        : m_AudioSourceLowHealth(a_AudioManager->createSound("heartbeat.wav"))
 	{
+		m_Device = a_Device;
 		m_GUIEnvironment = a_Device->getGUIEnvironment();
-
 		m_Driver = a_Device->getVideoDriver();
 		m_BloodImage = m_Driver->getTexture("Media/Textures/Blood.png");
 		m_BloodOverlay = m_GUIEnvironment->addImage(m_BloodImage, irr::core::position2d<int>(0, 0));
-		m_BloodOverlay->setVisible(false);
 		m_PlayerNode = a_Player;
 		m_HealthTextBox = m_GUIEnvironment->addStaticText(L"", irr::core::rect<irr::s32>(10, 10, 100, 25), false);
-		m_AudioSourceLowHealth = new OpenALSource("heartbeat.wav");
+		m_HealthImage = m_Driver->getTexture("Media/Textures/Heart.png");
+		m_HealthOne = m_GUIEnvironment->addImage(m_HealthImage, irr::core::position2d<int>(10, 668));
+		m_HealthTwo = m_GUIEnvironment->addImage(m_HealthImage, irr::core::position2d<int>(120, 668));
+		m_HealthThree = m_GUIEnvironment->addImage(m_HealthImage, irr::core::position2d<int>(230, 668));
+		m_HealthFour = m_GUIEnvironment->addImage(m_HealthImage, irr::core::position2d<int>(340, 668));
 	}
 
 	GUI::~GUI()
 	{
-		delete(m_AudioSourceLowHealth);
 	}
 
 	void GUI::update()
 	{
-		m_HealthString = (L"Health: " + std::to_wstring(m_PlayerNode->PlayerHealth.getHealth()) + L"%").c_str();
+		for (auto& uiElement : m_Elements)
+		{
+			uiElement->update();
+		}
+		m_HealthString = (L"Health: " + std::to_wstring(m_PlayerNode->getHealthInstance()->getHealth()) + L"%").c_str();
 		m_HealthTextBox->setText(m_HealthString.c_str());
 		drawBloodOverlay();
 		lowHealthAudio();
+		drawHealth();
 	}
 
 	void GUI::drawBloodOverlay()
 	{
-		m_BloodOverlay->setVisible(m_PlayerNode->PlayerHealth.getHealth() <= 50);
+		m_BloodOverlay->setVisible(m_PlayerNode->getHealthInstance()->getHealth() <= 25);
 	}
 
 	void GUI::lowHealthAudio()
 	{
-		if (m_PlayerNode->PlayerHealth.getHealth() <= 25)
+		if (m_PlayerNode->getHealthInstance()->getHealth() <= 25 && !m_AudioSourceLowHealth.isPlaying())
 		{
-			m_AudioSourceLowHealth->play();
+			m_AudioSourceLowHealth.play();
 		}
-		else
+		else if(m_AudioSourceLowHealth.isPlaying())
 		{
-			m_AudioSourceLowHealth->stop();
+            if(m_AudioSourceLowHealth.isPlaying())
+            {
+                m_AudioSourceLowHealth.stop();
+            }
 		}
+	}
+
+	void GUI::drawHealth()
+	{
+		m_HealthOne->setVisible(m_PlayerNode->getHealthInstance()->getHealth() >= 0);
+		m_HealthTwo->setVisible(m_PlayerNode->getHealthInstance()->getHealth() >= 25);
+		m_HealthThree->setVisible(m_PlayerNode->getHealthInstance()->getHealth() >= 50);
+		m_HealthFour->setVisible(m_PlayerNode->getHealthInstance()->getHealth() >= 75);
+	}
+
+	irr::core::position2d<int> GUI::calculatePixelPosition(irr::core::vector2df a_Coordinates, irr::core::dimension2d<irr::u32> a_CurrentResolution)
+	{
+		irr::core::vector2df pixelCoords;
+		pixelCoords.X = a_CurrentResolution.Width * a_Coordinates.X;
+		pixelCoords.Y = a_CurrentResolution.Height * a_Coordinates.Y;
+
+		return irr::core::position2d<int>(static_cast<int>(pixelCoords.X), static_cast<int>(pixelCoords.Y));
 	}
 }

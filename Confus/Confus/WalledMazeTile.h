@@ -3,6 +3,11 @@
 
 namespace Confus
 {
+	namespace Physics
+	{
+		class PhysicsWorld;
+	}
+
 	/// <summary>
 	/// Represents a tile used in mazes
 	/// </summary>
@@ -19,8 +24,10 @@ namespace Confus
 		/// </summary>
 		/// <param name="a_Device">The current Irrlicht device.</param>
 		/// <param name="a_RealPosition">The position of the wall when it is raised</param>
-		/// <param name="a_HiddenPosition">The position of the wall when it is lowered</param>
-		WalledMazeTile(irr::IrrlichtDevice * a_Device, irr::core::vector3df a_RealPosition, irr::core::vector3df a_HiddenPosition);
+		/// <param name="a_Scale">The scale of the wall</param>
+		/// <param name="a_PhysicsWorld">The active physics world</param>
+		WalledMazeTile(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RealPosition, irr::core::vector3df a_Scale,
+			Physics::PhysicsWorld& a_PhysicsWorld);
 
 		/// <summary>
 		/// The fixed update used to update the state of the walledMazeTile

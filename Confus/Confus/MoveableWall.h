@@ -3,6 +3,12 @@
 
 namespace Confus
 {    
+	namespace Physics
+	{
+		class PhysicsWorld;
+		class RigidBody;
+	};
+
     /// <summary>
     /// Represents a wall that transitions into and out of the maze
     /// </summary>
@@ -57,25 +63,24 @@ namespace Confus
         /// </summary>
         bool m_Transitioning = false;
 
-        /// <summary>
-        /// The triangle selector used for collision detection
-        /// </summary>
-        irr::scene::ITriangleSelector* m_TriangleSelector;
-
 		/// <summary>
 		/// If the wall is raised or lowered
 		/// </summary>
 		bool m_Raised = true;
+		
+		/// <summary> The rigid body for collision detection </summary>
+		Physics::RigidBody* m_RigidBody = nullptr;
 
     public:        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MoveableWall"/> class.
-        /// </summary>
-        /// <param name="a_Device">The current Irrlicht device.</param>
-        /// <param name="a_RegularPosition">The position of the wall when present in the maze.</param>
-        /// <param name="a_HiddenPosition">The position of the wall when out of the maze.</param>
-        MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition,
-            irr::core::vector3df a_HiddenPosition);      
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MoveableWall" /> class.
+		/// </summary>
+		/// <param name="a_Device">The current Irrlicht device.</param>
+		/// <param name="a_RegularPosition">The position of the wall when present in the maze.</param>
+		/// <param name="a_Scale">The scale </param>
+		/// <param name="a_PhysicsWorld">The active physics world</param>
+		MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition,
+			irr::core::vector3df a_Scale, Physics::PhysicsWorld& a_PhysicsWorld);
 
         /// <summary>
         /// Finalizes an instance of the <see cref="MoveableWall"/> class, cleans up Irrlicht resources
@@ -87,7 +92,7 @@ namespace Confus
         /// </summary>
         void hide();
 
-		const irr::scene::IAnimatedMeshSceneNode* getMeshNode() const { return m_MeshNode; }
+		irr::scene::IAnimatedMeshSceneNode* getMeshNode() const { return m_MeshNode; }
 		
 		/// <summary>
 		/// Starts the rising up transition, for moving into the maze

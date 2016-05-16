@@ -1,50 +1,37 @@
 #include <time.h> 
+#include <algorithm>
 
 #include "PlayerAudioEmitter.h"
+#include "AudioManager.h"
 
 namespace Confus
 {
     namespace Audio
     {
-        PlayerAudioEmitter::PlayerAudioEmitter(irr::scene::IAnimatedMeshSceneNode* a_AttachedPlayer) : m_AttachedPlayer(a_AttachedPlayer)
+        PlayerAudioEmitter::PlayerAudioEmitter(irr::scene::ISceneNode* a_AttachedPlayer, AudioManager* a_AudioManager)
+			: m_AttachedPlayer(a_AttachedPlayer),
+			m_HitSoundHeavy(a_AudioManager->createSound("SFX/Player/a_heavy_grunt.wav")),
+			m_HitSoundLight(a_AudioManager->createSound("SFX/Player/a_light_grunt.wav")),
+			m_HitSoundHeavyBackstab(a_AudioManager->createSound("SFX/Player/a_heavybackstab_grunt.wav")),
+			m_HitSoundLightBackstab(a_AudioManager->createSound("SFX/Player/a_lightbackstab_grunt.wav"))
         {
-        createAudioSources();
+			createAudioSources(a_AudioManager);
         }
 
-        PlayerAudioEmitter::~PlayerAudioEmitter()
+        void PlayerAudioEmitter::playFootStepSound()
         {
-            for(auto audioSource : m_AudioSourceFootsteps)
-            {
-                delete(audioSource);
-            }
-            for(auto audioSource : m_AudioSourceGrunts)
-            {
-                delete(audioSource);
-            }
-            for(auto audioSource : m_AudioSourceSwordSwoshes)
-            {
-                delete(audioSource);
-            }
+			auto soundIterator = std::find_if(m_Footsteps.begin(), m_Footsteps.end(), [](const Sound& a_Sound)->bool
+			{
+				return !a_Sound.isPlaying();
+			});
+			
+			if (soundIterator != m_Footsteps.end())
+			{
+				soundIterator->play();
+			}
         }
 
-        void PlayerAudioEmitter::playFootStepSound() const
-        {
-            if(!m_AudioSourceFootsteps[0]->isPlaying())
-            {
-                m_AudioSourceFootsteps[0]->play();
-            }
-            else if(!m_AudioSourceFootsteps[1]->isPlaying())
-            {
-                m_AudioSourceFootsteps[1]->play();
-            }
-            else
-            {
-                m_AudioSourceFootsteps[2]->play();
-            }
-        }
-
-
-        void PlayerAudioEmitter::playAttackSound(bool a_HeavyAttack) const
+        void PlayerAudioEmitter::playAttackSound(bool a_HeavyAttack)
         {
             if(!a_HeavyAttack)
             {
@@ -52,90 +39,89 @@ namespace Confus
             }
             else
             {
-                m_AudioSourceGrunts[2]->play();
+                m_Footsteps[2].play();
             }
             playRandomSwordSwosh();
         }
 
-        void PlayerAudioEmitter::playRandomGrunt() const
+        void PlayerAudioEmitter::playRandomGrunt()
         {
             std::srand(static_cast<int>(time(NULL)));
-            auto randomNumber = std::rand() % 2;
-
-            switch(randomNumber)
-            {
-            case 0:
-                m_AudioSourceGrunts[0]->play();
-                break;
-            case 1:
-                m_AudioSourceGrunts[1]->play();
-                break;
-            default:
-                break;
-            }
+			m_Grunts[std::rand() % 2].play();
         }
 
-        void PlayerAudioEmitter::playRandomSwordSwosh() const
+        void PlayerAudioEmitter::playRandomSwordSwosh()
         {
-            std::srand(static_cast<int>(time(NULL)));
-            auto randomNumber = std::rand() % 4;
-
-            switch(randomNumber)
-            {
-            case 0:
-                m_AudioSourceSwordSwoshes[0]->play();
-                break;
-            case 1:
-                m_AudioSourceSwordSwoshes[1]->play();
-                break;
-            case 2:
-                m_AudioSourceSwordSwoshes[2]->play();
-                break;
-            case 3:
-                m_AudioSourceSwordSwoshes[3]->play();
-                break;
-            default:
-                break;
-            }
+			std::srand(static_cast<int>(time(NULL)));
+			m_SwordSwoshes[std::rand() % 4].play();
         }
+
+		void PlayerAudioEmitter::playHitSound(EHitIdentifier a_HitIdentifier )
+		{
+			if (a_HitIdentifier == EHitIdentifier::Heavy)
+			{
+				m_HitSoundHeavy.play();
+			}
+			else if (a_HitIdentifier == EHitIdentifier::Light)
+			{
+				m_HitSoundLight.play();
+			}
+			else if (a_HitIdentifier == EHitIdentifier::LightBackstab)
+			{
+				m_HitSoundLightBackstab.play();
+			}
+			else if (a_HitIdentifier == EHitIdentifier::HeavyBackstab)
+			{
+				m_HitSoundHeavyBackstab.play();
+			}
+		}
 
         void PlayerAudioEmitter::updatePosition() const
         {
-            for(auto audioSource : m_AudioSourceFootsteps)
+            m_AttachedPlayer->updateAbsolutePosition();
+			irr::core::matrix4 playerRotation = m_AttachedPlayer->getAbsoluteTransformation();
+			irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10]);
+			irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
+            for(auto sound : m_Footsteps)
             {
-                audioSource->setPosition(m_AttachedPlayer->getAbsolutePosition());
+                sound.setPosition(m_AttachedPlayer->getAbsolutePosition());
+                sound.setDirection(forwardVector, upVector);
             }
 
-            for (auto audioSource : m_AudioSourceGrunts)
+            for(auto sound : m_Grunts)
             {
-                audioSource->setPosition(m_AttachedPlayer->getAbsolutePosition());
+				sound.setPosition(m_AttachedPlayer->getAbsolutePosition());
+                sound.setDirection(forwardVector, upVector);
             }
 
-            for(auto audioSource : m_AudioSourceSwordSwoshes)
+            for(auto sound : m_SwordSwoshes)
             {
-                audioSource->setPosition(m_AttachedPlayer->getAbsolutePosition());
+                sound.setPosition(m_AttachedPlayer->getAbsolutePosition());
+                sound.setDirection(forwardVector, upVector);
             }
         }
 
-        void PlayerAudioEmitter::createAudioSources()
+        void PlayerAudioEmitter::createAudioSources(AudioManager* a_AudioManager)
         {
-            m_AudioSourceFootsteps[0] = new OpenALSource("Footstep1_Concrete.wav");
-            m_AudioSourceFootsteps[1] = new OpenALSource("Footstep2_Concrete.wav");
-            m_AudioSourceFootsteps[2] = new OpenALSource("Footstep3_Concrete.wav");
-
-            m_AudioSourceGrunts[0] = new OpenALSource("Grunt1.wav");
-            m_AudioSourceGrunts[1] = new OpenALSource("Grunt2.wav");
-            m_AudioSourceGrunts[2] = new OpenALSource("GruntHeavy.wav");
-
-            for(auto audioSource : m_AudioSourceGrunts)
+            for(int i = 0; i < 4; i++)
             {
-                audioSource->setVolume(0.1f);
+                if(i < 3)
+                {
+					m_Footsteps.push_back(a_AudioManager->createSound("Footstep" + std::to_string(i + 1) + "_Concrete.wav"));
+                }
+                if(i < 2)
+                {
+                    m_Grunts.push_back(a_AudioManager->createSound("Grunt" + std::to_string(i + 1) + ".wav"));
+                }
+                m_SwordSwoshes.push_back(a_AudioManager->createSound("Sword_swing_" + std::to_string(i + 1) + ".wav"));
             }
-            
-            m_AudioSourceSwordSwoshes[0] = new OpenALSource("Sword_swing_1.wav");
-            m_AudioSourceSwordSwoshes[1] = new OpenALSource("Sword_swing_2.wav");
-            m_AudioSourceSwordSwoshes[2] = new OpenALSource("Sword_swing_3.wav");
-            m_AudioSourceSwordSwoshes[3] = new OpenALSource("Sword_swing_4.wav");
+
+            m_Grunts.push_back(a_AudioManager->createSound("GruntHeavy.wav"));
+
+            for(auto sound : m_Grunts)
+            {
+				sound.setVolume(0.1f);
+            }
         }
     }
 }

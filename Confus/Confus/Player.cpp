@@ -1,25 +1,52 @@
 #include <IrrAssimp/IrrAssimp.h>
-#include "Audio\PlayerAudioEmitter.h"
-#include "Player.h"
+#include <RakNet/BitStream.h>
+#include <RakNet/GetTime.h>
+#include <RakNet/RakPeer.h>
+#include <RakNet/RakNetTypes.h>
+#include <RakNet/PacketPriority.h>
+#include <RakNet/MessageIdentifiers.h>
+#include <iostream>
+#include <string>
+
+#include "Audio/PlayerAudioEmitter.h"
+#include "Networking/ClientConnection.h"
 #include "EventManager.h"
 #include "Flag.h"
+#include "../Confusshared/Physics/PhysicsWorld.h"
+#include "../Confusshared/Physics/BoxCollider.h"
+#include "../Confusshared/Physics/RigidBody.h"
+
+#include "Player.h"
 
 namespace Confus
 {
+    Networking::ClientConnection* m_Connection;
     const irr::u32 Player::WeaponJointIndex = 14u;
-    const unsigned Player::LightAttackDamage = 10u;
-    const unsigned Player::HeavyAttackDamage = 30u;
-	Player::Player(irr::IrrlichtDevice* a_Device, irr::s32 a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
-		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
-		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), a_id),
-		TeamIdentifier(new ETeamIdentifier(a_TeamIdentifier)),
-		CarryingFlag(new EFlagEnum(EFlagEnum::None))
+    const unsigned Player::LightAttackDamage = 25u;
+    const unsigned Player::HeavyAttackDamage = 50u;
+
+
+	Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Confus::Audio::AudioManager* a_AudioManager)
+		: m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f)),
+		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
+		TeamIdentifier(a_TeamIdentifier),
+		CarryingFlag(EFlagEnum::None),
+		m_SoundEmitter(new Audio::PlayerAudioEmitter(this, a_AudioManager)),
+		m_PlayerHealth()
     {
+		auto damageEvents = [this](EHitIdentifier a_HitIdentifier) -> void
+		{
+			m_SoundEmitter->playHitSound(a_HitIdentifier);
+		};
+		m_PlayerHealth.DamageEvent += damageEvents;
+
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
 
         IrrAssimp irrAssimp(sceneManager);
         m_Mesh = sceneManager->getMesh("Media/ninja.b3d");
+        MainPlayer = a_MainPlayer;
+        ID = a_ID;
 
         PlayerNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh, nullptr);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
@@ -34,58 +61,41 @@ namespace Confus
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
         }
 
-        m_KeyMap[0].Action = irr::EKA_MOVE_FORWARD;
-        m_KeyMap[0].KeyCode = irr::KEY_KEY_W;
-
-        m_KeyMap[1].Action = irr::EKA_MOVE_BACKWARD;
-        m_KeyMap[1].KeyCode = irr::KEY_KEY_S;
-
-        m_KeyMap[2].Action = irr::EKA_STRAFE_LEFT;
-        m_KeyMap[2].KeyCode = irr::KEY_KEY_A;
-
-        m_KeyMap[3].Action = irr::EKA_STRAFE_RIGHT;
-        m_KeyMap[3].KeyCode = irr::KEY_KEY_D;
-
-        m_KeyMap[4].Action = irr::EKA_JUMP_UP;
-        m_KeyMap[4].KeyCode = irr::KEY_SPACE;
-
         if(a_MainPlayer) 
         {
-            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, true);
+            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.0f, 1, nullptr, 0, true, 0.0f);
             CameraNode->setFOV(70.f);
             CameraNode->setNearValue(0.1f);
         }
         else 
         {
-            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, false);
+            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.0f, 1, nullptr, 0, true, 0.0f, false, false);
         }
         if(a_TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
-            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
+            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 0.f));
         }
         else if(a_TeamIdentifier == ETeamIdentifier::TeamRed)
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
         }
 	    PlayerNode->setParent(this);
+        
 		setParent(CameraNode);
-
-        createAudioEmitter();
+		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.6f, 2.7f, 0.6f), CameraNode,
+			Physics::ECollisionFilter::Player, ~Physics::ECollisionFilter::Player);
+		m_Collider->getRigidBody()->disableSleeping();
+		m_Collider->getRigidBody()->setOffset(irr::core::vector3df(0.0f, -0.65f, -0.2f));
         startWalking();
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
+		PlayerNode->setAnimationEndCallback(this);
     }
 
 	Player::~Player() {
-		delete(CarryingFlag);
-		delete(TeamIdentifier);
+        delete(m_SoundEmitter);
 	}
-
-    const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const
-    {
-        return m_Mesh->getBoundingBox();
-    }
 
     void Player::handleInput(EventManager& a_EventManager)
     {
@@ -100,22 +110,22 @@ namespace Confus
                 startLightAttack();
             }
         }
+
     }
+
+	Health* Player::getHealthInstance()
+	{
+		return &m_PlayerHealth;
+	}
 
     void Player::render()
     {
-
+       
     }
 
-    void Player::setLevelCollider(irr::scene::ISceneManager* a_SceneManager,
-        irr::scene::ITriangleSelector* a_Level)
+    const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const
     {
-        CameraNode->addAnimator(a_SceneManager->createCollisionResponseAnimator(a_Level, PlayerNode, {0.1f, 0.2f, 0.1f}, { 0, -1, 0 }, {0, 1.5f, 0}));
-        
-        irr::scene::ITriangleSelector* selector = nullptr;
-        selector = a_SceneManager->createTriangleSelector(PlayerNode);
-        CameraNode->setTriangleSelector(selector);
-        selector->drop();
+        return m_Mesh->getBoundingBox();
     }
 
     void Player::startWalking() const
@@ -125,6 +135,14 @@ namespace Confus
         PlayerNode->setFrameLoop(0, 13);
         PlayerNode->setCurrentFrame(7);
         PlayerNode->setAnimationSpeed(24);
+    }
+
+    void Player::stopWalking() const
+    {
+        PlayerNode->setAnimationEndCallback(nullptr);
+        PlayerNode->setLoopMode(false);
+        PlayerNode->setCurrentFrame(7);
+        PlayerNode->setAnimationSpeed(0);
     }
 
     void Player::initializeAttack()
@@ -139,6 +157,7 @@ namespace Confus
 
     void Player::startLightAttack()
     {
+        changeState(EPlayerState::LightAttacking);
         PlayerNode->setFrameLoop(38, 41);
         PlayerNode->setCurrentFrame(38);
         m_Weapon.Damage = LightAttackDamage;
@@ -149,6 +168,7 @@ namespace Confus
 
     void Player::startHeavyAttack()
     {
+        changeState(EPlayerState::HeavyAttacking);
         PlayerNode->setFrameLoop(60, 66);
         PlayerNode->setCurrentFrame(60);
         m_Weapon.Damage = HeavyAttackDamage;
@@ -163,6 +183,19 @@ namespace Confus
             m_Attacking = false;
             m_Weapon.disableCollider();
             startWalking();
+            // Reset the player state.
+            changeState(EPlayerState::Alive);
+        }
+    }
+
+    void Player::updateColor(irr::IrrlichtDevice* a_Device)
+    {
+        auto videoDriver = a_Device->getVideoDriver();
+        if(TeamIdentifier == ETeamIdentifier::TeamBlue) {
+            PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
+        }
+        else if(TeamIdentifier == ETeamIdentifier::TeamRed) {
+            PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
         }
     }
 
@@ -176,11 +209,24 @@ namespace Confus
             m_SoundEmitter->playFootStepSound();
         }
 
-        if(PlayerHealth.getHealth() <= 0) {
+        if(m_PlayerHealth.getHealth() <= 0) {
             respawn();
 			if (FlagPointer != nullptr) {
 				FlagPointer->drop(this);
 			}
+        }
+        if(m_Collider->getRigidBody()->getVelocity().X != 0.0f && m_Collider->getRigidBody()->getVelocity().Z != 0.0f)
+        {
+            if(!m_Attacking && !m_Walking)
+            {
+                startWalking();
+                m_Walking = true;
+            }
+        }
+        else if(m_Walking && !m_Attacking)
+        {
+            stopWalking();
+            m_Walking = false;
         }
 
         if(CameraNode->getPosition().Y <= -10) {
@@ -191,33 +237,85 @@ namespace Confus
         }
     }
 
+    void Player::fixedUpdate()
+    {
+        updateServer();
+    }
+
     void Player::respawn()
     {
-        irr::scene::ISceneNodeAnimatorCollisionResponse * animator = 0;
-
-        irr::core::list<irr::scene::ISceneNodeAnimator*>::ConstIterator iterator = CameraNode->getAnimators().begin();
-
-        for(; iterator != CameraNode->getAnimators().end(); ++iterator)
+		m_PlayerHealth.reset();
+        if(TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
-            animator = (irr::scene::ISceneNodeAnimatorCollisionResponse*)(*iterator);
-            if(animator->getType() == irr::scene::ESNAT_COLLISION_RESPONSE)
-                break;
+            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
         }
-
-        if(*TeamIdentifier == ETeamIdentifier::TeamBlue)
-        {
-             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
-             animator->setTargetNode(CameraNode);
-        }
-        else if(*TeamIdentifier == ETeamIdentifier::TeamRed)
+        else if(TeamIdentifier == ETeamIdentifier::TeamRed)
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
-            animator->setTargetNode(CameraNode);
         }
     }
 
-    void Player::createAudioEmitter()
+    void Player::updatePosition(irr::core::vector3df a_NewPosition)
     {
-        m_SoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
+        CameraNode->setPosition(a_NewPosition);
     }
+
+    void Player::updateRotation(irr::core::vector3df a_NewRotation)
+    {
+        CameraNode->setRotation(a_NewRotation);
+    }
+
+
+     void Player::setConnection(Networking::ClientConnection* a_Connection)
+	{
+        m_Connection = a_Connection;
+
+        m_PlayerID = m_Connection->m_Interface->GetGuidFromSystemAddress(RakNet::UNASSIGNED_SYSTEM_ADDRESS);
+
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::Packet* a_Data)
+        {
+            RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
+            irr::core::vector3df newPosition;
+
+            bitstreamIn.IgnoreBytes(sizeof(unsigned char));
+            bitstreamIn.Read(newPosition);
+
+            CameraNode->setPosition(newPosition);
+        });
+	}
+
+     void Player::updateServer() const
+	{
+        RakNet::BitStream bitstreamOut;
+
+        bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
+        bitstreamOut.Write(m_PlayerID);
+        bitstreamOut.Write(CameraNode->getPosition());
+        bitstreamOut.Write(CameraNode->getRotation());
+        bitstreamOut.Write(Player::m_PlayerState);
+        bitstreamOut.Write(m_StateChangeTime);
+        bitstreamOut.Write(m_PlayerHealthPoints);
+        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_W));
+        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_S));
+        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_A));
+        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_D));
+
+        m_Connection->sendMessage(&bitstreamOut, PacketReliability::UNRELIABLE);
+	}
+
+     void Player::changeState(EPlayerState a_NewState)
+     {
+         // Only change state is it is different from the player's current state.
+         if(a_NewState != m_PlayerState) 
+         {
+             m_PlayerState = a_NewState;
+             m_StateChangeTime = RakNet::GetTime();
+             std::cout << "State changed! Time of change is: " << m_StateChangeTime;
+         } 
+     }
+
+     void Player::setEventManager(EventManager* a_Manager) 
+     {
+         m_EventManager = a_Manager;
+     }
 }

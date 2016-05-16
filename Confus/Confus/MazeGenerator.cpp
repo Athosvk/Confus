@@ -1,22 +1,37 @@
+#include <RakNet\GetTime.h>
+
 #include "MazeGenerator.h"
 #include "WalledMazeTile.h"
+#include "Audio/AudioManager.h"
 
 namespace Confus
 {
 
-	MazeGenerator::MazeGenerator(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_StartPosition, int a_InitialSeed)
-		: m_MainMaze(a_Device, a_StartPosition,true), m_ReplacementMaze(a_Device, a_StartPosition, false), m_Seed(a_InitialSeed)
+	MazeGenerator::MazeGenerator(irr::IrrlichtDevice* a_Device, int a_MazeSizeX, int a_MazeSizeY, int a_InitialSeed,
+		irr::core::vector2df a_GenerateStartPoint, Physics::PhysicsWorld& a_PhysicsWorld, Audio::AudioManager* a_AudioManager)
+		: m_MainMaze(a_Device, a_MazeSizeX, a_MazeSizeY, a_PhysicsWorld, 1.5f, true), 
+		m_ReplacementMaze(a_Device, a_MazeSizeX, a_MazeSizeY, a_PhysicsWorld, 1.5f), 
+		m_Seed(a_InitialSeed), m_GenerateStartPoint(a_GenerateStartPoint),
+		m_MazeChangeSound(a_AudioManager->createSound("Wall rising.wav"))
 	{
 		generateMaze(m_MainMaze.MazeTiles, a_InitialSeed);
+		m_MazeChangeSound.setVolume(0.2f);
 	}
 
 	void MazeGenerator::fixedUpdate()
 	{
+        int currentTime = RakNet::GetTimeMS();
+        if(!hasBeenRefilled && currentTime > refillMazeTime)
+        {
+            refillMainMaze(m_Seed);
+            hasBeenRefilled = true;
+        }
 		m_MainMaze.fixedUpdate();
 	}
 
 	void MazeGenerator::refillMainMaze(int a_Seed)
 	{
+		m_MazeChangeSound.play();
 		generateMaze(m_ReplacementMaze.MazeTiles, a_Seed);
 		replaceMainMaze();
 		m_ReplacementMaze.resetMaze(irr::core::vector2df(30,-7),false);
@@ -53,7 +68,7 @@ namespace Confus
 		//setup globals & variables
 		srand(a_Seed);
 		MoveableWall* wall = nullptr;
-		std::shared_ptr<MazeTile> currentTile = a_Maze[0][0];
+		std::shared_ptr<MazeTile> currentTile = a_Maze[static_cast<int>(m_GenerateStartPoint.X)][static_cast<int>(m_GenerateStartPoint.Y)];
 
 		//Startcell must be set to visited, add to visitedcount
 		currentTile->Raised = false;
@@ -142,7 +157,17 @@ namespace Confus
 		return neighbours;
 	}
 
-	MazeGenerator::~MazeGenerator()
+    void MazeGenerator::refillMainMazeRequest(int a_Seed, int a_ChangeWantedTime)
+    {
+        if(a_ChangeWantedTime > refillMazeTime)
+        {
+            refillMazeTime = a_ChangeWantedTime;
+            m_Seed = a_Seed;
+            hasBeenRefilled = false;
+        }
+    }
+
+    MazeGenerator::~MazeGenerator()
 	{
 	}
 }

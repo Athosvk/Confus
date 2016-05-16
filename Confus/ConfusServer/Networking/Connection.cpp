@@ -1,9 +1,14 @@
+#include <RakNet/RakPeerInterface.h>
+#include <RakNet/RakNetTypes.h>
+#include <RakNet/BitStream.h>
 #include <iostream>
 #include <vector>
 #include <string>
-#include <RakNet/BitStream.h>
+#include <functional>
 
 #include "Connection.h"
+#define DEBUG_CONSOLE
+#include "../../ConfusShared/Debug.h"
 
 namespace ConfusServer
 {
@@ -11,6 +16,7 @@ namespace ConfusServer
     {
         Connection::Connection()
         {
+            m_Interface = RakNet::RakPeerInterface::GetInstance();
             RakNet::SocketDescriptor socketDescriptor(60000, nullptr);
             auto result = m_Interface->Startup(5, &socketDescriptor, 1);
 			if(result != RakNet::StartupResult::RAKNET_STARTED)
@@ -33,46 +39,73 @@ namespace ConfusServer
             RakNet::Packet* packet = m_Interface->Receive();
             while(packet != nullptr)
             {
-				handlePacket(packet);
+                if(packet->data[0] == ID_NEW_INCOMING_CONNECTION)
+                {
+                    m_Connected = true;
+                }
+
+                handlePacket(packet, static_cast<unsigned char>(packet->data[0]));
                 m_Interface->DeallocatePacket(packet);
                 packet = m_Interface->Receive();
             }
         }
 
-        unsigned short Connection::getConnectionCount() const
-        {
-            unsigned short openConnections = 0;
-			//Passing nullptr allows us to get the amount of open connections
-            m_Interface->GetConnectionList(nullptr, &openConnections);
-            return openConnections;
-        }
-
-        void Connection::closeAllConnections()
+        std::vector<RakNet::SystemAddress> Connection::getOpenConnections()
         {
             auto connectionCount = getConnectionCount();
             std::vector<RakNet::SystemAddress>
                 openConnections(static_cast<size_t>(connectionCount));
             auto serverID = m_Interface->GetConnectionList(openConnections.data(),
                 &connectionCount);
+            return openConnections;
+        }
 
-            for(unsigned short i = 0u; i < connectionCount; ++i)
+        void Connection::addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function)
+        {
+            m_CallbackFunctionMap[a_Event].push_back(a_Function);
+        }
+
+        std::vector<RakNet::SystemAddress> Connection::getOpenConnections() const
+        {
+            auto connectionCount = getConnectionCount();
+            std::vector<RakNet::SystemAddress> openConnections(static_cast<size_t>(connectionCount));
+            auto serverID = m_Interface->GetConnectionList(openConnections.data(),
+                &connectionCount);
+            return openConnections;
+        }
+
+        unsigned short Connection::getConnectionCount() const
+        {
+            unsigned short openConnections = 0;
+            //Passing nullptr allows us to get the amount of open connections
+            m_Interface->GetConnectionList(nullptr, &openConnections);
+            return openConnections;
+        }
+
+        void Connection::closeAllConnections()
+        {
+            auto openConnections = getOpenConnections();
+
+            for(unsigned short i = 0u; i < openConnections.size(); ++i)
             {
                 m_Interface->CloseConnection(openConnections[i], true);
             }
         }
 
-		void Connection::handlePacket(RakNet::Packet* a_Packet)
-		{
-			switch(static_cast<unsigned char>(a_Packet->data[0]))
+        void Connection::handlePacket(RakNet::Packet* a_Data, unsigned char a_Event)
+        {
+			for (size_t i = 0u; i < m_CallbackFunctionMap[a_Event].size(); i++)
 			{
-			case static_cast<unsigned char>(EPacketType::Message) :
-				printMessage(RakNet::BitStream(a_Packet->data, a_Packet->length, false));
-				break;
-			default:
-				std::cout << "Message arrived with id " << static_cast<int>(a_Packet->data[0])
-					<< std::endl;
+				m_CallbackFunctionMap[a_Event][i](a_Data);
 			}
-		}
+        }
+
+        void Connection::broadcastPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Excluded)
+        {
+            RakNet::AddressOrGUID guid = a_Excluded != nullptr ? *a_Excluded : m_Interface->GetMyGUID();
+            m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
+                    PacketReliability::RELIABLE_ORDERED, 0, guid, true);
+        }
 
 		void Connection::printMessage(RakNet::BitStream& a_InputStream)
 		{
@@ -81,5 +114,41 @@ namespace ConfusServer
 			a_InputStream.Read(contents);
 			std::cout << "Message received: " << contents << std::endl;
 		}
+
+        void Connection::sendPacket(RakNet::BitStream& a_InputStream, PacketReliability a_Reliability, RakNet::SystemAddress a_Address)
+        {
+            if(m_Connected)
+            {
+                auto openConnections = getOpenConnections();
+                m_Interface->Send(&a_InputStream, PacketPriority::HIGH_PRIORITY, a_Reliability, 0, a_Address, false);
+            }
+        }
+
+        // Overload method, sends the message with unreliable packetreliablitiy if no reliability is specified.
+        void Connection::sendPacket(RakNet::BitStream& a_InputStream, RakNet::SystemAddress a_Address)
+        {
+            if(m_Connected)
+            {
+                auto openConnections = getOpenConnections();
+                m_Interface->Send(&a_InputStream, PacketPriority::HIGH_PRIORITY, PacketReliability::UNRELIABLE, 0, a_Address, false);
+            }
+        }
+
+        void Connection::broadcastBitstream(RakNet::BitStream& a_BitStream)
+        {
+            auto openConnections = getOpenConnections();
+
+            for(unsigned short i = 0u; i < openConnections.size(); ++i)
+            {
+                m_Interface->Send(&a_BitStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0, openConnections[i], false);
+            }
+        }
+
+        void Connection::sendPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Address)
+        {
+            RakNet::AddressOrGUID guid = *a_Address;
+            m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
+                PacketReliability::RELIABLE_ORDERED, 0, guid, false);
+        }
     }
 }
