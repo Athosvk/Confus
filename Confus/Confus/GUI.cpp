@@ -16,6 +16,11 @@ namespace Confus
 		m_BloodOverlay = m_GUIEnvironment->addImage(m_BloodImage, irr::core::position2d<int>(0, 0));
 		m_PlayerNode = a_Player;
 		m_HealthTextBox = m_GUIEnvironment->addStaticText(L"", irr::core::rect<irr::s32>(10, 10, 100, 25), false);
+		m_HealthImage = m_Driver->getTexture("Media/Textures/Heart.png");
+		m_HealthOne = m_GUIEnvironment->addImage(m_HealthImage, irr::core::position2d<int>(10, 668));
+		m_HealthTwo = m_GUIEnvironment->addImage(m_HealthImage, irr::core::position2d<int>(120, 668));
+		m_HealthThree = m_GUIEnvironment->addImage(m_HealthImage, irr::core::position2d<int>(230, 668));
+		m_HealthFour = m_GUIEnvironment->addImage(m_HealthImage, irr::core::position2d<int>(340, 668));
 	}
 
 	GUI::~GUI()
@@ -32,11 +37,12 @@ namespace Confus
 		m_HealthTextBox->setText(m_HealthString.c_str());
 		drawBloodOverlay();
 		lowHealthAudio();
+		drawHealth();
 	}
 
 	void GUI::drawBloodOverlay()
 	{
-		m_BloodOverlay->setVisible(m_PlayerNode->getHealthInstance()->getHealth() <= 50);
+		m_BloodOverlay->setVisible(m_PlayerNode->getHealthInstance()->getHealth() <= 25);
 	}
 
 	void GUI::lowHealthAudio()
@@ -52,6 +58,14 @@ namespace Confus
                 m_AudioSourceLowHealth.stop();
             }
 		}
+	}
+
+	void GUI::drawHealth()
+	{
+		m_HealthOne->setVisible(m_PlayerNode->getHealthInstance()->getHealth() >= 0);
+		m_HealthTwo->setVisible(m_PlayerNode->getHealthInstance()->getHealth() >= 25);
+		m_HealthThree->setVisible(m_PlayerNode->getHealthInstance()->getHealth() >= 50);
+		m_HealthFour->setVisible(m_PlayerNode->getHealthInstance()->getHealth() >= 75);
 	}
 
 	irr::core::position2d<int> GUI::calculatePixelPosition(irr::core::vector2df a_Coordinates, irr::core::dimension2d<irr::u32> a_CurrentResolution)
