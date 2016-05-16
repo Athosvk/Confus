@@ -115,7 +115,13 @@ namespace ConfusServer
 			std::cout << "Message received: " << contents << std::endl;
 		}
 
-        void Connection::broadcastBitstream(RakNet::BitStream& a_BitStream)
+        void Connection::broadcastBitStreamToClient(RakNet::BitStream& a_BitStream, int a_ClientIndex)
+        {
+            auto openConnections = getOpenConnections();
+            m_Interface->Send(&a_BitStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0, openConnections[a_ClientIndex], false);
+        }
+
+        void Connection::broadcastBitStream(RakNet::BitStream& a_BitStream)
         {
             auto openConnections = getOpenConnections();
 

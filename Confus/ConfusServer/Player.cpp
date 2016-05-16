@@ -13,7 +13,7 @@ namespace ConfusServer
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-    const int Player::UserTimedOutTime = 10;
+    const int Player::UserTimedOutTime = 20;
 
 	Player::Player(irr::IrrlichtDevice* a_Device, char a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
 		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
@@ -50,21 +50,6 @@ namespace ConfusServer
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
         }
 
-        m_KeyMap[0].Action = irr::EKA_MOVE_FORWARD;
-        m_KeyMap[0].KeyCode = irr::KEY_KEY_W;
-
-        m_KeyMap[1].Action = irr::EKA_MOVE_BACKWARD;
-        m_KeyMap[1].KeyCode = irr::KEY_KEY_S;
-
-        m_KeyMap[2].Action = irr::EKA_STRAFE_LEFT;
-        m_KeyMap[2].KeyCode = irr::KEY_KEY_A;
-
-        m_KeyMap[3].Action = irr::EKA_STRAFE_RIGHT;
-        m_KeyMap[3].KeyCode = irr::KEY_KEY_D;
-
-        m_KeyMap[4].Action = irr::EKA_JUMP_UP;
-        m_KeyMap[4].KeyCode = irr::KEY_SPACE;
-
         if(a_MainPlayer)
         {
             CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, true);
@@ -83,6 +68,7 @@ namespace ConfusServer
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
         }
+
         PlayerNode->setParent(this);
         setParent(CameraNode);
 
@@ -101,21 +87,6 @@ namespace ConfusServer
     const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const
     {
         return m_Mesh->getBoundingBox();
-    }
-
-    void Player::handleInput(EventManager& a_EventManager)
-    {
-        if(!m_Attacking)
-        {
-            if(a_EventManager.IsRightMouseDown())
-            {
-                startHeavyAttack();
-            }
-            else if(a_EventManager.IsLeftMouseDown())
-            {
-                startLightAttack();
-            }
-        }
     }
 
     void Player::render()
@@ -149,52 +120,52 @@ namespace ConfusServer
 
     void Player::initializeAttack()
     {
+        m_Attacking = true;
         PlayerNode->setLoopMode(false);
         PlayerNode->setAnimationEndCallback(this);
         PlayerNode->setAnimationSpeed(10);
-        m_Attacking = true;
         m_Weapon.enableCollider();
         m_Weapon.resetCollider();
     }
 
     void Player::startLightAttack()
     {
-        if(!m_Attacking) 
+        if (!m_Attacking) 
         {
+            initializeAttack();
             PlayerNode->setFrameLoop(38, 41);
             PlayerNode->setCurrentFrame(38);
+
             m_Weapon.Damage = LightAttackDamage;
-            initializeAttack();
+            PlayerState = EPlayerState::LightAttacking;
         }
     }
 
     void Player::startHeavyAttack()
     {
-        if(!m_Attacking)
+        if (!m_Attacking)
         {
+            initializeAttack();
             PlayerNode->setFrameLoop(60, 66);
             PlayerNode->setCurrentFrame(60);
             m_Weapon.Damage = HeavyAttackDamage;
-            initializeAttack();
+            PlayerState = EPlayerState::HeavyAttacking;
         }
     }
 
     void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node)
     {
-        if(m_Attacking)
+        if (m_Attacking)
         {
             m_Attacking = false;
             m_Weapon.disableCollider();
             startWalking();
+            PlayerState = EPlayerState::Idle;
         }
     }
 
     void Player::update()
     {
-		if (!m_Attacking)
-		{
-			PlayerState = EPlayerState::Idle;
-		}
     }
 
     void Player::fixedUpdate()
@@ -222,23 +193,19 @@ namespace ConfusServer
 
 		setRotation(playerInfo.rotation);
 
-		if (PlayerState != EPlayerState::LightAttacking && PlayerState != EPlayerState::HeavyAttacking)
+		if (PlayerState == EPlayerState::Idle)
 		{
-			PlayerState = playerInfo.newState;
+            if(playerInfo.leftMouseButtonPressed)
+            {
+                startLightAttack();
+            }
+            else if(playerInfo.rightMouseButtonPressed)
+            {
+                startHeavyAttack();
+            }
 		}
 
-		if (PlayerState != EPlayerState::LightAttacking && playerInfo.leftMouseButtonPressed)
-		{
-			PlayerState = EPlayerState::LightAttacking;
-			startLightAttack();
-		}
-		else if (PlayerState != EPlayerState::HeavyAttacking && playerInfo.rightMouseButtonPressed)
-		{
-			PlayerState = EPlayerState::HeavyAttacking;
-			startHeavyAttack();
-		}
-
-		// Change this into something better when we are not using irrlichts FPS camera. 
+		// TODO: Use bullet instead of setting position manually
 		if (playerInfo.forwardKeyPressed)
 		{
 			CameraNode->setPosition(irr::core::vector3df(CameraNode->getPosition().X, CameraNode->getPosition().Y, CameraNode->getPosition().Z + 0.1f));

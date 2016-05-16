@@ -48,7 +48,10 @@ namespace Confus
 		{
 			for(auto& colliderPair : m_Colliders)
 			{
-				colliderPair.Body->onPrePhysicsUpdate();
+                if(colliderPair.Body.get() != nullptr)
+                {
+                    colliderPair.Body->onPrePhysicsUpdate();
+                }
 			}
 		}
 

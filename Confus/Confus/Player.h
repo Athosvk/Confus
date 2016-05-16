@@ -65,7 +65,7 @@ namespace Confus
         /// <summary> The player's unique ID. </summary>
         char m_PlayerID = 0;
         /// <summary> The player's active state. </summary>
-        EPlayerState m_PlayerState = EPlayerState::Alive;
+        EPlayerState m_PlayerState = EPlayerState::Idle;
         /// <summary> The player's health, ranging from 127 to -127. </summary>
         int8_t m_PlayerHealth = 100;
         /// <summary> The local time at which a state change took place. </summary>

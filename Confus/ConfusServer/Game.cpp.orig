@@ -15,7 +15,7 @@ namespace ConfusServer
 {
     const double Game::FixedUpdateInterval = 0.02;
     const double Game::MaxFixedUpdateInterval = 0.1;
-	const double Game::ProcessPacketsInterval = 0.01;
+	const double Game::ProcessPacketsInterval = 0.03;
     const double Game::MazeDelay = 2.0;
     const double Game::MazeChangeInterval = 60.0 - MazeDelay;
 
@@ -75,6 +75,7 @@ namespace ConfusServer
         while(m_Device->run())
         {
 			processConnection();
+            handleInput();
             update();
             processFixedUpdates();
             render();
@@ -137,6 +138,10 @@ namespace ConfusServer
             }
         }
         m_LevelRootNode->setTriangleSelector(metatriangleSelector);
+    }
+
+    void Game::handleInput()
+    {
     }
 
     void Game::update()
@@ -218,35 +223,34 @@ namespace ConfusServer
         ETeamIdentifier teamID = m_PlayerArray.size() % 2 == 0 ? ETeamIdentifier::TeamRed : ETeamIdentifier::TeamBlue;
 
         Player* newPlayer = new Player(m_Device, id, teamID, false);
-        newPlayer->setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_PlayerArray.push_back(newPlayer);
 
-        RakNet::BitStream newClientStream;
-        newClientStream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::MainPlayerJoined));
-        newClientStream.Write(static_cast<char>(id));
-        newClientStream.Write(static_cast<ETeamIdentifier>(teamID));
-        newClientStream.Write(static_cast<size_t>(m_PlayerArray.size()));
-
-        int playerIndex = 0;
+        RakNet::BitStream stream;
+        stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::MainPlayerJoined));
+        stream.Write(static_cast<char>(id));
+        stream.Write(static_cast<ETeamIdentifier>(teamID));
+        stream.Write(static_cast<size_t>(m_PlayerArray.size()));
 
         for(size_t i = 0u; i < m_PlayerArray.size(); i++)
         {
-            if(m_PlayerArray[i]->ID == id)
-            {
-                playerIndex = i;
-            }
-            newClientStream.Write(static_cast<char>(m_PlayerArray[i]->ID));
-            newClientStream.Write(static_cast<ETeamIdentifier>(m_PlayerArray[i]->TeamIdentifier));
+            stream.Write(static_cast<char>(m_PlayerArray[i]->ID));
+            stream.Write(static_cast<ETeamIdentifier>(m_PlayerArray[i]->TeamIdentifier));
         }
+<<<<<<< Updated upstream
+        m_Connection->broadcastBitstream(stream);
+=======
 
-        m_Connection->broadcastBitStreamToClient(newClientStream, playerIndex);
+        m_Connection->broadcastBitStreamToClient(stream, m_PlayerArray.size() - 1);
+
+        RakNet::BitStream broadcastStream;
+        broadcastStream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::OtherPlayerJoined));
+        broadcastStream.Write(static_cast<char>(id));
+        broadcastStream.Write(static_cast<ETeamIdentifier>(teamID));
+
+        m_Connection->broadcastBitStream(broadcastStream);
+
+>>>>>>> Stashed changes
         std::cout << "[Game Class] Player id: " << static_cast<int>(id) << " joined." << std::endl;
-
-        RakNet::BitStream otherClientsStream;
-        otherClientsStream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::OtherPlayerJoined));
-        otherClientsStream.Write(static_cast<char>(id));
-        otherClientsStream.Write(static_cast<ETeamIdentifier>(teamID));
-        m_Connection->broadcastBitStream(otherClientsStream);
     }
 
     void Game::removePlayer(RakNet::BitStream* a_Data)

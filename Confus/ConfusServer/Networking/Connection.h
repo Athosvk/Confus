@@ -68,12 +68,16 @@ namespace ConfusServer
             /// <param name="a_Event">The server event that should trigger the function.</param>
             /// <param name="a_Function">The function that should be added to the map.</param>
             void addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::BitStream* a_Data)> a_Function);
-            void sendMessage(RakNet::BitStream & a_InputStream, PacketReliability a_Reliability);
             void broadcastPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Excluded = nullptr);
-            void sendPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Address);
             /// <summary> Send Package to all clients </summary>
             /// <param name="a_BitStream">The packet to send.</param>
-            void broadcastBitstream(RakNet::BitStream& a_BitStream);
+            void broadcastBitStream(RakNet::BitStream& a_BitStream);
+            /// <summary>
+            /// Sends the message to client with the <see cref="a_ClientIndex/>.
+            /// </summary>
+            /// <param name="a_BitStream">The a_ bit stream.</param>
+            /// <param name="a_ClientIndex">Index of the a_ client.</param>
+            void broadcastBitStreamToClient(RakNet::BitStream & a_BitStream, int a_ClientIndex);
 		private:
 			/// <summary> Gets the amount of clients connected to this server instance </summary>
 			/// <returns>The amount of clients connected</returns>
@@ -97,9 +101,6 @@ namespace ConfusServer
             /// Processes the player packet: calls methods based on inputstream.
             /// <summary> Get all the open connections in a vector </summary>
             std::vector<RakNet::SystemAddress> getOpenConnections() const;
-            /// </summary>
-            /// <param name="a_Message">The inputstream.</param>
-            void processPlayerPacket(RakNet::BitStream& a_InputStream);
         };
     }
 }

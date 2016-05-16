@@ -23,7 +23,7 @@ namespace ConfusServer
         bitStream.Write(m_RedTeamScore);
 		bitStream.Write(m_BlueTeamScore);
 
-        m_Connection->broadcastBitstream(bitStream);
+        m_Connection->broadcastBitStream(bitStream);
     }
 
     void TeamScore::teamScoredPoint(ETeamIdentifier a_TeamScored, int a_IncreasementValue)

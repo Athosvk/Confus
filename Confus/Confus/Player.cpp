@@ -3,9 +3,9 @@
 #include <RakNet/GetTime.h>
 #include <RakNet/PacketPriority.h>
 
+#include "Player.h"
 #include "Audio\PlayerAudioEmitter.h"
 #include "Networking/ClientConnection.h"
-#include "Player.h"
 #include "EventManager.h"
 #include "Flag.h"
 #include "../Confusshared/Physics/PhysicsWorld.h"
@@ -113,7 +113,7 @@ namespace Confus
 		const float Speed = 15.0f;
 		auto resultingVelocity = irr::core::vector3df(movementDirection.X, 0.0f, movementDirection.Z) * Speed
 			+ irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
-		rigidBody->setVelocity(resultingVelocity);
+		//rigidBody->setVelocity(resultingVelocity);
     }
 
     void Player::render()
@@ -166,7 +166,6 @@ namespace Confus
 
     void Player::startLightAttack()
     {
-        //changeState(EPlayerState::LightAttacking);
         PlayerNode->setFrameLoop(38, 41);
         PlayerNode->setCurrentFrame(38);
         m_Weapon.Damage = LightAttackDamage;
@@ -176,7 +175,6 @@ namespace Confus
 
     void Player::startHeavyAttack()
     {
-        //changeState(EPlayerState::HeavyAttacking);
         PlayerNode->setFrameLoop(60, 66);
         PlayerNode->setCurrentFrame(60);
         m_Weapon.Damage = HeavyAttackDamage;
@@ -191,8 +189,6 @@ namespace Confus
             m_Attacking = false;
             m_Weapon.disableCollider();
             startWalking();
-            // Reset the player state.
-            //changeState(EPlayerState::Alive);
         }
     }
 
@@ -309,7 +305,7 @@ namespace Confus
              {
                  startLightAttack();
              } 
-             else if(m_PlayerState == EPlayerState::LightAttacking)
+             else if(m_PlayerState == EPlayerState::HeavyAttacking)
              {
                  startHeavyAttack();
              }

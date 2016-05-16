@@ -29,7 +29,7 @@ namespace ConfusServer
 		ETeamIdentifier TeamIdentifier;    
         Flag* FlagPointer;
         char ID;
-        EPlayerState PlayerState = EPlayerState::Alive;
+        EPlayerState PlayerState = EPlayerState::Idle;
         Health PlayerHealth;
    
 	private:
@@ -54,9 +54,6 @@ namespace ConfusServer
         virtual void render();
         /// <summary> Returns the bounding box of the player's mesh </summary>
         virtual const irr::core::aabbox3d<irr::f32> & getBoundingBox() const;
-        /// <summary> Handles the input based actions </summary>
-        /// <param name="a_EventManager">The current event manager</param>
-        void handleInput(EventManager& a_EventManager);
         void setLevelCollider(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_Level);
         /// <summary> Starts the light attack, dealing normal damage </summary>
         void startLightAttack();

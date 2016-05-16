@@ -149,7 +149,8 @@ namespace Confus
         /// <summary>
         /// Creates a new Player object for this user, with all the information about himself and other users.
         /// </summary>
-        void addNewPlayer(RakNet::BitStream* a_Data);
+        void addMainPlayer(RakNet::BitStream* a_Data);
+        void addOtherPlayer(RakNet::BitStream* a_Data);
         void removePlayer(RakNet::BitStream* a_Data);
 
 		/// <summary> Updates the (absolute) transformations of all the scene nodes recursively downwards </summary>

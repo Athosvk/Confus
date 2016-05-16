@@ -27,7 +27,8 @@ namespace Confus
 				auto playerNode = dynamic_cast<Player*>(*a_Other->getRigidBody()->getAttachedNode()->getChildren().begin());
 				if(playerNode != nullptr)
 				{
-					damagePlayer(playerNode);
+                    //Should be done on the server not here
+					//damagePlayer(playerNode);
 					m_Collided = true;
 				}
             }

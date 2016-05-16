@@ -9,7 +9,7 @@ int main()
 
 	nullDevice->drop();
 	irr::core::dimension2d<irr::u32> fixedResolution = irr::core::dimension2d<irr::u32>(1366, 768);
-    Confus::Game game(fixedResolution);
+    Confus::Game game(desktopResolution);
     game.run();
 
     return 0;
