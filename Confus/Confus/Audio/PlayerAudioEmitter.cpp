@@ -9,7 +9,11 @@ namespace Confus
     namespace Audio
     {
         PlayerAudioEmitter::PlayerAudioEmitter(irr::scene::ISceneNode* a_AttachedPlayer, AudioManager* a_AudioManager)
-			: m_AttachedPlayer(a_AttachedPlayer)
+			: m_AttachedPlayer(a_AttachedPlayer),
+			m_HitSoundHeavy(a_AudioManager->createSound("SFX/Player/a_heavy_grunt.wav")),
+			m_HitSoundLight(a_AudioManager->createSound("SFX/Player/a_light_grunt.wav")),
+			m_HitSoundHeavyBackstab(a_AudioManager->createSound("SFX/Player/a_heavybackstab_grunt.wav")),
+			m_HitSoundLightBackstab(a_AudioManager->createSound("SFX/Player/a_lightbackstab_grunt.wav"))
         {
 			createAudioSources(a_AudioManager);
         }
@@ -52,9 +56,24 @@ namespace Confus
 			m_SwordSwoshes[std::rand() % 4].play();
         }
 
-		void PlayerAudioEmitter::playHitSound()
+		void PlayerAudioEmitter::playHitSound(EHitIdentifier a_HitIdentifier )
 		{
-			//m_HitSound.play();
+			if (a_HitIdentifier == EHitIdentifier::Heavy)
+			{
+				m_HitSoundHeavy.play();
+			}
+			else if (a_HitIdentifier == EHitIdentifier::Light)
+			{
+				m_HitSoundLight.play();
+			}
+			else if (a_HitIdentifier == EHitIdentifier::LightBackstab)
+			{
+				m_HitSoundLightBackstab.play();
+			}
+			else if (a_HitIdentifier == EHitIdentifier::HeavyBackstab)
+			{
+				m_HitSoundHeavyBackstab.play();
+			}
 		}
 
         void PlayerAudioEmitter::updatePosition() const
@@ -84,7 +103,6 @@ namespace Confus
 
         void PlayerAudioEmitter::createAudioSources(AudioManager* a_AudioManager)
         {
-			//m_HitSound = a_AudioManager->createSound("stereo.wav");
             for(int i = 0; i < 4; i++)
             {
                 if(i < 3)

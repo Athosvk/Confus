@@ -3,6 +3,7 @@
 #include <iostream>
 #include <RakNet\GetTime.h>
 #include <RakNet\BitStream.h>
+#include <functional>
 
 #include "Game.h"
 #include "Player.h"
@@ -15,13 +16,14 @@ namespace ConfusServer
 {
     const double Game::FixedUpdateInterval = 0.02;
     const double Game::MaxFixedUpdateInterval = 0.1;
-	const double Game::ProcessPacketsInterval = 0.01;
+    const double Game::ProcessPacketsInterval = 0.01;
     const double Game::MazeDelay = 2.0;
     const double Game::MazeChangeInterval = 60.0 - MazeDelay;
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),
-		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+        m_TeamScoreManager(),
+        m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f), (19 + 20 + 21 + 22 + 23 + 24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, &m_TeamScoreManager),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed, &m_TeamScoreManager)
     {
@@ -36,10 +38,22 @@ namespace ConfusServer
         }
     }
 
+    void Game::resetGame() {
+        m_BlueFlag.returnToStartPosition();
+        m_RedFlag.returnToStartPosition();
+        m_TeamScoreManager.resetScore();
+        m_MazeTimer = 0;
+        broadcastMazeChange(19 + 20 + 21 + 22 + 23 + 24);
+
+        for(Player* player : m_PlayerArray) {
+            player->resetPlayer();
+        }
+    }
+
     void Game::run()
     {
         initializeConnection();
-
+        m_TeamScoreManager.setResetCallback([this] {resetGame(); });
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
@@ -47,7 +61,7 @@ namespace ConfusServer
         sceneManager->loadScene("Media/IrrlichtScenes/Bases2.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
-        
+
         processTriangleSelectors();
 
         m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
@@ -56,14 +70,15 @@ namespace ConfusServer
         m_Connection->addFunctionToMap(static_cast<unsigned char>(ID_NEW_INCOMING_CONNECTION), [this](RakNet::BitStream* a_Data)
         {
             addPlayer(a_Data);
-        }); 
-		m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::BitStream* a_Data)
-		{
-			for (size_t i = 0; i < m_PlayerArray.size(); i++)
-			{
-				m_PlayerArray[static_cast<int>(i)]->updateFromClient(a_Data);
-			}
-		});
+        });
+
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::BitStream* a_Data)
+        {
+            for(size_t i = 0; i < m_PlayerArray.size(); i++)
+            {
+                m_PlayerArray[static_cast<int>(i)]->updateFromClient(a_Data);
+            }
+        });
 
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::PlayerLeft), [this](RakNet::BitStream* a_Data)
         {
@@ -71,10 +86,10 @@ namespace ConfusServer
         });
 
         m_Device->getCursorControl()->setVisible(false);
-      
+
         while(m_Device->run())
         {
-			processConnection();
+            processConnection();
             update();
             processFixedUpdates();
             render();
@@ -87,21 +102,21 @@ namespace ConfusServer
         m_TeamScoreManager.setConnection(m_Connection.get());
     }
 
-	void Game::processConnection()
-	{
-		m_ConnectionUpdateTimer += m_DeltaTime;
-		if (m_ConnectionUpdateTimer >= ProcessPacketsInterval)
-		{
-			m_ConnectionUpdateTimer = 0;
-			m_Connection->processPackets();
-		}
-	}
+    void Game::processConnection()
+    {
+        m_ConnectionUpdateTimer += m_DeltaTime;
+        if(m_ConnectionUpdateTimer >= ProcessPacketsInterval)
+        {
+            m_ConnectionUpdateTimer = 0;
+            m_Connection->processPackets();
+        }
+    }
 
     void Game::processTriangleSelectors()
     {
         auto sceneManager = m_Device->getSceneManager();
         auto metatriangleSelector = sceneManager->createMetaTriangleSelector();
-        
+
         irr::core::array<irr::scene::ISceneNode*> nodes;
         sceneManager->getSceneNodesFromType(irr::scene::ESNT_ANY, nodes);
         for(irr::u32 i = 0; i < nodes.size(); ++i)
@@ -180,7 +195,11 @@ namespace ConfusServer
 
     void Game::fixedUpdate()
     {
-		m_MazeGenerator.fixedUpdate();
+        m_MazeGenerator.fixedUpdate();
+        for(auto player : m_PlayerArray)
+        {
+            player->fixedUpdate();
+        }
     }
 
     void Game::broadcastMazeChange(int a_Seed)
@@ -208,9 +227,9 @@ namespace ConfusServer
 
         for(unsigned char i = 0u; i < availableID.size(); i++)
         {
-            if(availableID[static_cast<int>(i+1)])
+            if(availableID[static_cast<int>(i + 1)])
             {
-                id = static_cast<char>(i+1);
+                id = static_cast<char>(i + 1);
                 break;
             }
         }
@@ -219,6 +238,7 @@ namespace ConfusServer
 
         Player* newPlayer = new Player(m_Device, id, teamID, false);
         newPlayer->setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+
         m_PlayerArray.push_back(newPlayer);
 
         RakNet::BitStream newClientStream;
@@ -285,25 +305,41 @@ namespace ConfusServer
             stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdatePosition));
             Player* player = m_PlayerArray[i];
 
-			if (player != nullptr)
-			{
-				ConfusShared::Networking::PlayerInfo playerInfo;
-				playerInfo.playerID = static_cast<char>(player->ID);
-				playerInfo.position = player->CameraNode->getAbsolutePosition();
-				playerInfo.rotation = player->CameraNode->getRotation();
-				playerInfo.newState = player->PlayerState;
-				playerInfo.playerHealth = static_cast<unsigned int>(player->PlayerHealth.getHealth());
-				stream.Write(playerInfo);
+            if(player != nullptr)
+            {
+                ConfusShared::Networking::PlayerInfo playerInfo;
+                playerInfo.playerID = static_cast<char>(player->ID);
+                playerInfo.position = player->CameraNode->getAbsolutePosition();
+                playerInfo.rotation = player->CameraNode->getRotation();
+                playerInfo.newState = player->PlayerState;
+                playerInfo.playerHealth = static_cast<unsigned int>(player->PlayerHealth.getHealth());
+                stream.Write(playerInfo);
 
-				m_Connection->broadcastPacket(&stream, nullptr);
+                m_Connection->broadcastBitStream(stream);
 
-				if (player->userTimedOut())
-				{
-					deletePlayer(playerInfo.playerID);
-					std::cout << "[Game Class] Player id: " << static_cast<int>(playerInfo.playerID) << " timed out." << std::endl;
-				}
-			}
+                if(player->userTimedOut())
+                {
+                    deletePlayer(playerInfo.playerID);
+                    std::cout << "[Game Class] Player id: " << static_cast<int>(playerInfo.playerID) << " timed out." << std::endl;
+                }
+            }
         }
+    }
+
+    void Game::updateHealth(EHitIdentifier a_HitType, Player* a_Player)
+    {
+        RakNet::BitStream stream;
+
+        //MessageID
+        stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdateHealth));
+
+        //data
+        stream.Write(static_cast<long long>(a_Player->ID));
+        stream.Write(static_cast<int>(a_Player->PlayerHealth.getHealth()));
+        stream.Write(static_cast<EHitIdentifier>(a_HitType));
+
+        //send packet
+        m_Connection->broadcastBitStream(stream);
     }
 
     void Game::render()

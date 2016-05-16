@@ -2,9 +2,12 @@
 #include <RakNet/BitStream.h>
 #include <RakNet/GetTime.h>
 #include <RakNet/PacketPriority.h>
+#include <RakNet/MessageIdentifiers.h>
+#include <iostream>
+#include <string>
 
 #include "Player.h"
-#include "Audio\PlayerAudioEmitter.h"
+#include "Audio/PlayerAudioEmitter.h"
 #include "Networking/ClientConnection.h"
 #include "EventManager.h"
 #include "Flag.h"
@@ -12,19 +15,29 @@
 #include "../Confusshared/Physics/BoxCollider.h"
 #include "../Confusshared/Physics/RigidBody.h"
 
+#include "Player.h"
+
 namespace Confus
 {
     const irr::u32 Player::WeaponJointIndex = 14u;
-    const unsigned Player::LightAttackDamage = 10u;
-    const unsigned Player::HeavyAttackDamage = 30u;
+    const unsigned Player::LightAttackDamage = 25u;
+    const unsigned Player::HeavyAttackDamage = 50u;
 
 
     Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, char a_ID, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Audio::AudioManager* a_AudioManager)
         : m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f)),
         irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
         TeamIdentifier(a_TeamIdentifier),
-        CarryingFlag(EFlagEnum::None)
+        CarryingFlag(EFlagEnum::None),
+		m_SoundEmitter(new Audio::PlayerAudioEmitter(this, a_AudioManager)),
+		m_PlayerHealth()
     {
+		auto damageEvents = [this](EHitIdentifier a_HitIdentifier) -> void
+		{
+			m_SoundEmitter->playHitSound(a_HitIdentifier);
+		};
+		m_PlayerHealth.DamageEvent += damageEvents;
+
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
 
@@ -51,7 +64,6 @@ namespace Confus
             CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.0f, 1, nullptr, 0, true, 0.0f);
             CameraNode->setFOV(70.f);
             CameraNode->setNearValue(0.1f);
-            m_IsMainPlayer = true;
         }
         else 
         {
@@ -74,8 +86,6 @@ namespace Confus
 		m_Collider->getRigidBody()->setOffset(irr::core::vector3df(0.0f, -0.65f, -0.2f));
         startWalking();
 
-        m_SoundEmitter = new Audio::PlayerAudioEmitter(this, a_AudioManager);
-
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
 		PlayerNode->setAnimationEndCallback(this);
@@ -87,38 +97,28 @@ namespace Confus
 
     void Player::handleInput(EventManager& a_EventManager)
     {
-		auto movementDirection = irr::core::vector3df();
-		if(a_EventManager.IsKeyDown(irr::KEY_KEY_W))
-		{
-			movementDirection.Z = 1.0f;
-		}
-		else if(a_EventManager.IsKeyDown(irr::KEY_KEY_S))
-		{
-			movementDirection.Z = -1.0f;
-		}
-		if(a_EventManager.IsKeyDown(irr::KEY_KEY_A))
-		{
-			movementDirection.X = -1.0f;
-		}
-		else if (a_EventManager.IsKeyDown(irr::KEY_KEY_D))
-		{
-			movementDirection.X = 1.0f;
-		}
-		//Rotate with the negative xz-rotation (around the Y axis), as
-		//the scene node convention seems to be clockwise while the rotate function
-		//is counter-clockwise
-		movementDirection.rotateXZBy(-CameraNode->getRotation().Y);
-		movementDirection = movementDirection.normalize();
-		auto rigidBody = m_Collider->getRigidBody();
-		const float Speed = 15.0f;
-		auto resultingVelocity = irr::core::vector3df(movementDirection.X, 0.0f, movementDirection.Z) * Speed
-			+ irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
-		//rigidBody->setVelocity(resultingVelocity);
+        if(!m_Attacking)
+        {
+            if(a_EventManager.IsRightMouseDown())
+            {
+                startHeavyAttack();
+            }
+            else if(a_EventManager.IsLeftMouseDown())
+            {
+                startLightAttack();
+            }
+        }
+
     }
+
+	Health* Player::getHealthInstance()
+	{
+		return &m_PlayerHealth;
+	}
 
     void Player::render()
     {
-
+       
     }
 
     const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const
@@ -213,7 +213,7 @@ namespace Confus
             m_SoundEmitter->playFootStepSound();
         }
 
-        if(PlayerHealth.getHealth() <= 0) {
+        if(m_PlayerHealth.getHealth() <= 0) {
             respawn();
 			if (FlagPointer != nullptr) {
 				FlagPointer->drop(this);
@@ -248,7 +248,7 @@ namespace Confus
 
     void Player::respawn()
     {
-		PlayerHealth.reset();
+		m_PlayerHealth.reset();
         if(TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
@@ -290,6 +290,7 @@ namespace Confus
         RakNet::BitStream bitstreamOut;
         bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
 		bitstreamOut.Write(playerInfo);
+        bitstreamOut.Write(m_PlayerHealthPoints);
 
         m_Connection->sendMessage(&bitstreamOut, PacketReliability::UNRELIABLE);
 	}

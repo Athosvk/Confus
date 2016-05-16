@@ -3,37 +3,42 @@
 
 #include "Health.h"
 #include "Weapon.h"
+#include "RakNet/RakNetSocket2.h"
+#include "Networking/Connection.h"
 #include "../ConfusShared/TeamIdentifier.h"
 #include "../ConfusShared/Networking/BitStreamStruct.h"
 
-#include "RakNet/RakNetSocket2.h"
-#include "Networking/Connection.h"
-
 namespace ConfusServer
 {
-	namespace Audio 
+    namespace Physics
     {
-		class PlayerAudioEmitter;
-	}
+        class BoxCollider;
+        class PhysicsWorld;
+    }
+
+    namespace Audio
+    {
+        class PlayerAudioEmitter;
+    }
     enum class EFlagEnum;
     class EventManager;
     class Flag;
-   
+
     class Player : irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
-    {   
+    {
     public:
-		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
+        /// <summary> The IAnimatedMeshSceneNode for the player </summary>
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
         irr::scene::ICameraSceneNode* CameraNode = nullptr;
-		EFlagEnum CarryingFlag;
-		ETeamIdentifier TeamIdentifier;    
+        EFlagEnum CarryingFlag;
+        ETeamIdentifier TeamIdentifier;
         Flag* FlagPointer;
         char ID;
         EPlayerState PlayerState = EPlayerState::Idle;
         Health PlayerHealth;
-   
-	private:
+    private:
         /// <summary> The weapon bone index of the animation for the weapom_PlayerStaten </summary>
+        Physics::BoxCollider* m_Collider;
         static const irr::u32 WeaponJointIndex;
         static const unsigned LightAttackDamage;
         static const unsigned HeavyAttackDamage;
@@ -43,12 +48,12 @@ namespace ConfusServer
         bool m_Attacking = false;
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
-		irr::SKeyMap m_KeyMap[6];
+        irr::SKeyMap m_KeyMap[6];
         int m_LastUpdateTime;
         static const int UserTimedOutTime;
     public:
         Player(irr::IrrlichtDevice* a_Device, char a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer);
-		~Player();
+        ~Player();
         void fixedUpdate();
         void update();
         virtual void render();
@@ -57,16 +62,18 @@ namespace ConfusServer
         void setLevelCollider(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_Level);
         /// <summary> Starts the light attack, dealing normal damage </summary>
         void startLightAttack();
+        /// Reset the player
+        void resetPlayer();
 
         /// <summary> Starts the heavy attack, which deals more damage </summary>
         void startHeavyAttack();
-		
-		/// <summary>
-		/// Updates from client.
-		/// </summary>
-		/// <param name="a_Data">The data the client sent.</param>
-		void updateFromClient(RakNet::BitStream* a_Data);
-        
+
+        /// <summary>
+        /// Updates from client.
+        /// </summary>
+        /// <param name="a_Data">The data the client sent.</param>
+        void updateFromClient(RakNet::BitStream* a_Data);
+
         /// <summary>
         /// The player didn't have a connection for the <see cref="UserTimedOutTime"/> seconds.
         /// </summary>
@@ -75,12 +82,12 @@ namespace ConfusServer
     private:
         /// <summary> Starts the walking animation, which is the default animation </summary>
         void startWalking() const;
-        
+
         /// <summary> Initializes the shared attack variables </summary>
         void initializeAttack();
 
-		void createAudioEmitter();
-		void moveOnButtonPress(irr::EKEY_CODE a_Key);
+        void createAudioEmitter();
+        void moveOnButtonPress(irr::EKEY_CODE a_Key);
 
         /// <summary> Called when the animation finishes </summary>
         /// <remarks> Generally used for the attack animations only </remarks>

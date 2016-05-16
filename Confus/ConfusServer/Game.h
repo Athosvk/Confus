@@ -9,9 +9,10 @@
 #include "EventManager.h"
 #include "Flag.h"
 #include "TeamScore.h"
+#include "../ConfusShared/EHitIdentifier.h"
 
 namespace ConfusServer
-{ 
+{
     /// <summary> 
     /// The Game instance itself, running the game loop. It ties the objects in
     /// the Game to the Irrlicht instance, so that these can communicate through this
@@ -28,10 +29,10 @@ namespace ConfusServer
         /// The interval to clamp to if the delay between sequential fixed updates is too long
         /// </summary>
         static const double MaxFixedUpdateInterval;
-		/// <summary>
-		/// The interval at which packets queue before processed
-		/// </summary>
-		static const double ProcessPacketsInterval;
+        /// <summary>
+        /// The interval at which packets queue before processed
+        /// </summary>
+        static const double ProcessPacketsInterval;
         /// <summary>
         /// The interval at which packets queue before processed
         /// </summary>
@@ -44,7 +45,7 @@ namespace ConfusServer
 
         /// <summary>
         /// The instance of the IrrlichtDevice
-		/// Statics are avoided to make code clearer, hence this is not a static
+        /// Statics are avoided to make code clearer, hence this is not a static
         /// </summary>
         irr::IrrlichtDevice* m_Device;
         /// <summary>
@@ -52,7 +53,6 @@ namespace ConfusServer
         /// </summary>
         MazeGenerator m_MazeGenerator;
         EventManager m_EventManager;
-
         std::vector<Player*> m_PlayerArray;
         /// <summary>
         /// The Blue Flag.
@@ -66,12 +66,12 @@ namespace ConfusServer
         /// The delay between the last and future fixed update
         /// </summary>
         double m_FixedUpdateTimer = 0.0;
-		/// <summary>
-		/// The delay between the last and future packet update
-		/// </summary>
-		double m_ConnectionUpdateTimer = 0.0;
         /// <summary>
-		/// The time interval between the last update and the second-last
+        /// The delay between the last and future packet update
+        /// </summary>
+        double m_ConnectionUpdateTimer = 0.0;
+        /// <summary>
+        /// The time interval between the last update and the second-last
         /// </summary>
         double m_DeltaTime = 0.0;
         /// <summary>
@@ -79,7 +79,7 @@ namespace ConfusServer
         /// </summary>
         double m_MazeTimer = 0.0;
         /// <summary>
-		/// The total elapsed game ticks in milliseconds in the last frame
+        /// The total elapsed game ticks in milliseconds in the last frame
         /// </summary>
         irr::u32 m_PreviousTicks = 0;
         /// <summary>
@@ -135,26 +135,29 @@ namespace ConfusServer
         /// Renders the objects in the game
         /// </summary>
         void render();
-		/// <summary>
-		/// Processes the packets connection
-		/// </summary>
-		void processConnection();
-	    void addPlayer(RakNet::BitStream* a_Data);
-                
+        /// <summary>
+        /// Processes the packets connection
+        /// </summary>
+        void processConnection();
+        void addPlayer(RakNet::BitStream* a_Data);
+
         /// <summary>
         /// Removes the player from the list and send network update
         /// </summary>
         /// <param name="a_Data">The data that the client tells us with that it closes the connection.</param>
-        void removePlayer(RakNet::BitStream* a_Data);        
+        void removePlayer(RakNet::BitStream* a_Data);
         /// <summary>
         /// Removes the player from the list ourselves and send network update.
         /// </summary>
         /// <param name="a_PlayerID">The a_ player identifier.</param>
         void deletePlayer(char a_PlayerID);
         void updatePlayers();
+        void updateHealth(EHitIdentifier a_HitType, Player* a_Player);
         /// <summary>
         /// Broadcast a maze change
         /// </summary>
         void broadcastMazeChange(int a_Seed);
+        /// <summary> Reset game </summary>
+        void resetGame();
     };
 }

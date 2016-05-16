@@ -21,11 +21,16 @@ namespace Confus
 		class BoxCollider;
 		class PhysicsWorld;
 	}
+    namespace Audio
+    {
+        class PlayerAudioEmitter;
+        class AudioManager;
+    }
     enum class EFlagEnum;
     class Flag;
 
     class Player : public irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
-    {   
+    { 
     public:
 		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
@@ -34,28 +39,28 @@ namespace Confus
 		EFlagEnum CarryingFlag;
 		ETeamIdentifier TeamIdentifier;    
         Flag* FlagPointer = nullptr;
-		Health PlayerHealth;
 
         /// <summary> Determines if this player is this users player or not </summary>
         bool MainPlayer = false;
         char ID = 0;
+
+		static const unsigned LightAttackDamage;
+		static const unsigned HeavyAttackDamage;
     private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
+		/// <summary> private value for health class </summary>
+		Health m_PlayerHealth;
 		Physics::BoxCollider* m_Collider;
         Networking::ClientConnection* m_Connection;
 
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
-        static const unsigned LightAttackDamage;
-        static const unsigned HeavyAttackDamage;
 
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
 
         /// <summary> Whether the player is currently attacking or not </summary>
         bool m_Attacking = false;
-        /// <summary> Is this the main player? </summary>
-        bool m_IsMainPlayer = false;
 
         /// <summary> Whether the player is currently walking or not </summary>
         bool m_Walking = false;
@@ -67,7 +72,7 @@ namespace Confus
         /// <summary> The player's active state. </summary>
         EPlayerState m_PlayerState = EPlayerState::Idle;
         /// <summary> The player's health, ranging from 127 to -127. </summary>
-        int8_t m_PlayerHealth = 100;
+        int8_t m_PlayerHealthPoints = 100;
         /// <summary> The local time at which a state change took place. </summary>
         RakNet::Time m_StateChangeTime = 0;
         /// <summary> A reference to the eventmanager. </summary>
@@ -113,6 +118,9 @@ namespace Confus
         /// <param name="a_Connection">The connection reference.</param>
         void setConnection(Networking::ClientConnection* a_Connection);
         
+
+		/// <summary> get/setter for health. Should really turn into const but gave some weird errors </summary>
+		Health* getHealthInstance();
         /// <summary> Sets the connection to the server. </summary>
         void updateServer() const;
         /// <summary> Sets the eventmanager. </summary>

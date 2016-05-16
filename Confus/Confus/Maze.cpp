@@ -3,8 +3,7 @@
 
 namespace Confus
 {
-
-	Maze::Maze(irr::IrrlichtDevice * a_Device, int a_MazeSizeX, int a_MazeSizeY, Physics::PhysicsWorld& a_PhysicsWorld,
+	Maze::Maze(irr::IrrlichtDevice * a_Device, int a_MazeSizeX, int a_MazeSizeY, Physics::PhysicsWorld& a_PhysicsWorld, 
 		float a_MazeScalar, bool a_NeedRender)
 		:m_MazeSizeX(a_MazeSizeX), m_MazeSizeY(a_MazeSizeY),
 		m_PhysicsWorld(a_PhysicsWorld), 
