@@ -15,8 +15,6 @@
 #include "../Confusshared/Physics/BoxCollider.h"
 #include "../Confusshared/Physics/RigidBody.h"
 
-#include "Player.h"
-
 namespace Confus
 {
     const irr::u32 Player::WeaponJointIndex = 14u;
@@ -29,8 +27,7 @@ namespace Confus
         irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
         TeamIdentifier(a_TeamIdentifier),
         CarryingFlag(EFlagEnum::None),
-		m_SoundEmitter(new Audio::PlayerAudioEmitter(this, a_AudioManager)),
-		m_PlayerHealth()
+		m_SoundEmitter(new Audio::PlayerAudioEmitter(this, a_AudioManager))
     {
 		auto damageEvents = [this](EHitIdentifier a_HitIdentifier) -> void
 		{
@@ -52,10 +49,12 @@ namespace Confus
         PlayerNode->setPosition(irr::core::vector3df(0.f, -2.0f, -0.2f));
         PlayerNode->setName({"Player"});
 
-        if (a_TeamIdentifier == ETeamIdentifier::TeamBlue) {
+        if (a_TeamIdentifier == ETeamIdentifier::TeamBlue) 
+        {
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
         }
-        else if(a_TeamIdentifier == ETeamIdentifier::TeamRed) {
+        else if(a_TeamIdentifier == ETeamIdentifier::TeamRed) 
+        {
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
         }
 
@@ -69,14 +68,7 @@ namespace Confus
         {
             CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.0f, 1, nullptr, 0, true, 0.0f, false, false);
         }
-        if(a_TeamIdentifier == ETeamIdentifier::TeamBlue)
-        {
-            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
-        }
-        else if(a_TeamIdentifier == ETeamIdentifier::TeamRed)
-        {
-            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
-        }
+
 	    PlayerNode->setParent(this);
         
 		setParent(CameraNode);
@@ -85,6 +77,7 @@ namespace Confus
 		m_Collider->getRigidBody()->disableSleeping();
 		m_Collider->getRigidBody()->setOffset(irr::core::vector3df(0.0f, -0.65f, -0.2f));
         startWalking();
+
 
         m_Weapon.setParent(PlayerNode->getJointNode(WeaponJointIndex));
         m_Weapon.disableCollider();
@@ -97,18 +90,6 @@ namespace Confus
 
     void Player::handleInput(EventManager& a_EventManager)
     {
-        if(!m_Attacking)
-        {
-            if(a_EventManager.IsRightMouseDown())
-            {
-                startHeavyAttack();
-            }
-            else if(a_EventManager.IsLeftMouseDown())
-            {
-                startLightAttack();
-            }
-        }
-
     }
 
 	Health* Player::getHealthInstance()
@@ -195,10 +176,12 @@ namespace Confus
     void Player::updateColor(irr::IrrlichtDevice* a_Device)
     {
         auto videoDriver = a_Device->getVideoDriver();
-        if(TeamIdentifier == ETeamIdentifier::TeamBlue) {
+        if(TeamIdentifier == ETeamIdentifier::TeamBlue) 
+        {
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
         }
-        else if(TeamIdentifier == ETeamIdentifier::TeamRed) {
+        else if(TeamIdentifier == ETeamIdentifier::TeamRed) 
+        {
             PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
         }
     }

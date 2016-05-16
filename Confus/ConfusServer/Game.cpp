@@ -53,7 +53,7 @@ namespace ConfusServer
     void Game::run()
     {
         initializeConnection();
-        m_TeamScoreManager.setResetCallback([this] {resetGame(); });
+        m_TeamScoreManager.setResetCallback([this] { resetGame(); });
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
 
@@ -247,7 +247,7 @@ namespace ConfusServer
         newClientStream.Write(static_cast<ETeamIdentifier>(teamID));
         newClientStream.Write(static_cast<size_t>(m_PlayerArray.size()));
 
-        int playerIndex = 0;
+        int playerIndex = -1;
 
         for(size_t i = 0u; i < m_PlayerArray.size(); i++)
         {

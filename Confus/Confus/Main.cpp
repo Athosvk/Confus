@@ -6,14 +6,6 @@
 
 int main()
 {
-	//irr::IrrlichtDevice *nullDevice = irr::createDevice(irr::video::EDT_NULL);
-
-	//irr::core::dimension2d<irr::u32> desktopResolution = nullDevice->getVideoModeList()->getDesktopResolution();
-
-	//nullDevice->drop();
-
-    //Confus::Game game(fixedResolution);
-
     irr::core::dimension2d<irr::u32> fixedResolution = irr::core::dimension2d<irr::u32>(1366, 768);
     auto device = irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL, fixedResolution);
 

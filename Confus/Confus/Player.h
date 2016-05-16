@@ -21,11 +21,6 @@ namespace Confus
 		class BoxCollider;
 		class PhysicsWorld;
 	}
-    namespace Audio
-    {
-        class PlayerAudioEmitter;
-        class AudioManager;
-    }
     enum class EFlagEnum;
     class Flag;
 
