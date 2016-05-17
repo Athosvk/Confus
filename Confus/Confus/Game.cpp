@@ -25,7 +25,7 @@ namespace Confus
         m_PhysicsWorld(m_Device),
         m_MazeGenerator(m_Device, 41, 40, (19 + 20 + 21 + 22 + 23 + 24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
             irr::core::vector2df(19., 20.), m_PhysicsWorld, &m_AudioManager),
-        m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true, &m_AudioManager),
+        m_PlayerNode(m_Device, m_PhysicsWorld, 0, ETeamIdentifier::TeamBlue, true, &m_AudioManager),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_PhysicsWorld),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_PhysicsWorld),
         m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
@@ -103,7 +103,10 @@ namespace Confus
 
             for(size_t i = 0u; i < m_PlayerArray.size(); i++)
             {
-                m_PlayerArray[i]->updateFromServer(playerInfo);
+				if (m_PlayerArray[i]->ID == playerInfo.playerID)
+				{
+					m_PlayerArray[i]->updateFromServer(playerInfo);
+				}
             }
         });
 
@@ -343,7 +346,6 @@ namespace Confus
         //Set our own data
         m_PlayerNode.ID = m_Connection->ClientID = newPlayerID;
         m_PlayerNode.TeamIdentifier = newPlayerIdentifier;
-        a_Data->Read(m_PlayerNode.TeamIdentifier);
         m_PlayerNode.respawn();
         m_PlayerNode.updateColor(m_Device);
         m_PlayerArray.push_back(&m_PlayerNode);
@@ -363,6 +365,7 @@ namespace Confus
             if(id != m_PlayerNode.ID)
             {
                 Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false, &m_AudioManager);
+				newPlayer->updateColor(m_Device);
                 m_PlayerArray.push_back(newPlayer);
             }
         }
@@ -392,17 +395,19 @@ namespace Confus
 
         for(size_t i = 0u; i < m_PlayerArray.size(); i++)
         {
-            if(m_PlayerNode.ID == id)
-            {
-                m_ShouldRun = false;
-            }
-            else if(m_PlayerArray[i]->ID == id)
-            {
-                m_PlayerArray[i]->remove();
-                delete(m_PlayerArray[i]);
-                m_PlayerArray.erase(m_PlayerArray.begin() + i);
-                break;
-            }
+			if (id == m_PlayerArray[i]->ID)
+			{
+				if (m_PlayerNode.ID == id)
+				{
+					m_ShouldRun = false;
+				}
+				else if (m_PlayerNode.ID != id)
+				{
+					m_PlayerArray[i]->removeAll();
+					delete(m_PlayerArray[i]);
+					m_PlayerArray.erase(m_PlayerArray.begin() + i);
+				}
+			}
         }
     }
 

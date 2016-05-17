@@ -22,7 +22,7 @@ namespace Confus
 
 		void RigidBody::onPrePhysicsUpdate() const
 		{
-			if(m_Type != ERigidBodyType::Static)
+			if(m_Type != ERigidBodyType::Static && m_AttachedNode != nullptr)
 			{
 				syncRigidBodyTransform();
 			}
@@ -30,7 +30,7 @@ namespace Confus
 
 		void RigidBody::onPostPhysicsUpdate() const
 		{
-			if(m_Type != ERigidBodyType::Static)
+			if(m_Type != ERigidBodyType::Static  && m_AttachedNode != nullptr)
 			{
 				btTransform transform;
 				m_MotionState->getWorldTransform(transform);

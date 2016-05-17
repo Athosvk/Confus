@@ -216,8 +216,6 @@ namespace ConfusServer
     void Game::addPlayer(RakNet::BitStream* a_Data)
     {
         char id = 0;
-        char blueMembers = 0;
-        char redMembers = 0;
         std::vector<bool> availableID(11, true);
 
         for(unsigned char i = 0u; i < m_PlayerArray.size(); i++)
@@ -234,11 +232,10 @@ namespace ConfusServer
             }
         }
 
-        ETeamIdentifier teamID = m_PlayerArray.size() % 2 == 0 ? ETeamIdentifier::TeamRed : ETeamIdentifier::TeamBlue;
+        ETeamIdentifier teamID = id % 2 == 0 ? ETeamIdentifier::TeamRed : ETeamIdentifier::TeamBlue;
 
         Player* newPlayer = new Player(m_Device, id, teamID, false);
         newPlayer->setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-
         m_PlayerArray.push_back(newPlayer);
 
         RakNet::BitStream newClientStream;

@@ -48,15 +48,7 @@ namespace Confus
         PlayerNode->setScale(irr::core::vector3df(0.3f, 0.3f, 0.3f));
         PlayerNode->setPosition(irr::core::vector3df(0.f, -2.0f, -0.2f));
         PlayerNode->setName({"Player"});
-
-        if (a_TeamIdentifier == ETeamIdentifier::TeamBlue) 
-        {
-            PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinbl.jpg"));
-        }
-        else if(a_TeamIdentifier == ETeamIdentifier::TeamRed) 
-        {
-            PlayerNode->setMaterialTexture(0, videoDriver->getTexture("Media/nskinrd.jpg"));
-        }
+		updateColor(a_Device);
 
         if(a_MainPlayer) 
         {
