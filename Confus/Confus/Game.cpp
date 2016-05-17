@@ -10,8 +10,8 @@
 #include "Flag.h"
 #include "FlagGUI.h"
 #include "WinScreen.h"
-
 #include "ScoreGUI.h"
+#include "HealthGUI.h"
 #define DEBUG_CONSOLE
 #include "../ConfusShared/Debug.h"
 #include "../ConfusShared/TeamIdentifier.h"
@@ -49,6 +49,11 @@ namespace Confus
 
 		m_GUI.addElement<ScoreGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(30, 30),
 			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.45f, 0.061f));
+
+		m_GUI.addElement<HealthGUI>(m_Device, &m_PlayerNode, irr::core::dimension2du(40, 40),
+			videoDriver->getTexture("Media/Textures/Heart.png"),
+			videoDriver->getTexture("Media/Textures/Blood.png"),
+			irr::core::vector2df(0.0f, 0.02f));
     }
 
     Game::~Game()
