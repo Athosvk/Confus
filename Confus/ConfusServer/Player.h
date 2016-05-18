@@ -4,7 +4,7 @@
 
 #include "Networking\Connection.h"
 #include "../ConfusShared/Health.h"
-#include "Weapon.h"
+#include "../ConfusShared/Weapon.h"
 #include "../ConfusShared/TeamIdentifier.h"
 
 namespace ConfusShared
@@ -16,7 +16,8 @@ namespace ConfusShared
 	}
 }
 
-namespace ConfusServer {
+namespace ConfusServer 
+{
 	namespace Audio 
     {
 		class PlayerAudioEmitter;
@@ -57,7 +58,7 @@ namespace ConfusServer {
         static const unsigned HeavyAttackDamage;
 	    
         /// <summary> The player's weapon </summary>
-        Weapon m_Weapon;
+        ConfusShared::Weapon m_Weapon;
         /// <summary> Whether the player is currently attacking or not </summary>
         bool m_Attacking = false;
         /// <summary> The player's mesh </summary>
@@ -65,7 +66,8 @@ namespace ConfusServer {
         /// <summary> A pointer to the connection to the client. </summary>
         Networking::Connection* m_Connection;
     public:
-        Player(irr::IrrlichtDevice* a_Device, long long a_id, ConfusShared::ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, RakNet::SystemAddress a_Address);
+        Player(irr::IrrlichtDevice* a_Device, long long a_id, ConfusShared::ETeamIdentifier a_TeamIdentifier,
+			bool a_MainPlayer, RakNet::SystemAddress a_Address, ConfusShared::Physics::PhysicsWorld& a_PhysicsWorld);
 		~Player();
 
         void fixedUpdate();

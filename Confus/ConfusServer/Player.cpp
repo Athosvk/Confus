@@ -1,7 +1,6 @@
- #include <IrrAssimp/IrrAssimp.h>
-
 #include <RakNet/BitStream.h>
 #include <iostream>
+
 #include "EventManager.h"
 #include "Flag.h"
 #include "../Confusshared/Physics/PhysicsWorld.h"
@@ -16,9 +15,11 @@ namespace ConfusServer
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-	Player::Player(irr::IrrlichtDevice* a_Device, long long a_id, ConfusShared::ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, RakNet::SystemAddress a_SystemAddress)
-		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
-		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
+
+	Player::Player(irr::IrrlichtDevice* a_Device, long long a_id, ConfusShared::ETeamIdentifier a_TeamIdentifier, 
+		bool a_MainPlayer,  RakNet::SystemAddress a_SystemAddress, ConfusShared::Physics::PhysicsWorld& a_PhysicsWorld)
+		: irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
+		m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(1.0f, 1.0f, 4.0f)),
 		TeamIdentifier(a_TeamIdentifier),
 		CarryingFlag(EFlagEnum::None),
         SystemAddress(a_SystemAddress)
@@ -26,7 +27,6 @@ namespace ConfusServer
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
 
-        IrrAssimp irrAssimp(sceneManager);
         m_Mesh = sceneManager->getMesh("Media/ninja.b3d");
         PlayerNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh, 0, 1);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
@@ -234,7 +234,6 @@ namespace ConfusServer
         m_Connection->sendPacket(bitstreamOut, SystemAddress);
     }
  
-
     void Player::setConnection(Networking::Connection* a_Connection)
     {
         m_Connection = a_Connection;

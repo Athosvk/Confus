@@ -24,7 +24,8 @@ namespace ConfusServer
         m_TeamScoreManager(),
 		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
         m_BlueFlag(m_Device, ConfusShared::ETeamIdentifier::TeamBlue, &m_TeamScoreManager),
-        m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, &m_TeamScoreManager)
+        m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, &m_TeamScoreManager),
+		m_PhysicsWorld(m_Device)
     {
     }
 
@@ -229,7 +230,7 @@ namespace ConfusServer
 		ConfusShared::ETeamIdentifier teamID = m_PlayerArray.size() % 2 == 0 ? 
 			ConfusShared::ETeamIdentifier::TeamRed : ConfusShared::ETeamIdentifier::TeamBlue;
 
-        Player* newPlayer = new Player(m_Device, id, teamID, false, a_Data->systemAddress);
+        Player* newPlayer = new Player(m_Device, id, teamID, false, a_Data->systemAddress, m_PhysicsWorld);
         newPlayer->setConnection(m_Connection.get());
         newPlayer->setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
 

@@ -11,6 +11,7 @@
 #include "Flag.h"
 #include "TeamScore.h"
 #include "../ConfusShared/EHitIdentifier.h"
+#include "../ConfusShared/Physics/PhysicsWorld.h"
 
 namespace ConfusServer
 { 
@@ -95,7 +96,9 @@ namespace ConfusServer
         std::unique_ptr<Networking::Connection> m_Connection;
         irr::scene::ISceneNode* m_LevelRootNode;
         /// <summary> Team Score Manager </summary>
-        TeamScore m_TeamScoreManager;
+        TeamScore m_TeamScoreManager;		
+		/// <summary>The physics world, allowing simulation of rigid bodies and colliders</summary>
+		ConfusShared::Physics::PhysicsWorld m_PhysicsWorld;
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
