@@ -7,14 +7,16 @@
 #include "Weapon.h"
 #include "../ConfusShared/TeamIdentifier.h"
 
+namespace ConfusShared
+{
+	namespace Physics
+	{
+		class BoxCollider;
+		class PhysicsWorld;
+	}
+}
+
 namespace ConfusServer {
-
-    namespace Physics
-    {
-        class BoxCollider;
-        class PhysicsWorld;
-    }
-
 	namespace Audio 
     {
 		class PlayerAudioEmitter;
@@ -42,22 +44,18 @@ namespace ConfusServer {
 		EFlagEnum CarryingFlag;
 		ConfusShared::ETeamIdentifier TeamIdentifier;
         Flag* FlagPointer;
-        Health PlayerHealth;
         long long ID;
         /// <summary> The systemaddress of the client player that matches this player. </summary>
         RakNet::SystemAddress SystemAddress;
+		ConfusShared::Health PlayerHealth;
 	private:
         Audio::PlayerAudioEmitter* m_FootstepSoundEmitter;
         ConfusShared::Physics::BoxCollider* m_Collider;
-        void createAudioEmitter();
-        void updateClient();
-        void moveOnButtonPress(irr::EKEY_CODE a_Key);
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
         static const unsigned LightAttackDamage;
         static const unsigned HeavyAttackDamage;
 	    
-	    ConfusShared::Health PlayerHealth;
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
         /// <summary> Whether the player is currently attacking or not </summary>
@@ -69,6 +67,7 @@ namespace ConfusServer {
     public:
         Player(irr::IrrlichtDevice* a_Device, long long a_id, ConfusShared::ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, RakNet::SystemAddress a_Address);
 		~Player();
+
         void fixedUpdate();
         void update();
         virtual void render();
@@ -98,6 +97,9 @@ namespace ConfusServer {
         /// <remarks> Generally used for the attack animations only </remarks>
         /// <param name="node">The node whoms animation finished</param>
         virtual void OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node) override;
+		void createAudioEmitter();
+		void updateClient();
+		void moveOnButtonPress(irr::EKEY_CODE a_Key);
         irr::SKeyMap m_KeyMap[6];
     };
 }
