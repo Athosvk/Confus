@@ -46,10 +46,10 @@ namespace Confus
 			irr::core::vector2df(0.56f, 0.0f), true);
 
 		m_GUI.addElement<ScoreGUI>(m_Device, &m_RedFlag, irr::core::dimension2du(30, 30),
-			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.59f, 0.061f));
+			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.59f, 0.061f), m_ClientScore);
 
 		m_GUI.addElement<ScoreGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(30, 30),
-			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.45f, 0.061f));
+			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.45f, 0.061f), m_ClientScore);
 		
 		m_MazeChangedSound.setVolume(0.2f);
 		m_MazeGenerator.addMazeChangedListener([this]()
@@ -196,7 +196,7 @@ namespace Confus
             m_MazeGenerator.refillMainMazeRequest(mazeSeed, timeMazeChanges);
         });
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [](RakNet::Packet* a_Data)
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [this](RakNet::Packet* a_Data)
         {
             RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
 
@@ -205,8 +205,8 @@ namespace Confus
             bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
             bitstreamIn.Read(redScore);
             bitstreamIn.Read(blueScore);
-            ClientTeamScore::setTeamScore(ConfusShared::ETeamIdentifier::TeamRed, redScore);
-            ClientTeamScore::setTeamScore(ConfusShared::ETeamIdentifier::TeamBlue, blueScore);
+            m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamRed, redScore);
+            m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamBlue, blueScore);
             std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
         });
 
@@ -277,8 +277,8 @@ namespace Confus
         m_BlueFlag.returnToStartPosition();
         m_RedFlag.returnToStartPosition();
         m_PlayerNode.respawn();
-        ClientTeamScore::setTeamScore(ConfusShared::ETeamIdentifier::TeamBlue, 0);
-        ClientTeamScore::setTeamScore(ConfusShared::ETeamIdentifier::TeamRed, 0);
+        m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamBlue, 0);
+        m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamRed, 0);
     }
 
     void Game::fixedUpdate()

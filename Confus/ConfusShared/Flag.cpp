@@ -1,11 +1,9 @@
 #include <Irrlicht/irrlicht.h>
-#include <IrrAssimp/IrrAssimp.h>
 #include <iostream>
 
 #include "Flag.h"
 //To remove
 #include "../Confus/Player.h"
-#include "../Confus/ClientTeamScore.h"
 
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "../ConfusShared/Physics/BoxCollider.h"
@@ -21,7 +19,6 @@ namespace ConfusShared
         auto videoDriver = a_Device->getVideoDriver();
 
         //Load model
-        IrrAssimp irrAssimp(sceneManager);
         irr::scene::IAnimatedMesh* mesh = sceneManager->getMesh("Media/Meshes/Flag.3ds");
         m_FlagNode = sceneManager->addMeshSceneNode(mesh, 0, 2);
         m_FlagNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
@@ -192,8 +189,6 @@ namespace ConfusShared
 		a_PlayerObject->FlagPointer = nullptr;
         a_PlayerObject->CarryingFlag = EFlagEnum::None;
 		m_OnScore();
-		Confus::ClientTeamScore::setTeamScore(a_PlayerObject->TeamIdentifier, 
-			Confus::ClientTeamScore::getTeamScore(a_PlayerObject->TeamIdentifier) + 1);
 	}
 
 	void Flag::drop(Confus::Player* a_PlayerObject) 

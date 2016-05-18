@@ -77,6 +77,7 @@ namespace Confus
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
 		Audio::Sound m_MazeChangedSound;
+		ClientTeamScore m_ClientScore;
 
     public:
         /// <summary>

@@ -9,11 +9,11 @@ namespace Confus
     {
 	private:
 		/// <summary> The red team score, static so it can be accessed from anywhere. </summary>
-		static int RedTeamScore;
+		int m_RedTeamScore;
 		/// <summary> The blue team score, static so it can accessed from anywhere. </summary>
-		static int BlueTeamScore;
+		int m_BlueTeamScore;
     public:
-        static void setTeamScore(ConfusShared::ETeamIdentifier a_TeamIdentifier, int a_Score);
-        static int getTeamScore(ConfusShared::ETeamIdentifier a_TeamIdentifier);
+        void setTeamScore(ConfusShared::ETeamIdentifier a_TeamIdentifier, int a_Score);
+        int getTeamScore(ConfusShared::ETeamIdentifier a_TeamIdentifier) const;
 	};
 }

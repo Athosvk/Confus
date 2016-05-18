@@ -193,7 +193,15 @@ lib /out:ConfusServer.lib *.obj</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\ConfusShared\BaseGame.cpp" />
+    <ClCompile Include="..\ConfusShared\EventManager.cpp" />
+    <ClCompile Include="..\ConfusShared\Flag.cpp" />
+    <ClCompile Include="..\ConfusShared\Maze.cpp" />
+    <ClCompile Include="..\ConfusShared\MazeGenerator.cpp" />
+    <ClCompile Include="..\ConfusShared\MazeTile.cpp" />
+    <ClCompile Include="..\ConfusShared\MoveableWall.cpp" />
     <ClCompile Include="..\ConfusShared\RespawnFloor.cpp" />
+    <ClCompile Include="..\ConfusShared\WalledMazeTile.cpp" />
+    <ClCompile Include="..\ConfusShared\Weapon.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -213,9 +221,18 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClInclude Include="..\ConfusShared\BaseGame.h" />
     <ClInclude Include="..\ConfusShared\Debug.h" />
     <ClInclude Include="..\ConfusShared\Delegate.h" />
+    <ClInclude Include="..\ConfusShared\EHitIdentifier.h" />
     <ClInclude Include="..\ConfusShared\EnumUtility.h" />
+    <ClInclude Include="..\ConfusShared\EventManager.h" />
+    <ClInclude Include="..\ConfusShared\Flag.h" />
+    <ClInclude Include="..\ConfusShared\Maze.h" />
+    <ClInclude Include="..\ConfusShared\MazeGenerator.h" />
+    <ClInclude Include="..\ConfusShared\MazeTile.h" />
+    <ClInclude Include="..\ConfusShared\MoveableWall.h" />
     <ClInclude Include="..\ConfusShared\RespawnFloor.h" />
     <ClInclude Include="..\ConfusShared\TeamIdentifier.h" />
+    <ClInclude Include="..\ConfusShared\WalledMazeTile.h" />
+    <ClInclude Include="..\ConfusShared\Weapon.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="Game.h" />

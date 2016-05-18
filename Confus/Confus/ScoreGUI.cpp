@@ -6,9 +6,10 @@
 namespace Confus
 {
 	//TODO Add TeamScoreManager 
-	ScoreGUI::ScoreGUI(irr::IrrlichtDevice * a_Device, ConfusShared::Flag * a_Flag, irr::core::dimension2du a_ImageMaxSize, 
-		irr::video::ITexture * a_ScoreTexture, irr::core::vector2df a_RelativePosition)
-		:m_ImageMaxSize(a_ImageMaxSize), m_Flag(a_Flag)
+	ScoreGUI::ScoreGUI(irr::IrrlichtDevice* a_Device, ConfusShared::Flag * a_Flag, irr::core::dimension2du a_ImageMaxSize, 
+		irr::video::ITexture* a_ScoreTexture, irr::core::vector2df a_RelativePosition, ClientTeamScore& a_TeamScore)
+		: m_ImageMaxSize(a_ImageMaxSize), m_Flag(a_Flag),
+		m_TeamScore(a_TeamScore)
 	{
 		irr::core::dimension2du offset = calculateOffset(m_ImageMaxSize, a_ScoreTexture);
 		auto guiEnvironment = a_Device->getGUIEnvironment();
@@ -23,7 +24,7 @@ namespace Confus
 
 	void ScoreGUI::update()
 	{
-		int score = ClientTeamScore::getTeamScore(m_Flag->getTeamIdentifier());
+		int score = m_TeamScore.getTeamScore(m_Flag->getTeamIdentifier());
 		for (int i = 0; i < Game::MaxScore; i++)
 		{
 			if (score > i)

@@ -66,6 +66,30 @@
     <ClCompile Include="..\ConfusShared\RespawnFloor.cpp">
       <Filter>Shared Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ConfusShared\Maze.cpp">
+      <Filter>Shared Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\MazeGenerator.cpp">
+      <Filter>Shared Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\MazeTile.cpp">
+      <Filter>Shared Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\MoveableWall.cpp">
+      <Filter>Shared Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\WalledMazeTile.cpp">
+      <Filter>Shared Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Weapon.cpp">
+      <Filter>Shared Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\EventManager.cpp">
+      <Filter>Shared Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Flag.cpp">
+      <Filter>Shared Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -132,6 +156,33 @@
       <Filter>Shared Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ConfusShared\RespawnFloor.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Maze.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\MazeGenerator.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\MazeTile.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\MoveableWall.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\WalledMazeTile.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Weapon.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\EventManager.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\EHitIdentifier.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Flag.h">
       <Filter>Shared Files</Filter>
     </ClInclude>
   </ItemGroup>
