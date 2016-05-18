@@ -16,6 +16,7 @@ namespace ConfusShared
 	}
 	enum class EFlagEnum;
 	class Flag;
+	class EventManager;
 }
 
 namespace ConfusServer 
@@ -29,8 +30,6 @@ namespace ConfusServer
     {
         class Connection;
     }
-
-    class EventManager;
     
     enum class EPlayerState : unsigned char
     {
@@ -77,7 +76,7 @@ namespace ConfusServer
         virtual const irr::core::aabbox3d<irr::f32> & getBoundingBox() const;
         /// <summary> Handles the input based actions </summary>
         /// <param name="a_EventManager">The current event manager</param>
-        void handleInput(EventManager& a_EventManager);
+        void handleInput(ConfusShared::EventManager& a_EventManager);
         void setLevelCollider(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_Level);
         /// <summary> Starts the light attack, dealing normal damage </summary>
         void startLightAttack();

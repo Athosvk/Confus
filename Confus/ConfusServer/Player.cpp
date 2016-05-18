@@ -1,7 +1,7 @@
 #include <RakNet/BitStream.h>
 #include <iostream>
 
-#include "EventManager.h"
+#include "../ConfusShared/EventManager.h"
 #include "../ConfusShared/Flag.h"
 #include "../Confusshared/Physics/PhysicsWorld.h"
 #include "../Confusshared/Physics/BoxCollider.h"
@@ -117,7 +117,7 @@ namespace ConfusServer
         return m_Mesh->getBoundingBox();
     }
 
-    void Player::handleInput(EventManager& a_EventManager)
+    void Player::handleInput(ConfusShared::EventManager& a_EventManager)
     {
         if(!m_Attacking)
         {

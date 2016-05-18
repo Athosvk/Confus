@@ -7,7 +7,7 @@
 #include "OpenAL\OpenALListener.h"
 #include "Player.h"
 #include "Audio\PlayerAudioEmitter.h"
-#include "EventManager.h"
+#include "../ConfusShared/EventManager.h"
 #include "../ConfusShared/Flag.h"
 #include "TeamScore.h"
 #include "../ConfusShared/EHitIdentifier.h"
@@ -58,7 +58,7 @@ namespace ConfusServer
         /// The OpenAL listener that is attached to the camera.
         /// </summary>
         OpenALListener m_Listener;
-        EventManager m_EventManager;
+        ConfusShared::EventManager m_EventManager;
         std::vector<Player*> m_PlayerArray;
         /// <summary>
         /// The Blue Flag.
