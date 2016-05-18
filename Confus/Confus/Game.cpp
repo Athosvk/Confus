@@ -66,6 +66,8 @@ namespace Confus
         m_Device->setWindowCaption(L"Game");
 
         initializeConnection();
+        m_PlayerNode.setConnection(m_Connection.get());
+
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
         m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
@@ -76,6 +78,7 @@ namespace Confus
 		updateSceneTransformations();
         initializeLevelColliders();
 
+        m_PlayerNode.setEventManager(m_EventManager);
         m_Device->getCursorControl()->setVisible(false);
 
         m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::MainPlayerJoined), [this](RakNet::Packet* a_Data)
@@ -98,11 +101,25 @@ namespace Confus
             updateOtherPlayer(a_Data);
         });
 
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdateHealth), [this](RakNet::Packet* a_Data)
-        {
-            updateHealth(a_Data);
-        });
-      
+		m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdateHealth), [this](RakNet::Packet* a_Data)
+		{
+			updateHealth(a_Data);
+		});
+        
+		m_Connection->addFunctionToMap(ID_NO_FREE_INCOMING_CONNECTIONS, [this](RakNet::Packet* a_Data)
+		{
+			denyConnection(a_Data);
+		});
+			
+		m_Connection->addFunctionToMap(ID_CONNECTION_ATTEMPT_FAILED, [this](RakNet::Packet* a_Data)
+		{
+			denyConnection(a_Data);
+		});
+
+		m_Connection->addFunctionToMap(ID_CONNECTION_LOST, [this](RakNet::Packet* a_Data)
+		{
+			denyConnection(a_Data);
+		});
     }
 
 	void Game::initializeLevelColliders()
@@ -151,7 +168,7 @@ namespace Confus
     void Game::initializeConnection()
     {
         std::string serverIP;
-        std::cout << "Enter the server's ip address: ";
+        std::cout << " loaded" << std::endl << "Enter the server's ip address: ";
         std::cin >> serverIP;
 
         unsigned short serverPort;
@@ -159,24 +176,27 @@ namespace Confus
         std::cin >> serverPort;
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Packet) 
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Data)
         {
+            RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
+
             int timeMazeChanges, mazeSeed;
-            RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
-            inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
-            inputStream.Read(timeMazeChanges);
-            inputStream.Read(mazeSeed);
+            bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
+            bitstreamIn.Read(timeMazeChanges);
+            bitstreamIn.Read(mazeSeed);
             std::cout << "Update is in " << (timeMazeChanges - static_cast<int>(RakNet::GetTimeMS())) << " ms, the seed is:\t" << mazeSeed << std::endl;
             m_MazeGenerator.refillMainMazeRequest(mazeSeed, timeMazeChanges);
         });
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [](RakNet::Packet* a_Packet) 
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [](RakNet::Packet* a_Data)
         {
+            RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
+
             int redScore, blueScore;
-            RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
-            inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
-            inputStream.Read(redScore);
-            inputStream.Read(blueScore);
+            
+            bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
+            bitstreamIn.Read(redScore);
+            bitstreamIn.Read(blueScore);
             ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, redScore);
             ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, blueScore);
             std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
@@ -257,6 +277,7 @@ namespace Confus
     {
 		m_MazeGenerator.fixedUpdate();
 		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
+        m_PlayerNode.fixedUpdate();
     }
 
     void Game::end()
@@ -267,11 +288,12 @@ namespace Confus
 
     void Game::updateOtherPlayer(RakNet::Packet* a_Data)
     {
-        RakNet::BitStream inputStream(a_Data->data, a_Data->length, false);
-        inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+        RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
+        
+        bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
 
         long long id;
-        inputStream.Read(id);
+        bitstreamIn.Read(id);
 
         for(size_t j = 0u; j < m_PlayerArray.size(); j++)
         {
@@ -282,14 +304,14 @@ namespace Confus
                     irr::core::vector3df pos;
                     irr::core::vector3df rot;
 
-                    inputStream.Read(pos);
-                    inputStream.Read(rot);
+                    bitstreamIn.Read(pos);
+                    bitstreamIn.Read(rot);
 
                     m_PlayerArray[i]->setPosition(pos);
                     m_PlayerArray[i]->setRotation(rot);
                 }
             }
-            inputStream.Read(id);
+            bitstreamIn.Read(id);
         }
     }
 
@@ -301,28 +323,27 @@ namespace Confus
         long long id;
         inputStream.Read(id);
 
-        for(size_t j = 0u; j < m_PlayerArray.size(); j++)
-        {
-            for(size_t i = 0u; i < m_PlayerArray.size(); i++)
-            {
-                if(m_PlayerArray[i]->ID == id)
-                {
-                    int health;
+		for (size_t i = 0u; i < m_PlayerArray.size(); i++)
+		{
+			if (m_PlayerArray[i]->ID == id)
+			{
+				int health;
+				EHitIdentifier hitIdentifier;
 
-                    inputStream.Read(health);
+				inputStream.Read(health);
+				inputStream.Read(hitIdentifier);
 
-                    if(health > m_PlayerArray[i]->PlayerHealth.getHealth())
-                    {
-                        m_PlayerArray[i]->PlayerHealth.heal(health - m_PlayerArray[i]->PlayerHealth.getHealth());
-                    }
-                    else if(health < m_PlayerArray[i]->PlayerHealth.getHealth())
-                    {
-                        m_PlayerArray[i]->PlayerHealth.damage(m_PlayerArray[i]->PlayerHealth.getHealth() - health);
-                    }
-                }
-            }
-            inputStream.Read(id);
-        }
+				if (health > m_PlayerArray[i]->getHealthInstance()->getHealth())
+				{
+					m_PlayerArray[i]->getHealthInstance()->heal(health - m_PlayerArray[i]->getHealthInstance()->getHealth());
+				}
+				else if (health < m_PlayerArray[i]->getHealthInstance()->getHealth())
+				{
+					m_PlayerArray[i]->getHealthInstance()->damage(m_PlayerArray[i]->getHealthInstance()->getHealth() - health, hitIdentifier);
+				}
+				break;
+			}
+		}
     }
 
 	void Game::updateSceneTransformations()
@@ -341,24 +362,25 @@ namespace Confus
     //need to test of the guid.g is the right one, and not the one from the server
     void Game::addOwnPlayer(RakNet::Packet* a_Data)
     {
-        RakNet::BitStream inputStream(a_Data->data, a_Data->length, false);
-        inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+        RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
 
-        inputStream.Read(m_PlayerNode.ID);
-        inputStream.Read(m_PlayerNode.TeamIdentifier);
+        bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
+
+        bitstreamIn.Read(m_PlayerNode.ID);
+        bitstreamIn.Read(m_PlayerNode.TeamIdentifier);
         m_PlayerNode.respawn();
         m_PlayerNode.updateColor(m_Device);
 
         size_t size;
-        inputStream.Read(size);
+        bitstreamIn.Read(size);
 
         for(size_t i = 0u; i < size; i++)
         {
             long long id;
             ETeamIdentifier teamID;
 
-            inputStream.Read(id);
-            inputStream.Read(teamID);
+            bitstreamIn.Read(id);
+            bitstreamIn.Read(teamID);
 
             Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false, &m_AudioManager);
             m_PlayerArray.push_back(newPlayer);
@@ -369,14 +391,15 @@ namespace Confus
 
     void Game::addOtherPlayer(RakNet::Packet* a_Data)
     {
-        RakNet::BitStream inputStream(a_Data->data, a_Data->length, false);
-        inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+        RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
+
+        bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
 
         long long id;
         ETeamIdentifier teamID;
 
-        inputStream.Read(id);
-        inputStream.Read(teamID);
+        bitstreamIn.Read(id);
+        bitstreamIn.Read(teamID);
 
         Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false, &m_AudioManager);
         m_PlayerArray.push_back(newPlayer);
@@ -384,12 +407,13 @@ namespace Confus
 
     void Game::removePlayer(RakNet::Packet* a_Data)
     {
-        RakNet::BitStream inputStream(a_Data->data, a_Data->length, false);
-        inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
+        RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
+
+        bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
 
         long long id;
 
-        inputStream.Read(id);
+        bitstreamIn.Read(id);
 
         for(size_t i = 0u; i < m_PlayerArray.size(); i++)
         {
@@ -401,7 +425,26 @@ namespace Confus
                 break;
             }
         }
+        m_PlayerNode.fixedUpdate();
     }
+
+	void Game::denyConnection(RakNet::Packet* a_Data)
+	{
+		RakNet::BitStream inputStream(a_Data->data, a_Data->length, false);
+		RakNet::MessageID messageID;
+
+		inputStream.Read(messageID);
+
+		switch (messageID)
+		{
+			case ID_NO_FREE_INCOMING_CONNECTIONS:
+				std::cout << "Server is full" << std::endl;
+			default:
+				std::cout << "Could not connect to the server" << std::endl;
+		}
+
+		m_ShouldRun = false;
+	}
 
     void Game::render()
     {

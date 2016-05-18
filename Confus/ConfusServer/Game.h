@@ -10,6 +10,7 @@
 #include "EventManager.h"
 #include "Flag.h"
 #include "TeamScore.h"
+#include "../ConfusShared/EHitIdentifier.h"
 
 namespace ConfusServer
 { 
@@ -57,12 +58,6 @@ namespace ConfusServer
         /// </summary>
         OpenALListener m_Listener;
         EventManager m_EventManager;
-        /// <summary>
-        /// The Players to test with.
-        /// </summary>
-        Player m_PlayerNode;
-		Player m_SecondPlayerNode;
-
         std::vector<Player*> m_PlayerArray;
         /// <summary>
         /// The Blue Flag.
@@ -152,7 +147,7 @@ namespace ConfusServer
 	    void addPlayer(RakNet::Packet* a_Data);
         void removePlayer(RakNet::Packet* a_Data);
         void updatePlayers();
-        void updateHealth();
+        void updateHealth(EHitIdentifier a_HitType, Player* a_Player);
         /// <summary>
         /// Broadcast a maze change
         /// </summary>
