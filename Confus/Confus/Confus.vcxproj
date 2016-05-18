@@ -209,6 +209,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="..\ConfusShared\Physics\PhysicsWorld.cpp" />
     <ClCompile Include="..\ConfusShared\Physics\RigidBody.cpp" />
     <ClCompile Include="Announcer.cpp" />
+    <ClCompile Include="NewMazeGenerator.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Flag.cpp" />
     <ClCompile Include="FlagGUI.cpp" />
@@ -222,6 +223,8 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MoveableWall.cpp" />
     <ClCompile Include="Networking\ClientConnection.cpp" />
+    <ClCompile Include="NewMaze.cpp" />
+    <ClCompile Include="NewMazeTile.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RespawnFloor.cpp" />
     <ClCompile Include="Audio\Sound.cpp" />
@@ -255,6 +258,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="..\ConfusShared\Physics\RigidBody.h" />
     <ClInclude Include="Announcer.h" />
     <ClInclude Include="Delegate.h" />
+    <ClInclude Include="NewMazeGenerator.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="Flag.h" />
     <ClInclude Include="FlagGUI.h" />
@@ -268,6 +272,8 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MoveableWall.h" />
     <ClInclude Include="Networking\ClientConnection.h" />
+    <ClInclude Include="NewMaze.h" />
+    <ClInclude Include="NewMazeTile.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RespawnFloor.h" />
     <ClInclude Include="Audio\Sound.h" />

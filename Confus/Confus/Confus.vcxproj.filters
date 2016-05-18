@@ -144,6 +144,15 @@
     <ClCompile Include="WinScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NewMaze.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NewMazeTile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NewMazeGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -288,6 +297,15 @@
       <Filter>Shared</Filter>
     </ClInclude>
     <ClInclude Include="Networking\ClientConnection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NewMaze.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NewMazeTile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NewMazeGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
