@@ -21,8 +21,8 @@ namespace ConfusServer
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),
-        m_TeamScoreManager(),
-		m_MazeGenerator(m_Device, irr::core::vector3df(0.0f, 0.0f, 0.0f),(19+20+21+22+23+24)), // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+		m_MazeGenerator(m_Device, 41, 40, (19+20+21+22+23+24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+			irr::core::vector2df(19., 20.), m_PhysicsWorld),
         m_BlueFlag(m_Device, ConfusShared::ETeamIdentifier::TeamBlue, &m_TeamScoreManager),
         m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, &m_TeamScoreManager),
 		m_PhysicsWorld(m_Device)

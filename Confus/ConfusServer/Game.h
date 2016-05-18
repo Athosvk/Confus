@@ -3,7 +3,7 @@
 #include <RakNet/BitStream.h>
 
 #include "Networking/Connection.h"
-#include "MazeGenerator.h"
+#include "../ConfusShared/MazeGenerator.h"
 #include "OpenAL\OpenALListener.h"
 #include "Player.h"
 #include "Audio\PlayerAudioEmitter.h"
@@ -53,7 +53,7 @@ namespace ConfusServer
         /// <summary>
         /// MazeGenerator that hasa accesible maze
         /// </summary>
-        MazeGenerator m_MazeGenerator;
+        ConfusShared::MazeGenerator m_MazeGenerator;
         /// <summary>
         /// The OpenAL listener that is attached to the camera.
         /// </summary>
