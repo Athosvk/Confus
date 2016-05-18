@@ -40,7 +40,7 @@ namespace ConfusShared
         irr::scene::IMeshSceneNode* m_FlagNode;
         Physics::BoxCollider* m_Collider;
         irr::scene::ISceneNode* m_FlagOldParent = nullptr;
-
+		Delegate<void()> m_OnScore;
 
     public: 
 		/// <summary> Flag class constructor </summary>
@@ -79,6 +79,7 @@ namespace ConfusShared
 		const irr::video::SColor getColor() const;
 		const ConfusShared::ETeamIdentifier getTeamIdentifier() const;
 		const EFlagEnum getFlagStatus() const;
+		void addScoreCallback(std::function<void()> a_Callback);
     private:
 		void setFlagStatus(EFlagEnum a_FlagStatus);
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);

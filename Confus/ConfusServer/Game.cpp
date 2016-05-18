@@ -5,7 +5,6 @@
 
 #include "Game.h"
 #include "Player.h"
-#include "Flag.h"
 
 #define DEBUG_CONSOLE
 #include "../ConfusShared/Debug.h"
@@ -23,8 +22,8 @@ namespace ConfusServer
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),
 		m_MazeGenerator(m_Device, 41, 40, (19+20+21+22+23+24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
 			irr::core::vector2df(19., 20.), m_PhysicsWorld),
-        m_BlueFlag(m_Device, ConfusShared::ETeamIdentifier::TeamBlue, &m_TeamScoreManager),
-        m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, &m_TeamScoreManager),
+        m_BlueFlag(m_Device, ConfusShared::ETeamIdentifier::TeamBlue, &m_TeamScoreManager, m_PhysicsWorld),
+        m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, &m_TeamScoreManager, m_PhysicsWorld),
 		m_PhysicsWorld(m_Device)
     {
     }
@@ -64,8 +63,6 @@ namespace ConfusServer
         
         processTriangleSelectors();
 
-        m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
-        m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
 
         m_Connection->addFunctionToMap(ID_NEW_INCOMING_CONNECTION, [this](RakNet::Packet* a_Data)
         {

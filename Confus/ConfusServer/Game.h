@@ -8,7 +8,7 @@
 #include "Player.h"
 #include "Audio\PlayerAudioEmitter.h"
 #include "EventManager.h"
-#include "Flag.h"
+#include "../ConfusShared/Flag.h"
 #include "TeamScore.h"
 #include "../ConfusShared/EHitIdentifier.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
@@ -63,11 +63,11 @@ namespace ConfusServer
         /// <summary>
         /// The Blue Flag.
         /// </summary>
-        Flag m_BlueFlag;
+        ConfusShared::Flag m_BlueFlag;
         /// <summary>
         /// The Red Flag.
         /// </summary>
-        Flag m_RedFlag;
+        ConfusShared::Flag m_RedFlag;
         /// <summary>
         /// The delay between the last and future fixed update
         /// </summary>

@@ -14,6 +14,8 @@ namespace ConfusShared
 		class BoxCollider;
 		class PhysicsWorld;
 	}
+	enum class EFlagEnum;
+	class Flag;
 }
 
 namespace ConfusServer 
@@ -28,9 +30,7 @@ namespace ConfusServer
         class Connection;
     }
 
-    enum class EFlagEnum;
     class EventManager;
-    class Flag;
     
     enum class EPlayerState : unsigned char
     {
@@ -42,9 +42,9 @@ namespace ConfusServer
 		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
         irr::scene::ICameraSceneNode* CameraNode = nullptr;
-		EFlagEnum CarryingFlag;
+		ConfusShared::EFlagEnum CarryingFlag;
 		ConfusShared::ETeamIdentifier TeamIdentifier;
-        Flag* FlagPointer;
+        ConfusShared::Flag* FlagPointer;
         long long ID;
         /// <summary> The systemaddress of the client player that matches this player. </summary>
         RakNet::SystemAddress SystemAddress;

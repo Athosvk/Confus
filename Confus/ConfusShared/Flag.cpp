@@ -115,7 +115,7 @@ namespace ConfusShared
         particleAffector->drop();
     }
 
-     const irr::video::SColor Flag::getColor() const
+    const irr::video::SColor Flag::getColor() const
     {
         switch(m_TeamIdentifier)
         {
@@ -138,9 +138,14 @@ namespace ConfusShared
 		 return m_FlagStatus;
 	 }
 
-	//This class handles what to do on collision
-	void Flag::captureFlag(Confus::Player* a_PlayerObject) 
-    {
+	 void Flag::addScoreCallback(std::function<void()> a_Callback)
+	 {
+		 m_OnScore += a_Callback;
+	 }
+
+	 //This class handles what to do on collision
+	 void Flag::captureFlag(Confus::Player* a_PlayerObject) 
+     {
 		//Somebody is already carrying the flag
 		if (m_FlagStatus == EFlagEnum::FlagTaken) 
 		{
@@ -181,12 +186,12 @@ namespace ConfusShared
 		}
 	}
 
-	//TODO Score points to team of a_PlayerObject
 	void Flag::score(Confus::Player* a_PlayerObject) 
     {
 		a_PlayerObject->FlagPointer->returnToStartPosition();
 		a_PlayerObject->FlagPointer = nullptr;
         a_PlayerObject->CarryingFlag = EFlagEnum::None;
+		m_OnScore();
 		Confus::ClientTeamScore::setTeamScore(a_PlayerObject->TeamIdentifier, 
 			Confus::ClientTeamScore::getTeamScore(a_PlayerObject->TeamIdentifier) + 1);
 	}

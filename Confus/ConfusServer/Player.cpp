@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "EventManager.h"
-#include "Flag.h"
+#include "../ConfusShared/Flag.h"
 #include "../Confusshared/Physics/PhysicsWorld.h"
 #include "../Confusshared/Physics/BoxCollider.h"
 #include "../Confusshared/Physics/RigidBody.h"
@@ -21,7 +21,7 @@ namespace ConfusServer
 		: irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
 		m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(1.0f, 1.0f, 4.0f)),
 		TeamIdentifier(a_TeamIdentifier),
-		CarryingFlag(EFlagEnum::None),
+		CarryingFlag(ConfusShared::EFlagEnum::None),
         SystemAddress(a_SystemAddress)
     {
         auto sceneManager = a_Device->getSceneManager();

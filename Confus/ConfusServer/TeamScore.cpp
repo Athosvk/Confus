@@ -7,10 +7,23 @@
 #include "TeamScore.h"
 #define DEBUG_CONSOLE
 #include "../ConfusShared/Debug.h"
+#include "../ConfusShared/Flag.h"
 
 namespace ConfusServer 
 {
-    void TeamScore::setConnection(Networking::Connection* a_Connection)
+	TeamScore::TeamScore(ConfusShared::Flag& a_BlueFlag, ConfusShared::Flag& a_RedFlag)
+	{
+		a_BlueFlag.addScoreCallback([this]()
+		{
+			onBlueTeamScored();
+		});
+		a_RedFlag.addScoreCallback([this]()
+		{
+			onRedTeamScored();
+		});
+	}
+
+	void TeamScore::setConnection(Networking::Connection* a_Connection)
     {
         m_Connection = a_Connection;
     }
@@ -26,16 +39,8 @@ namespace ConfusServer
         m_Connection->broadcastBitstream(bitStream);
     }
 
-    void TeamScore::teamScoredPoint(ConfusShared::ETeamIdentifier a_TeamScored, int a_IncreasementValue)
+    void TeamScore::onTeamScored(ConfusShared::ETeamIdentifier a_TeamScored)
     {
-        if(a_TeamScored == ConfusShared::ETeamIdentifier::TeamBlue)
-        {
-            m_BlueTeamScore += a_IncreasementValue;
-        } 
-        else if(a_TeamScored == ConfusShared::ETeamIdentifier::TeamRed)
-        {
-            m_RedTeamScore += a_IncreasementValue;
-        }
         if(teamHasWon(a_TeamScored))
         {
             RakNet::BitStream bitStream;
@@ -48,6 +53,18 @@ namespace ConfusServer
         std::cout << "Score updated\tRed score: " << m_RedTeamScore << "\t Blue score: " << m_BlueTeamScore << std::endl;
         sendScoreToClients();
     }
+
+	void TeamScore::onRedTeamScored()
+	{
+		m_RedTeamScore += 1;
+		onTeamScored(ConfusShared::ETeamIdentifier::TeamRed);
+	}
+
+	void TeamScore::onBlueTeamScored()
+	{
+		m_BlueTeamScore += 1;
+		onTeamScored(ConfusShared::ETeamIdentifier::TeamBlue);
+	}
 
     void TeamScore::resetScore()
     {
@@ -67,7 +84,7 @@ namespace ConfusServer
             scoreAmount = m_RedTeamScore;
             break;
         default:
-            throw new std::logic_error("Team does not exist");
+            throw std::logic_error("Team does not exist");
             break;
         }
         return scoreAmount;
