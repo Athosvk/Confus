@@ -144,6 +144,9 @@
     <ClCompile Include="WinScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CrosshairGUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -288,6 +291,9 @@
       <Filter>Shared</Filter>
     </ClInclude>
     <ClInclude Include="Networking\ClientConnection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CrosshairGUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

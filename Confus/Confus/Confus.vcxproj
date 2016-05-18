@@ -74,27 +74,27 @@
     <IncludePath>$(SolutionDir)../Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)../Libraries/32 bit/Debug;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)../Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)../Libraries/64 bit/Debug;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)../Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)../Libraries/32 bit/Release;$(LibraryPath)</LibraryPath>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)../Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)../Libraries/64 bit/Release;$(LibraryPath)</LibraryPath>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -105,7 +105,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <EnablePREfast>true</EnablePREfast>
+      <EnablePREfast>false</EnablePREfast>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
     </ClCompile>
     <Link>
@@ -127,7 +127,7 @@ lib /out:Confus.lib *.obj</Command>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <EnablePREfast>true</EnablePREfast>
+      <EnablePREfast>false</EnablePREfast>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
     </ClCompile>
     <Link>
@@ -151,7 +151,7 @@ lib /out:Confus.lib *.obj</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <EnablePREfast>true</EnablePREfast>
+      <EnablePREfast>false</EnablePREfast>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -175,7 +175,7 @@ lib /out:Confus.lib *.obj</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <EnablePREfast>true</EnablePREfast>
+      <EnablePREfast>false</EnablePREfast>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -209,6 +209,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="..\ConfusShared\Physics\PhysicsWorld.cpp" />
     <ClCompile Include="..\ConfusShared\Physics\RigidBody.cpp" />
     <ClCompile Include="Announcer.cpp" />
+    <ClCompile Include="CrosshairGUI.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Flag.cpp" />
     <ClCompile Include="FlagGUI.cpp" />
@@ -254,6 +255,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="..\ConfusShared\Physics\PhysicsWorld.h" />
     <ClInclude Include="..\ConfusShared\Physics\RigidBody.h" />
     <ClInclude Include="Announcer.h" />
+    <ClInclude Include="CrosshairGUI.h" />
     <ClInclude Include="Delegate.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="Flag.h" />
