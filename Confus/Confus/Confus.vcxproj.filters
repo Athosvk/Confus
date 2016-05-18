@@ -33,9 +33,6 @@
     <ClCompile Include="StaticWall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EventManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Audio\PlayerAudioEmitter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -144,6 +141,9 @@
     <ClCompile Include="..\ConfusShared\Weapon.cpp">
       <Filter>Shared</Filter>
     </ClCompile>
+    <ClCompile Include="..\ConfusShared\EventManager.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -152,16 +152,10 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EventManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="StaticWall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EventManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MoveableWall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StaticWall.h">
@@ -216,12 +210,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Announcer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\TeamIdentifier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ConfusShared\Debug.h">
@@ -292,6 +280,9 @@
     </ClInclude>
     <ClInclude Include="Networking\ClientConnection.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\EventManager.h">
+      <Filter>Shared</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

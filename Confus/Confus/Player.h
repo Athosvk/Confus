@@ -5,6 +5,18 @@
 #include "../ConfusShared/Weapon.h"
 #include "../ConfusShared/TeamIdentifier.h"
 
+namespace ConfusShared
+{
+	class EventManager;
+	class Flag;
+	enum class EFlagEnum;
+	namespace Physics
+	{
+		class BoxCollider;
+		class PhysicsWorld;
+	}
+}
+
 namespace Confus 
 {
 	namespace Audio 
@@ -12,15 +24,6 @@ namespace Confus
 		class PlayerAudioEmitter;
         class AudioManager;
 	}
-	namespace Physics
-	{
-		class BoxCollider;
-		class PhysicsWorld;
-	}
-
-    enum class EFlagEnum;
-    class EventManager;
-    class Flag;
 
     /// <summary> 
     /// Player class
@@ -32,17 +35,17 @@ namespace Confus
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
         /// <summary> The ICameraSceneNode for the player </summary>
         irr::scene::ICameraSceneNode* CameraNode = nullptr;
-		EFlagEnum CarryingFlag;
+		ConfusShared::EFlagEnum CarryingFlag;
 		ConfusShared::ETeamIdentifier TeamIdentifier;    
-        Flag* FlagPointer = nullptr;
-		Health PlayerHealth;
+        ConfusShared::Flag* FlagPointer = nullptr;
+		ConfusShared::Health PlayerHealth;
         /// <summary> Determines if this player is this users player or not </summary>
         bool MainPlayer = false;
 
         long long ID;
 	private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
-		Physics::BoxCollider* m_Collider;
+		ConfusShared::Physics::BoxCollider* m_Collider;
 
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
@@ -50,7 +53,7 @@ namespace Confus
         static const unsigned HeavyAttackDamage;
 
         /// <summary> The player's weapon </summary>
-        Weapon m_Weapon;
+        ConfusShared::Weapon m_Weapon;
 
         /// <summary> Whether the player is currently attacking or not </summary>
         bool m_Attacking = false;
@@ -68,7 +71,7 @@ namespace Confus
         /// <param name="a_TeamIdentifier">The team's identifier the player should have.</param>
         /// <param name="a_MainPlayer">A boolean to identify the player the user controls.</param>
         /// <param name="a_AudioManager">The audio manager.</param>
-        Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, 
+        Player(irr::IrrlichtDevice* a_Device, ConfusShared::Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, 
 			ConfusShared::ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, 
 			Audio::AudioManager* a_AudioManager);
         /// <summary> Player class destructor. </summary>
@@ -92,7 +95,7 @@ namespace Confus
         virtual const irr::core::aabbox3d<irr::f32> & getBoundingBox() const;
         /// <summary> Handles the input based actions. </summary>
         /// <param name="a_EventManager">The current event manager. </param>
-        void handleInput(EventManager& a_EventManager);
+        void handleInput(ConfusShared::EventManager& a_EventManager);
     private:
         /// <summary> Starts the walking animation, which is the default animation. </summary>
         void startWalking() const;

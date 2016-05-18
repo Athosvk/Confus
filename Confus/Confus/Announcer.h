@@ -8,8 +8,8 @@ namespace Confus
 	class Announcer
 	{
 	private:
-		Flag* m_RedFlag;
-		Flag* m_BlueFlag;
+		ConfusShared::Flag* m_RedFlag;
+		ConfusShared::Flag* m_BlueFlag;
 		Player* m_Player;
 
 		Audio::Sound m_RedScoredSound;
@@ -25,8 +25,9 @@ namespace Confus
 		void playFlagTakenSound(ConfusShared::ETeamIdentifier a_TeamIdentifier);
 		void playFlagReturnedSound(ConfusShared::ETeamIdentifier a_TeamIdentifier);
 	public:
-		Announcer(Flag* a_RedFlag, Flag* a_BlueFlag, Player* a_Player, Audio::AudioManager* a_AudioManager);
-		void playFlagEvent(ConfusShared::ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum);
+		Announcer(ConfusShared::Flag* a_RedFlag, ConfusShared::Flag* a_BlueFlag, Player* a_Player, Audio::AudioManager* a_AudioManager);
+		void playFlagEvent(ConfusShared::ETeamIdentifier a_TeamIdentifier, ConfusShared::EFlagEnum a_PreviousFlagEnum, 
+			ConfusShared::EFlagEnum a_CurrentFlagEnum);
 		~Announcer();
 	};
 }

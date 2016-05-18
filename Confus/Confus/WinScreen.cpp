@@ -1,7 +1,7 @@
 #include <string>
 
 #include "WinScreen.h"
-#include "../Confus/EventManager.h"
+#include "../ConfusShared/EventManager.h"
 
 namespace Confus
 {

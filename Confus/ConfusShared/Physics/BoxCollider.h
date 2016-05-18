@@ -5,7 +5,7 @@
 
 #include "Collider.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	namespace Physics
 	{

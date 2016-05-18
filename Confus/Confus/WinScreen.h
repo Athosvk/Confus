@@ -4,7 +4,7 @@
 
 namespace Confus
 {
-    class WinScreen : public BaseGame
+    class WinScreen : public ConfusShared::BaseGame
     {
     private:
         irr::gui::IGUIStaticText* m_WinningText;
@@ -20,7 +20,7 @@ namespace Confus
         virtual void render() override;
     public:
         bool ShouldRestart = false;
-        WinScreen(irr::IrrlichtDevice* a_Device, ConfusShared::ETeamIdentifier a_TeamIdentifier, EventManager* a_EventManager) : 
+        WinScreen(irr::IrrlichtDevice* a_Device, ConfusShared::ETeamIdentifier a_TeamIdentifier, ConfusShared::EventManager* a_EventManager) : 
             BaseGame(a_Device, a_EventManager),
             m_GameWinner(a_TeamIdentifier) {}
     };

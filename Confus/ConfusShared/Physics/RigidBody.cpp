@@ -4,7 +4,7 @@
 #include "RigidBody.h"
 #include "PhysicsWorld.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	namespace Physics
 	{

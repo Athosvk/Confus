@@ -1,7 +1,7 @@
 #include "Maze.h"
 #include "WalledMazeTile.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	Maze::Maze(irr::IrrlichtDevice * a_Device, int a_MazeSizeX, int a_MazeSizeY, Physics::PhysicsWorld& a_PhysicsWorld, 
 		float a_MazeScalar, bool a_NeedRender)

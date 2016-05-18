@@ -2,7 +2,7 @@
 
 #include "Audio\PlayerAudioEmitter.h"
 #include "Player.h"
-#include "EventManager.h"
+#include "../ConfusShared/EventManager.h"
 #include "../ConfusShared/Flag.h"
 #include "../Confusshared/Physics/PhysicsWorld.h"
 #include "../Confusshared/Physics/BoxCollider.h"
@@ -14,13 +14,13 @@ namespace Confus
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
 
-    Player::Player(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld, 
+    Player::Player(irr::IrrlichtDevice* a_Device, ConfusShared::Physics::PhysicsWorld& a_PhysicsWorld, 
 		long long a_ID, ConfusShared::ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, 
 		Confus::Audio::AudioManager* a_AudioManager)
 		: m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f)),
         irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
         TeamIdentifier(a_TeamIdentifier),
-        CarryingFlag(EFlagEnum::None)     
+        CarryingFlag(ConfusShared::EFlagEnum::None)
     {
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
@@ -64,7 +64,7 @@ namespace Confus
 	    PlayerNode->setParent(this);
 		setParent(CameraNode);
 		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(0.6f, 2.7f, 0.6f), CameraNode,
-			Physics::ECollisionFilter::Player, ~Physics::ECollisionFilter::Player);
+			ConfusShared::Physics::ECollisionFilter::Player, ~ConfusShared::Physics::ECollisionFilter::Player);
 		m_Collider->getRigidBody()->disableSleeping();
 		m_Collider->getRigidBody()->setOffset(irr::core::vector3df(0.0f, -0.65f, -0.2f));
         startWalking();
@@ -80,7 +80,7 @@ namespace Confus
         delete(m_SoundEmitter);
 	}
 
-    void Player::handleInput(EventManager& a_EventManager)
+    void Player::handleInput(ConfusShared::EventManager& a_EventManager)
     {
         if(!m_Attacking)
         {

@@ -4,6 +4,10 @@
 namespace Confus
 {
 	class Player;
+}
+
+namespace ConfusShared
+{
 	namespace Physics
 	{
 		class PhysicsWorld;
@@ -68,7 +72,7 @@ namespace Confus
     private:
         /// <summary> Damages the playe. </summary>
         /// <remarks> Triggered as callback on collision </remarks>
-        void damagePlayer(Player* a_Player) const;
+        void damagePlayer(Confus::Player* a_Player) const;
 
         /// <summary> Gets the angle between the given vectors </summary>
         /// <param name="a_Vector1">The first vector </param>

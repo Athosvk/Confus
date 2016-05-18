@@ -4,7 +4,7 @@
 #include <vector>
 #include <functional>
 
-namespace Confus
+namespace ConfusShared
 {
 	namespace Physics
 	{

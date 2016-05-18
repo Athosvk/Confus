@@ -1,7 +1,7 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
 
-namespace Confus 
+namespace ConfusShared
 {
 	namespace Physics
 	{

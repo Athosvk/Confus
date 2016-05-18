@@ -1,7 +1,7 @@
 #include "PhysicsWorld.h"
 #include "BoxCollider.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	namespace Physics
 	{

@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
+    <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)../Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)../Libraries/32 bit/Debug;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -192,6 +192,7 @@ lib /out:Confus.lib *.obj</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\ConfusShared\BaseGame.cpp" />
+    <ClCompile Include="..\ConfusShared\EventManager.cpp" />
     <ClCompile Include="..\ConfusShared\Flag.cpp" />
     <ClCompile Include="..\ConfusShared\Health.cpp" />
     <ClCompile Include="..\ConfusShared\Maze.cpp" />
@@ -218,7 +219,6 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="..\ConfusShared\Physics\PhysicsWorld.cpp" />
     <ClCompile Include="..\ConfusShared\Physics\RigidBody.cpp" />
     <ClCompile Include="Announcer.cpp" />
-    <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="FlagGUI.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GUI.cpp" />
@@ -236,6 +236,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="..\ConfusShared\Debug.h" />
     <ClInclude Include="..\ConfusShared\Delegate.h" />
     <ClInclude Include="..\ConfusShared\EnumUtility.h" />
+    <ClInclude Include="..\ConfusShared\EventManager.h" />
     <ClInclude Include="..\ConfusShared\Flag.h" />
     <ClInclude Include="..\ConfusShared\Health.h" />
     <ClInclude Include="..\ConfusShared\Maze.h" />
@@ -264,7 +265,6 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="..\ConfusShared\Physics\PhysicsWorld.h" />
     <ClInclude Include="..\ConfusShared\Physics\RigidBody.h" />
     <ClInclude Include="Announcer.h" />
-    <ClInclude Include="EventManager.h" />
     <ClInclude Include="FlagGUI.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GUI.h" />

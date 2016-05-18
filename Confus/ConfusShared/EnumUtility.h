@@ -4,25 +4,25 @@
 #define EnumFlagOperators(a_EnumType) \
 inline a_EnumType operator| (a_EnumType a_Value1, a_EnumType a_Value2) \
 { \
-    return Confus::EnumUtility::bitwiseEnumOR(a_Value1, a_Value2); \
+    return ConfusShared::EnumUtility::bitwiseEnumOR(a_Value1, a_Value2); \
 } \
 \
 inline a_EnumType operator& (a_EnumType a_Value1, a_EnumType a_Value2) \
 { \
-	return Confus::EnumUtility::bitwiseEnumAND(a_Value1, a_Value2); \
+	return ConfusShared::EnumUtility::bitwiseEnumAND(a_Value1, a_Value2); \
 } \
 \
 inline a_EnumType operator^ (a_EnumType a_Value1, a_EnumType a_Value2) \
 { \
-	return Confus::EnumUtility::bitwiseEnumXOR(a_Value1, a_Value2); \
+	return ConfusShared::EnumUtility::bitwiseEnumXOR(a_Value1, a_Value2); \
 } \
 \
 inline a_EnumType operator~ (a_EnumType a_Value) \
 { \
-	return Confus::EnumUtility::bitwiseEnumComplement(a_Value); \
+	return ConfusShared::EnumUtility::bitwiseEnumComplement(a_Value); \
 }
 
-namespace Confus
+namespace ConfusShared
 {
 	class EnumUtility
 	{

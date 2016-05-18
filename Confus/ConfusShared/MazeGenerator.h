@@ -6,7 +6,7 @@
 #include "../Confus/Audio/Sound.h"
 #include "../ConfusShared/Physics/BoxCollider.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	/// <summary>
 	/// Generates the maze
@@ -49,7 +49,7 @@ namespace Confus
         bool hasBeenRefilled = true;
 
 		/// <summary> The sound played when the maze changes/refills </summary>
-		Audio::Sound m_MazeChangeSound;
+		Confus::Audio::Sound m_MazeChangeSound;
 	public:
 		/// <summary> Initializes a new instance of the <see cref="MazeGenerator" /> class </summary>
 		/// <param name="a_Device">The instance of the IrrlichtDevice</param>
@@ -60,7 +60,7 @@ namespace Confus
 		/// <param name="a_PhysicsWorld">The physics world </param>
 		/// <param name="a_AudioManager">The audio manager </param>
 		MazeGenerator(irr::IrrlichtDevice * a_Device, int a_MazeSizeX, int a_MazeSizeY, int a_InitialSeed,
-			irr::core::vector2df a_GenerateStartPoint, Physics::PhysicsWorld& a_PhysicsWorld, Audio::AudioManager* a_AudioManager);
+			irr::core::vector2df a_GenerateStartPoint, Physics::PhysicsWorld& a_PhysicsWorld, Confus::Audio::AudioManager* a_AudioManager);
 
 		/// <summary>
 		/// The fixed update used to update the state of the main maze

@@ -1,7 +1,7 @@
 #pragma once
 #include "MazeTile.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	namespace Physics
 	{

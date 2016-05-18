@@ -1,9 +1,7 @@
 #include "MazeTile.h"
 
-
-namespace Confus
+namespace ConfusShared
 {
-
 	MazeTile::MazeTile()
 		:Raised(true)
 	{
@@ -17,7 +15,6 @@ namespace Confus
 	{
 		return nullptr;
 	}
-
 
 	MazeTile::~MazeTile()
 	{

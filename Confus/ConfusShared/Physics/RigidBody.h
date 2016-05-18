@@ -3,7 +3,7 @@
 #include <memory>
 #include <Irrlicht/irrlicht.h>
 
-namespace Confus
+namespace ConfusShared
 {
 	namespace Physics
 	{

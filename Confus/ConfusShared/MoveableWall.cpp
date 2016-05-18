@@ -4,7 +4,7 @@
 #include "../ConfusShared/Physics/BoxCollider.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	MoveableWall::MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition,
 		irr::core::vector3df a_Scale, Physics::PhysicsWorld& a_PhysicsWorld)

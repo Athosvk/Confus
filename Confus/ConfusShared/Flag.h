@@ -4,9 +4,13 @@
 #include "../ConfusShared/TeamIdentifier.h"
 #include "Delegate.h"
 
-namespace Confus 
+namespace Confus
 {
 	class Player;
+}
+
+namespace ConfusShared
+{
 	namespace Physics
 	{
 		class BoxCollider;
@@ -51,7 +55,7 @@ namespace Confus
 
 		/// <summary> Capture Flag a flag with the wanted playerobject parent. </summary>
 		/// <param name="a_PlayerObject"> The player object that should carry the flag. </param>
-		void captureFlag(Player* a_PlayerObject);
+		void captureFlag(Confus::Player* a_PlayerObject);
 
 		/// <summary> Set the starting position of the flag that it will reset to. </summary>
 		/// <param name="a_Position"> The position the flag will reset to. </param>
@@ -63,14 +67,14 @@ namespace Confus
 
 		/// <summary> Will drop the flag at the current position. </summary>
 		/// <param name="a_PlayerObject"> The player object that drops the flag. </param>
-		void drop(Player* a_PlayerObject);
+		void drop(Confus::Player* a_PlayerObject);
 
 		/// <summary> Will return the flag to it's starting position and rotation. </summary>
 		void returnToStartPosition();
 
 		/// <summary> The player carrying a flag has gotten a point. </summary>
 		/// <param name="a_PlayerObject"> Score a point for the player object. </param>
-		void score(Player* a_PlayerObject);
+		void score(Confus::Player* a_PlayerObject);
 
 		const irr::video::SColor getColor() const;
 		const ConfusShared::ETeamIdentifier getTeamIdentifier() const;

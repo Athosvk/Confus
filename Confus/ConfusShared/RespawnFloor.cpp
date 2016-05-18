@@ -3,7 +3,7 @@
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "../ConfusShared/Physics/BoxCollider.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	RespawnFloor::RespawnFloor(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld,
 		irr::core::vector3df a_Position)

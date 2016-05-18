@@ -6,7 +6,8 @@
 namespace Confus
 {
 	//TODO Add TeamScoreManager 
-	ScoreGUI::ScoreGUI(irr::IrrlichtDevice * a_Device, Flag * a_Flag, irr::core::dimension2du a_ImageMaxSize, irr::video::ITexture * a_ScoreTexture, irr::core::vector2df a_RelativePosition)
+	ScoreGUI::ScoreGUI(irr::IrrlichtDevice * a_Device, ConfusShared::Flag * a_Flag, irr::core::dimension2du a_ImageMaxSize, 
+		irr::video::ITexture * a_ScoreTexture, irr::core::vector2df a_RelativePosition)
 		:m_ImageMaxSize(a_ImageMaxSize), m_Flag(a_Flag)
 	{
 		irr::core::dimension2du offset = calculateOffset(m_ImageMaxSize, a_ScoreTexture);

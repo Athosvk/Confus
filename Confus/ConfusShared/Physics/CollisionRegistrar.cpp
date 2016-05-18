@@ -2,7 +2,7 @@
 #include "BoxCollider.h"
 #include "RigidBody.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	namespace Physics
 	{

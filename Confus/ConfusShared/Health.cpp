@@ -1,6 +1,6 @@
 #include "Health.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	Health::Health()
 	{

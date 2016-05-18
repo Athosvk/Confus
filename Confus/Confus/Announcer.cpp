@@ -3,7 +3,7 @@
 
 namespace Confus
 {
-	Announcer::Announcer(Flag* a_RedFlag, Flag* a_BlueFlag, Player* a_Player, Audio::AudioManager* a_AudioManager)
+	Announcer::Announcer(ConfusShared::Flag* a_RedFlag, ConfusShared::Flag* a_BlueFlag, Player* a_Player, Audio::AudioManager* a_AudioManager)
 		: m_RedFlag(a_RedFlag),
 		m_BlueFlag(a_BlueFlag),
 		m_Player(a_Player),
@@ -14,7 +14,8 @@ namespace Confus
 		m_FlagBlueTakenSound(a_AudioManager->createSound("SFX/FlagSounds/blue_flag_taken.wav")),
 		m_FlagBlueReturnedSound(a_AudioManager->createSound("SFX/FlagSounds/blue_flag_returned.wav"))
 	{
-		auto flagChangedEvents = [this](ConfusShared::ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum) -> void 
+		auto flagChangedEvents = [this](ConfusShared::ETeamIdentifier a_TeamIdentifier, ConfusShared::EFlagEnum a_PreviousFlagEnum, 
+			ConfusShared::EFlagEnum a_CurrentFlagEnum) -> void 
 		{ 
 			playFlagEvent(a_TeamIdentifier, a_PreviousFlagEnum, a_CurrentFlagEnum); 
 		};
@@ -23,19 +24,20 @@ namespace Confus
 
 	}
 
-	void Announcer::playFlagEvent(ConfusShared::ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum)
+	void Announcer::playFlagEvent(ConfusShared::ETeamIdentifier a_TeamIdentifier, ConfusShared::EFlagEnum a_PreviousFlagEnum, 
+		ConfusShared::EFlagEnum a_CurrentFlagEnum)
 	{
-		if (a_PreviousFlagEnum == EFlagEnum::FlagTaken && a_CurrentFlagEnum == EFlagEnum::FlagBase)
+		if (a_PreviousFlagEnum == ConfusShared::EFlagEnum::FlagTaken && a_CurrentFlagEnum == ConfusShared::EFlagEnum::FlagBase)
 		{
 			playScoredSound(a_TeamIdentifier);
 		}
 
-		if (a_PreviousFlagEnum == EFlagEnum::FlagDropped && a_CurrentFlagEnum == EFlagEnum::FlagBase)
+		if (a_PreviousFlagEnum == ConfusShared::EFlagEnum::FlagDropped && a_CurrentFlagEnum == ConfusShared::EFlagEnum::FlagBase)
 		{
 			playFlagReturnedSound(a_TeamIdentifier);
 		}
 
-		if (a_PreviousFlagEnum != EFlagEnum::FlagTaken && a_CurrentFlagEnum == EFlagEnum::FlagTaken)
+		if (a_PreviousFlagEnum != ConfusShared::EFlagEnum::FlagTaken && a_CurrentFlagEnum == ConfusShared::EFlagEnum::FlagTaken)
 		{
 			playFlagTakenSound(a_TeamIdentifier);
 		}

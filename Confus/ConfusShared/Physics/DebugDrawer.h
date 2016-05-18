@@ -2,7 +2,7 @@
 #include <Bullet/btBulletCollisionCommon.h>
 #include <Irrlicht/irrlicht.h>
 
-namespace Confus
+namespace ConfusShared
 {
 	namespace Physics
 	{

@@ -10,7 +10,7 @@
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "../ConfusShared/Physics/BoxCollider.h"
 
-namespace Confus 
+namespace ConfusShared
 {
 	Flag::Flag(irr::IrrlichtDevice* a_Device, ConfusShared::ETeamIdentifier a_TeamIdentifier, Physics::PhysicsWorld& a_PhysicsWorld) : 
 		m_TeamIdentifier(a_TeamIdentifier),
@@ -35,7 +35,7 @@ namespace Confus
 			auto collidedNode = a_Other->getRigidBody()->getAttachedNode();
 			if (!collidedNode->getChildren().empty())
 			{
-				Player* player = dynamic_cast<Player*>(*collidedNode->getChildren().begin());
+				Confus::Player* player = dynamic_cast<Confus::Player*>(*collidedNode->getChildren().begin());
 				if (player != nullptr)
 				{
 					captureFlag(player);
@@ -139,14 +139,13 @@ namespace Confus
 	 }
 
 	//This class handles what to do on collision
-	void Flag::captureFlag(Player* a_PlayerObject) 
+	void Flag::captureFlag(Confus::Player* a_PlayerObject) 
     {
 		//Somebody is already carrying the flag
 		if (m_FlagStatus == EFlagEnum::FlagTaken) 
 		{
 			return;
 		}
-
 
 		if (a_PlayerObject->TeamIdentifier != m_TeamIdentifier && a_PlayerObject->CarryingFlag == EFlagEnum::None) 
         {
@@ -183,15 +182,16 @@ namespace Confus
 	}
 
 	//TODO Score points to team of a_PlayerObject
-	void Flag::score(Player* a_PlayerObject) 
+	void Flag::score(Confus::Player* a_PlayerObject) 
     {
 		a_PlayerObject->FlagPointer->returnToStartPosition();
 		a_PlayerObject->FlagPointer = nullptr;
         a_PlayerObject->CarryingFlag = EFlagEnum::None;
-		 ClientTeamScore::setTeamScore(a_PlayerObject->TeamIdentifier, ClientTeamScore::getTeamScore(a_PlayerObject->TeamIdentifier) + 1);
+		Confus::ClientTeamScore::setTeamScore(a_PlayerObject->TeamIdentifier, 
+			Confus::ClientTeamScore::getTeamScore(a_PlayerObject->TeamIdentifier) + 1);
 	}
 
-	void Flag::drop(Player* a_PlayerObject) 
+	void Flag::drop(Confus::Player* a_PlayerObject) 
     {
         m_FlagNode->setParent(m_FlagOldParent);
         m_FlagNode->setPosition(a_PlayerObject->PlayerNode->getAbsolutePosition());

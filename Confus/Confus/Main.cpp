@@ -1,7 +1,7 @@
 #include <Irrlicht\irrlicht.h>
 
 #include "Menu.h"
-#include "EventManager.h"
+#include "../ConfusShared/EventManager.h"
 
 int main()
 {
@@ -15,7 +15,8 @@ int main()
 
     auto device = irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_OPENGL, desktopResolution);
 
-    Confus::EventManager eventManager;
+    ConfusShared::EventManager eventManager;
+	device->setEventReceiver(&eventManager);
     Confus::Menu menu(device, &eventManager);
     menu.run();
     device->setEventReceiver(0);

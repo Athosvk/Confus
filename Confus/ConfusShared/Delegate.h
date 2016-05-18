@@ -3,7 +3,7 @@
 #include <functional>
 #include <utility>
 
-namespace Confus
+namespace ConfusShared
 {
 	template<typename TFunctionType>
 	class Delegate

@@ -3,7 +3,7 @@
 
 namespace Confus
 {
-    class Menu : public BaseGame
+    class Menu : public ConfusShared::BaseGame
     {
     private:
         irr::gui::IGUIStaticText* m_Text;
@@ -14,6 +14,6 @@ namespace Confus
         virtual void end() override;
         void runGame();
     public:
-        Menu(irr::IrrlichtDevice* a_Device, EventManager* a_EventManager) : BaseGame(a_Device, a_EventManager) {}
+		Menu(irr::IrrlichtDevice* a_Device, ConfusShared::EventManager* a_EventManager);
     };
 }

@@ -7,7 +7,7 @@
 //Refactor to shared player
 #include "../Confus/Player.h"
 
-namespace Confus
+namespace ConfusShared
 {
     Weapon::Weapon(irr::scene::ISceneManager* a_SceneManager, Physics::PhysicsWorld& a_World,
 		irr::core::vector3df a_Dimensions)
@@ -25,7 +25,7 @@ namespace Confus
         {
             if(!m_Collided)
             {
-				auto playerNode = dynamic_cast<Player*>(*a_Other->getRigidBody()->getAttachedNode()->getChildren().begin());
+				auto playerNode = dynamic_cast<Confus::Player*>(*a_Other->getRigidBody()->getAttachedNode()->getChildren().begin());
 				if(playerNode != nullptr)
 				{
 					damagePlayer(playerNode);
@@ -35,7 +35,7 @@ namespace Confus
         });
     }
 
-    void Weapon::damagePlayer(Player* a_Player) const
+    void Weapon::damagePlayer(Confus::Player* a_Player) const
     {
         if(getAngle(a_Player->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle))
         {

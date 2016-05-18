@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-namespace Confus
+namespace ConfusShared
 {
 	namespace Physics
 	{

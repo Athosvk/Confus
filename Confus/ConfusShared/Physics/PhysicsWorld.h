@@ -10,7 +10,7 @@
 #include "ECollisionFilter.h"
 #include "CollisionRegistrar.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	namespace Physics
 	{

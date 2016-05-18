@@ -2,7 +2,7 @@
 #include <irrlicht/irrlicht.h>
 #include <array>
 
-namespace Confus
+namespace ConfusShared
 {
     /// <summary> 
     /// Event Manager

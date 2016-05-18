@@ -21,7 +21,7 @@ namespace Confus
 {
 	const int Game::MaxScore = 3; // dont change this for now. Breaks redside score.
 
-    Game::Game(irr::IrrlichtDevice* a_Device, EventManager* a_EventManager) : BaseGame(a_Device, a_EventManager),
+    Game::Game(irr::IrrlichtDevice* a_Device, ConfusShared::EventManager* a_EventManager) : BaseGame(a_Device, a_EventManager),
         m_PhysicsWorld(m_Device),
         m_MazeGenerator(m_Device, 41, 40, (19 + 20 + 21 + 22 + 23 + 24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
             irr::core::vector2df(19., 20.), m_PhysicsWorld, &m_AudioManager),
@@ -107,7 +107,7 @@ namespace Confus
 		for(irr::u32 i = 0; i < nodes.size(); ++i)
 		{
 			irr::scene::ISceneNode* node = nodes[i];
-			Physics::Collider* collider = nullptr;
+			ConfusShared::Physics::Collider* collider = nullptr;
 
 			if(node->isVisible())
 			{
@@ -118,13 +118,14 @@ namespace Confus
 				case irr::scene::ESNT_MESH:
 					if(std::string(node->getName()).find("Ground", 0) != std::string::npos)
 					{
-						collider = m_PhysicsWorld.createBoxCollider(node, Physics::ECollisionFilter::LevelStatic,
-							Physics::ECollisionFilter::Player | Physics::ECollisionFilter::Interactable);
+						collider = m_PhysicsWorld.createBoxCollider(node, ConfusShared::Physics::ECollisionFilter::LevelStatic,
+							ConfusShared::Physics::ECollisionFilter::Player | ConfusShared::Physics::ECollisionFilter::Interactable);
 					}
 					else if (std::string(node->getName()).find("Basefolder", 0) == std::string::npos)
 					{
-						collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, Physics::ECollisionFilter::LevelStatic | Physics::ECollisionFilter::Interactable,
-							Physics::ECollisionFilter::Player);
+						collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, ConfusShared::Physics::ECollisionFilter::LevelStatic | 
+							ConfusShared::Physics::ECollisionFilter::Interactable,
+							ConfusShared::Physics::ECollisionFilter::Player);
                     }
                     else
                     {

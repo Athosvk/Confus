@@ -4,7 +4,7 @@
 
 #include "MoveableWall.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	/// <summary>
 	/// Represents a tile used in mazes

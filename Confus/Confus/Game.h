@@ -6,7 +6,7 @@
 #include "Audio/OpenAL\OpenALListener.h"
 #include "Player.h"
 #include "Audio\PlayerAudioEmitter.h"
-#include "EventManager.h"
+#include "../ConfusShared/EventManager.h"
 #include "../ConfusShared/Flag.h"
 #include "../ConfusShared/RespawnFloor.h"
 #include "GUI.h"
@@ -23,7 +23,7 @@ namespace Confus
     /// the Game to the Irrlicht instance, so that these can communicate through this
     /// with the active Irrlicht instance 
     /// </summary>
-    class Game : public BaseGame
+    class Game : public ConfusShared::BaseGame
     {
 	public:
 		/// <summary>
@@ -33,7 +33,7 @@ namespace Confus
     private:
         /// <summary>
 		/// <summary> The currently active physics world </summary>
-		Physics::PhysicsWorld m_PhysicsWorld;
+		ConfusShared::Physics::PhysicsWorld m_PhysicsWorld;
         /// The OpenAL listener that is attached to the camera.
         /// </summary>
         Audio::OpenAL::OpenALListener m_Listener;        
@@ -45,7 +45,7 @@ namespace Confus
 		/// <summary>
 		/// MazeGenerator that hasa accesible maze
 		/// </summary>
-		MazeGenerator m_MazeGenerator;
+		ConfusShared::MazeGenerator m_MazeGenerator;
 
 		/// <summary>
 		/// The GUI for the Player
@@ -61,15 +61,15 @@ namespace Confus
         /// <summary>
         /// The Blue Flag.
         /// </summary>
-        Flag m_BlueFlag;
+        ConfusShared::Flag m_BlueFlag;
         /// <summary>
         /// The Red Flag.
         /// </summary>
-        Flag m_RedFlag;
+        ConfusShared::Flag m_RedFlag;
 
 		Announcer m_Announcer;
-		RespawnFloor m_RedRespawnFloor;
-		RespawnFloor m_BlueRespawnFloor;
+		ConfusShared::RespawnFloor m_RedRespawnFloor;
+		ConfusShared::RespawnFloor m_BlueRespawnFloor;
 
         irr::scene::ISceneNode* m_LevelRootNode;
 		/// <summary>
@@ -84,7 +84,7 @@ namespace Confus
         /// </summary>
         /// <param name="a_Device">The a_ device.</param>
         /// <param name="a_EventManager">The a_ event manager.</param>
-        Game(irr::IrrlichtDevice* a_Device, EventManager* a_EventManager);
+        Game(irr::IrrlichtDevice* a_Device, ConfusShared::EventManager* a_EventManager);
 
         /// <summary>
         /// Finalizes an instance of the <see cref="Game"/> class.
@@ -136,6 +136,5 @@ namespace Confus
         virtual void fixedUpdate() override;
         virtual void end() override;
         virtual void render() override;
-
-};
+	};
 }
