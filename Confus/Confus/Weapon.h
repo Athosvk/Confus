@@ -1,9 +1,12 @@
 #pragma once
+
+#include "../ConfusShared/TeamIdentifier.h"
 #include "../ConfusShared/Physics/BoxCollider.h"
 
 namespace Confus
 {
 	class Player;
+
 	namespace Physics
 	{
 		class PhysicsWorld;

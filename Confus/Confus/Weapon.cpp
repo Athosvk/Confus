@@ -1,6 +1,7 @@
 #include <Irrlicht/irrlicht.h>
 #include <math.h>
-
+#include <iostream>
+#include <string>
 #include "Weapon.h"
 #include "../ConfusShared/Physics/RigidBody.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
@@ -9,7 +10,7 @@
 namespace Confus
 {
     Weapon::Weapon(irr::scene::ISceneManager* a_SceneManager, Physics::PhysicsWorld& a_World,
-		irr::core::vector3df a_Dimensions, ETeamIdentifier a_TeamIdentifier)
+		irr::core::vector3df a_Dimensions, ETeamIdentifier a_TeamIdentifier) : m_TeamIdentifier(a_TeamIdentifier)
     {
         m_Node = a_SceneManager->addCubeSceneNode(1.0f, nullptr, -1, irr::core::vector3df(), irr::core::vector3df(),
             a_Dimensions);
@@ -36,6 +37,8 @@ namespace Confus
 
     void Weapon::damagePlayer(Player* a_Player) const
     {
+        // Remove iostream include with this comment.
+        std::cout << "Player team identifier is " + static_cast<char>(a_Player->TeamIdentifier) << " \n our team id is " + static_cast<char>(m_TeamIdentifier);
         // Only do damage if the other player is in another team than us.
         if(a_Player->TeamIdentifier != m_TeamIdentifier)
         {
