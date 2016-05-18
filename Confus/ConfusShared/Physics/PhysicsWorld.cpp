@@ -48,9 +48,9 @@ namespace Confus
 
 		void PhysicsWorld::prePhysicsUpdate() const
 		{
-            for(size_t i = 0; i < m_Colliders.size(); ++i)
+            for(auto& colliderPair : m_Colliders)
             {
-                m_Colliders[i].Body->onPrePhysicsUpdate();
+                colliderPair.Body->onPrePhysicsUpdate();
             }
 		}
 

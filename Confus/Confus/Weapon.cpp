@@ -13,7 +13,7 @@ namespace Confus
         irr::core::vector3df a_Dimensions) :
         m_PhysicsWorld(a_World)
     {
-        m_Node = a_SceneManager->addCubeSceneNode(1.0f, nullptr, 420, irr::core::vector3df(), irr::core::vector3df(),
+        m_Node = a_SceneManager->addCubeSceneNode(1.0f, nullptr, -1, irr::core::vector3df(), irr::core::vector3df(),
             a_Dimensions);
         m_Node->setName("Weapon");
         m_Node->setVisible(false);

@@ -407,8 +407,9 @@ namespace Confus
                     {
                         m_PlayerArray[i]->FlagPointer->drop(m_PlayerArray[i]);
                     }
-                    std::cout << "Deleting Player with id " << static_cast<int>(id) << std::endl;
-					m_PlayerArray[i]->removeAll();
+                    // Remove children of the node
+					m_PlayerArray[i]->removeAll(); 
+                    // Remove node
                     m_PlayerArray[i]->remove();
 					delete(m_PlayerArray[i]);
 					m_PlayerArray.erase(m_PlayerArray.begin() + i);
