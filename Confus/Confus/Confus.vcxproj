@@ -228,7 +228,6 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Audio\Sound.cpp" />
     <ClCompile Include="ScoreGUI.cpp" />
-    <ClCompile Include="StaticWall.cpp" />
     <ClCompile Include="WinScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -274,7 +273,6 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="Player.h" />
     <ClInclude Include="Audio\Sound.h" />
     <ClInclude Include="ScoreGUI.h" />
-    <ClInclude Include="StaticWall.h" />
     <ClInclude Include="WinScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -48,9 +48,6 @@
     <ClCompile Include="MoveableWall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StaticWall.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="EventManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -67,9 +64,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Weapon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Health.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Flag.cpp">
@@ -125,9 +119,6 @@
     <ClInclude Include="MoveableWall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StaticWall.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -153,9 +144,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Weapon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Health.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Flag.h">

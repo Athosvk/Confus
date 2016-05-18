@@ -1,7 +1,7 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
 
-#include "Health.h"
+#include "../ConfusShared/Health.h"
 #include "Weapon.h"
 #include "../ConfusShared/TeamIdentifier.h"
 
@@ -34,7 +34,7 @@ namespace ConfusServer {
         static const irr::u32 WeaponJointIndex;
         static const unsigned LightAttackDamage;
         static const unsigned HeavyAttackDamage;
-	    Health PlayerHealth;
+	    ConfusShared::Health PlayerHealth;
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
         /// <summary> Whether the player is currently attacking or not </summary>
