@@ -138,6 +138,15 @@
     <ClCompile Include="..\ConfusShared\Weapon.cpp">
       <Filter>Shared</Filter>
     </ClCompile>
+    <ClCompile Include="BaseGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WinScreen.cpp">
+      <Filter>Source Files</Filter>
+	</ClCompile>
     <ClCompile Include="..\ConfusShared\EventManager.cpp">
       <Filter>Shared</Filter>
     </ClCompile>
@@ -272,8 +281,14 @@
     <ClInclude Include="Networking\ClientConnection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\ConfusShared\EHitIdentifier.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
     <ClInclude Include="..\ConfusShared\EventManager.h">
       <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Networking\ClientConnection.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

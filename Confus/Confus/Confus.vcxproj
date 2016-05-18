@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>false</LinkIncremental>
+    <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)../Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)../Libraries/32 bit/Debug;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -233,6 +233,7 @@ lib /out:Confus.lib *.obj</Command>
   <ItemGroup>
     <ClInclude Include="..\ConfusShared\BaseGame.h" />
     <ClInclude Include="..\ConfusShared\Debug.h" />
+    <ClInclude Include="..\ConfusShared\EHitIdentifier.h" />
     <ClInclude Include="..\ConfusShared\Delegate.h" />
     <ClInclude Include="..\ConfusShared\EnumUtility.h" />
     <ClInclude Include="..\ConfusShared\EventManager.h" />
