@@ -2,20 +2,16 @@
 
 #include "MazeGenerator.h"
 #include "WalledMazeTile.h"
-//Refactor to observer pattern
-#include "../Confus/Audio/AudioManager.h"
 
 namespace ConfusShared
 {
 	MazeGenerator::MazeGenerator(irr::IrrlichtDevice* a_Device, int a_MazeSizeX, int a_MazeSizeY, int a_InitialSeed,
-		irr::core::vector2df a_GenerateStartPoint, Physics::PhysicsWorld& a_PhysicsWorld, Confus::Audio::AudioManager* a_AudioManager)
+		irr::core::vector2df a_GenerateStartPoint, Physics::PhysicsWorld& a_PhysicsWorld)
 		: m_MainMaze(a_Device, a_MazeSizeX, a_MazeSizeY, a_PhysicsWorld, 1.5f, true), 
 		m_ReplacementMaze(a_Device, a_MazeSizeX, a_MazeSizeY, a_PhysicsWorld, 1.5f), 
-		m_Seed(a_InitialSeed), m_GenerateStartPoint(a_GenerateStartPoint),
-		m_MazeChangeSound(a_AudioManager->createSound("Wall rising.wav"))
+		m_Seed(a_InitialSeed), m_GenerateStartPoint(a_GenerateStartPoint)
 	{
 		generateMaze(m_MainMaze.MazeTiles, a_InitialSeed);
-		m_MazeChangeSound.setVolume(0.2f);
 	}
 
 	void MazeGenerator::fixedUpdate()
@@ -31,7 +27,7 @@ namespace ConfusShared
 
 	void MazeGenerator::refillMainMaze(int a_Seed)
 	{
-		m_MazeChangeSound.play();
+		m_OnMazeChange();
 		generateMaze(m_ReplacementMaze.MazeTiles, a_Seed);
 		replaceMainMaze();
 		m_ReplacementMaze.resetMaze(irr::core::vector2df(30,-7),false);
@@ -61,6 +57,11 @@ namespace ConfusShared
 				}
 			}
 		}
+	}
+
+	void MazeGenerator::addMazeChangedListener(std::function<void()> a_Callback)
+	{
+		m_OnMazeChange += a_Callback;
 	}
 
 	void MazeGenerator::generateMaze(std::vector<std::vector<std::shared_ptr<MazeTile>>> &  a_Maze, int a_Seed)

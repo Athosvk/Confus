@@ -18,7 +18,6 @@ namespace ConfusShared
 		return &m_Wall;
 	}
 
-
 	WalledMazeTile::~WalledMazeTile()
 	{
 	}

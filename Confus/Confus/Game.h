@@ -76,8 +76,8 @@ namespace Confus
 		/// The connection as a client to the server that we are currently connected to
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
+		Audio::Sound m_MazeChangedSound;
 
-		
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game" /> class.

@@ -24,14 +24,15 @@ namespace Confus
     Game::Game(irr::IrrlichtDevice* a_Device, ConfusShared::EventManager* a_EventManager) : BaseGame(a_Device, a_EventManager),
         m_PhysicsWorld(m_Device),
         m_MazeGenerator(m_Device, 41, 40, (19 + 20 + 21 + 22 + 23 + 24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-            irr::core::vector2df(19., 20.), m_PhysicsWorld, &m_AudioManager),
+            irr::core::vector2df(19., 20.), m_PhysicsWorld),
         m_PlayerNode(m_Device, m_PhysicsWorld, 1, ConfusShared::ETeamIdentifier::TeamBlue, true, &m_AudioManager),
         m_BlueFlag(m_Device, ConfusShared::ETeamIdentifier::TeamBlue, m_PhysicsWorld),
         m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, m_PhysicsWorld),
         m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
         m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, -83.f)),
         m_GUI(m_Device, &m_PlayerNode, &m_AudioManager),
-		m_Announcer(&m_RedFlag,&m_BlueFlag,&m_PlayerNode, &m_AudioManager)
+		m_Announcer(&m_RedFlag,&m_BlueFlag,&m_PlayerNode, &m_AudioManager),
+		m_MazeChangedSound(m_AudioManager.createSound("Wall rising.wav"))
     {
 		auto videoDriver = m_Device->getVideoDriver();
 		m_GUI.addElement<FlagGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(50, 50),
@@ -49,6 +50,12 @@ namespace Confus
 
 		m_GUI.addElement<ScoreGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(30, 30),
 			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.45f, 0.061f));
+		
+		m_MazeChangedSound.setVolume(0.2f);
+		m_MazeGenerator.addMazeChangedListener([this]()
+		{
+			m_MazeChangedSound.play();
+		});
     }
 
     Game::~Game()

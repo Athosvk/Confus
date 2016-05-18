@@ -2,9 +2,8 @@
 #include <stack>
 
 #include "Maze.h"
-//Change to observer pattern
-#include "../Confus/Audio/Sound.h"
-#include "../ConfusShared/Physics/BoxCollider.h"
+#include "Physics/BoxCollider.h"
+#include "Delegate.h"
 
 namespace ConfusShared
 {
@@ -47,9 +46,7 @@ namespace ConfusShared
         /// A bool that checks if the maze fill request has been fulfilled yet
         /// </summary>
         bool hasBeenRefilled = true;
-
-		/// <summary> The sound played when the maze changes/refills </summary>
-		Confus::Audio::Sound m_MazeChangeSound;
+		Delegate<void()> m_OnMazeChange;
 	public:
 		/// <summary> Initializes a new instance of the <see cref="MazeGenerator" /> class </summary>
 		/// <param name="a_Device">The instance of the IrrlichtDevice</param>
@@ -60,7 +57,7 @@ namespace ConfusShared
 		/// <param name="a_PhysicsWorld">The physics world </param>
 		/// <param name="a_AudioManager">The audio manager </param>
 		MazeGenerator(irr::IrrlichtDevice * a_Device, int a_MazeSizeX, int a_MazeSizeY, int a_InitialSeed,
-			irr::core::vector2df a_GenerateStartPoint, Physics::PhysicsWorld& a_PhysicsWorld, Confus::Audio::AudioManager* a_AudioManager);
+			irr::core::vector2df a_GenerateStartPoint, Physics::PhysicsWorld& a_PhysicsWorld);
 
 		/// <summary>
 		/// The fixed update used to update the state of the main maze
@@ -84,6 +81,10 @@ namespace ConfusShared
 		/// Default destructor, could be omitted
 		/// </summary>
 		~MazeGenerator();
+
+		/// <summary>Adds a listener for the maze changed event</summary>
+		/// <param name="a_Callback">The callback to add</param>
+		void addMazeChangedListener(std::function<void()> a_Callback);
 	private:
 		/// <summary>
 		/// Loads the necessary textures
