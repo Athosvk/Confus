@@ -10,10 +10,12 @@
 namespace Confus
 {
     Weapon::Weapon(irr::scene::ISceneManager* a_SceneManager, Physics::PhysicsWorld& a_World,
-		irr::core::vector3df a_Dimensions)
+        irr::core::vector3df a_Dimensions) :
+        m_PhysicsWorld(a_World)
     {
-        m_Node = a_SceneManager->addCubeSceneNode(1.0f, nullptr, -1, irr::core::vector3df(), irr::core::vector3df(),
+        m_Node = a_SceneManager->addCubeSceneNode(1.0f, nullptr, 420, irr::core::vector3df(), irr::core::vector3df(),
             a_Dimensions);
+        m_Node->setName("Weapon");
         m_Node->setVisible(false);
 		m_Node->setPosition(irr::core::vector3df(0.0f, 0.0f, -1.2f));
 
@@ -34,6 +36,11 @@ namespace Confus
 				}
             }
         });
+    }
+
+    Weapon::~Weapon()
+    {
+        m_PhysicsWorld.removeCollider(m_Collider);
     }
 
     void Weapon::damagePlayer(Player* a_Player) const

@@ -28,6 +28,9 @@ namespace Confus
         /// <summary> The irrlicht scene node </summary>
         irr::scene::ISceneNode* m_Node;
 
+        /// <summary> The reference to the physicsworld </summary>
+        Physics::PhysicsWorld& m_PhysicsWorld;
+
         /// <summary> Whether a collision has been trigered between now and the call to <see cref="resetCollider"> </summary> 
         /// <remarks> Used to prevent the weapon from dealing damage multiple times to the same collided node </remarks>
         bool m_Collided;
@@ -39,6 +42,7 @@ namespace Confus
 		/// <param name="a_Dimensions">The dimensions of the weapon</param>
 		Weapon(irr::scene::ISceneManager* a_SceneManager, Physics::PhysicsWorld& a_World,
 			irr::core::vector3df a_Dimensions);
+        ~Weapon();
 
         /// <summary> Enables the collider.of the weapon, making it possible to damage players </summary>
         /// <remarks> 

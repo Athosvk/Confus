@@ -103,6 +103,10 @@ namespace Confus
 			/// <param name="a_Vector"> The vector as Bullets type </param>
 			/// <returns> The vector as Irrlichts type </returns>
 			static irr::core::vector3df toIrrlichtVector(const btVector3& a_Vector);
+            
+            /// <summary> Removes the collider (and attached rigidbody) from the physics world. </summary>
+            /// <param name="a_Collider">The collider body to delete.</param>
+            void removeCollider(Collider* a_Collider);
 		private:			
 			/// <summary> Executes the operations necessary before the actual simulation step occurs </summary>
 			void prePhysicsUpdate() const;	

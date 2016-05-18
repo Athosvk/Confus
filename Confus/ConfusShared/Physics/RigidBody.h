@@ -18,6 +18,8 @@ namespace Confus
 			Kinematic
 		};
 
+        class PhysicsWorld;
+
 		/// <summary> Represents the RigidBody in the Physics World, associated with some collision shape </summary>
 		class RigidBody
 		{
@@ -71,6 +73,12 @@ namespace Confus
 			/// <summary> Gets the associated/attached scene node </summary>
 			/// <returns> The associated/attached scene node </returns>
 			irr::scene::ISceneNode* getAttachedNode() const;
+            
+            /// <summary>
+            /// Gets the bullet rigid body.
+            /// </summary>
+            /// <returns> The bullet rigit body. </returns>
+            btRigidBody* getbtRigidBody() const;
 
 			/// <summary> Makes the RigidBody dynamic, causing it to be influenced by events in the Physics World </summary>
 			void makeDynamic();

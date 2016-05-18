@@ -8,11 +8,11 @@ namespace Confus
 {
 	namespace Physics
 	{
-		RigidBody::RigidBody(std::unique_ptr<btRigidBody>&& a_RigidBody, irr::scene::ISceneNode* a_AttachedNode)
-			: m_Body(std::move(a_RigidBody)),
-			m_AttachedNode(a_AttachedNode),
-			m_Mass(static_cast<btScalar>(1.0) / m_Body->getInvMass()),
-			m_MotionState(std::make_unique<btDefaultMotionState>(extractTransform()))
+        RigidBody::RigidBody(std::unique_ptr<btRigidBody>&& a_RigidBody, irr::scene::ISceneNode* a_AttachedNode)
+            : m_Body(std::move(a_RigidBody)),
+            m_AttachedNode(a_AttachedNode),
+            m_Mass(static_cast<btScalar>(1.0) / m_Body->getInvMass()),
+            m_MotionState(std::make_unique<btDefaultMotionState>(extractTransform()))
 		{
 			m_Body->setMotionState(m_MotionState.get());
 			m_Body->getInvMass() <= static_cast<btScalar>(0.00001) ? makeStatic() : makeDynamic();
@@ -22,7 +22,7 @@ namespace Confus
 
 		void RigidBody::onPrePhysicsUpdate() const
 		{
-			if(m_Type != ERigidBodyType::Static && m_AttachedNode != nullptr)
+			if(m_Type != ERigidBodyType::Static)
 			{
 				syncRigidBodyTransform();
 			}
@@ -30,7 +30,7 @@ namespace Confus
 
 		void RigidBody::onPostPhysicsUpdate() const
 		{
-			if(m_Type != ERigidBodyType::Static  && m_AttachedNode != nullptr)
+			if(m_Type != ERigidBodyType::Static)
 			{
 				btTransform transform;
 				m_MotionState->getWorldTransform(transform);
@@ -43,7 +43,12 @@ namespace Confus
 			return m_AttachedNode;
 		}
 
-		void RigidBody::makeDynamic()
+        btRigidBody* RigidBody::getbtRigidBody() const
+        {
+            return m_Body.get();
+        }
+
+        void RigidBody::makeDynamic()
 		{
 			m_Type = ERigidBodyType::Dynamic;
 			m_Body->setCollisionFlags(m_Body->getCollisionFlags() &

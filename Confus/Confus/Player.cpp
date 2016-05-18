@@ -47,7 +47,7 @@ namespace Confus
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
         PlayerNode->setScale(irr::core::vector3df(0.3f, 0.3f, 0.3f));
         PlayerNode->setPosition(irr::core::vector3df(0.f, -2.0f, -0.2f));
-        PlayerNode->setName({"Player"});
+
 		updateColor(a_Device);
 
         if(a_MainPlayer) 
@@ -60,6 +60,8 @@ namespace Confus
         {
             CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.0f, 1, nullptr, 0, true, 0.0f, false, false);
         }
+
+        CameraNode->setName(("Player" + std::to_string(static_cast<int>(a_ID))).c_str());
 
 	    PlayerNode->setParent(this);
         
@@ -77,6 +79,10 @@ namespace Confus
     }
 
 	Player::~Player() {
+        if(!MainPlayer)
+        {
+            m_Collider->deleteBoxCollider();
+        }
         delete(m_SoundEmitter);
 	}
 

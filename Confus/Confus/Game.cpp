@@ -53,7 +53,7 @@ namespace Confus
 
     Game::~Game()
     {
-        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        for(size_t i = 0u; i < m_PlayerArray.size(); ++i)
         {
             //m_PlayerArray[i]->remove();
             //delete(m_PlayerArray[i]);
@@ -101,7 +101,7 @@ namespace Confus
             ConfusShared::Networking::PlayerInfo playerInfo;
             a_Data->Read(playerInfo);
 
-            for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+            for(size_t i = 0u; i < m_PlayerArray.size(); ++i)
             {
 				if (m_PlayerArray[i]->ID == playerInfo.playerID)
 				{
@@ -298,7 +298,7 @@ namespace Confus
         long long id;
         a_Data->Read(id);
 
-        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        for(size_t i = 0u; i < m_PlayerArray.size(); ++i)
         {
             if(m_PlayerArray[i]->ID == id)
             {
@@ -354,7 +354,7 @@ namespace Confus
         size_t size;
         a_Data->Read(size);
 
-        for(size_t i = 0u; i < size; i++)
+        for(size_t i = 0u; i < size; ++i)
         {
             char id;
             ETeamIdentifier teamID;
@@ -393,7 +393,7 @@ namespace Confus
         char id;
         a_Data->Read(id);
 
-        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        for(size_t i = 0u; i < m_PlayerArray.size(); ++i)
         {
 			if (id == m_PlayerArray[i]->ID)
 			{
@@ -403,7 +403,13 @@ namespace Confus
 				}
 				else if (m_PlayerNode.ID != id)
 				{
+                    if(m_PlayerArray[i]->FlagPointer != nullptr)
+                    {
+                        m_PlayerArray[i]->FlagPointer->drop(m_PlayerArray[i]);
+                    }
+                    std::cout << "Deleting Player with id " << static_cast<int>(id) << std::endl;
 					m_PlayerArray[i]->removeAll();
+                    m_PlayerArray[i]->remove();
 					delete(m_PlayerArray[i]);
 					m_PlayerArray.erase(m_PlayerArray.begin() + i);
 				}

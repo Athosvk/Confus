@@ -67,7 +67,7 @@ namespace ConfusServer
             scoreAmount = m_RedTeamScore;
             break;
         default:
-            throw new std::logic_error("Team does not exist");
+            throw std::logic_error("Team does not exist");
             break;
         }
         return scoreAmount;
