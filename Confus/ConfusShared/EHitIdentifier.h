@@ -9,9 +9,7 @@ namespace ConfusShared
 		Heavy = 1 << 0,
 		LightBackstab = 1 << 1,
 		HeavyBackstab = 1 << 2
-
 	};
 }
-
 
 using ConfusShared::EHitIdentifier;

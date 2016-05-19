@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "Player.h"
+#include "../ConfusShared/Player.h"
 #include "IUIElement.h"
 #include "Audio\Sound.h"
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "../ConfusShared/Flag.h"
-#include "Player.h"
+#include "../ConfusShared/Player.h"
 #include "Audio\Sound.h"
 
 namespace Confus

@@ -199,6 +199,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="..\ConfusShared\MazeGenerator.cpp" />
     <ClCompile Include="..\ConfusShared\MazeTile.cpp" />
     <ClCompile Include="..\ConfusShared\MoveableWall.cpp" />
+    <ClCompile Include="..\ConfusShared\Player.cpp" />
     <ClCompile Include="..\ConfusShared\RespawnFloor.cpp" />
     <ClCompile Include="..\ConfusShared\WalledMazeTile.cpp" />
     <ClCompile Include="..\ConfusShared\Weapon.cpp" />
@@ -222,11 +223,12 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="FlagGUI.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GUI.cpp" />
+    <ClCompile Include="LocalPlayerController.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Networking\ClientConnection.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Audio\Sound.cpp" />
+    <ClCompile Include="RemotePlayerController.cpp" />
     <ClCompile Include="ScoreGUI.cpp" />
     <ClCompile Include="WinScreen.cpp" />
   </ItemGroup>
@@ -243,6 +245,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="..\ConfusShared\MazeGenerator.h" />
     <ClInclude Include="..\ConfusShared\MazeTile.h" />
     <ClInclude Include="..\ConfusShared\MoveableWall.h" />
+    <ClInclude Include="..\ConfusShared\Player.h" />
     <ClInclude Include="..\ConfusShared\RespawnFloor.h" />
     <ClInclude Include="..\ConfusShared\TeamIdentifier.h" />
     <ClInclude Include="..\ConfusShared\WalledMazeTile.h" />
@@ -269,10 +272,11 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="Game.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="IUIElement.h" />
+    <ClInclude Include="LocalPlayerController.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Networking\ClientConnection.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="Audio\Sound.h" />
+    <ClInclude Include="RemotePlayerController.h" />
     <ClInclude Include="ScoreGUI.h" />
     <ClInclude Include="WinScreen.h" />
   </ItemGroup>

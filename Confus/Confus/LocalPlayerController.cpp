@@ -2,6 +2,7 @@
 
 #include "LocalPlayerController.h"
 #include "../ConfusShared/EventManager.h"
+#include "../ConfusShared/Player.h"
 
 namespace Confus
 {
@@ -9,11 +10,7 @@ namespace Confus
 		: m_Player(a_Player),
 		m_Connection(a_Connection)
 	{
-		m_ID = m_Connection.m_Interface->
-		m_Connection.addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::Packet* a_Packet)
-		{
-			synchronizeState(RakNet::BitStream(a_Packet->data, a_Packet->length, false));
-		});
+		m_ID = m_Connection.getID();
 	}
 
 	void LocalPlayerController::handleInput(ConfusShared::EventManager& a_EventManager)
@@ -51,13 +48,5 @@ namespace Confus
 		m_InputState.BackwardPressed = false;
 		m_InputState.LeftPressed = false;
 		m_InputState.RightPressed = false;
-	}
-
-	void LocalPlayerController::synchronizeState(RakNet::BitStream& a_Data)
-	{
-		irr::core::vector3df newPosition;
-		a_Data.IgnoreBytes(sizeof(unsigned char));
-		a_Data.Read(newPosition);
-		m_Player.CameraNode->setPosition(newPosition);
 	}
 }

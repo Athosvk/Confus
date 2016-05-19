@@ -1,10 +1,9 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
 
-#include "Networking\ClientConnection.h"
-#include "../ConfusShared/Health.h"
-#include "../ConfusShared/Weapon.h"
-#include "../ConfusShared/TeamIdentifier.h"
+#include "Health.h"
+#include "Weapon.h"
+#include "TeamIdentifier.h"
 
 namespace ConfusShared
 {
@@ -18,7 +17,7 @@ namespace ConfusShared
 	}
 }
 
-namespace Confus 
+namespace Confus
 {
     namespace Audio
     {
@@ -74,6 +73,7 @@ namespace Confus
         irr::scene::IAnimatedMesh* m_Mesh;
         /// <summary> The player's active state. </summary>
         EPlayerState m_PlayerState = EPlayerState::Alive;
+		irr::core::vector3df m_StartPosition = irr::core::vector3df();
     public:
         /// <summary> Player class constructor. </summary>
         /// <param name="a_Device">The active Irrlicht Device.</param>
@@ -83,8 +83,7 @@ namespace Confus
         /// <param name="a_MainPlayer">A boolean to identify the player the user controls.</param>
         /// <param name="a_AudioManager">The audio manager.</param>
         Player(irr::IrrlichtDevice* a_Device, ConfusShared::Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, 
-			ConfusShared::ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, 
-			Audio::AudioManager* a_AudioManager);
+			ConfusShared::ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Audio::AudioManager* a_AudioManager);
         /// <summary> Player class destructor. </summary>
 		~Player();
         /// <summary> Update function, any tasks that need to be done every frame go here. </summary>
@@ -103,8 +102,6 @@ namespace Confus
 
 		/// <summary> get/setter for health. Should really turn into const but gave some weird errors </summary>
 		ConfusShared::Health* getHealthInstance();
-        /// <summary> Sets the connection to the server. </summary>
-        void updateServer() const;
 		void onScore();
 		/// <summary> Starts the light attack, dealing normal damage. </summary>
 		void startLightAttack();
@@ -112,6 +109,7 @@ namespace Confus
 		/// <summary> Starts the heavy attack, which deals more damage. </summary>
 		void startHeavyAttack();
 		EPlayerState getState() const;
+		void setStartPosition(irr::core::vector3df a_Position);
     private:
 		void dropFlag();
         /// <summary> Starts the walking animation, which is the default animation. </summary>

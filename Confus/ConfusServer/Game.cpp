@@ -4,7 +4,7 @@
 #include <RakNet\GetTime.h>
 
 #include "Game.h"
-#include "Player.h"
+#include "../ConfusShared/Player.h"
 
 #define DEBUG_CONSOLE
 #include "../ConfusShared/Debug.h"
@@ -38,15 +38,17 @@ namespace ConfusServer
         }
     }
 
-    void Game::resetGame() {
+    void Game::resetGame() 
+	{
         m_BlueFlag.returnToStartPosition();
         m_RedFlag.returnToStartPosition();
         m_TeamScoreManager.resetScore();
         m_MazeTimer = 0;
         broadcastMazeChange(19 + 20 + 21 + 22 + 23 + 24);
 		
-        for(Player* player : m_PlayerArray) {
-			player->resetPlayer();            
+        for(Confus::Player* player : m_PlayerArray) 
+		{
+			player->respawn();
         }
     }
 
@@ -228,9 +230,7 @@ namespace ConfusServer
 		ConfusShared::ETeamIdentifier teamID = m_PlayerArray.size() % 2 == 0 ? 
 			ConfusShared::ETeamIdentifier::TeamRed : ConfusShared::ETeamIdentifier::TeamBlue;
 
-        Player* newPlayer = new Player(m_Device, id, teamID, false, a_Data->systemAddress, m_PhysicsWorld);
-        newPlayer->setConnection(m_Connection.get());
-        newPlayer->setLevelCollider(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
+        Confus::Player* newPlayer = new Confus::Player(m_Device, m_PhysicsWorld, id, teamID, false, nullptr);
 
         m_PlayerArray.push_back(newPlayer);
 
@@ -253,7 +253,17 @@ namespace ConfusServer
         broadcastStream.Write(static_cast<ConfusShared::ETeamIdentifier>(teamID));
 
         m_Connection->broadcastPacket(&broadcastStream, &guid);
-
+		//To split up
+		if(teamID == ConfusShared::ETeamIdentifier::TeamBlue)
+		{
+			newPlayer->setStartPosition(irr::core::vector3df(0.f, 10.f, 0.f));
+		}
+		else if(teamID == ConfusShared::ETeamIdentifier::TeamRed)
+		{
+			newPlayer->setStartPosition(irr::core::vector3df(0.f, 10.f, -85.f));
+		}
+		newPlayer->respawn();
+		//Perhaps force a player update here?
         std::cout << id << " joined" << std::endl;
     }
 
@@ -292,20 +302,14 @@ namespace ConfusServer
         m_Connection->broadcastPacket(&stream);
     }
 
-    void Game::updateHealth(EHitIdentifier a_HitType, Player* a_Player)
+    void Game::updateHealth(EHitIdentifier a_HitType, Confus::Player* a_Player)
     {
         RakNet::BitStream stream;
-
-		//MessageID
         stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdateHealth));
-
-		//data
 		stream.Write(static_cast<long long>(a_Player->ID));
-		stream.Write(static_cast<int>(a_Player->PlayerHealth.getHealth()));
+		stream.Write(static_cast<int>(a_Player->getHealthInstance()->getHealth()));
 		stream.Write(static_cast<EHitIdentifier>(a_HitType));
-		
-		//send packet
-        m_Connection->broadcastPacket(&stream, nullptr);
+		m_Connection->broadcastPacket(&stream, nullptr);
     }
 
     void Game::render()

@@ -195,10 +195,18 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClCompile Include="..\ConfusShared\BaseGame.cpp" />
     <ClCompile Include="..\ConfusShared\EventManager.cpp" />
     <ClCompile Include="..\ConfusShared\Flag.cpp" />
+    <ClCompile Include="..\ConfusShared\Health.cpp" />
     <ClCompile Include="..\ConfusShared\Maze.cpp" />
     <ClCompile Include="..\ConfusShared\MazeGenerator.cpp" />
     <ClCompile Include="..\ConfusShared\MazeTile.cpp" />
     <ClCompile Include="..\ConfusShared\MoveableWall.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\BoxCollider.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\Collider.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\CollisionRegistrar.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\DebugDrawer.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\PhysicsWorld.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\RigidBody.cpp" />
+    <ClCompile Include="..\ConfusShared\Player.cpp" />
     <ClCompile Include="..\ConfusShared\RespawnFloor.cpp" />
     <ClCompile Include="..\ConfusShared\WalledMazeTile.cpp" />
     <ClCompile Include="..\ConfusShared\Weapon.cpp" />
@@ -211,8 +219,8 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClCompile Include="OpenAL\Framework\LoadOAL.cpp" />
     <ClCompile Include="OpenAL\OpenALListener.cpp" />
     <ClCompile Include="OpenAL\OpenALSource.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Audio\PlayerAudioEmitter.cpp" />
+    <ClCompile Include="Source.cpp" />
     <ClCompile Include="TeamScore.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -223,10 +231,19 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClInclude Include="..\ConfusShared\EnumUtility.h" />
     <ClInclude Include="..\ConfusShared\EventManager.h" />
     <ClInclude Include="..\ConfusShared\Flag.h" />
+    <ClInclude Include="..\ConfusShared\Health.h" />
     <ClInclude Include="..\ConfusShared\Maze.h" />
     <ClInclude Include="..\ConfusShared\MazeGenerator.h" />
     <ClInclude Include="..\ConfusShared\MazeTile.h" />
     <ClInclude Include="..\ConfusShared\MoveableWall.h" />
+    <ClInclude Include="..\ConfusShared\Physics\BoxCollider.h" />
+    <ClInclude Include="..\ConfusShared\Physics\Collider.h" />
+    <ClInclude Include="..\ConfusShared\Physics\CollisionRegistrar.h" />
+    <ClInclude Include="..\ConfusShared\Physics\DebugDrawer.h" />
+    <ClInclude Include="..\ConfusShared\Physics\ECollisionFilter.h" />
+    <ClInclude Include="..\ConfusShared\Physics\PhysicsWorld.h" />
+    <ClInclude Include="..\ConfusShared\Physics\RigidBody.h" />
+    <ClInclude Include="..\ConfusShared\Player.h" />
     <ClInclude Include="..\ConfusShared\RespawnFloor.h" />
     <ClInclude Include="..\ConfusShared\TeamIdentifier.h" />
     <ClInclude Include="..\ConfusShared\WalledMazeTile.h" />
@@ -239,7 +256,6 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClInclude Include="OpenAL\Framework\LoadOAL.h" />
     <ClInclude Include="OpenAL\OpenALListener.h" />
     <ClInclude Include="OpenAL\OpenALSource.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="Audio\PlayerAudioEmitter.h" />
     <ClInclude Include="TeamScore.h" />
   </ItemGroup>

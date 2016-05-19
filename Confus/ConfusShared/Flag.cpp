@@ -3,7 +3,7 @@
 
 #include "Flag.h"
 //To remove
-#include "../Confus/Player.h"
+#include "../ConfusShared/Player.h"
 
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "../ConfusShared/Physics/BoxCollider.h"

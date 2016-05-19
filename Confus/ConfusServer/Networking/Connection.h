@@ -8,8 +8,6 @@
 #include <map>
 #include <functional>
 
-#include "../Player.h"
-
 namespace RakNet 
 {
     class RakPeerInterface;

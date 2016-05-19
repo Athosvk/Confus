@@ -16,6 +16,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Shared Files\Physics">
+      <UniqueIdentifier>{12b82904-cb6a-4fbb-ae5b-da280fbcd0cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -40,9 +43,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OpenAL\Framework\LoadOAL.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Audio\PlayerAudioEmitter.cpp">
@@ -84,6 +84,33 @@
     <ClCompile Include="..\ConfusShared\Flag.cpp">
       <Filter>Shared Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Player.cpp">
+      <Filter>Shared Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Physics\BoxCollider.cpp">
+      <Filter>Shared Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Physics\Collider.cpp">
+      <Filter>Shared Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Physics\CollisionRegistrar.cpp">
+      <Filter>Shared Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Physics\DebugDrawer.cpp">
+      <Filter>Shared Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Physics\PhysicsWorld.cpp">
+      <Filter>Shared Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Physics\RigidBody.cpp">
+      <Filter>Shared Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\Health.cpp">
+      <Filter>Shared Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -105,18 +132,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OpenAL\Framework\LoadOAL.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EventManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MoveableWall.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Audio\PlayerAudioEmitter.h">
@@ -171,6 +186,33 @@
       <Filter>Shared Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ConfusShared\Flag.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Player.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Physics\BoxCollider.h">
+      <Filter>Shared Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Physics\Collider.h">
+      <Filter>Shared Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Physics\CollisionRegistrar.h">
+      <Filter>Shared Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Physics\DebugDrawer.h">
+      <Filter>Shared Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Physics\ECollisionFilter.h">
+      <Filter>Shared Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Physics\PhysicsWorld.h">
+      <Filter>Shared Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Physics\RigidBody.h">
+      <Filter>Shared Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Health.h">
       <Filter>Shared Files</Filter>
     </ClInclude>
   </ItemGroup>

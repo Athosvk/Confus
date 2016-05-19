@@ -1,19 +1,17 @@
 #include <iostream>
 #include <string>
 
-#include "Audio/PlayerAudioEmitter.h"
-#include "Networking/ClientConnection.h"
-#include "../ConfusShared/EventManager.h"
-#include "../ConfusShared/Flag.h"
-#include "../Confusshared/Physics/PhysicsWorld.h"
-#include "../Confusshared/Physics/BoxCollider.h"
-#include "../Confusshared/Physics/RigidBody.h"
+#include "../Confus/Audio/PlayerAudioEmitter.h"
+#include "EventManager.h"
+#include "Flag.h"
+#include "Physics/PhysicsWorld.h"
+#include "Physics/BoxCollider.h"
+#include "Physics/RigidBody.h"
 
 #include "Player.h"
 
 namespace Confus
 {
-    Networking::ClientConnection* m_Connection;
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 25u;
     const unsigned Player::HeavyAttackDamage = 50u;
@@ -62,14 +60,6 @@ namespace Confus
         else 
         {
             CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.0f, 1, nullptr, 0, true, 0.0f, false, false);
-        }
-        if(a_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamBlue)
-        {
-            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 0.f));
-        }
-        else if(a_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamRed)
-        {
-            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
         }
 	    PlayerNode->setParent(this);
         
@@ -157,6 +147,11 @@ namespace Confus
 		return m_PlayerState;
 	}
 
+	void Player::setStartPosition(irr::core::vector3df a_Position)
+	{
+		m_StartPosition = a_Position;
+	}
+
     void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node)
     {
         if(m_Attacking)
@@ -221,30 +216,12 @@ namespace Confus
 
     void Player::fixedUpdate()
     {
-        updateServer();
     }
 
     void Player::respawn()
     {
 		m_PlayerHealth.reset();
-        if(TeamIdentifier == ConfusShared::ETeamIdentifier::TeamBlue)
-        {
-            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
-        }
-        else if(TeamIdentifier == ConfusShared::ETeamIdentifier::TeamRed)
-        {
-            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
-        }
-    }
-
-    void Player::updatePosition(irr::core::vector3df a_NewPosition)
-    {
-        CameraNode->setPosition(a_NewPosition);
-    }
-
-    void Player::updateRotation(irr::core::vector3df a_NewRotation)
-    {
-        CameraNode->setRotation(a_NewRotation);
+		CameraNode->setPosition(m_StartPosition);
     }
 
     void Player::changeState(EPlayerState a_NewState)
@@ -256,7 +233,7 @@ namespace Confus
         } 
     }
 
-	 void Player::onScore()
+	void Player::onScore()
 	 {
 		 FlagPointer = nullptr;
 		 CarryingFlag = ConfusShared::EFlagEnum::None;

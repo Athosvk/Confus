@@ -4,7 +4,7 @@
 #include "Networking/ClientConnection.h"
 #include "../ConfusShared/MazeGenerator.h"
 #include "Audio/OpenAL\OpenALListener.h"
-#include "Player.h"
+#include "../ConfusShared/Player.h"
 #include "Audio\PlayerAudioEmitter.h"
 #include "../ConfusShared/EventManager.h"
 #include "../ConfusShared/Flag.h"

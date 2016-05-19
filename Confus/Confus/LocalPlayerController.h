@@ -1,8 +1,17 @@
 #pragma once
 #include <RakNet/BitStream.h>
 
-#include "Player.h"
 #include "Networking/ClientConnection.h"
+
+namespace ConfusShared
+{
+	class EventManager;
+}
+
+namespace Confus
+{
+	class Player;
+}
 
 namespace Confus
 {
@@ -30,6 +39,5 @@ namespace Confus
 		void fixedUpdate();
 	private:
 		void resetInputState();
-		void synchronizeState(RakNet::BitStream& a_Data);
 	};
 }

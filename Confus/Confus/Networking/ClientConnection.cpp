@@ -5,7 +5,6 @@
 #include <RakNet/RakPeerInterface.h>
 
 #include "ClientConnection.h"
-#include "../Player.h"
 
 namespace Confus
 {
@@ -74,7 +73,7 @@ namespace Confus
 
 		long long ClientConnection::getID() const
 		{
-			return m_Interface->GetGuidFromSystemAddress(RakNet::UNASSIGNED_SYSTEM_ADDRESS);
+			return m_Interface->GetGuidFromSystemAddress(RakNet::UNASSIGNED_SYSTEM_ADDRESS).g;
 		}
 
 		void ClientConnection::sendMessage(RakNet::BitStream* a_Stream, PacketReliability a_Reliability) 

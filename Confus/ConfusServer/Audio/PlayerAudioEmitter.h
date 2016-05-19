@@ -2,7 +2,6 @@
 #include <irrlicht/irrlicht.h>
 #include <memory>
 
-#include "..\Player.h"
 #include "..\OpenAL\OpenALSource.h"
 
 namespace ConfusServer

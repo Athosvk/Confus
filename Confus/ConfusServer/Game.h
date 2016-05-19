@@ -5,7 +5,7 @@
 #include "Networking/Connection.h"
 #include "../ConfusShared/MazeGenerator.h"
 #include "OpenAL\OpenALListener.h"
-#include "Player.h"
+#include "../ConfusShared/Player.h"
 #include "Audio\PlayerAudioEmitter.h"
 #include "../ConfusShared/EventManager.h"
 #include "../ConfusShared/Flag.h"
@@ -44,7 +44,6 @@ namespace ConfusServer
         /// </summary>
         static const double MazeDelay;
 
-
         /// <summary>
         /// The instance of the IrrlichtDevice
 		/// Statics are avoided to make code clearer, hence this is not a static
@@ -59,7 +58,7 @@ namespace ConfusServer
         /// </summary>
         OpenALListener m_Listener;
         ConfusShared::EventManager m_EventManager;
-        std::vector<Player*> m_PlayerArray;
+        std::vector<Confus::Player*> m_PlayerArray;
         /// <summary>
         /// The Blue Flag.
         /// </summary>
@@ -150,7 +149,7 @@ namespace ConfusServer
 	    void addPlayer(RakNet::Packet* a_Data);
         void removePlayer(RakNet::Packet* a_Data);
         void updatePlayers();
-        void updateHealth(EHitIdentifier a_HitType, Player* a_Player);
+        void updateHealth(EHitIdentifier a_HitType, Confus::Player* a_Player);
         /// <summary>
         /// Broadcast a maze change
         /// </summary>

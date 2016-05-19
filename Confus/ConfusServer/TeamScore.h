@@ -4,6 +4,11 @@
 #include "../ConfusShared/TeamIdentifier.h"
 #include "Networking/Connection.h"
 
+namespace ConfusShared
+{
+	class Flag;
+}
+
 namespace ConfusServer
 {
     /// <summary> Score class that keeps track the teams their score </summary>

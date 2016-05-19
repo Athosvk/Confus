@@ -2,11 +2,11 @@
 #include <math.h>
 
 #include "Weapon.h"
-#include "../ConfusShared/Physics/RigidBody.h"
-#include "../ConfusShared/Physics/PhysicsWorld.h"
-#include "../ConfusShared/EHitIdentifier.h"
+#include "Physics/RigidBody.h"
+#include "Physics/PhysicsWorld.h"
+#include "EHitIdentifier.h"
 //Refactor to shared player
-#include "../Confus/Player.h"
+#include "Player.h"
 
 namespace ConfusShared
 {

@@ -4,6 +4,11 @@
 #include "../ConfusShared/TeamIdentifier.h"
 #include "Delegate.h"
 
+namespace Confus
+{
+	class Player;
+}
+
 namespace ConfusShared
 {
 	namespace Physics
