@@ -1,4 +1,3 @@
-#include <IrrAssimp/IrrAssimp.h>
 #include <RakNet/BitStream.h>
 #include <RakNet/GetTime.h>
 #include <RakNet/RakPeer.h>
@@ -43,7 +42,6 @@ namespace Confus
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
 
-        IrrAssimp irrAssimp(sceneManager);
         m_Mesh = sceneManager->getMesh("Media/ninja.b3d");
         MainPlayer = a_MainPlayer;
         ID = a_ID;
@@ -96,22 +94,6 @@ namespace Confus
 	Player::~Player() {
         delete(m_SoundEmitter);
 	}
-
-    void Player::handleInput(ConfusShared::EventManager& a_EventManager)
-    {
-        if(!m_Attacking)
-        {
-            if(a_EventManager.IsRightMouseDown())
-            {
-                startHeavyAttack();
-            }
-            else if(a_EventManager.IsLeftMouseDown())
-            {
-                startLightAttack();
-            }
-        }
-
-    }
 
 	ConfusShared::Health* Player::getHealthInstance()
 	{
@@ -211,8 +193,9 @@ namespace Confus
 
         if(m_PlayerHealth.getHealth() <= 0) {
             respawn();
-			if (FlagPointer != nullptr) {
-				FlagPointer->drop(this);
+			if (FlagPointer != nullptr) 
+			{
+				dropFlag();
 			}
         }
         if(m_Collider->getRigidBody()->getVelocity().X != 0.0f && m_Collider->getRigidBody()->getVelocity().Z != 0.0f)
@@ -265,7 +248,7 @@ namespace Confus
         CameraNode->setRotation(a_NewRotation);
     }
 
-     void Player::setConnection(Networking::ClientConnection* a_Connection)
+    void Player::setConnection(Networking::ClientConnection* a_Connection)
 	{
         m_Connection = a_Connection;
 
@@ -283,28 +266,21 @@ namespace Confus
         });
 	}
 
-     void Player::updateServer() const
+    void Player::updateServer() const
 	{
         RakNet::BitStream bitstreamOut;
 
         bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
         bitstreamOut.Write(m_PlayerID);
-        bitstreamOut.Write(CameraNode->getPosition());
         bitstreamOut.Write(CameraNode->getRotation());
-        bitstreamOut.Write(Player::m_PlayerState);
-        bitstreamOut.Write(m_StateChangeTime);
-        bitstreamOut.Write(m_PlayerHealthPoints);
-        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_W));
-        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_S));
-        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_A));
-        bitstreamOut.Write(m_EventManager->IsKeyDown(irr::KEY_KEY_D));
+        bitstreamOut.Write(m_PlayerState);
 
         m_Connection->sendMessage(&bitstreamOut, PacketReliability::UNRELIABLE);
 	}
 
      void Player::changeState(EPlayerState a_NewState)
      {
-         // Only change state is it is different from the player's current state.
+         // Only change state if it is different from the player's current state.
          if(a_NewState != m_PlayerState) 
          {
              m_PlayerState = a_NewState;
@@ -313,8 +289,16 @@ namespace Confus
          } 
      }
 
-     void Player::setEventManager(ConfusShared::EventManager* a_Manager) 
-     {
-         m_EventManager = a_Manager;
-     }
+	 void Player::onScore()
+	 {
+		 FlagPointer = nullptr;
+		 CarryingFlag = ConfusShared::EFlagEnum::None;
+	 }
+
+	 void Player::dropFlag()
+	 {
+		 FlagPointer->drop(PlayerNode->getAbsolutePosition());
+		 FlagPointer = nullptr;
+		 CarryingFlag = ConfusShared::EFlagEnum::None;
+	 }
 }

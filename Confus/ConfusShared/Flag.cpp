@@ -172,7 +172,7 @@ namespace ConfusShared
                     if(a_PlayerObject->FlagPointer != nullptr) 
 					{
                         // Player scored a point!
-                        score(a_PlayerObject);
+                        score();
                     }
 					else
 					{
@@ -183,20 +183,16 @@ namespace ConfusShared
 		}
 	}
 
-	void Flag::score(Confus::Player* a_PlayerObject) 
+	void Flag::score() 
     {
-		a_PlayerObject->FlagPointer->returnToStartPosition();
-		a_PlayerObject->FlagPointer = nullptr;
-        a_PlayerObject->CarryingFlag = EFlagEnum::None;
+		returnToStartPosition();
 		m_OnScore();
 	}
 
-	void Flag::drop(Confus::Player* a_PlayerObject) 
+	void Flag::drop(irr::core::vector3df a_DropPosition) 
     {
         m_FlagNode->setParent(m_FlagOldParent);
-        m_FlagNode->setPosition(a_PlayerObject->PlayerNode->getAbsolutePosition());
-        a_PlayerObject->FlagPointer = nullptr;
-        a_PlayerObject->CarryingFlag = EFlagEnum::None;
+        m_FlagNode->setPosition(a_DropPosition);
 		setFlagStatus(EFlagEnum::FlagDropped);
 	}
 
@@ -210,7 +206,7 @@ namespace ConfusShared
         m_StartRotation.set(a_Rotation);
     }
 
-    void Flag::returnToStartPosition() {
+	void Flag::returnToStartPosition() {
         m_FlagNode->setParent(m_FlagOldParent);
         m_FlagNode->setPosition(m_StartPosition);
         m_FlagNode->setRotation(m_StartRotation);

@@ -4,11 +4,6 @@
 #include "../ConfusShared/TeamIdentifier.h"
 #include "Delegate.h"
 
-namespace Confus
-{
-	class Player;
-}
-
 namespace ConfusShared
 {
 	namespace Physics
@@ -65,16 +60,15 @@ namespace ConfusShared
 		/// <param name="a_Rotation"> The rotation the flag will reset to. </param>
         void setStartRotation(irr::core::vector3df a_Rotation);
 
-		/// <summary> Will drop the flag at the current position. </summary>
-		/// <param name="a_PlayerObject"> The player object that drops the flag. </param>
-		void drop(Confus::Player* a_PlayerObject);
+		/// <summary>Will drop the flag at the current position.</summary>
+		/// <param name="a_DropPosition">The position to drop it at</param>
+		void drop(irr::core::vector3df a_DropPosition);
 
 		/// <summary> Will return the flag to it's starting position and rotation. </summary>
 		void returnToStartPosition();
 
 		/// <summary> The player carrying a flag has gotten a point. </summary>
-		/// <param name="a_PlayerObject"> Score a point for the player object. </param>
-		void score(Confus::Player* a_PlayerObject);
+		void score();
 
 		const irr::video::SColor getColor() const;
 		const ConfusShared::ETeamIdentifier getTeamIdentifier() const;

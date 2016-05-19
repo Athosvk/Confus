@@ -85,7 +85,6 @@ namespace Confus
 		updateSceneTransformations();
         initializeLevelColliders();
 
-        m_PlayerNode.setEventManager(m_EventManager);
         m_Device->getCursorControl()->setVisible(false);
 
         m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::MainPlayerJoined), [this](RakNet::Packet* a_Data)
@@ -234,7 +233,6 @@ namespace Confus
 
     void Game::handleInput()
     {
-        m_PlayerNode.handleInput(*m_EventManager);
         if(m_EventManager->IsKeyDown(irr::KEY_ESCAPE))
         {
             m_ShouldRun = false;

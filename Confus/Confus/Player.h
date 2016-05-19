@@ -76,12 +76,8 @@ namespace Confus
         RakNet::RakNetGUID m_PlayerID;
         /// <summary> The player's active state. </summary>
         EPlayerState m_PlayerState = EPlayerState::Alive;
-        /// <summary> The player's health, ranging from 127 to -127. </summary>
-        int8_t m_PlayerHealthPoints = 100;
         /// <summary> The local time at which a state change took place. </summary>
         RakNet::Time m_StateChangeTime = 0;
-        /// <summary> A reference to the eventmanager. </summary>
-        ConfusShared::EventManager* m_EventManager;
     public:
         /// <summary> Player class constructor. </summary>
         /// <param name="a_Device">The active Irrlicht Device.</param>
@@ -114,30 +110,26 @@ namespace Confus
         virtual void render();
         /// <summary> Returns the bounding box of the player's mesh. </summary>
         virtual const irr::core::aabbox3d<irr::f32> & getBoundingBox() const;
-        /// <summary> Handles the input based actions. </summary>
-        /// <param name="a_EventManager">The current event manager. </param>
-        void handleInput(ConfusShared::EventManager& a_EventManager);
         /// <summary> Sets the connection to the server. </summary>
         void setConnection(Networking::ClientConnection* a_Connection);
 		/// <summary> get/setter for health. Should really turn into const but gave some weird errors </summary>
 		ConfusShared::Health* getHealthInstance();
         /// <summary> Sets the connection to the server. </summary>
         void updateServer() const;
-        /// <summary> Sets the eventmanager. </summary>
-        void setEventManager(ConfusShared::EventManager* a_Manager);
+		void onScore();
+		/// <summary> Starts the light attack, dealing normal damage. </summary>
+		void startLightAttack();
+
+		/// <summary> Starts the heavy attack, which deals more damage. </summary>
+		void startHeavyAttack();
     private:
+		void dropFlag();
         /// <summary> Starts the walking animation, which is the default animation. </summary>
         void startWalking() const;
         /// <summary> Stops the walking animation. </summary>
         void stopWalking() const;
         /// <summary> Initializes the shared attack variables. </summary>
         void initializeAttack();
-
-        /// <summary> Starts the light attack, dealing normal damage. </summary>
-        void startLightAttack();
-
-        /// <summary> Starts the heavy attack, which deals more damage. </summary>
-        void startHeavyAttack();
         
         /// <summary> Changes the state of the player. </summary>
         void changeState(EPlayerState a_NewState);
