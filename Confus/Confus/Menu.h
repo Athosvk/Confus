@@ -8,6 +8,10 @@ namespace Confus
     {
     private:
         irr::gui::IGUIStaticText* m_Text;
+		irr::gui::IGUIImage* m_Image;
+		irr::video::ITexture* m_StartScreen;
+		irr::video::ITexture* m_InfoScreen;
+		irr::core::rect<irr::s32> m_ScreenRect;
     private:
         virtual void start() override;
         virtual void update() override;
