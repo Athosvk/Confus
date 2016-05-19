@@ -7,7 +7,6 @@
 #include <functional>
 
 #include "Connection.h"
-#define DEBUG_CONSOLE
 #include "../../ConfusShared/Debug.h"
 
 namespace ConfusServer
@@ -45,7 +44,7 @@ namespace ConfusServer
                 }
 
                 RakNet::BitStream inputStream(packet->data, packet->length, false);
-                handlePacket(&inputStream, static_cast<unsigned char>(packet->data[0]));
+                handlePacket(&inputStream, static_cast<unsigned char>(packet->data[0]), packet->systemAddress);
                 m_Interface->DeallocatePacket(packet);
                 packet = m_Interface->Receive();
             }
@@ -61,7 +60,7 @@ namespace ConfusServer
             return openConnections;
         }
 
-        void Connection::addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::BitStream* a_Data)> a_Function)
+        void Connection::addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::BitStream* a_Data, RakNet::SystemAddress& a_ClientAddress)> a_Function)
         {
             m_CallbackFunctionMap[a_Event].push_back(a_Function);
         }
@@ -93,26 +92,12 @@ namespace ConfusServer
             }
         }
 
-        void Connection::handlePacket(RakNet::BitStream* a_Data, unsigned char a_Event)
+        void Connection::handlePacket(RakNet::BitStream* a_Data, unsigned char a_Event, RakNet::SystemAddress& a_ClientAddress)
         {
             for(size_t i = 0u; i < m_CallbackFunctionMap[a_Event].size(); i++)
             {
-                m_CallbackFunctionMap[a_Event][i](a_Data);
+                m_CallbackFunctionMap[a_Event][i](a_Data, a_ClientAddress);
             }
-        }
-
-        void Connection::printMessage(RakNet::BitStream& a_InputStream)
-        {
-            RakNet::RakString contents;
-            a_InputStream.IgnoreBytes(sizeof(RakNet::MessageID));
-            a_InputStream.Read(contents);
-            std::cout << "Message received: " << contents << std::endl;
-        }
-
-        void Connection::broadcastBitStreamToClient(RakNet::BitStream& a_BitStream, int a_ClientIndex)
-        {
-            auto openConnections = getOpenConnections();
-            m_Interface->Send(&a_BitStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0, openConnections[a_ClientIndex], false);
         }
 
         void Connection::broadcastBitStream(RakNet::BitStream& a_BitStream)
@@ -124,5 +109,10 @@ namespace ConfusServer
                 m_Interface->Send(&a_BitStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0, openConnections[i], false);
             }
         }
+
+		void Connection::sendBitStreamToClient(RakNet::BitStream& a_BitStream, RakNet::SystemAddress& a_ClientAddress)
+		{
+			m_Interface->Send(&a_BitStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0, a_ClientAddress, false);
+		}
     }
 }

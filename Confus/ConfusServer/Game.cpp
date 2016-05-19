@@ -67,12 +67,12 @@ namespace ConfusServer
         m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
         m_RedFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(ID_NEW_INCOMING_CONNECTION), [this](RakNet::BitStream* a_Data)
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(ID_NEW_INCOMING_CONNECTION), [this](RakNet::BitStream* a_Data, RakNet::SystemAddress& a_ClientAddress)
         {
-            addPlayer(a_Data);
+            addPlayer(a_Data, a_ClientAddress);
         });
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::BitStream* a_Data)
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::BitStream* a_Data, RakNet::SystemAddress& a_ClientAddress)
         {
             for(size_t i = 0; i < m_PlayerArray.size(); i++)
             {
@@ -80,9 +80,9 @@ namespace ConfusServer
             }
         });
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::PlayerLeft), [this](RakNet::BitStream* a_Data)
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::PlayerLeft), [this](RakNet::BitStream* a_Data, RakNet::SystemAddress& a_ClientAddress)
         {
-            removePlayer(a_Data);
+            removePlayer(a_Data, a_ClientAddress);
         });
 
         m_Device->getCursorControl()->setVisible(false);
@@ -213,7 +213,7 @@ namespace ConfusServer
         m_Connection->broadcastBitStream(bitStream);
     }
 
-    void Game::addPlayer(RakNet::BitStream* a_Data)
+    void Game::addPlayer(RakNet::BitStream* a_Data, RakNet::SystemAddress& a_ClientAddress)
     {
         char id = 0;
         std::vector<bool> availableID(11, true);
@@ -256,7 +256,7 @@ namespace ConfusServer
             newClientStream.Write(static_cast<ETeamIdentifier>(m_PlayerArray[i]->TeamIdentifier));
         }
 
-        m_Connection->broadcastBitStreamToClient(newClientStream, playerIndex);
+        m_Connection->sendBitStreamToClient(newClientStream, a_ClientAddress);
         std::cout << "[Game Class] Player id: " << static_cast<int>(id) << " joined." << std::endl;
 
         RakNet::BitStream otherClientsStream;
@@ -266,7 +266,7 @@ namespace ConfusServer
         m_Connection->broadcastBitStream(otherClientsStream);
     }
 
-    void Game::removePlayer(RakNet::BitStream* a_Data)
+    void Game::removePlayer(RakNet::BitStream* a_Data, RakNet::SystemAddress& a_ClientAddress)
     {
         a_Data->IgnoreBytes(sizeof(RakNet::MessageID));
         char id;

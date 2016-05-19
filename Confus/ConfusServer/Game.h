@@ -139,13 +139,13 @@ namespace ConfusServer
         /// Processes the packets connection
         /// </summary>
         void processConnection();
-        void addPlayer(RakNet::BitStream* a_Data);
+        void addPlayer(RakNet::BitStream* a_Data, RakNet::SystemAddress& a_ClientAddress);
 
         /// <summary>
         /// Removes the player from the list and send network update
         /// </summary>
         /// <param name="a_Data">The data that the client tells us with that it closes the connection.</param>
-        void removePlayer(RakNet::BitStream* a_Data);
+        void removePlayer(RakNet::BitStream* a_Data, RakNet::SystemAddress& a_ClientAddress);
         /// <summary>
         /// Removes the player from the list ourselves and send network update.
         /// </summary>
