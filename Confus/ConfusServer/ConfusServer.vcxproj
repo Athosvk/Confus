@@ -213,13 +213,6 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Networking\Connection.cpp" />
-    <ClCompile Include="OpenAL\Framework\aldlist.cpp" />
-    <ClCompile Include="OpenAL\Framework\CWaves.cpp" />
-    <ClCompile Include="OpenAL\Framework\Framework.cpp" />
-    <ClCompile Include="OpenAL\Framework\LoadOAL.cpp" />
-    <ClCompile Include="OpenAL\OpenALListener.cpp" />
-    <ClCompile Include="OpenAL\OpenALSource.cpp" />
-    <ClCompile Include="Audio\PlayerAudioEmitter.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="TeamScore.cpp" />
   </ItemGroup>
@@ -250,13 +243,6 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClInclude Include="..\ConfusShared\Weapon.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Networking\Connection.h" />
-    <ClInclude Include="OpenAL\Framework\aldlist.h" />
-    <ClInclude Include="OpenAL\Framework\CWaves.h" />
-    <ClInclude Include="OpenAL\Framework\Framework.h" />
-    <ClInclude Include="OpenAL\Framework\LoadOAL.h" />
-    <ClInclude Include="OpenAL\OpenALListener.h" />
-    <ClInclude Include="OpenAL\OpenALSource.h" />
-    <ClInclude Include="Audio\PlayerAudioEmitter.h" />
     <ClInclude Include="TeamScore.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

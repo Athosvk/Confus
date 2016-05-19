@@ -4,9 +4,7 @@
 
 #include "Networking/Connection.h"
 #include "../ConfusShared/MazeGenerator.h"
-#include "OpenAL\OpenALListener.h"
 #include "../ConfusShared/Player.h"
-#include "Audio\PlayerAudioEmitter.h"
 #include "../ConfusShared/EventManager.h"
 #include "../ConfusShared/Flag.h"
 #include "TeamScore.h"
@@ -53,10 +51,6 @@ namespace ConfusServer
         /// MazeGenerator that hasa accesible maze
         /// </summary>
         ConfusShared::MazeGenerator m_MazeGenerator;
-        /// <summary>
-        /// The OpenAL listener that is attached to the camera.
-        /// </summary>
-        OpenALListener m_Listener;
         ConfusShared::EventManager m_EventManager;
         std::vector<Confus::Player*> m_PlayerArray;
         /// <summary>

@@ -162,15 +162,7 @@ namespace ConfusServer
         {
             player->update();
         }
-        // Setting the listener position to the first player for debugging. 
-        if(!m_PlayerArray.empty())
-        {
-            m_Listener.setPosition(m_PlayerArray[0]->getAbsolutePosition());
-            irr::core::quaternion playerRotation(m_PlayerArray[0]->getRotation());
-            irr::core::vector3df upVector = playerRotation * irr::core::vector3df(0, 1, 0);
-            irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
-            m_Listener.setDirection(forwardVector, upVector);
-        }
+
         static float currentDelay = 0.0f;
         static int currentSeed;
         m_MazeTimer += m_DeltaTime;
