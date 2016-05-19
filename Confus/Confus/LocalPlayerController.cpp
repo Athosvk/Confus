@@ -35,7 +35,7 @@ namespace Confus
 		bitstream.Write(reinterpret_cast<char*>(&m_InputState));
 		bitstream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
 		bitstream.Write(m_Player.ID);
-		bitstream.Write(m_Player.CameraNode->getRotation());
+		bitstream.Write(m_Player.getRotation());
 		bitstream.Write(m_Player);
 
 		m_Connection.sendMessage(&bitstream, PacketReliability::UNRELIABLE);

@@ -7,6 +7,11 @@
 
 namespace Confus
 {
+	class Player;
+}
+
+namespace Confus
+{
     namespace Audio
     {
 		class AudioManager;
@@ -28,22 +33,21 @@ namespace Confus
 			/// <summary> The sword slash sounds </summary>
 			std::vector<Sound> m_SwordSwoshes;            
 			/// <summary> The player emmitting the sounds </summary>
-			irr::scene::ISceneNode* m_AttachedPlayer;
+			Player* m_AttachedPlayer;
         public:            
             /// <summary>
             /// Initializes a new instance of the <see cref="PlayerAudioEmitter"/> class.
             /// </summary>
             /// <param name="a_AttachedPlayer">The player that owns this emitter.</param>
-            PlayerAudioEmitter(irr::scene::ISceneNode* a_AttachedPlayer, AudioManager* a_AudioManager);
+            PlayerAudioEmitter(Player* a_AttachedPlayer, AudioManager* a_AudioManager);
             /// <summary>
             /// Plays a random footstep sound.
             /// </summary>
-            void playFootStepSound();            
-            /// <summary>
-            /// Plays a random attack sound.
-            /// </summary>
-            /// <param name="a_HeavyAttack">Is it a heavy attack?</param>
-            void playAttackSound(bool a_HeavyAttack);
+            void playFootStepSound();			
+			/// <summary> Plays the heavy attack sound.</summary>
+			void playHeavyAttack();
+            /// <summary> Plays the light attack sound. </summary>
+            void playLightAttack();
             /// <summary>
             /// Plays a random grunt.
             /// </summary>
@@ -59,7 +63,7 @@ namespace Confus
 			/// <summary>
             /// Updates the position of this instance.
             /// </summary>
-            void updatePosition() const;            
+            void updatePosition();            
             /// <summary>
             /// Creates the audio sources.
             /// </summary>

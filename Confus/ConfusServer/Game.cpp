@@ -165,8 +165,8 @@ namespace ConfusServer
         // Setting the listener position to the first player for debugging. 
         if(!m_PlayerArray.empty())
         {
-            m_Listener.setPosition(m_PlayerArray[0]->CameraNode->getAbsolutePosition());
-            irr::core::quaternion playerRotation(m_PlayerArray[0]->CameraNode->getRotation());
+            m_Listener.setPosition(m_PlayerArray[0]->getAbsolutePosition());
+            irr::core::quaternion playerRotation(m_PlayerArray[0]->getRotation());
             irr::core::vector3df upVector = playerRotation * irr::core::vector3df(0, 1, 0);
             irr::core::vector3df forwardVector = playerRotation * irr::core::vector3df(0, 0, 1);
             m_Listener.setDirection(forwardVector, upVector);
@@ -230,7 +230,8 @@ namespace ConfusServer
 		ConfusShared::ETeamIdentifier teamID = m_PlayerArray.size() % 2 == 0 ? 
 			ConfusShared::ETeamIdentifier::TeamRed : ConfusShared::ETeamIdentifier::TeamBlue;
 
-        Confus::Player* newPlayer = new Confus::Player(m_Device, m_PhysicsWorld, id, teamID, false, nullptr);
+        Confus::Player* newPlayer = new Confus::Player(m_Device, m_PhysicsWorld, id);
+		newPlayer->setTeamIdentifier(teamID, m_Device);
 
         m_PlayerArray.push_back(newPlayer);
 
@@ -242,7 +243,7 @@ namespace ConfusServer
         for(size_t i = 0u; i < m_PlayerArray.size(); i++)
         {
             stream.Write(static_cast<long long>(m_PlayerArray[i]->ID));
-            stream.Write(static_cast<ConfusShared::ETeamIdentifier>(m_PlayerArray[i]->TeamIdentifier));
+            stream.Write(static_cast<ConfusShared::ETeamIdentifier>(m_PlayerArray[i]->getTeamIdentifier()));
         }
         RakNet::AddressOrGUID guid = a_Data->guid;
         m_Connection->sendPacket(&stream, &guid);
@@ -253,7 +254,6 @@ namespace ConfusServer
         broadcastStream.Write(static_cast<ConfusShared::ETeamIdentifier>(teamID));
 
         m_Connection->broadcastPacket(&broadcastStream, &guid);
-		//To split up
 		if(teamID == ConfusShared::ETeamIdentifier::TeamBlue)
 		{
 			newPlayer->setStartPosition(irr::core::vector3df(0.f, 10.f, 0.f));
@@ -296,8 +296,8 @@ namespace ConfusServer
         for(size_t i = 0u; i < m_PlayerArray.size(); ++i)
         {
             stream.Write(static_cast<long long>(m_PlayerArray[i]->ID));
-            stream.Write(static_cast<irr::core::vector3df>(m_PlayerArray[i]->CameraNode->getPosition()));
-            stream.Write(static_cast<irr::core::vector3df>(m_PlayerArray[i]->CameraNode->getRotation()));
+            stream.Write(static_cast<irr::core::vector3df>(m_PlayerArray[i]->getPosition()));
+            stream.Write(static_cast<irr::core::vector3df>(m_PlayerArray[i]->getRotation()));
         }
         m_Connection->broadcastPacket(&stream);
     }

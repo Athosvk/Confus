@@ -149,15 +149,15 @@ namespace ConfusShared
 			return;
 		}
 
-		if (a_PlayerObject->TeamIdentifier != m_TeamIdentifier && a_PlayerObject->CarryingFlag == EFlagEnum::None) 
+		if (a_PlayerObject->getTeamIdentifier() != m_TeamIdentifier && a_PlayerObject->CarryingFlag == EFlagEnum::None) 
         {
             // Capturing flag if player has no flag
-            m_FlagNode->setParent(a_PlayerObject->PlayerNode);            
+            m_FlagNode->setParent(a_PlayerObject);            
             setFlagStatus(EFlagEnum::FlagTaken);
             a_PlayerObject->FlagPointer = this;
             a_PlayerObject->CarryingFlag = EFlagEnum::FlagTaken;
 		}
-		else if (a_PlayerObject->TeamIdentifier == m_TeamIdentifier) 
+		else if (a_PlayerObject->getTeamIdentifier() == m_TeamIdentifier) 
         {
 			//If flag has been dropped return flag to base
  			if (m_FlagStatus == EFlagEnum::FlagDropped) 

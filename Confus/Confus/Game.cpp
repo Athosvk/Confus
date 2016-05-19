@@ -24,7 +24,7 @@ namespace Confus
         m_PhysicsWorld(m_Device),
         m_MazeGenerator(m_Device, 41, 40, (19 + 20 + 21 + 22 + 23 + 24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
             irr::core::vector2df(19., 20.), m_PhysicsWorld),
-        m_PlayerNode(m_Device, m_PhysicsWorld, 1, ConfusShared::ETeamIdentifier::TeamBlue, true, &m_AudioManager),
+        m_PlayerNode(m_Device, m_PhysicsWorld, 1),
         m_BlueFlag(m_Device, ConfusShared::ETeamIdentifier::TeamBlue, m_PhysicsWorld),
         m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, m_PhysicsWorld),
         m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
@@ -55,17 +55,26 @@ namespace Confus
 		{
 			m_MazeChangedSound.play();
 		});
+		irr::scene::ICameraSceneNode* camera = m_Device->getSceneManager()->addCameraSceneNodeFPS(&m_PlayerNode, 100.0f, 0.0f, 1);
+		camera->setFOV(70.f);
+		camera->setNearValue(0.1f);
     }
 
     Game::~Game()
     {
-        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        for(auto player : m_Players)
         {
             //m_PlayerArray[i]->remove();
             //delete(m_PlayerArray[i]);
         }
         m_Device->getSceneManager()->clear();
     }
+
+	Game::PlayerPair::PlayerPair(Confus::Player* a_Player, Audio::PlayerAudioEmitter a_AudioEmitter)
+		: AudioEmitter(a_AudioEmitter),
+		Player(a_Player)
+	{
+	}
 
     void Game::start()
     {
@@ -153,11 +162,10 @@ namespace Confus
 							ConfusShared::Physics::ECollisionFilter::Interactable,
 							ConfusShared::Physics::ECollisionFilter::Player);
                     }
-                    else
-                    {
-                        break;
-                    }
-					collider->getRigidBody()->makeStatic();
+					if(collider != nullptr)
+					{
+						collider->getRigidBody()->makeStatic();
+					}
 					break;
 				case irr::scene::ESNT_SPHERE:
 				case irr::scene::ESNT_TERRAIN:
@@ -242,7 +250,11 @@ namespace Confus
         m_Connection->processPackets();
         handleInput();
 
-        m_PlayerNode.update();
+		for(auto player : m_Players)
+		{			
+			player.second.Player->update();
+			player.second.AudioEmitter.updatePosition();
+		}
 		m_GUI.update();
         m_Listener.setPosition(m_PlayerNode.getAbsolutePosition());
 
@@ -296,25 +308,18 @@ namespace Confus
         
         bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
 
-        for(size_t j = 0u; j < m_PlayerArray.size(); j++)
-        {
+		for(size_t i = 0; i < m_Players.size(); ++i)
+		{
 			long long id;
 			bitstreamIn.Read(id);
-            for(size_t i = 0u; i < m_PlayerArray.size(); i++)
-            {
-                if(m_PlayerArray[i]->ID == id)
-                {
-                    irr::core::vector3df pos;
-                    irr::core::vector3df rot;
-
-                    bitstreamIn.Read(pos);
-                    bitstreamIn.Read(rot);
-
-                    m_PlayerArray[i]->setPosition(pos);
-                    m_PlayerArray[i]->setRotation(rot);
-                }
-            }
-        }
+			auto pair = m_Players.at(id);
+			irr::core::vector3df position;
+			irr::core::vector3df rotation;
+			bitstreamIn.Read(position);
+			bitstreamIn.Read(rotation);
+			pair.Player->setPosition(position);
+			pair.Player->setRotation(rotation);
+		}
     }
 
     void Game::updateHealth(RakNet::Packet* a_Data)
@@ -325,26 +330,20 @@ namespace Confus
         long long id;
         inputStream.Read(id);
 
-		for (size_t i = 0u; i < m_PlayerArray.size(); i++)
+		auto player = m_Players.at(id);
+		int health;
+		EHitIdentifier hitIdentifier;
+
+		inputStream.Read(health);
+		inputStream.Read(hitIdentifier);
+
+		if(health > player.Player->getHealthInstance()->getHealth())
 		{
-			if (m_PlayerArray[i]->ID == id)
-			{
-				int health;
-				EHitIdentifier hitIdentifier;
-
-				inputStream.Read(health);
-				inputStream.Read(hitIdentifier);
-
-				if (health > m_PlayerArray[i]->getHealthInstance()->getHealth())
-				{
-					m_PlayerArray[i]->getHealthInstance()->heal(health - m_PlayerArray[i]->getHealthInstance()->getHealth());
-				}
-				else if (health < m_PlayerArray[i]->getHealthInstance()->getHealth())
-				{
-					m_PlayerArray[i]->getHealthInstance()->damage(m_PlayerArray[i]->getHealthInstance()->getHealth() - health, hitIdentifier);
-				}
-				break;
-			}
+			player.Player->getHealthInstance()->heal(health - player.Player->getHealthInstance()->getHealth());
+		}
+		else if(health < player.Player->getHealthInstance()->getHealth())
+		{
+			player.Player->getHealthInstance()->damage(player.Player->getHealthInstance()->getHealth() - health, hitIdentifier);
 		}
     }
 
@@ -361,17 +360,18 @@ namespace Confus
 		};
 		updateDownwards(m_Device->getSceneManager()->getRootSceneNode());
 	}
+
     //need to test of the guid.g is the right one, and not the one from the server
     void Game::addOwnPlayer(RakNet::Packet* a_Data)
     {
         RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
 
         bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
-
+		ConfusShared::ETeamIdentifier teamID;
+		bitstreamIn.Read(teamID);
+		m_PlayerNode.setTeamIdentifier(teamID, m_Device);
         bitstreamIn.Read(m_PlayerNode.ID);
-        bitstreamIn.Read(m_PlayerNode.TeamIdentifier);
         m_PlayerNode.respawn();
-        m_PlayerNode.updateColor(m_Device);
 
         size_t size;
         bitstreamIn.Read(size);
@@ -379,17 +379,17 @@ namespace Confus
         for(size_t i = 0u; i < size; i++)
         {
             long long id;
-			ConfusShared::ETeamIdentifier teamID;
-
             bitstreamIn.Read(id);
             bitstreamIn.Read(teamID);
 
-            Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false, &m_AudioManager);
-            m_PlayerArray.push_back(newPlayer);
-        }
+            Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id);
+			newPlayer->setTeamIdentifier(teamID, m_Device);
+			m_Players.emplace(id, PlayerPair(newPlayer, Audio::PlayerAudioEmitter(newPlayer, &m_AudioManager)));
+		}
 
-        m_PlayerArray.push_back(&m_PlayerNode);
-    }
+		// Add self
+		m_Players.emplace(m_PlayerNode.ID, PlayerPair(&m_PlayerNode, Audio::PlayerAudioEmitter(&m_PlayerNode, &m_AudioManager)));
+	}
 
     void Game::addOtherPlayer(RakNet::Packet* a_Data)
     {
@@ -403,31 +403,22 @@ namespace Confus
         bitstreamIn.Read(id);
         bitstreamIn.Read(teamID);
 
-        Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false, &m_AudioManager);
-        m_PlayerArray.push_back(newPlayer);
+        Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id);
+		newPlayer->setTeamIdentifier(teamID, m_Device);
+		m_Players.emplace(id, PlayerPair(newPlayer, Audio::PlayerAudioEmitter(newPlayer, &m_AudioManager)));
     }
 
     void Game::removePlayer(RakNet::Packet* a_Data)
     {
         RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
-
         bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
 
         long long id;
-
         bitstreamIn.Read(id);
-
-        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
-        {
-            if(m_PlayerArray[i]->ID == id)
-            {
-                m_PlayerArray[i]->remove();
-                delete(m_PlayerArray[i]);
-                m_PlayerArray.erase(m_PlayerArray.begin() + i);
-                break;
-            }
-        }
-        m_PlayerNode.fixedUpdate();
+		auto player = m_Players.at(id);
+		player.Player->remove();
+		delete(player.Player);
+		m_Players.erase(id);
     }
 
 	void Game::denyConnection(RakNet::Packet* a_Data)

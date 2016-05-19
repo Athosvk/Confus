@@ -4,6 +4,7 @@
 #include "Health.h"
 #include "Weapon.h"
 #include "TeamIdentifier.h"
+#include "Delegate.h"
 
 namespace ConfusShared
 {
@@ -19,12 +20,6 @@ namespace ConfusShared
 
 namespace Confus
 {
-    namespace Audio
-    {
-        class PlayerAudioEmitter;
-        class AudioManager;
-    }
-
     enum class EPlayerState : unsigned char
     {
         Alive, CarryingFlag, HeavyAttacking, LightAttacking, Dead
@@ -36,23 +31,19 @@ namespace Confus
     class Player : public irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
     {
     public:
-		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
-        irr::scene::IAnimatedMeshSceneNode* PlayerNode;
-        /// <summary> The ICameraSceneNode for the player </summary>
-        irr::scene::ICameraSceneNode* CameraNode = nullptr;
-
 		ConfusShared::EFlagEnum CarryingFlag;
-		ConfusShared::ETeamIdentifier TeamIdentifier;    
         ConfusShared::Flag* FlagPointer = nullptr;
-        /// <summary> Determines if this player is this users player or not </summary>
-        bool MainPlayer = false;
 
         long long ID;
 
 		static const unsigned LightAttackDamage;
 		static const unsigned HeavyAttackDamage;
-    private:
-        Audio::PlayerAudioEmitter* m_SoundEmitter;
+
+		ConfusShared::Delegate<void()> OnLightAttack;
+		ConfusShared::Delegate<void()> OnHeavyAttack;
+    private:;
+		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
+		irr::scene::IAnimatedMeshSceneNode* m_PlayerNode;
 		/// <summary> private value for health class </summary>
 		ConfusShared::Health m_PlayerHealth;
 		ConfusShared::Physics::BoxCollider* m_Collider;
@@ -74,25 +65,19 @@ namespace Confus
         /// <summary> The player's active state. </summary>
         EPlayerState m_PlayerState = EPlayerState::Alive;
 		irr::core::vector3df m_StartPosition = irr::core::vector3df();
+
+		ConfusShared::ETeamIdentifier m_TeamIdentifier;
     public:
-        /// <summary> Player class constructor. </summary>
-        /// <param name="a_Device">The active Irrlicht Device.</param>
-        /// <param name="a_PhysicsWorld">The a_ physics world.</param>
-        /// <param name="a_ID">The ID of the scenenode.</param>
-        /// <param name="a_TeamIdentifier">The team's identifier the player should have.</param>
-        /// <param name="a_MainPlayer">A boolean to identify the player the user controls.</param>
-        /// <param name="a_AudioManager">The audio manager.</param>
-        Player(irr::IrrlichtDevice* a_Device, ConfusShared::Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID, 
-			ConfusShared::ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, Audio::AudioManager* a_AudioManager);
-        /// <summary> Player class destructor. </summary>
-		~Player();
+		/// <summary>Player class constructor.</summary>
+		/// <param name="a_Device">The active Irrlicht Device.</param>
+		/// <param name="a_PhysicsWorld">The Physics World</param>
+		/// <param name="a_ID">The ID of the scenenode.</param>
+		/// <param name="a_TeamIdentifier">The team's identifier the player should have.</param>
+		Player(irr::IrrlichtDevice* a_Device, ConfusShared::Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID);
         /// <summary> Update function, any tasks that need to be done every frame go here. </summary>
         void update();
         ///<summary> Respawns the player to their base, public so round resets etc. can call this. </summary>
         void respawn();
-		/// <summary> Updates the color </summary>
-		/// <param name="a_Device"> The active irrlicht device </param>
-		void updateColor(irr::IrrlichtDevice* a_Device);
 
         void fixedUpdate();
         /// <summary> Required render function for the ISceneNode, does nothing as we render in the Game.cpp.</summary>
@@ -110,7 +95,13 @@ namespace Confus
 		void startHeavyAttack();
 		EPlayerState getState() const;
 		void setStartPosition(irr::core::vector3df a_Position);
+		ConfusShared::ETeamIdentifier getTeamIdentifier() const;
+		void setTeamIdentifier(ConfusShared::ETeamIdentifier a_TeamIdentifier, irr::IrrlichtDevice* a_Device);
+		int getAnimationFrame() const;
     private:
+		/// <summary> Updates the color </summary>
+		/// <param name="a_Device"> The active irrlicht device </param>
+		void updateColor(irr::IrrlichtDevice* a_Device);
 		void dropFlag();
         /// <summary> Starts the walking animation, which is the default animation. </summary>
         void startWalking() const;

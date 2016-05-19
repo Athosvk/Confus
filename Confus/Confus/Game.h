@@ -25,6 +25,16 @@ namespace Confus
     /// </summary>
     class Game : public ConfusShared::BaseGame
     {
+	private:
+		struct PlayerPair
+		{			
+			/// <summary>Initializes a new instance of the <see cref="PlayerPair"/> struct.</summary>
+			/// <param name="a_Player">The a_ player.</param>
+			/// <param name="a_AudioEmitter">The a_ audio emitter.</param>
+			PlayerPair(Player* a_Player, Audio::PlayerAudioEmitter a_AudioEmitter);
+			Player* Player;
+			Audio::PlayerAudioEmitter AudioEmitter;
+		};
 	public:
 		/// <summary>
 		/// The maximum score used to determine if someone has won
@@ -56,8 +66,7 @@ namespace Confus
         /// </summary>
         Player m_PlayerNode;
 
-
-        std::vector<Player*> m_PlayerArray;
+		std::map<long long, PlayerPair> m_Players;
         /// <summary>
         /// The Blue Flag.
         /// </summary>

@@ -19,6 +19,6 @@ namespace Confus
 		irr::core::vector3df newPosition;
 		a_Data.IgnoreBytes(sizeof(unsigned char));
 		a_Data.Read(newPosition);
-		m_Player.CameraNode->setPosition(newPosition);
+		m_Player.setPosition(newPosition);
 	}
 }
