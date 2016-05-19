@@ -23,6 +23,7 @@ namespace Confus
 		}
 		else
 		{
+			irr::core::vector2df x = irr::core::vector2df(0.0f, 0.0f);
 			rect = m_ExclamationMarkImage->getRelativePosition().UpperLeftCorner + irr::core::dimension2di(offset.Width, 0);
 		}
 

@@ -2,8 +2,8 @@
 
 namespace Confus
 {
-	NewMaze::NewMaze(int a_MazeSizeX, int a_MazeSizeY)
-		:m_MazeSizeX(a_MazeSizeX), m_MazeSizeY(a_MazeSizeY)
+	NewMaze::NewMaze(irr::core::vector2d<irr::u32> a_MazeSize)
+		:m_MazeSize(a_MazeSize)
 	{
 		resetMaze();
 	}
@@ -11,11 +11,11 @@ namespace Confus
 	void NewMaze::resetMaze()
 	{
 		MazeTiles.clear();
-		for (int x = 0; x < m_MazeSizeX; x++)
+		for (unsigned int x = 0; x < m_MazeSize.X; x++)
 		{
 			std::vector<std::shared_ptr<NewMazeTile>> tempVector;
 			MazeTiles.push_back(tempVector);
-			for (int y = 0; y < m_MazeSizeY - 1; y++)
+			for (unsigned int y = 0; y < m_MazeSize.Y - 1; y++)
 			{
 				std::shared_ptr<NewMazeTile> mazeTile = std::make_shared<NewMazeTile>();
 				MazeTiles[x].push_back(mazeTile);
@@ -25,14 +25,9 @@ namespace Confus
 		}
 	}
 
-	int const & NewMaze::mazeSizeY() const
+	irr::core::vector2d<irr::u32> const & NewMaze::mazeSize() const
 	{
-		return m_MazeSizeY;
-	}
-
-	int const & NewMaze::mazeSizeX() const
-	{
-		return m_MazeSizeX;
+		return m_MazeSize;
 	}
 
 

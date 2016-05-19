@@ -1,14 +1,11 @@
 #pragma once
 #include <vector>
+#include <Irrlicht\irrlicht.h>
 
 #include "NewMazeTile.h"
 
 namespace Confus
 {
-	namespace Physics
-	{
-		class PhysicsWorld;
-	}
 
 	/// <summary>
 	/// Contains a 2D Vector of mazeTiles, forms the Maze
@@ -25,28 +22,18 @@ namespace Confus
 		/// <summary>
 		/// the X size of the maze
 		/// </summary>
-		int m_MazeSizeX;
-
-		/// <summary>
-		/// The Y size of the maze
-		/// </summary>
-		int m_MazeSizeY;
+		irr::core::vector2d<irr::u32> m_MazeSize;
 
 	public:
 		/// <summary>
-		/// Gets the current X size of the maze
+		/// Gets the current size of the maze
 		/// </summary>
-		int const& mazeSizeX() const;
-
-		/// <summary>
-		/// Gets the current Y size of the maze
-		/// </summary>
-		int const& mazeSizeY() const;
+		irr::core::vector2d<irr::u32> const& mazeSize() const;
 
 		/// <summary> Constructor for this class </summary>
 		/// <param name="a_MazeSizeX">The width </param>
 		/// <param name="a_MazeSizeY">The depth </param>
-		NewMaze(int a_MazeSizeX, int a_MazeSizeY);
+		NewMaze(irr::core::vector2d<irr::u32> a_MazeSize);
 
 		/// <summary>
 		/// Resets the 2d vector
