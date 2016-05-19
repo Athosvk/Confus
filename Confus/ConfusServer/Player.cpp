@@ -106,7 +106,6 @@ namespace ConfusServer
             CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
         }
     }
-
     
 	Player::~Player() 
     {
@@ -249,21 +248,15 @@ namespace ConfusServer
             // Only continue if the playerID in the packet matches ours.
             if(playerID == static_cast<RakNet::RakNetGUID>(ID))
             {
-                irr::core::vector3df position;
                 irr::core::vector3df rotation;
                 EPlayerState state;
-                RakNet::Time stateChangeTime;
-                int8_t playerHealth;
                 bool forwardKeyPressed;
                 bool backwardKeyPressed;
                 bool leftKeyPressed;
                 bool rightKeyPressed;
 
-                bitstreamIn.Read(position);
                 bitstreamIn.Read(rotation);
                 bitstreamIn.Read(state);
-                bitstreamIn.Read(stateChangeTime);
-                bitstreamIn.Read(playerHealth);
                 bitstreamIn.Read(forwardKeyPressed);
                 bitstreamIn.Read(backwardKeyPressed);
                 bitstreamIn.Read(leftKeyPressed);
@@ -298,6 +291,6 @@ namespace ConfusServer
                     movementDirection.X = 1.0f;
                 }
             }
-    });
+		});
     }
 }
