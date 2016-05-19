@@ -39,7 +39,7 @@ namespace Confus
     void Weapon::damagePlayer(Player* a_Player) const
     {
         // Remove iostream include with this comment.
-        std::cout << "Player team identifier is " + static_cast<char>(a_Player->TeamIdentifier) << " \n our team id is " + static_cast<char>(m_TeamIdentifier);
+        std::cout << "Damageplayer is being called";
         // Only do damage if the other player is in another team than us.
         if(a_Player->TeamIdentifier != m_TeamIdentifier)
         {
