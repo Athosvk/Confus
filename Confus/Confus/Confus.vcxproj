@@ -216,6 +216,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="Health.cpp" />
     <ClCompile Include="HealthGUI.cpp" />
+    <ClCompile Include="HealthPickup.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="MazeGenerator.cpp" />
@@ -263,6 +264,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Health.h" />
     <ClInclude Include="HealthGUI.h" />
+    <ClInclude Include="HealthPickup.h" />
     <ClInclude Include="IUIElement.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="MazeGenerator.h" />

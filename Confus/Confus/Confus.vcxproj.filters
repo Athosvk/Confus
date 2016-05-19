@@ -147,6 +147,9 @@
     <ClCompile Include="HealthGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HealthPickup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -294,6 +297,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HealthGUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthPickup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

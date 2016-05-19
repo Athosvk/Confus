@@ -15,6 +15,7 @@
 #include "Audio/AudioManager.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "Announcer.h"
+#include "HealthPickup.h"
 
 namespace Confus
 {    
@@ -66,6 +67,8 @@ namespace Confus
         /// The Red Flag.
         /// </summary>
         Flag m_RedFlag;
+
+		std::vector<HealthPickup*> m_HealthPickupArray;
 
 		Announcer m_Announcer;
 		RespawnFloor m_RedRespawnFloor;
@@ -130,6 +133,8 @@ namespace Confus
         void removePlayer(RakNet::Packet* a_Data);
 
 		void denyConnection(RakNet::Packet* a_Data);
+
+		void spawnHealthPickups();
 
         virtual void start() override;
         /// <summary>

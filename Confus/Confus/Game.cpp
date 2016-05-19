@@ -12,6 +12,7 @@
 #include "WinScreen.h"
 #include "ScoreGUI.h"
 #include "HealthGUI.h"
+#include "HealthPickup.h"
 #define DEBUG_CONSOLE
 #include "../ConfusShared/Debug.h"
 #include "../ConfusShared/TeamIdentifier.h"
@@ -63,6 +64,11 @@ namespace Confus
             //m_PlayerArray[i]->remove();
             //delete(m_PlayerArray[i]);
         }
+		for (size_t j = 0u; j < m_HealthPickupArray.size(); j++)
+		{
+			//m_HealthPickupArray[j]->remove();
+			//delete(m_HealthPickupArray[j]);
+		}
         m_Device->getSceneManager()->clear();
     }
 
@@ -85,6 +91,8 @@ namespace Confus
 
         m_PlayerNode.setEventManager(m_EventManager);
         m_Device->getCursorControl()->setVisible(false);
+
+		spawnHealthPickups();
 
         m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::MainPlayerJoined), [this](RakNet::Packet* a_Data)
         {
@@ -252,6 +260,11 @@ namespace Confus
         irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
         m_Listener.setDirection(forwardVector, upVector);    
 
+		for (size_t i = 0u; i < m_HealthPickupArray.size(); i++)
+		{
+			m_HealthPickupArray[i]->update(m_DeltaTime);
+		}
+
 		static float timer = 0.0f;
 		timer += static_cast<float>(m_DeltaTime);
 		if(timer >= 3.0f)
@@ -386,7 +399,6 @@ namespace Confus
 
             bitstreamIn.Read(id);
             bitstreamIn.Read(teamID);
-
             Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false, &m_AudioManager);
             m_PlayerArray.push_back(newPlayer);
         }
@@ -449,6 +461,16 @@ namespace Confus
 		}
 
 		m_ShouldRun = false;
+	}
+
+	void Game::spawnHealthPickups()
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			HealthPickup* pickup = new HealthPickup(m_Device, m_PhysicsWorld);
+			m_HealthPickupArray.push_back(pickup);
+			pickup->setPosition(irr::core::vector3df(i*3.f, 0.f, -85.f));
+		}
 	}
 
     void Game::render()
