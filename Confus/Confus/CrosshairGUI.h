@@ -7,7 +7,6 @@ namespace Confus
 {
     /// <summary> 
     /// A class that constructs the crosshair GUI element. 
-    /// Derives from IUIElement.
     ///       ----------
     ///      |IUIElement|
     ///       ----------

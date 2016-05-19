@@ -3,9 +3,7 @@
 
 #include "../Confus/GUI.h"
 #include "../Confus/CrosshairGUI.h"
-#include "../Confus/Player.h"
-#include "../Confus/Audio/AudioManager.h"
-#include "../ConfusShared/Physics/PhysicsWorld.h"
+
 #include "CppUnitTest.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
