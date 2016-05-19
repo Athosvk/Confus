@@ -112,11 +112,6 @@ namespace ConfusServer
         /// </summary>
         void initializeConnection();
         /// <summary>
-        /// Processes the triangle selectors.
-        /// </summary>
-        void processTriangleSelectors();
-        irr::scene::IMetaTriangleSelector* processLevelMetaTriangles();
-        /// <summary>
         /// Processes the input data
         /// </summary>
         void handleInput();
@@ -132,10 +127,6 @@ namespace ConfusServer
         /// Updates the state of objects that require frame-rate independence
         /// </summary>
         void fixedUpdate();
-        /// <summary>
-        /// Renders the objects in the game
-        /// </summary>
-        void render();
 		/// <summary>
 		/// Processes the packets connection
 		/// </summary>
