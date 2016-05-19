@@ -21,6 +21,7 @@ namespace Confus
 
 		Player& m_Player;
 		Networking::ClientConnection& m_Connection;
+		long long m_ID;
 
 	public:
 		LocalPlayerController(Player& a_Player, Networking::ClientConnection& m_Connection);

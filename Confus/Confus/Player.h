@@ -72,12 +72,8 @@ namespace Confus
 
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
-        /// <summary> The player's unique ID. </summary>
-        RakNet::RakNetGUID m_PlayerID;
         /// <summary> The player's active state. </summary>
         EPlayerState m_PlayerState = EPlayerState::Alive;
-        /// <summary> The local time at which a state change took place. </summary>
-        RakNet::Time m_StateChangeTime = 0;
     public:
         /// <summary> Player class constructor. </summary>
         /// <param name="a_Device">The active Irrlicht Device.</param>
@@ -98,20 +94,13 @@ namespace Confus
 		/// <summary> Updates the color </summary>
 		/// <param name="a_Device"> The active irrlicht device </param>
 		void updateColor(irr::IrrlichtDevice* a_Device);
-        /// <summary> Updates the rotation of this player </summary>
-        /// <param name="a_NewRotation">The new rotation for this player.</param>
-        void updateRotation(irr::core::vector3df a_NewRotation);
-        /// <summary> Updates the position of this player. </summary>
-        /// <param name="a_NewPosition">The new position for this player.</param>
-        void updatePosition(irr::core::vector3df a_NewPosition);
 
         void fixedUpdate();
         /// <summary> Required render function for the ISceneNode, does nothing as we render in the Game.cpp.</summary>
         virtual void render();
         /// <summary> Returns the bounding box of the player's mesh. </summary>
         virtual const irr::core::aabbox3d<irr::f32> & getBoundingBox() const;
-        /// <summary> Sets the connection to the server. </summary>
-        void setConnection(Networking::ClientConnection* a_Connection);
+
 		/// <summary> get/setter for health. Should really turn into const but gave some weird errors </summary>
 		ConfusShared::Health* getHealthInstance();
         /// <summary> Sets the connection to the server. </summary>
@@ -122,6 +111,7 @@ namespace Confus
 
 		/// <summary> Starts the heavy attack, which deals more damage. </summary>
 		void startHeavyAttack();
+		EPlayerState getState() const;
     private:
 		void dropFlag();
         /// <summary> Starts the walking animation, which is the default animation. </summary>

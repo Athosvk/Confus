@@ -1,9 +1,3 @@
-#include <RakNet/BitStream.h>
-#include <RakNet/GetTime.h>
-#include <RakNet/RakPeer.h>
-#include <RakNet/RakNetTypes.h>
-#include <RakNet/PacketPriority.h>
-#include <RakNet/MessageIdentifiers.h>
 #include <iostream>
 #include <string>
 
@@ -158,6 +152,11 @@ namespace Confus
         initializeAttack();
     }
 
+	EPlayerState Player::getState() const
+	{
+		return m_PlayerState;
+	}
+
     void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node)
     {
         if(m_Attacking)
@@ -248,46 +247,14 @@ namespace Confus
         CameraNode->setRotation(a_NewRotation);
     }
 
-    void Player::setConnection(Networking::ClientConnection* a_Connection)
-	{
-        m_Connection = a_Connection;
-
-        m_PlayerID = m_Connection->m_Interface->GetGuidFromSystemAddress(RakNet::UNASSIGNED_SYSTEM_ADDRESS);
-
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::Packet* a_Data)
+    void Player::changeState(EPlayerState a_NewState)
+    {
+        // Only change state if it is different from the player's current state.
+        if(a_NewState != m_PlayerState) 
         {
-            RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
-            irr::core::vector3df newPosition;
-
-            bitstreamIn.IgnoreBytes(sizeof(unsigned char));
-            bitstreamIn.Read(newPosition);
-
-            CameraNode->setPosition(newPosition);
-        });
-	}
-
-    void Player::updateServer() const
-	{
-        RakNet::BitStream bitstreamOut;
-
-        bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
-        bitstreamOut.Write(m_PlayerID);
-        bitstreamOut.Write(CameraNode->getRotation());
-        bitstreamOut.Write(m_PlayerState);
-
-        m_Connection->sendMessage(&bitstreamOut, PacketReliability::UNRELIABLE);
-	}
-
-     void Player::changeState(EPlayerState a_NewState)
-     {
-         // Only change state if it is different from the player's current state.
-         if(a_NewState != m_PlayerState) 
-         {
-             m_PlayerState = a_NewState;
-             m_StateChangeTime = RakNet::GetTime();
-             std::cout << "State changed! Time of change is: " << m_StateChangeTime;
-         } 
-     }
+            m_PlayerState = a_NewState;
+        } 
+    }
 
 	 void Player::onScore()
 	 {

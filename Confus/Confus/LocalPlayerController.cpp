@@ -1,3 +1,5 @@
+#include <RakNet/PacketPriority.h>
+
 #include "LocalPlayerController.h"
 #include "../ConfusShared/EventManager.h"
 
@@ -7,6 +9,7 @@ namespace Confus
 		: m_Player(a_Player),
 		m_Connection(a_Connection)
 	{
+		m_ID = m_Connection.m_Interface->
 		m_Connection.addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::Packet* a_Packet)
 		{
 			synchronizeState(RakNet::BitStream(a_Packet->data, a_Packet->length, false));
@@ -33,6 +36,12 @@ namespace Confus
 	{
 		RakNet::BitStream bitstream;
 		bitstream.Write(reinterpret_cast<char*>(&m_InputState));
+		bitstream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
+		bitstream.Write(m_Player.ID);
+		bitstream.Write(m_Player.CameraNode->getRotation());
+		bitstream.Write(m_Player);
+
+		m_Connection.sendMessage(&bitstream, PacketReliability::UNRELIABLE);
 		resetInputState();
 	}
 

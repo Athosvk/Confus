@@ -79,6 +79,10 @@ namespace Confus
             /// <param name="a_Event">The server event that should trigger the function.</param>
             /// <param name="a_Function">The function that should be added to the map.</param>
             void addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function);
+			
+			/// <summary>Gets the identifier for this clietn </summary>
+			/// <returns>The client ID</returns>
+			long long getID() const;
 		private:
 			/// <summary> Gets the amount of clients connected to this server instance </summary>
 			/// <returns> The amount of clients connected </returns>

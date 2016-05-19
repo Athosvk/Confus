@@ -72,6 +72,11 @@ namespace Confus
             m_CallbackFunctionMap[a_Event].push_back(a_Function);
         }
 
+		long long ClientConnection::getID() const
+		{
+			return m_Interface->GetGuidFromSystemAddress(RakNet::UNASSIGNED_SYSTEM_ADDRESS);
+		}
+
 		void ClientConnection::sendMessage(RakNet::BitStream* a_Stream, PacketReliability a_Reliability) 
 		{
 			if(m_Connected)

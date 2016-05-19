@@ -298,11 +298,10 @@ namespace Confus
         
         bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
 
-        long long id;
-        bitstreamIn.Read(id);
-
         for(size_t j = 0u; j < m_PlayerArray.size(); j++)
         {
+			long long id;
+			bitstreamIn.Read(id);
             for(size_t i = 0u; i < m_PlayerArray.size(); i++)
             {
                 if(m_PlayerArray[i]->ID == id)
@@ -317,7 +316,6 @@ namespace Confus
                     m_PlayerArray[i]->setRotation(rot);
                 }
             }
-            bitstreamIn.Read(id);
         }
     }
 
