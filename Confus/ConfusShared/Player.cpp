@@ -1,7 +1,3 @@
-#include <iostream>
-#include <string>
-
-#include "EventManager.h"
 #include "Flag.h"
 #include "Physics/PhysicsWorld.h"
 #include "Physics/BoxCollider.h"
@@ -17,11 +13,10 @@ namespace Confus
 	Player::Player(irr::IrrlichtDevice* a_Device, ConfusShared::Physics::PhysicsWorld& a_PhysicsWorld,
 		long long a_ID)
 		: irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
-		m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f)),
-		CarryingFlag(ConfusShared::EFlagEnum::None)
+		CarryingFlag(ConfusShared::EFlagEnum::None),
+		m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f))
     {
         auto sceneManager = a_Device->getSceneManager();
-        auto videoDriver = a_Device->getVideoDriver();
 
         m_Mesh = sceneManager->getMesh("Media/ninja.b3d");
         ID = a_ID;
@@ -131,7 +126,7 @@ namespace Confus
 		return static_cast<int>(m_PlayerNode->getFrameNr());
 	}
 
-    void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node)
+	void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* a_SceneNode)
     {
         if(m_Attacking)
         {
@@ -188,10 +183,6 @@ namespace Confus
 				FlagPointer->returnToStartPosition();
 			}
         }
-    }
-
-    void Player::fixedUpdate()
-    {
     }
 
     void Player::respawn()

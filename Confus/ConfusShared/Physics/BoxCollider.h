@@ -40,11 +40,7 @@ namespace ConfusShared
 			
 			/// <summary> Sets the trigger enter callback </summary>
 			/// <param name="a_Callback">The callback to use once a Trigger Enter event has occurred </param>
-			void setTriggerEnterCallback(std::function<void(BoxCollider* a_Other)>& a_Callback);
-
-			/// <summary> Sets the trigger enter callback </summary>
-			/// <param name="a_Callback">The callback to use once a Trigger Enter event has occurred </param>
-			void setTriggerEnterCallback(std::function<void(BoxCollider* a_Other)>&& a_Callback);
+			void setTriggerEnterCallback(const std::function<void(BoxCollider* a_Other)>& a_Callback);
 		};
 	}
 }

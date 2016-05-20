@@ -32,7 +32,7 @@ namespace ConfusShared
 				/// <summary> Compares whether two instances of CollisionInfo are equal </summary>
 				/// <param name="a_Other">The CollisionInfo instance to check against </param>
 				/// <returns> Whether this instance is eqaul to the given CollisionInfo instance </returns>
-				bool operator==(const CollisionInfo& a_Other);
+				bool operator==(const CollisionInfo& a_Other) const;
 			};
 			
 			/// <summary> The collisions that occurred during the previous phsyics simulation step </summary>
@@ -52,13 +52,7 @@ namespace ConfusShared
 			/// <summary> Sets the trigger enter callback for the given collider </summary>
 			/// <param name="a_Collider">The collider to set the callback of </param>
 			/// <param name="a_Callback">The callback to use once a trigger enter event has occurred </param>
-			void setTriggerEnterCallback(BoxCollider* a_Collider, std::function<void(BoxCollider* a_Other)>&
-				a_Callback);
-
-			/// <summary> Sets the trigger enter callback for the given collider </summary>
-			/// <param name="a_Collider">The collider to set the callback of </param>
-			/// <param name="a_Callback">The callback to use once a trigger enter event has occurred </param>
-			void setTriggerEnterCallback(BoxCollider* a_Collider, std::function<void(BoxCollider* a_Other)>&& 
+			void setTriggerEnterCallback(BoxCollider* a_Collider, const std::function<void(BoxCollider* a_Other)>&
 				a_Callback);
 
 			/// <summary> Executes the actiosn that need to occur after the physics update </summary>

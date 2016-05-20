@@ -79,7 +79,6 @@ namespace Confus
         ///<summary> Respawns the player to their base, public so round resets etc. can call this. </summary>
         void respawn();
 
-        void fixedUpdate();
         /// <summary> Required render function for the ISceneNode, does nothing as we render in the Game.cpp.</summary>
         virtual void render();
         /// <summary> Returns the bounding box of the player's mesh. </summary>
@@ -113,9 +112,9 @@ namespace Confus
         /// <summary> Changes the state of the player. </summary>
         void changeState(EPlayerState a_NewState);
 
-        /// <summary> Called when the animation finishes </summary>
-        /// <remarks> Generally used for the attack animations only </remarks>
-        /// <param name="node">The node whoms animation finished</param>
-        virtual void OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node) override;
+		/// <summary>Called when the animation finishes</summary>
+		/// <param name="a_SceneNode">The scene node the animation ended on</param>
+		/// <remarks>Generally used for the attack animations only</remarks>
+		virtual void OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* a_SceneNode) override;
     };
 }

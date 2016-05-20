@@ -1,6 +1,4 @@
 #pragma once
-#include <Irrlicht\irrlicht.h>
-
 #include "../ConfusShared/TeamIdentifier.h"
 #include "Delegate.h"
 
@@ -49,9 +47,6 @@ namespace ConfusShared
 		/// <param name="a_PhysicsWorld">The physics world </param>
 		Flag(irr::IrrlichtDevice* a_Device, ConfusShared::ETeamIdentifier a_TeamIdentifier,
 			Physics::PhysicsWorld& a_PhysicsWorld);
-
-        /// <summary> Flag class destructor </summary>
-        ~Flag();
 
 		/// <summary> Capture Flag a flag with the wanted playerobject parent. </summary>
 		/// <param name="a_PlayerObject"> The player object that should carry the flag. </param>

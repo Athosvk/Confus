@@ -16,12 +16,7 @@ namespace ConfusShared
 		{
 		}
 
-		void BoxCollider::setTriggerEnterCallback(std::function<void(BoxCollider*a_Other)>& a_Callback)
-		{
-			m_CollisionRegistrar.setTriggerEnterCallback(this, a_Callback);
-		}
-
-		void BoxCollider::setTriggerEnterCallback(std::function<void(BoxCollider*a_Other)>&& a_Callback)
+		void BoxCollider::setTriggerEnterCallback(const std::function<void(BoxCollider*a_Other)>& a_Callback)
 		{
 			m_CollisionRegistrar.setTriggerEnterCallback(this, a_Callback);
 		}

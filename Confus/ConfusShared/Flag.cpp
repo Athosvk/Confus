@@ -206,13 +206,11 @@ namespace ConfusShared
         m_StartRotation.set(a_Rotation);
     }
 
-	void Flag::returnToStartPosition() {
+	void Flag::returnToStartPosition() 
+	{
         m_FlagNode->setParent(m_FlagOldParent);
         m_FlagNode->setPosition(m_StartPosition);
         m_FlagNode->setRotation(m_StartRotation);
 		setFlagStatus(EFlagEnum::FlagBase);
     }
-
-	Flag::~Flag() {
-	}
 }
