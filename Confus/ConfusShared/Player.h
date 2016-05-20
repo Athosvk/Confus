@@ -92,8 +92,13 @@ namespace ConfusShared
 		void setStartPosition(irr::core::vector3df a_Position);
 		ConfusShared::ETeamIdentifier getTeamIdentifier() const;
 		void setTeamIdentifier(ConfusShared::ETeamIdentifier a_TeamIdentifier, irr::IrrlichtDevice* a_Device);
-		int getAnimationFrame() const;
-		void setMovementDirection(irr::core::vector3df a_Direction) const;
+		int getAnimationFrame() const;		
+		/// <summary>
+		/// Sets the movement direction, so that the player can walk in other directions than forward,
+		/// and will update the velocity accordingly 
+		/// </summary>
+		/// <param name="a_Direction">The direction the player will start moving in in local terms</param>
+		void setLocalDirection(irr::core::vector3df a_Direction) const;
     private:
 		/// <summary> Updates the color </summary>
 		/// <param name="a_Device"> The active irrlicht device </param>

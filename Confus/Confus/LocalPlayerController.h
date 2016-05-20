@@ -1,7 +1,6 @@
 #pragma once
-#include <RakNet/BitStream.h>
-
 #include "Networking/ClientConnection.h"
+#include "../ConfusShared/PlayerInputState.h"
 
 namespace ConfusShared
 {
@@ -10,30 +9,34 @@ namespace ConfusShared
 }
 
 namespace Confus
-{
+{	
+	/// <summary>
+	/// Handles the input of the local player, so that it can be forwarded to the server
+	/// and optionally applied to the player to perform prediction
+	/// </summary>
 	class LocalPlayerController
 	{
-	private:
-#pragma pack(push, 1)
-		struct InputState
-		{
-			bool ForwardPressed = false;
-			bool BackwardPressed = false;
-			bool LeftPressed = false;
-			bool RightPressed = false;
-		} m_InputState;
-#pragma pack(pop)
+	private:		
+		/// <summary>The player to control</summary>
+		ConfusShared::Player& m_Player;		
+		/// <summary>The connection with the server to send the player state to, so that it can update the player remotely</summary>
+		Networking::ClientConnection& m_Connection;		
+		/// <summary>The current state of the input parameters for the player, so it can be sent to the server</summary>
+		ConfusShared::PlayerInputState m_InputState;
 
-		ConfusShared::Player& m_Player;
-		Networking::ClientConnection& m_Connection;
-		long long m_ID;
-
-	public:
+	public:		
+		/// <summary>Initializes a new instance of the <see cref="LocalPlayerController"/> class.</summary>
+		/// <param name="a_Player">The player this controller is controlling</param>
+		/// <param name="m_Connection">The connection with the server to send the player state to </param>
 		LocalPlayerController(ConfusShared::Player& a_Player, Networking::ClientConnection& m_Connection);
-		
-		void handleInput(ConfusShared::EventManager& a_EventManager);
+				
+		/// <summary>Handles the input to change the state that is sent to the server</summary>
+		/// <param name="a_EventManager">The event manager to check the input state of</param>
+		void handleInput(ConfusShared::EventManager& a_EventManager);		
+		/// <summary>Sends the current player state to the server, so that the player can be updated remotely</summary>
 		void fixedUpdate();
-	private:
+	private:		
+		/// <summary>Resets the input state back to normal, so that newly pressed keys are registered</summary>
 		void resetInputState();
 	};
 }

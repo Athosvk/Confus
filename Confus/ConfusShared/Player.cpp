@@ -126,10 +126,20 @@ namespace ConfusShared
 		return static_cast<int>(m_PlayerNode->getFrameNr());
 	}
 
-	void Player::setMovementDirection(irr::core::vector3df a_Direction) const
+	void Player::setLocalDirection(irr::core::vector3df a_Direction) const
 	{
-		const float Speed = 1.0f;
-		m_Collider->getRigidBody()->setVelocity(a_Direction.normalize() * Speed);
+		auto rigidBody = m_Collider->getRigidBody();
+		if(a_Direction.getLengthSQ() > 0.0f)
+		{
+			const float Speed = 15.0f;
+			a_Direction.rotateXZBy(-getRotation().Y);
+			auto resultingVelocity = irr::core::vector3df(a_Direction.X, rigidBody->getVelocity().Y, a_Direction.Z) * Speed;
+			rigidBody->setVelocity(resultingVelocity);
+		}
+		else
+		{
+			rigidBody->setVelocity(irr::core::vector3df());
+		}
 	}
 
 	void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* a_SceneNode)

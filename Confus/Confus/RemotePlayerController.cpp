@@ -15,7 +15,10 @@ namespace Confus
 			data.IgnoreBytes(sizeof(RakNet::MessageID));
 			long long id;
 			data.Read(id);
-			synchronizeState(data);
+			if(id == m_Player.ID)
+			{
+				synchronizeState(data);
+			}
 		});
 	}
 

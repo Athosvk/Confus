@@ -11,7 +11,6 @@ namespace Confus
 		: m_Player(a_Player),
 		m_Connection(a_Connection)
 	{
-		m_ID = m_Connection.getID();
 	}
 
 	void LocalPlayerController::handleInput(ConfusShared::EventManager& a_EventManager)
@@ -33,11 +32,10 @@ namespace Confus
 	void LocalPlayerController::fixedUpdate()
 	{
 		RakNet::BitStream bitstream;
-		bitstream.Write(reinterpret_cast<char*>(&m_InputState));
 		bitstream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::Player));
 		bitstream.Write(m_Player.ID);
 		bitstream.Write(m_Player.getRotation());
-		bitstream.Write(m_Player);
+		bitstream.Write(reinterpret_cast<char*>(&m_InputState));
 
 		m_Connection.sendMessage(&bitstream, PacketReliability::UNRELIABLE);
 		resetInputState();
