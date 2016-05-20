@@ -10,4 +10,8 @@
 // Headers for CppUnitTest
 #include "CppUnitTest.h"
 
+#include <ConfusShared/Player.h>
+#include <ConfusShared/Physics/PhysicsWorld.h>
+#include <ConfusShared/Flag.h>
+
 // TODO: reference additional headers your program requires here
