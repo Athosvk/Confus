@@ -9,9 +9,12 @@ namespace Confus
 		: m_Player(a_Player),
 		m_Connection(a_Connection)
 	{
-		m_Connection.addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::Player), [this](RakNet::Packet* a_Packet)
+		m_Connection.addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::UpdatePosition), [this](RakNet::Packet* a_Packet)
 		{
 			RakNet::BitStream data(a_Packet->data, a_Packet->length, false);
+			data.IgnoreBytes(sizeof(RakNet::MessageID));
+			long long id;
+			data.Read(id);
 			synchronizeState(data);
 		});
 	}
@@ -19,8 +22,11 @@ namespace Confus
 	void RemotePlayerController::synchronizeState(RakNet::BitStream& a_Data) const
 	{
 		irr::core::vector3df newPosition;
-		a_Data.IgnoreBytes(sizeof(unsigned char));
 		a_Data.Read(newPosition);
 		m_Player.setPosition(newPosition);
+
+		irr::core::vector3df newRotation;
+		a_Data.Read(newRotation);
+		m_Player.setRotation(newRotation);
 	}
 }

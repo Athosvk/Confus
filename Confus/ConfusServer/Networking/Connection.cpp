@@ -56,7 +56,7 @@ namespace ConfusServer
             auto connectionCount = getConnectionCount();
             std::vector<RakNet::SystemAddress>
                 openConnections(static_cast<size_t>(connectionCount));
-            auto serverID = m_Interface->GetConnectionList(openConnections.data(),
+            m_Interface->GetConnectionList(openConnections.data(),
                 &connectionCount);
             return openConnections;
         }
@@ -70,7 +70,7 @@ namespace ConfusServer
         {
             auto connectionCount = getConnectionCount();
             std::vector<RakNet::SystemAddress> openConnections(static_cast<size_t>(connectionCount));
-            auto serverID = m_Interface->GetConnectionList(openConnections.data(),
+            m_Interface->GetConnectionList(openConnections.data(),
                 &connectionCount);
             return openConnections;
         }
@@ -120,7 +120,6 @@ namespace ConfusServer
         {
             if(m_Connected)
             {
-                auto openConnections = getOpenConnections();
                 m_Interface->Send(&a_InputStream, PacketPriority::HIGH_PRIORITY, a_Reliability, 0, a_Address, false);
             }
         }
@@ -130,7 +129,6 @@ namespace ConfusServer
         {
             if(m_Connected)
             {
-                auto openConnections = getOpenConnections();
                 m_Interface->Send(&a_InputStream, PacketPriority::HIGH_PRIORITY, PacketReliability::UNRELIABLE, 0, a_Address, false);
             }
         }
