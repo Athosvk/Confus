@@ -1,6 +1,6 @@
 #include <RakNet/BitStream.h>
 
-#include "RemoteController.h"
+#include "RemoteReceiver.h"
 #include "../ConfusShared/PacketType.h"
 #include "Networking/Connection.h"
 #include "../ConfusShared/Player.h"
@@ -8,7 +8,7 @@
 
 namespace ConfusServer
 {
-	RemoteController::RemoteController(ConfusShared::Player& a_Player, Networking::Connection& a_Connection)
+	RemoteReceiver::RemoteReceiver(ConfusShared::Player& a_Player, Networking::Connection& a_Connection)
 		: m_Player(a_Player),
 		m_Connection(a_Connection)
 	{
@@ -25,7 +25,7 @@ namespace ConfusServer
 		});
 	}
 
-	void RemoteController::synchronize(RakNet::BitStream& a_Data) const
+	void RemoteReceiver::synchronize(RakNet::BitStream& a_Data) const
 	{
 		irr::core::vector3df rotation = irr::core::vector3df();
 		a_Data.Read(rotation);

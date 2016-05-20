@@ -15,7 +15,7 @@ namespace ConfusTest
 			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
 			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
 			player.startLightAttack();
-			Assert::AreEqual(player.getState(), ConfusShared::EPlayerState::LightAttacking);
+			Assert::IsTrue(player.getState() == ConfusShared::EPlayerState::LightAttacking);
 		}
 
 		TEST_METHOD(testHeavyAttack)
@@ -23,7 +23,7 @@ namespace ConfusTest
 			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
 			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
 			player.startHeavyAttack();
-			Assert::AreEqual(player.getState(), ConfusShared::EPlayerState::HeavyAttacking);
+			Assert::IsTrue(player.getState() == ConfusShared::EPlayerState::HeavyAttacking);
 		}
 
 		TEST_METHOD(testRespawn)
@@ -33,7 +33,7 @@ namespace ConfusTest
 			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
 			player.setStartPosition(StartPosition);
 			player.respawn();
-			Assert::AreEqual(player.getPosition(), StartPosition);
+			Assert::IsTrue(player.getPosition() == StartPosition);
 		}
 
 		TEST_METHOD(testTeamID)
@@ -42,7 +42,7 @@ namespace ConfusTest
 			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
 			const auto TeamIdentifier = ConfusShared::ETeamIdentifier::TeamBlue;
 			player.setTeamIdentifier(TeamIdentifier, m_Device);
-			Assert::AreEqual(player.getTeamIdentifier(), TeamIdentifier);
+			Assert::IsTrue(player.getTeamIdentifier() == TeamIdentifier);
 		}
 
 		TEST_METHOD(testDeathRespawn)
@@ -53,7 +53,7 @@ namespace ConfusTest
 			player.setStartPosition(StartPosition);
 			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
 			player.update();
-			Assert::AreEqual(player.getPosition(), StartPosition);
+			Assert::IsTrue(player.getPosition() == StartPosition);
 		}
 
 		TEST_METHOD(testDrop)
@@ -81,7 +81,7 @@ namespace ConfusTest
 			player.FlagPointer = &flag;
 			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
 			player.update();
-			Assert::AreEqual(player.CarryingFlag, ConfusShared::EFlagEnum::None);
+			Assert::IsTrue(player.CarryingFlag == ConfusShared::EFlagEnum::None);
 		}
 
 		TEST_METHOD(testFlagStateReset)
@@ -95,7 +95,7 @@ namespace ConfusTest
 			player.FlagPointer = &flag;
 			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
 			player.update();
-			Assert::AreEqual(flag.getFlagStatus(), ConfusShared::EFlagEnum::FlagDropped);
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
 		}
 	};
 }

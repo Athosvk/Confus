@@ -302,5 +302,8 @@
     <ClInclude Include="..\ConfusShared\PacketType.h">
       <Filter>Shared\Networking</Filter>
     </ClInclude>
+    <ClInclude Include="..\ConfusShared\PlayerInputState.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

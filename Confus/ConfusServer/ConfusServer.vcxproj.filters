@@ -19,6 +19,9 @@
     <Filter Include="Shared Files\Physics">
       <UniqueIdentifier>{12b82904-cb6a-4fbb-ae5b-da280fbcd0cd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shared Files\Networking">
+      <UniqueIdentifier>{6d35f9e4-addc-4b3c-bb12-a4b067e83a0d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -89,6 +92,9 @@
     </ClCompile>
     <ClCompile Include="..\ConfusShared\Health.cpp">
       <Filter>Shared Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RemoteReceiver.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +178,15 @@
     </ClInclude>
     <ClInclude Include="..\ConfusShared\Health.h">
       <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\PacketType.h">
+      <Filter>Shared Files\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\PlayerInputState.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RemoteReceiver.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

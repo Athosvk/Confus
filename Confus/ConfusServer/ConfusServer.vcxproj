@@ -213,6 +213,7 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Networking\Connection.cpp" />
+    <ClCompile Include="RemoteReceiver.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="TeamScore.cpp" />
   </ItemGroup>
@@ -229,6 +230,7 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClInclude Include="..\ConfusShared\MazeGenerator.h" />
     <ClInclude Include="..\ConfusShared\MazeTile.h" />
     <ClInclude Include="..\ConfusShared\MoveableWall.h" />
+    <ClInclude Include="..\ConfusShared\PacketType.h" />
     <ClInclude Include="..\ConfusShared\Physics\BoxCollider.h" />
     <ClInclude Include="..\ConfusShared\Physics\Collider.h" />
     <ClInclude Include="..\ConfusShared\Physics\CollisionRegistrar.h" />
@@ -237,12 +239,14 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClInclude Include="..\ConfusShared\Physics\PhysicsWorld.h" />
     <ClInclude Include="..\ConfusShared\Physics\RigidBody.h" />
     <ClInclude Include="..\ConfusShared\Player.h" />
+    <ClInclude Include="..\ConfusShared\PlayerInputState.h" />
     <ClInclude Include="..\ConfusShared\RespawnFloor.h" />
     <ClInclude Include="..\ConfusShared\TeamIdentifier.h" />
     <ClInclude Include="..\ConfusShared\WalledMazeTile.h" />
     <ClInclude Include="..\ConfusShared\Weapon.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Networking\Connection.h" />
+    <ClInclude Include="RemoteReceiver.h" />
     <ClInclude Include="TeamScore.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
