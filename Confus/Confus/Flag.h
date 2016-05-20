@@ -25,6 +25,7 @@ namespace Confus
 	/// Flag class with status and team id
 	class Flag 
     {
+        friend class FlagTest;
 	public:
 		Delegate<void(ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum)> FlagStatusChangedEvent;
     private:		
