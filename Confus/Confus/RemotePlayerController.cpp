@@ -1,6 +1,7 @@
 #include "RemotePlayerController.h"
 #include "Networking/ClientConnection.h"
 #include "../ConfusShared/Player.h"
+#include "../ConfusShared/PacketType.h"
 
 namespace Confus
 {
@@ -8,7 +9,7 @@ namespace Confus
 		: m_Player(a_Player),
 		m_Connection(a_Connection)
 	{
-		m_Connection.addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::Packet* a_Packet)
+		m_Connection.addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::Player), [this](RakNet::Packet* a_Packet)
 		{
 			RakNet::BitStream data(a_Packet->data, a_Packet->length, false);
 			synchronizeState(data);

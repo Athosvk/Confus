@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <functional>
+#include <RakNet/MessageIdentifiers.h>
 
 #include "Connection.h"
 #define DEBUG_CONSOLE

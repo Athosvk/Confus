@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include <RakNet/BitStream.h>
 #include <RakNet/MessageIdentifiers.h>
 #include <RakNet/RakPeerInterface.h>
@@ -76,7 +77,7 @@ namespace Confus
 			return m_Interface->GetGuidFromSystemAddress(RakNet::UNASSIGNED_SYSTEM_ADDRESS).g;
 		}
 
-		void ClientConnection::sendMessage(RakNet::BitStream* a_Stream, PacketReliability a_Reliability) 
+		void ClientConnection::sendMessage(RakNet::BitStream* a_Stream, PacketReliability a_Reliability) const
 		{
 			if(m_Connected)
 			{
@@ -97,12 +98,11 @@ namespace Confus
 			auto connectionCount = getConnectionCount();
 			std::vector<RakNet::SystemAddress>
 				openConnections(static_cast<size_t>(connectionCount));
-			auto serverID = m_Interface->GetConnectionList(openConnections.data(),
-				&connectionCount);
+			m_Interface->GetConnectionList(openConnections.data(), &connectionCount);
 
 			if(connectionCount <= 0)
 			{
-				throw new std::logic_error("There is no connected server");
+				throw std::logic_error("There is no connected server");
 			}
 			//We assume there is at most one connection, so it is safe to say that this
 			//is the server connection

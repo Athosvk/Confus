@@ -1,13 +1,12 @@
 #include <iostream>
-#include <memory>
 #include <RakNet/BitStream.h>
-#include <RakNet\MessageIdentifiers.h>
 #include <string>
 
 #include "TeamScore.h"
 #define DEBUG_CONSOLE
 #include "../ConfusShared/Debug.h"
 #include "../ConfusShared/Flag.h"
+#include "../ConfusShared/PacketType.h"
 
 namespace ConfusServer 
 {
@@ -31,7 +30,7 @@ namespace ConfusServer
     void TeamScore::sendScoreToClients()
     {
         RakNet::BitStream bitStream;
-        bitStream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::ScoreUpdate));
+        bitStream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::ScoreUpdate));
 
         bitStream.Write(m_RedTeamScore);
 		bitStream.Write(m_BlueTeamScore);
@@ -44,7 +43,7 @@ namespace ConfusServer
         if(teamHasWon(a_TeamScored))
         {
             RakNet::BitStream bitStream;
-            bitStream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::EndOfGame));
+            bitStream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::EndOfGame));
             bitStream.Write(a_TeamScored);
             m_Connection->broadcastBitstream(bitStream);
             std::cout << "Team has won: " << static_cast<int>(a_TeamScored) << std::endl;
@@ -85,7 +84,6 @@ namespace ConfusServer
             break;
         default:
             throw std::logic_error("Team does not exist");
-            break;
         }
         return scoreAmount;
     }

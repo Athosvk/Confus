@@ -9,7 +9,7 @@
 #include "../ConfusShared/Flag.h"
 #include "FlagGUI.h"
 #include "WinScreen.h"
-
+#include "../ConfusShared/PacketType.h"
 #include "ScoreGUI.h"
 #define DEBUG_CONSOLE
 #include "../ConfusShared/Debug.h"
@@ -94,27 +94,27 @@ namespace Confus
 
         m_Device->getCursorControl()->setVisible(false);
 
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::MainPlayerJoined), [this](RakNet::Packet* a_Data)
+        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::MainPlayerJoined), [this](RakNet::Packet* a_Data)
         {
             addOwnPlayer(a_Data);
         });
 
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::PlayerLeft), [this](RakNet::Packet* a_Data)
+        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::PlayerLeft), [this](RakNet::Packet* a_Data)
         {
             removePlayer(a_Data);
         });
 
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::OtherPlayerJoined), [this](RakNet::Packet* a_Data)
+        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::OtherPlayerJoined), [this](RakNet::Packet* a_Data)
         {
             addOtherPlayer(a_Data);
         });
 
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdatePosition), [this](RakNet::Packet* a_Data)
+        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::UpdatePosition), [this](RakNet::Packet* a_Data)
         {
             updateOtherPlayer(a_Data);
         });
 
-		m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdateHealth), [this](RakNet::Packet* a_Data)
+		m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::UpdateHealth), [this](RakNet::Packet* a_Data)
 		{
 			updateHealth(a_Data);
 		});
@@ -189,7 +189,7 @@ namespace Confus
         std::cin >> serverPort;
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Data)
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Data)
         {
             RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
 
@@ -201,7 +201,7 @@ namespace Confus
             m_MazeGenerator.refillMainMazeRequest(mazeSeed, timeMazeChanges);
         });
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [this](RakNet::Packet* a_Data)
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::ScoreUpdate), [this](RakNet::Packet* a_Data)
         {
             RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
 
@@ -215,7 +215,7 @@ namespace Confus
             std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
         });
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::EndOfGame), [this](RakNet::Packet* a_Packet) 
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::EndOfGame), [this](RakNet::Packet* a_Packet)
         {
             ConfusShared::ETeamIdentifier a_TeamIdentifier;
             RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);

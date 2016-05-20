@@ -83,7 +83,6 @@ namespace ConfusShared
 
 		/// <summary> get/setter for health. Should really turn into const but gave some weird errors </summary>
 		ConfusShared::Health* getHealthInstance();
-		void onScore();
 		/// <summary> Starts the light attack, dealing normal damage. </summary>
 		void startLightAttack();
 
@@ -94,6 +93,7 @@ namespace ConfusShared
 		ConfusShared::ETeamIdentifier getTeamIdentifier() const;
 		void setTeamIdentifier(ConfusShared::ETeamIdentifier a_TeamIdentifier, irr::IrrlichtDevice* a_Device);
 		int getAnimationFrame() const;
+		void setMovementDirection(irr::core::vector3df a_Direction) const;
     private:
 		/// <summary> Updates the color </summary>
 		/// <param name="a_Device"> The active irrlicht device </param>

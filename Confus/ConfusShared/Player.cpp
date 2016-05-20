@@ -126,6 +126,12 @@ namespace ConfusShared
 		return static_cast<int>(m_PlayerNode->getFrameNr());
 	}
 
+	void Player::setMovementDirection(irr::core::vector3df a_Direction) const
+	{
+		const float Speed = 1.0f;
+		m_Collider->getRigidBody()->setVelocity(a_Direction.normalize() * Speed);
+	}
+
 	void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* a_SceneNode)
     {
         if(m_Attacking)
@@ -199,12 +205,6 @@ namespace ConfusShared
             m_PlayerState = a_NewState;
         } 
     }
-
-	void Player::onScore()
-	{
-		FlagPointer = nullptr;
-		CarryingFlag = ConfusShared::EFlagEnum::None;
-	}
 
 	void Player::dropFlag()
 	{

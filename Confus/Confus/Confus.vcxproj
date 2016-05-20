@@ -245,6 +245,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="..\ConfusShared\MazeGenerator.h" />
     <ClInclude Include="..\ConfusShared\MazeTile.h" />
     <ClInclude Include="..\ConfusShared\MoveableWall.h" />
+    <ClInclude Include="..\ConfusShared\PacketType.h" />
     <ClInclude Include="..\ConfusShared\Player.h" />
     <ClInclude Include="..\ConfusShared\RespawnFloor.h" />
     <ClInclude Include="..\ConfusShared\TeamIdentifier.h" />

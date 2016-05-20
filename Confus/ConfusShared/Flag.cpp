@@ -172,6 +172,9 @@ namespace ConfusShared
 					{
                         // Player scored a point!
                         score();
+						a_PlayerObject->FlagPointer = nullptr;
+						a_PlayerObject->CarryingFlag = EFlagEnum::None;
+						returnToStartPosition();
                     }
 					else
 					{

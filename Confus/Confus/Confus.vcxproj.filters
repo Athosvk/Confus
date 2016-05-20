@@ -19,6 +19,9 @@
     <Filter Include="Shared\Physics">
       <UniqueIdentifier>{9986cd98-88be-46dc-9b0d-850e68f7eac9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shared\Networking">
+      <UniqueIdentifier>{9812e897-229b-40a5-b970-a49cd85625bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -295,6 +298,9 @@
     </ClInclude>
     <ClInclude Include="..\ConfusShared\Player.h">
       <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\PacketType.h">
+      <Filter>Shared\Networking</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
