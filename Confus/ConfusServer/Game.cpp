@@ -1,11 +1,11 @@
 #include <Irrlicht/irrlicht.h>
 #include <time.h>
 #include <iostream>
-#include <RakNet\GetTime.h>
+#include <RakNet/BitStream.h>
+#include <RakNet/GetTime.h>
 
 #include "Game.h"
 #include "../ConfusShared/Player.h"
-
 #define DEBUG_CONSOLE
 #include "../ConfusShared/Debug.h"
 #include "../ConfusShared/TeamIdentifier.h"
@@ -24,8 +24,8 @@ namespace ConfusServer
 			irr::core::vector2df(19., 20.), m_PhysicsWorld),
         m_BlueFlag(m_Device, ConfusShared::ETeamIdentifier::TeamBlue, m_PhysicsWorld),
         m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, m_PhysicsWorld),
-		m_PhysicsWorld(m_Device),
-		m_TeamScoreManager(m_BlueFlag, m_RedFlag)
+		m_TeamScoreManager(m_BlueFlag, m_RedFlag),
+		m_PhysicsWorld(m_Device)
     {
     }
 
@@ -122,7 +122,7 @@ namespace ConfusServer
             }
             if(currentDelay == 0.0f)
             {
-                currentSeed = static_cast<int>(time(0)) % 1000;
+                currentSeed = static_cast<int>(time(nullptr)) % 1000;
                 broadcastMazeChange(currentSeed);
             }
             currentDelay += static_cast<float>(m_DeltaTime);
@@ -150,7 +150,7 @@ namespace ConfusServer
         }
     }
 
-    void Game::broadcastMazeChange(int a_Seed)
+    void Game::broadcastMazeChange(int a_Seed) const
     {
         int newTime = static_cast<int>(RakNet::GetTimeMS()) + (static_cast<int>(MazeDelay * 1000));
 
@@ -240,7 +240,7 @@ namespace ConfusServer
         m_Connection->broadcastPacket(&stream);
     }
 
-    void Game::updateHealth(EHitIdentifier a_HitType, Confus::Player* a_Player)
+    void Game::updateHealth(EHitIdentifier a_HitType, Confus::Player* a_Player) const
     {
         RakNet::BitStream stream;
         stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdateHealth));

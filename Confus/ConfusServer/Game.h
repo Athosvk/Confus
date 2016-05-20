@@ -1,15 +1,12 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
-#include <RakNet/BitStream.h>
 
 #include "Networking/Connection.h"
 #include "../ConfusShared/MazeGenerator.h"
 #include "../ConfusShared/Player.h"
-#include "../ConfusShared/EventManager.h"
 #include "../ConfusShared/Flag.h"
-#include "TeamScore.h"
-#include "../ConfusShared/EHitIdentifier.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
+#include "TeamScore.h"
 
 namespace ConfusServer
 { 
@@ -51,7 +48,6 @@ namespace ConfusServer
         /// MazeGenerator that hasa accesible maze
         /// </summary>
         ConfusShared::MazeGenerator m_MazeGenerator;
-        ConfusShared::EventManager m_EventManager;
         std::vector<Confus::Player*> m_PlayerArray;
         /// <summary>
         /// The Blue Flag.
@@ -87,9 +83,9 @@ namespace ConfusServer
         irr::u32 m_CurrentTicks = 0;
         /// <summary> The connection to the clients of this server</summary>
         std::unique_ptr<Networking::Connection> m_Connection;
-        irr::scene::ISceneNode* m_LevelRootNode;
+        irr::scene::ISceneNode* m_LevelRootNode = nullptr;
         /// <summary> Team Score Manager </summary>
-        TeamScore m_TeamScoreManager;		
+        TeamScore m_TeamScoreManager;
 		/// <summary>The physics world, allowing simulation of rigid bodies and colliders</summary>
 		ConfusShared::Physics::PhysicsWorld m_PhysicsWorld;
     public:
@@ -112,10 +108,6 @@ namespace ConfusServer
         /// </summary>
         void initializeConnection();
         /// <summary>
-        /// Processes the input data
-        /// </summary>
-        void handleInput();
-        /// <summary>
         /// Updates the state of the objects in the game
         /// </summary>
         void update();
@@ -134,11 +126,11 @@ namespace ConfusServer
 	    void addPlayer(RakNet::Packet* a_Data);
         void removePlayer(RakNet::Packet* a_Data);
         void updatePlayers();
-        void updateHealth(EHitIdentifier a_HitType, Confus::Player* a_Player);
+        void updateHealth(EHitIdentifier a_HitType, Confus::Player* a_Player) const;
         /// <summary>
         /// Broadcast a maze change
         /// </summary>
-        void broadcastMazeChange(int a_Seed);
+        void broadcastMazeChange(int a_Seed) const;
         /// <summary> Reset game </summary>
         void resetGame();
     };
