@@ -1,14 +1,12 @@
 #pragma once
+#include <Irrlicht/irrlicht.h>
+
 #include "../ConfusShared/TeamIdentifier.h"
 #include "Delegate.h"
 
-namespace Confus
-{
-	class Player;
-}
-
 namespace ConfusShared
 {
+	class Player;
 	namespace Physics
 	{
 		class BoxCollider;
@@ -29,7 +27,7 @@ namespace ConfusShared
 	class Flag 
     {
 	public:
-		Delegate<void(ConfusShared::ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum)> FlagStatusChangedEvent;
+		Delegate<void(ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum)> FlagStatusChangedEvent;
     private:		
 		irr::core::vector3df m_StartPosition = irr::core::vector3df(0.f);
 		irr::core::vector3df m_StartRotation = irr::core::vector3df(0.f);
@@ -45,12 +43,12 @@ namespace ConfusShared
 		/// <param name="a_Device">The active Irrlicht Device.</param>
 		/// <param name="a_TeamIdentifier">The team's identifier the flag should have.</param>
 		/// <param name="a_PhysicsWorld">The physics world </param>
-		Flag(irr::IrrlichtDevice* a_Device, ConfusShared::ETeamIdentifier a_TeamIdentifier,
+		Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier,
 			Physics::PhysicsWorld& a_PhysicsWorld);
 
 		/// <summary> Capture Flag a flag with the wanted playerobject parent. </summary>
 		/// <param name="a_PlayerObject"> The player object that should carry the flag. </param>
-		void captureFlag(Confus::Player* a_PlayerObject);
+		void captureFlag(Player* a_PlayerObject);
 
 		/// <summary> Set the starting position of the flag that it will reset to. </summary>
 		/// <param name="a_Position"> The position the flag will reset to. </param>

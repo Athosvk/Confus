@@ -4,9 +4,13 @@ namespace RakNet
 	class BitStream;
 }
 
-namespace Confus
+namespace ConfusShared
 {
 	class Player;
+}
+
+namespace Confus
+{
 	namespace Networking
 	{
 		class ClientConnection;
@@ -15,12 +19,12 @@ namespace Confus
 	class RemotePlayerController
 	{
 	private:
-		Player& m_Player;
+		ConfusShared::Player& m_Player;
 		Networking::ClientConnection& m_Connection;
 	public:
-		RemotePlayerController(Player& a_Player, Networking::ClientConnection& a_Connection);
+		RemotePlayerController(ConfusShared::Player& a_Player, Networking::ClientConnection& a_Connection);
 
 	private:
-		void synchronizeState(RakNet::BitStream& a_Data);
+		void synchronizeState(RakNet::BitStream& a_Data) const;
 	};
 }

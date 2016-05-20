@@ -6,10 +6,6 @@
 namespace ConfusShared
 {
 	class EventManager;
-}
-
-namespace Confus
-{
 	class Player;
 }
 
@@ -28,12 +24,12 @@ namespace Confus
 		} m_InputState;
 #pragma pack(pop)
 
-		Player& m_Player;
+		ConfusShared::Player& m_Player;
 		Networking::ClientConnection& m_Connection;
 		long long m_ID;
 
 	public:
-		LocalPlayerController(Player& a_Player, Networking::ClientConnection& m_Connection);
+		LocalPlayerController(ConfusShared::Player& a_Player, Networking::ClientConnection& m_Connection);
 		
 		void handleInput(ConfusShared::EventManager& a_EventManager);
 		void fixedUpdate();

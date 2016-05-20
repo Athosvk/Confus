@@ -48,7 +48,7 @@ namespace ConfusServer
         /// MazeGenerator that hasa accesible maze
         /// </summary>
         ConfusShared::MazeGenerator m_MazeGenerator;
-        std::vector<Confus::Player*> m_PlayerArray;
+        std::vector<ConfusShared::Player*> m_PlayerArray;
         /// <summary>
         /// The Blue Flag.
         /// </summary>
@@ -126,7 +126,7 @@ namespace ConfusServer
 	    void addPlayer(RakNet::Packet* a_Data);
         void removePlayer(RakNet::Packet* a_Data);
         void updatePlayers();
-        void updateHealth(EHitIdentifier a_HitType, Confus::Player* a_Player) const;
+        void updateHealth(EHitIdentifier a_HitType, ConfusShared::Player* a_Player) const;
         /// <summary>
         /// Broadcast a maze change
         /// </summary>

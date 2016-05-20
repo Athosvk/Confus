@@ -5,14 +5,14 @@
 
 #include "../ConfusShared/Player.h"
 #include "IUIElement.h"
-#include "Audio\Sound.h"
+#include "Audio/Sound.h"
 
 namespace Confus
 {
 	class GUI
 	{
 	private:
-		Player* m_PlayerNode;
+		ConfusShared::Player* m_PlayerNode;
 		irr::IrrlichtDevice* m_Device;
 		irr::gui::IGUIEnvironment* m_GUIEnvironment;
 		irr::gui::IGUIStaticText* m_HealthTextBox;
@@ -24,7 +24,7 @@ namespace Confus
         Audio::Sound m_AudioSourceLowHealth;
 		
 	public:
-		GUI(irr::IrrlichtDevice* a_Device, Player* a_Player, Audio::AudioManager* a_AudioManager);
+		GUI(irr::IrrlichtDevice* a_Device, ConfusShared::Player* a_Player, Audio::AudioManager* a_AudioManager);
 		~GUI();
 		void update();
 		void drawBloodOverlay();

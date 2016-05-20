@@ -9,12 +9,12 @@ namespace Confus
 {
     namespace Audio
     {
-        PlayerAudioEmitter::PlayerAudioEmitter(Player* a_AttachedPlayer, AudioManager* a_AudioManager)
-			: m_AttachedPlayer(a_AttachedPlayer),
-			m_HitSoundHeavy(a_AudioManager->createSound("SFX/Player/a_heavy_grunt.wav")),
+        PlayerAudioEmitter::PlayerAudioEmitter(ConfusShared::Player* a_AttachedPlayer, AudioManager* a_AudioManager)
+			: m_HitSoundHeavy(a_AudioManager->createSound("SFX/Player/a_heavy_grunt.wav")),
 			m_HitSoundLight(a_AudioManager->createSound("SFX/Player/a_light_grunt.wav")),
 			m_HitSoundHeavyBackstab(a_AudioManager->createSound("SFX/Player/a_heavybackstab_grunt.wav")),
-			m_HitSoundLightBackstab(a_AudioManager->createSound("SFX/Player/a_lightbackstab_grunt.wav"))
+			m_HitSoundLightBackstab(a_AudioManager->createSound("SFX/Player/a_lightbackstab_grunt.wav")),
+			m_AttachedPlayer(a_AttachedPlayer)
         {
 			createAudioSources(a_AudioManager);
 			m_AttachedPlayer->getHealthInstance()->DamageEvent += [this](EHitIdentifier a_HitIdentifier) -> void
@@ -60,13 +60,13 @@ namespace Confus
 
         void PlayerAudioEmitter::playRandomGrunt()
         {
-            std::srand(static_cast<int>(time(NULL)));
+            std::srand(static_cast<int>(time(nullptr)));
 			m_Grunts[std::rand() % 2].play();
         }
 
         void PlayerAudioEmitter::playRandomSwordSwosh()
         {
-			std::srand(static_cast<int>(time(NULL)));
+			std::srand(static_cast<int>(time(nullptr)));
 			m_SwordSwoshes[std::rand() % 4].play();
         }
 

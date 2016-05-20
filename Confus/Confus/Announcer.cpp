@@ -1,9 +1,9 @@
 #include "Announcer.h"
-#include "Audio\AudioManager.h"
+#include "Audio/AudioManager.h"
 
 namespace Confus
 {
-	Announcer::Announcer(ConfusShared::Flag* a_RedFlag, ConfusShared::Flag* a_BlueFlag, Player* a_Player, Audio::AudioManager* a_AudioManager)
+	Announcer::Announcer(ConfusShared::Flag* a_RedFlag, ConfusShared::Flag* a_BlueFlag, ConfusShared::Player* a_Player, Audio::AudioManager* a_AudioManager)
 		: m_RedFlag(a_RedFlag),
 		m_BlueFlag(a_BlueFlag),
 		m_Player(a_Player),

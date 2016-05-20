@@ -46,7 +46,7 @@ namespace ConfusServer
         m_MazeTimer = 0;
         broadcastMazeChange(19 + 20 + 21 + 22 + 23 + 24);
 		
-        for(Confus::Player* player : m_PlayerArray) 
+        for(ConfusShared::Player* player : m_PlayerArray) 
 		{
 			player->respawn();
         }
@@ -144,10 +144,6 @@ namespace ConfusServer
     {
         updatePlayers();
 		m_MazeGenerator.fixedUpdate();
-        for(auto player : m_PlayerArray)
-        {
-            player->fixedUpdate();
-        }
     }
 
     void Game::broadcastMazeChange(int a_Seed) const
@@ -168,7 +164,7 @@ namespace ConfusServer
 		ConfusShared::ETeamIdentifier teamID = m_PlayerArray.size() % 2 == 0 ? 
 			ConfusShared::ETeamIdentifier::TeamRed : ConfusShared::ETeamIdentifier::TeamBlue;
 
-        Confus::Player* newPlayer = new Confus::Player(m_Device, m_PhysicsWorld, id);
+        ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
 		newPlayer->setTeamIdentifier(teamID, m_Device);
 
         m_PlayerArray.push_back(newPlayer);
@@ -240,7 +236,7 @@ namespace ConfusServer
         m_Connection->broadcastPacket(&stream);
     }
 
-    void Game::updateHealth(EHitIdentifier a_HitType, Confus::Player* a_Player) const
+    void Game::updateHealth(EHitIdentifier a_HitType, ConfusShared::Player* a_Player) const
     {
         RakNet::BitStream stream;
         stream.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdateHealth));

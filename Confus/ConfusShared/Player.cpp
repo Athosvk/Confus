@@ -4,7 +4,7 @@
 #include "Physics/RigidBody.h"
 #include "Player.h"
 
-namespace Confus
+namespace ConfusShared
 {
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 25u;

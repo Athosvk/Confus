@@ -1,5 +1,4 @@
 #include <Irrlicht/irrlicht.h>
-#include <iostream>
 
 #include "Flag.h"
 //To remove
@@ -10,7 +9,7 @@
 
 namespace ConfusShared
 {
-	Flag::Flag(irr::IrrlichtDevice* a_Device, ConfusShared::ETeamIdentifier a_TeamIdentifier, Physics::PhysicsWorld& a_PhysicsWorld) : 
+	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, Physics::PhysicsWorld& a_PhysicsWorld) : 
 		m_TeamIdentifier(a_TeamIdentifier),
 		m_FlagStatus(EFlagEnum::FlagBase) 
 	{
@@ -20,7 +19,7 @@ namespace ConfusShared
 
         //Load model
         irr::scene::IAnimatedMesh* mesh = sceneManager->getMesh("Media/Meshes/Flag.3ds");
-        m_FlagNode = sceneManager->addMeshSceneNode(mesh, 0, 2);
+        m_FlagNode = sceneManager->addMeshSceneNode(mesh, nullptr, 2);
         m_FlagNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
         m_FlagNode->setScale({ 1.5f, 1.5f, 1.5f });
 		m_Collider = a_PhysicsWorld.createBoxCollider(irr::core::vector3df(1.0f, 3.0f, 1.0f), m_FlagNode, Physics::ECollisionFilter::Interactable,
@@ -32,7 +31,7 @@ namespace ConfusShared
 			auto collidedNode = a_Other->getRigidBody()->getAttachedNode();
 			if (!collidedNode->getChildren().empty())
 			{
-				Confus::Player* player = dynamic_cast<Confus::Player*>(*collidedNode->getChildren().begin());
+				ConfusShared::Player* player = dynamic_cast<ConfusShared::Player*>(*collidedNode->getChildren().begin());
 				if (player != nullptr)
 				{
 					captureFlag(player);
@@ -141,7 +140,7 @@ namespace ConfusShared
 	 }
 
 	 //This class handles what to do on collision
-	 void Flag::captureFlag(Confus::Player* a_PlayerObject) 
+	 void Flag::captureFlag(Player* a_PlayerObject)
      {
 		//Somebody is already carrying the flag
 		if (m_FlagStatus == EFlagEnum::FlagTaken) 

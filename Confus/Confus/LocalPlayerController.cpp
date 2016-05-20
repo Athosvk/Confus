@@ -6,7 +6,7 @@
 
 namespace Confus
 {
-	LocalPlayerController::LocalPlayerController(Player& a_Player, Networking::ClientConnection& a_Connection)
+	LocalPlayerController::LocalPlayerController(ConfusShared::Player& a_Player, Networking::ClientConnection& a_Connection)
 		: m_Player(a_Player),
 		m_Connection(a_Connection)
 	{

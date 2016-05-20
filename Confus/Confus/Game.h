@@ -3,9 +3,8 @@
 
 #include "Networking/ClientConnection.h"
 #include "../ConfusShared/MazeGenerator.h"
-#include "Audio/OpenAL\OpenALListener.h"
-#include "../ConfusShared/Player.h"
-#include "Audio\PlayerAudioEmitter.h"
+#include "Audio/OpenAL/OpenALListener.h"
+#include "Audio/PlayerAudioEmitter.h"
 #include "../ConfusShared/EventManager.h"
 #include "../ConfusShared/Flag.h"
 #include "../ConfusShared/RespawnFloor.h"
@@ -31,8 +30,8 @@ namespace Confus
 			/// <summary>Initializes a new instance of the <see cref="PlayerPair"/> struct.</summary>
 			/// <param name="a_Player">The a_ player.</param>
 			/// <param name="a_AudioEmitter">The a_ audio emitter.</param>
-			PlayerPair(Player* a_Player, Audio::PlayerAudioEmitter a_AudioEmitter);
-			Player* Player;
+			PlayerPair(ConfusShared::Player* a_Player, Audio::PlayerAudioEmitter a_AudioEmitter);
+			ConfusShared::Player* Player;
 			Audio::PlayerAudioEmitter AudioEmitter;
 		};
 	public:
@@ -64,7 +63,7 @@ namespace Confus
         /// <summary>
         /// The Players to test with.
         /// </summary>
-        Player m_PlayerNode;
+        ConfusShared::Player m_PlayerNode;
 
 		std::map<long long, PlayerPair> m_Players;
         /// <summary>

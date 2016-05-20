@@ -1,5 +1,4 @@
 #include <Irrlicht/irrlicht.h>
-#include <math.h>
 
 #include "Weapon.h"
 #include "Physics/RigidBody.h"
@@ -26,7 +25,7 @@ namespace ConfusShared
         {
             if(!m_Collided)
             {
-				auto playerNode = dynamic_cast<Confus::Player*>(*a_Other->getRigidBody()->getAttachedNode()->getChildren().begin());
+				auto playerNode = dynamic_cast<Player*>(*a_Other->getRigidBody()->getAttachedNode()->getChildren().begin());
 				if(playerNode != nullptr)
 				{
 					damagePlayer(playerNode);
@@ -36,18 +35,18 @@ namespace ConfusShared
         });
     }
 
-    void Weapon::damagePlayer(Confus::Player* a_Player) const
+    void Weapon::damagePlayer(Player* a_Player) const
     {
         if(getAngle(a_Player->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle))
         {
-			if (Damage == Confus::Player::LightAttackDamage)
+			if (Damage == Player::LightAttackDamage)
 				a_Player->getHealthInstance()->damage(Damage*2, EHitIdentifier::LightBackstab);
 			else
 				a_Player->getHealthInstance()->damage(Damage*2, EHitIdentifier::HeavyBackstab);
         }
 		else
 		{
-			if(Damage == Confus::Player::LightAttackDamage)
+			if(Damage == Player::LightAttackDamage)
 				a_Player->getHealthInstance()->damage(Damage,EHitIdentifier::Light);
 			else
 				a_Player->getHealthInstance()->damage(Damage, EHitIdentifier::Heavy);

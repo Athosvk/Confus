@@ -1,11 +1,10 @@
 #pragma once
-#include <irrlicht/irrlicht.h>
 #include <vector>
 
 #include "Sound.h"
 #include "../../ConfusShared/EHitIdentifier.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	class Player;
 }
@@ -33,13 +32,13 @@ namespace Confus
 			/// <summary> The sword slash sounds </summary>
 			std::vector<Sound> m_SwordSwoshes;            
 			/// <summary> The player emmitting the sounds </summary>
-			Player* m_AttachedPlayer;
+			ConfusShared::Player* m_AttachedPlayer;
         public:            
             /// <summary>
             /// Initializes a new instance of the <see cref="PlayerAudioEmitter"/> class.
             /// </summary>
             /// <param name="a_AttachedPlayer">The player that owns this emitter.</param>
-            PlayerAudioEmitter(Player* a_AttachedPlayer, AudioManager* a_AudioManager);
+            PlayerAudioEmitter(ConfusShared::Player* a_AttachedPlayer, AudioManager* a_AudioManager);
             /// <summary>
             /// Plays a random footstep sound.
             /// </summary>

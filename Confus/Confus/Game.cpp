@@ -70,9 +70,9 @@ namespace Confus
         m_Device->getSceneManager()->clear();
     }
 
-	Game::PlayerPair::PlayerPair(Confus::Player* a_Player, Audio::PlayerAudioEmitter a_AudioEmitter)
-		: AudioEmitter(a_AudioEmitter),
-		Player(a_Player)
+	Game::PlayerPair::PlayerPair(ConfusShared::Player* a_Player, Audio::PlayerAudioEmitter a_AudioEmitter)
+		: Player(a_Player),
+		AudioEmitter(a_AudioEmitter)
 	{
 	}
 
@@ -293,7 +293,6 @@ namespace Confus
     {
 		m_MazeGenerator.fixedUpdate();
 		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
-        m_PlayerNode.fixedUpdate();
     }
 
     void Game::end()
@@ -382,7 +381,7 @@ namespace Confus
             bitstreamIn.Read(id);
             bitstreamIn.Read(teamID);
 
-            Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id);
+            ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
 			newPlayer->setTeamIdentifier(teamID, m_Device);
 			m_Players.emplace(id, PlayerPair(newPlayer, Audio::PlayerAudioEmitter(newPlayer, &m_AudioManager)));
 		}
@@ -403,7 +402,7 @@ namespace Confus
         bitstreamIn.Read(id);
         bitstreamIn.Read(teamID);
 
-        Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id);
+        ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
 		newPlayer->setTeamIdentifier(teamID, m_Device);
 		m_Players.emplace(id, PlayerPair(newPlayer, Audio::PlayerAudioEmitter(newPlayer, &m_AudioManager)));
     }

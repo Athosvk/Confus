@@ -1,13 +1,9 @@
 #pragma once
 #include "../ConfusShared/Physics/BoxCollider.h"
 
-namespace Confus
-{
-	class Player;
-}
-
 namespace ConfusShared
 {
+	class Player;
 	namespace Physics
 	{
 		class PhysicsWorld;
@@ -72,7 +68,7 @@ namespace ConfusShared
     private:
         /// <summary> Damages the playe. </summary>
         /// <remarks> Triggered as callback on collision </remarks>
-        void damagePlayer(Confus::Player* a_Player) const;
+        void damagePlayer(Player* a_Player) const;
 
         /// <summary> Gets the angle between the given vectors </summary>
         /// <param name="a_Vector1">The first vector </param>

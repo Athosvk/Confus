@@ -16,10 +16,7 @@ namespace ConfusShared
 		class BoxCollider;
 		class PhysicsWorld;
 	}
-}
 
-namespace Confus
-{
     enum class EPlayerState : unsigned char
     {
         Alive, CarryingFlag, HeavyAttacking, LightAttacking, Dead
