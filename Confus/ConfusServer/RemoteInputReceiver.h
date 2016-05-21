@@ -17,7 +17,7 @@ namespace ConfusServer
 	}
 	
 	/// <summary> A controller that controls a player instance using the input from the remote client </summary>
-	class RemoteReceiver
+	class RemoteInputReceiver
 	{
 	private:		
 		/// <summary>The player this controller is controlling</summary>
@@ -29,7 +29,7 @@ namespace ConfusServer
 		/// <summary>Initializes a new instance of the <see cref="RemoteController"/> class.</summary>
 		/// <param name="a_Player">The player this controller is controlling</param>
 		/// <param name="a_Connection">The connection through which it is being controlled</param>
-		RemoteReceiver(ConfusShared::Player& a_Player, Networking::Connection& a_Connection);
+		RemoteInputReceiver(ConfusShared::Player& a_Player, Networking::Connection& a_Connection);
 
 	private:		
 		/// <summary>Synchronizes the player with the incoming data</summary>

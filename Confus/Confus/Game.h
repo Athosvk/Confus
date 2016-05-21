@@ -27,24 +27,24 @@ namespace Confus
     class Game : public ConfusShared::BaseGame
     {
 	private:
-		struct PlayerPair
+		struct PlayerConstruct
 		{			
 			/// <summary>Initializes a new instance of the <see cref="PlayerPair" /> struct.</summary>
 			/// <param name="a_Player">The player.</param>
 			/// <param name="a_AudioEmitter">The audio emitter.</param>
 			/// <param name="a_PlayerController">The player controller, ensuring this player is controlled by the server</param>
-			PlayerPair(ConfusShared::Player* a_Player, Audio::PlayerAudioEmitter a_AudioEmitter,
-				RemotePlayerController a_PlayerController);
+			PlayerConstruct(ConfusShared::Player* a_Player, std::unique_ptr<Audio::PlayerAudioEmitter> a_AudioEmitter,
+				Networking::ClientConnection& a_Connection);
 			
 			/// <summary>The player instance, mirrored from the server</summary>
 			ConfusShared::Player* Player;			
 			/// <summary>The audio emitter, playing audio for the associated player</summary>
-			Audio::PlayerAudioEmitter AudioEmitter;			
+			std::unique_ptr<Audio::PlayerAudioEmitter> AudioEmitter;			
 			/// <summary>
 			/// The player controller that ensures synchronization between the local 
 			/// instantiations of the players and those on the server
 			/// </summary>
-			RemotePlayerController PlayerController;
+			std::unique_ptr<RemotePlayerController> PlayerController;
 		};
 	public:
 		/// <summary>
@@ -81,9 +81,9 @@ namespace Confus
 		/// The controller controlling the player instance of the client, so that 
 		/// inputs can be sent to the server
 		/// </summary>
-		LocalPlayerController m_PlayerController;
+		std::unique_ptr<LocalPlayerController> m_PlayerController;
 
-		std::map<long long, PlayerPair> m_Players;
+		std::map<long long, PlayerConstruct> m_Players;
         /// <summary>
         /// The Blue Flag.
         /// </summary>

@@ -26,7 +26,6 @@ namespace Confus
 	        irr::core::vector2df(19., 20.), m_PhysicsWorld),
         m_GUI(m_Device, &m_PlayerNode, &m_AudioManager),
         m_PlayerNode(m_Device, m_PhysicsWorld, 1),
-        m_PlayerController(m_PlayerNode, *m_Connection),
         m_BlueFlag(m_Device, ConfusShared::ETeamIdentifier::TeamBlue, m_PhysicsWorld),
         m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, m_PhysicsWorld),
         m_Announcer(&m_RedFlag,&m_BlueFlag,&m_PlayerNode, &m_AudioManager),
@@ -56,14 +55,16 @@ namespace Confus
 		{
 			m_MazeChangedSound.play();
 		});
-		irr::scene::ICameraSceneNode* camera = m_Device->getSceneManager()->addCameraSceneNodeFPS(&m_PlayerNode, 100.0f, 0.0f, 1);
+		irr::scene::ICameraSceneNode* camera = m_Device->getSceneManager()->addCameraSceneNodeFPS(m_Device->getSceneManager()->getRootSceneNode());
 		camera->setFOV(70.f);
 		camera->setNearValue(0.1f);
+		camera->setPosition(irr::core::vector3df(0.f, 0.0f, 0.2f));
+		camera->setParent(&m_PlayerNode);
     }
 
     Game::~Game()
     {
-        for(auto player : m_Players)
+        for(auto& player : m_Players)
         {
             //m_PlayerArray[i]->remove();
             //delete(m_PlayerArray[i]);
@@ -71,11 +72,11 @@ namespace Confus
         m_Device->getSceneManager()->clear();
     }
 
-	Game::PlayerPair::PlayerPair(ConfusShared::Player* a_Player, Audio::PlayerAudioEmitter a_AudioEmitter,
-		RemotePlayerController a_PlayerController)
+	Game::PlayerConstruct::PlayerConstruct(ConfusShared::Player* a_Player, std::unique_ptr<Audio::PlayerAudioEmitter> a_AudioEmitter,
+		Networking::ClientConnection& a_Connection)
 		: Player(a_Player),
-		AudioEmitter(a_AudioEmitter),
-		PlayerController(a_PlayerController)
+		AudioEmitter(std::move(a_AudioEmitter)),
+		PlayerController(std::make_unique<RemotePlayerController>(*a_Player, a_Connection))
 	{
 	}
 
@@ -192,6 +193,8 @@ namespace Confus
         std::cin >> serverPort;
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
+		m_PlayerController = std::make_unique<LocalPlayerController>(m_PlayerNode, *m_Connection);
+		m_PlayerNode.setGUID(m_Connection->getID());
         m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Data)
         {
             RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
@@ -246,6 +249,7 @@ namespace Confus
         {
             m_ShouldRun = false;
         }
+		m_PlayerController->handleInput(*m_EventManager);
     }
 
     void Game::update()
@@ -253,10 +257,10 @@ namespace Confus
         m_Connection->processPackets();
         handleInput();
 
-		for(auto player : m_Players)
+		for(auto& player : m_Players)
 		{			
 			player.second.Player->update();
-			player.second.AudioEmitter.updatePosition();
+			player.second.AudioEmitter->updatePosition();
 		}
 		m_GUI.update();
         m_Listener.setPosition(m_PlayerNode.getAbsolutePosition());
@@ -296,6 +300,7 @@ namespace Confus
     {
 		m_MazeGenerator.fixedUpdate();
 		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
+		m_PlayerController->fixedUpdate();
     }
 
     void Game::end()
@@ -314,7 +319,7 @@ namespace Confus
 		{
 			long long id;
 			bitstreamIn.Read(id);
-			auto pair = m_Players.at(id);
+			auto& pair = m_Players.at(id);
 			irr::core::vector3df position;
 			irr::core::vector3df rotation;
 			bitstreamIn.Read(position);
@@ -332,7 +337,7 @@ namespace Confus
         long long id;
         inputStream.Read(id);
 
-		auto player = m_Players.at(id);
+		auto& player = m_Players.at(id);
 		int health;
 		EHitIdentifier hitIdentifier;
 
@@ -372,27 +377,29 @@ namespace Confus
 		ConfusShared::ETeamIdentifier teamID;
 		bitstreamIn.Read(teamID);
 		m_PlayerNode.setTeamIdentifier(teamID, m_Device);
-        bitstreamIn.Read(m_PlayerNode.ID);
         m_PlayerNode.respawn();
 
         size_t size;
         bitstreamIn.Read(size);
-
+		std::cout << "\n Player id " << m_PlayerNode.getGUID() << std::endl;
         for(size_t i = 0u; i < size; i++)
         {
             long long id;
             bitstreamIn.Read(id);
             bitstreamIn.Read(teamID);
 
-            ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
-			newPlayer->setTeamIdentifier(teamID, m_Device);
-			m_Players.emplace(id, PlayerPair(newPlayer, Audio::PlayerAudioEmitter(newPlayer, &m_AudioManager), 
-				RemotePlayerController(*newPlayer, *m_Connection)));
+			if(id != m_PlayerNode.getGUID())
+			{
+				ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
+				newPlayer->setTeamIdentifier(teamID, m_Device);
+				m_Players.emplace(id, PlayerConstruct(newPlayer, std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager),
+					*m_Connection));
+			}
 		}
 
 		// Add self
-		m_Players.emplace(m_PlayerNode.ID, PlayerPair(&m_PlayerNode, Audio::PlayerAudioEmitter(&m_PlayerNode, &m_AudioManager),
-			RemotePlayerController(m_PlayerNode, *m_Connection)));
+		m_Players.emplace(m_PlayerNode.getGUID(), PlayerConstruct(&m_PlayerNode, std::make_unique<Audio::PlayerAudioEmitter>(&m_PlayerNode, &m_AudioManager),
+			*m_Connection));
 	}
 
     void Game::addOtherPlayer(RakNet::Packet* a_Data)
@@ -409,8 +416,8 @@ namespace Confus
 
         ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
 		newPlayer->setTeamIdentifier(teamID, m_Device);
-		m_Players.emplace(id, PlayerPair(newPlayer, Audio::PlayerAudioEmitter(newPlayer, &m_AudioManager),
-			RemotePlayerController(*newPlayer, *m_Connection)));
+		m_Players.emplace(id, PlayerConstruct(newPlayer, std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager),
+			*m_Connection));
     }
 
     void Game::removePlayer(RakNet::Packet* a_Data)
@@ -420,7 +427,7 @@ namespace Confus
 
         long long id;
         bitstreamIn.Read(id);
-		auto player = m_Players.at(id);
+		auto& player = m_Players.at(id);
 		player.Player->remove();
 		delete(player.Player);
 		m_Players.erase(id);

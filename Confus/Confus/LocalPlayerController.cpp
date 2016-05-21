@@ -33,11 +33,11 @@ namespace Confus
 	{
 		RakNet::BitStream bitstream;
 		bitstream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::Player));
-		bitstream.Write(m_Player.ID);
+		bitstream.Write(m_Player.getGUID());
 		bitstream.Write(m_Player.getRotation());
 		bitstream.Write(reinterpret_cast<char*>(&m_InputState));
 
-		m_Connection.sendMessage(&bitstream, PacketReliability::UNRELIABLE);
+		//m_Connection.sendMessage(&bitstream, PacketReliability::UNRELIABLE);
 		resetInputState();
 	}
 

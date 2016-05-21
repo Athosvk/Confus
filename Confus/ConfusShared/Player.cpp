@@ -14,12 +14,12 @@ namespace ConfusShared
 		long long a_ID)
 		: irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
 		CarryingFlag(ConfusShared::EFlagEnum::None),
+		m_ID(a_ID),
 		m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f))
     {
+		setParent(SceneManager->getRootSceneNode());
         auto sceneManager = a_Device->getSceneManager();
-
         m_Mesh = sceneManager->getMesh("Media/ninja.b3d");
-        ID = a_ID;
 
 		m_PlayerNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh, this);
 		m_PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
@@ -43,9 +43,18 @@ namespace ConfusShared
 		return &m_PlayerHealth;
 	}
 
-    void Player::render()
+	long long Player::getGUID() const
+	{
+		return m_ID;
+	}
+
+	void Player::setGUID(long long a_ID)
+	{
+		m_ID = a_ID;
+	}
+
+	void Player::render()
     {
-       
     }
 
     const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const

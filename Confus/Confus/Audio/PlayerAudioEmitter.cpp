@@ -19,17 +19,17 @@ namespace Confus
 			createAudioSources(a_AudioManager);
 			m_AttachedPlayer->getHealthInstance()->DamageEvent += [this](EHitIdentifier a_HitIdentifier) -> void
 			{
-				playHitSound(a_HitIdentifier);
+				//playHitSound(a_HitIdentifier);
 			};
 
 			m_AttachedPlayer->OnHeavyAttack += [this]() -> void
 			{
-				playHeavyAttack();
+				//playHeavyAttack();
 			};
 
 			m_AttachedPlayer->OnLightAttack += [this]() -> void
 			{
-				playLightAttack();
+				//playLightAttack();
 			};
         }
 
@@ -42,31 +42,31 @@ namespace Confus
 			
 			if (soundIterator != m_Footsteps.end())
 			{
-				soundIterator->play();
+				//soundIterator->play();
 			}
         }
 
 		void PlayerAudioEmitter::playHeavyAttack()
 		{
-			m_Footsteps[2].play();
-			playRandomSwordSwosh();
+			//m_Footsteps[2].play();
+			//playRandomSwordSwosh();
 		}
 
         void PlayerAudioEmitter::playLightAttack()
         {
-			playRandomGrunt();
-            playRandomSwordSwosh();
+			//playRandomGrunt();
+            //playRandomSwordSwosh();
         }
 
         void PlayerAudioEmitter::playRandomGrunt()
         {
-            std::srand(static_cast<int>(time(nullptr)));
-			m_Grunts[std::rand() % 2].play();
+            //std::srand(static_cast<int>(time(nullptr)));
+			//m_Grunts[std::rand() % 2].play();
         }
 
         void PlayerAudioEmitter::playRandomSwordSwosh()
         {
-			std::srand(static_cast<int>(time(nullptr)));
+			//std::srand(static_cast<int>(time(nullptr)));
 			m_SwordSwoshes[std::rand() % 4].play();
         }
 

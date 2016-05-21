@@ -19,6 +19,12 @@ namespace ConfusServer
     const double Game::MazeDelay = 2.0;
     const double Game::MazeChangeInterval = 60.0 - MazeDelay;
 
+	Game::PlayerPair::PlayerPair(ConfusShared::Player* a_Player, Networking::Connection& a_Connection)
+		: Player(a_Player),
+		Receiver(std::make_unique<RemoteInputReceiver>(*Player, a_Connection))
+	{
+	}
+
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),
 		m_MazeGenerator(m_Device, 41, 40, (19+20+21+22+23+24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
@@ -32,7 +38,7 @@ namespace ConfusServer
 
     Game::~Game()
     {
-        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
+        for(size_t i = 0u; i < m_Players.size(); i++)
         {
             //m_PlayerArray[i]->remove();
             //delete(m_PlayerArray[i]);
@@ -47,9 +53,9 @@ namespace ConfusServer
         m_MazeTimer = 0;
         broadcastMazeChange(19 + 20 + 21 + 22 + 23 + 24);
 		
-        for(ConfusShared::Player* player : m_PlayerArray) 
+        for(auto& playerPair : m_Players) 
 		{
-			player->respawn();
+			playerPair.second.Player->respawn();
         }
     }
 
@@ -105,9 +111,9 @@ namespace ConfusServer
         m_CurrentTicks = m_Device->getTimer()->getTime();
         m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
 
-        for(auto player : m_PlayerArray)
+        for(auto& playerPair : m_Players)
         {
-            player->update();
+            playerPair.second.Player->update();
         }
 
         static float currentDelay = 0.0f;
@@ -160,35 +166,13 @@ namespace ConfusServer
 
     void Game::addPlayer(RakNet::Packet* a_Data)
     {
-        std::cout << a_Data->systemAddress.ToString() << "Is the address of the player that joined";
+        std::cout << a_Data->systemAddress.ToString() << " is the address of the player that joined\n";
         long long id = static_cast<long long>(a_Data->guid.g);
-		ConfusShared::ETeamIdentifier teamID = m_PlayerArray.size() % 2 == 0 ? 
+		ConfusShared::ETeamIdentifier teamID = m_Players.size() % 2 == 0 ? 
 			ConfusShared::ETeamIdentifier::TeamRed : ConfusShared::ETeamIdentifier::TeamBlue;
 
         ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
 		newPlayer->setTeamIdentifier(teamID, m_Device);
-
-        m_PlayerArray.push_back(newPlayer);
-
-        RakNet::BitStream stream;
-        stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::MainPlayerJoined));
-        stream.Write(static_cast<long long>(id));
-        stream.Write(static_cast<ConfusShared::ETeamIdentifier>(teamID));
-        stream.Write(static_cast<size_t>(m_PlayerArray.size()));
-        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
-        {
-            stream.Write(static_cast<long long>(m_PlayerArray[i]->ID));
-            stream.Write(static_cast<ConfusShared::ETeamIdentifier>(m_PlayerArray[i]->getTeamIdentifier()));
-        }
-        RakNet::AddressOrGUID guid = a_Data->guid;
-        m_Connection->sendPacket(&stream, &guid);
-
-        RakNet::BitStream broadcastStream;
-        broadcastStream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::OtherPlayerJoined));
-        broadcastStream.Write(static_cast<long long>(id));
-        broadcastStream.Write(static_cast<ConfusShared::ETeamIdentifier>(teamID));
-
-        m_Connection->broadcastPacket(&broadcastStream, &guid);
 		if(teamID == ConfusShared::ETeamIdentifier::TeamBlue)
 		{
 			newPlayer->setStartPosition(irr::core::vector3df(0.f, 10.f, 0.f));
@@ -198,6 +182,27 @@ namespace ConfusServer
 			newPlayer->setStartPosition(irr::core::vector3df(0.f, 10.f, -85.f));
 		}
 		newPlayer->respawn();
+        m_Players.emplace(newPlayer->getGUID(), PlayerPair(newPlayer, *m_Connection));
+
+        RakNet::BitStream stream;
+        stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::MainPlayerJoined));
+        stream.Write(static_cast<ConfusShared::ETeamIdentifier>(teamID));
+        stream.Write(static_cast<size_t>(m_Players.size()));
+        for(auto& playerPair : m_Players)
+        {
+			if(playerPair.second.Player->getGUID() != id)
+            stream.Write(static_cast<long long>(playerPair.second.Player->getGUID()));
+            stream.Write(static_cast<ConfusShared::ETeamIdentifier>(playerPair.second.Player->getTeamIdentifier()));
+        }
+        RakNet::AddressOrGUID guid = a_Data->guid;
+        //m_Connection->sendPacket(&stream, &guid);
+
+        RakNet::BitStream broadcastStream;
+        broadcastStream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::OtherPlayerJoined));
+        broadcastStream.Write(static_cast<long long>(id));
+        broadcastStream.Write(static_cast<ConfusShared::ETeamIdentifier>(teamID));
+
+        m_Connection->broadcastPacket(&broadcastStream, &guid);
 		//Perhaps force a player update here?
         std::cout << id << " joined" << std::endl;
     }
@@ -207,15 +212,10 @@ namespace ConfusServer
         long long id = static_cast<long long>(a_Data->guid.g);
         std::cout << id << " left" << std::endl;
 
-        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
-        {
-            if(m_PlayerArray[i]->ID == id)
-            {
-                m_PlayerArray[i]->remove();
-                delete(m_PlayerArray[i]);
-                m_PlayerArray.erase(m_PlayerArray.begin()+i);
-            }
-        }
+		PlayerPair& playerPair = m_Players.at(id);
+		playerPair.Player->remove();
+		delete(playerPair.Player);
+		m_Players.erase(id);
 
         RakNet::BitStream stream;
         stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::PlayerLeft));
@@ -228,11 +228,11 @@ namespace ConfusServer
     {
         RakNet::BitStream stream;
         stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::UpdatePosition));
-        for(size_t i = 0u; i < m_PlayerArray.size(); ++i)
+        for(auto& playerPair : m_Players)
         {
-            stream.Write(static_cast<long long>(m_PlayerArray[i]->ID));
-            stream.Write(static_cast<irr::core::vector3df>(m_PlayerArray[i]->getPosition()));
-            stream.Write(static_cast<irr::core::vector3df>(m_PlayerArray[i]->getRotation()));
+            stream.Write(static_cast<long long>(playerPair.second.Player->getGUID()));
+            stream.Write(static_cast<irr::core::vector3df>(playerPair.second.Player->getPosition()));
+            stream.Write(static_cast<irr::core::vector3df>(playerPair.second.Player->getRotation()));
         }
         m_Connection->broadcastPacket(&stream);
     }
@@ -241,7 +241,7 @@ namespace ConfusServer
     {
         RakNet::BitStream stream;
         stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::UpdateHealth));
-		stream.Write(static_cast<long long>(a_Player->ID));
+		stream.Write(static_cast<long long>(a_Player->getGUID()));
 		stream.Write(static_cast<int>(a_Player->getHealthInstance()->getHealth()));
 		stream.Write(static_cast<EHitIdentifier>(a_HitType));
 		m_Connection->broadcastPacket(&stream, nullptr);

@@ -31,14 +31,14 @@ namespace ConfusShared
 		ConfusShared::EFlagEnum CarryingFlag;
         ConfusShared::Flag* FlagPointer = nullptr;
 
-        long long ID;
-
 		static const unsigned LightAttackDamage;
 		static const unsigned HeavyAttackDamage;
 
 		ConfusShared::Delegate<void()> OnLightAttack;
 		ConfusShared::Delegate<void()> OnHeavyAttack;
-    private:;
+    private:
+		/// <summary>The m_ identifier</summary>
+		long long m_ID;
 		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
 		irr::scene::IAnimatedMeshSceneNode* m_PlayerNode;
 		/// <summary> private value for health class </summary>
@@ -99,6 +99,12 @@ namespace ConfusShared
 		/// </summary>
 		/// <param name="a_Direction">The direction the player will start moving in in local terms</param>
 		void setLocalDirection(irr::core::vector3df a_Direction) const;
+
+		/// <summary>Gets the unique identifier.</summary>
+		/// <returns>The unique identifier of this player instance</returns>
+		long long getGUID() const;
+
+		void setGUID(long long a_ID);
     private:
 		/// <summary> Updates the color </summary>
 		/// <param name="a_Device"> The active irrlicht device </param>

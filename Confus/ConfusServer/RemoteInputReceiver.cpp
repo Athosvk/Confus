@@ -1,6 +1,6 @@
 #include <RakNet/BitStream.h>
 
-#include "RemoteReceiver.h"
+#include "RemoteInputReceiver.h"
 #include "../ConfusShared/PacketType.h"
 #include "Networking/Connection.h"
 #include "../ConfusShared/Player.h"
@@ -8,24 +8,24 @@
 
 namespace ConfusServer
 {
-	RemoteReceiver::RemoteReceiver(ConfusShared::Player& a_Player, Networking::Connection& a_Connection)
+	RemoteInputReceiver::RemoteInputReceiver(ConfusShared::Player& a_Player, Networking::Connection& a_Connection)
 		: m_Player(a_Player),
 		m_Connection(a_Connection)
 	{
-		m_Connection.addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::UpdatePosition), [this](RakNet::Packet* a_Packet)
+		m_Connection.addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::Player), [this](RakNet::Packet* a_Packet)
 		{
 			RakNet::BitStream data(a_Packet->data, a_Packet->length, false);
 			data.IgnoreBytes(sizeof(RakNet::MessageID));
 			long long id;
 			data.Read(id);
-			if(id == m_Player.ID)
+			if(id == m_Player.getGUID())
 			{
 				synchronize(data);
 			}
 		});
 	}
 
-	void RemoteReceiver::synchronize(RakNet::BitStream& a_Data) const
+	void RemoteInputReceiver::synchronize(RakNet::BitStream& a_Data) const
 	{
 		irr::core::vector3df rotation = irr::core::vector3df();
 		a_Data.Read(rotation);

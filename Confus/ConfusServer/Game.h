@@ -7,6 +7,7 @@
 #include "../ConfusShared/Flag.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "TeamScore.h"
+#include "RemoteInputReceiver.h"
 
 namespace ConfusServer
 { 
@@ -18,6 +19,15 @@ namespace ConfusServer
     class Game
     {
     private:
+		struct PlayerPair
+		{
+			ConfusShared::Player* Player;
+			std::unique_ptr<RemoteInputReceiver> Receiver;
+
+		public:
+			PlayerPair(ConfusShared::Player* a_Player, Networking::Connection& a_Connection);
+		};
+
         /// <summary>
         /// The rate at which fixed updates are carried out
         /// </summary>
@@ -44,11 +54,13 @@ namespace ConfusServer
 		/// Statics are avoided to make code clearer, hence this is not a static
         /// </summary>
         irr::IrrlichtDevice* m_Device;
+		/// <summary>The physics world, allowing simulation of rigid bodies and colliders</summary>
+		ConfusShared::Physics::PhysicsWorld m_PhysicsWorld;
         /// <summary>
         /// MazeGenerator that hasa accesible maze
         /// </summary>
         ConfusShared::MazeGenerator m_MazeGenerator;
-        std::vector<ConfusShared::Player*> m_PlayerArray;
+        std::map<long long, PlayerPair> m_Players;
         /// <summary>
         /// The Blue Flag.
         /// </summary>
@@ -86,8 +98,6 @@ namespace ConfusServer
         irr::scene::ISceneNode* m_LevelRootNode = nullptr;
         /// <summary> Team Score Manager </summary>
         TeamScore m_TeamScoreManager;
-		/// <summary>The physics world, allowing simulation of rigid bodies and colliders</summary>
-		ConfusShared::Physics::PhysicsWorld m_PhysicsWorld;
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
