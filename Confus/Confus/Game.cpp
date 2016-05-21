@@ -23,14 +23,15 @@ namespace Confus
     Game::Game(irr::IrrlichtDevice* a_Device, ConfusShared::EventManager* a_EventManager) : BaseGame(a_Device, a_EventManager),
         m_PhysicsWorld(m_Device),
         m_MazeGenerator(m_Device, 41, 40, (19 + 20 + 21 + 22 + 23 + 24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-            irr::core::vector2df(19., 20.), m_PhysicsWorld),
+	        irr::core::vector2df(19., 20.), m_PhysicsWorld),
+        m_GUI(m_Device, &m_PlayerNode, &m_AudioManager),
         m_PlayerNode(m_Device, m_PhysicsWorld, 1),
+        m_PlayerController(m_PlayerNode, *m_Connection),
         m_BlueFlag(m_Device, ConfusShared::ETeamIdentifier::TeamBlue, m_PhysicsWorld),
         m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, m_PhysicsWorld),
-        m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
-        m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, -83.f)),
-        m_GUI(m_Device, &m_PlayerNode, &m_AudioManager),
-		m_Announcer(&m_RedFlag,&m_BlueFlag,&m_PlayerNode, &m_AudioManager),
+        m_Announcer(&m_RedFlag,&m_BlueFlag,&m_PlayerNode, &m_AudioManager),
+		m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
+		m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, -83.f)),
 		m_MazeChangedSound(m_AudioManager.createSound("Wall rising.wav"))
     {
 		auto videoDriver = m_Device->getVideoDriver();
@@ -70,9 +71,11 @@ namespace Confus
         m_Device->getSceneManager()->clear();
     }
 
-	Game::PlayerPair::PlayerPair(ConfusShared::Player* a_Player, Audio::PlayerAudioEmitter a_AudioEmitter)
+	Game::PlayerPair::PlayerPair(ConfusShared::Player* a_Player, Audio::PlayerAudioEmitter a_AudioEmitter,
+		RemotePlayerController a_PlayerController)
 		: Player(a_Player),
-		AudioEmitter(a_AudioEmitter)
+		AudioEmitter(a_AudioEmitter),
+		PlayerController(a_PlayerController)
 	{
 	}
 
@@ -383,11 +386,13 @@ namespace Confus
 
             ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
 			newPlayer->setTeamIdentifier(teamID, m_Device);
-			m_Players.emplace(id, PlayerPair(newPlayer, Audio::PlayerAudioEmitter(newPlayer, &m_AudioManager)));
+			m_Players.emplace(id, PlayerPair(newPlayer, Audio::PlayerAudioEmitter(newPlayer, &m_AudioManager), 
+				RemotePlayerController(*newPlayer, *m_Connection)));
 		}
 
 		// Add self
-		m_Players.emplace(m_PlayerNode.ID, PlayerPair(&m_PlayerNode, Audio::PlayerAudioEmitter(&m_PlayerNode, &m_AudioManager)));
+		m_Players.emplace(m_PlayerNode.ID, PlayerPair(&m_PlayerNode, Audio::PlayerAudioEmitter(&m_PlayerNode, &m_AudioManager),
+			RemotePlayerController(m_PlayerNode, *m_Connection)));
 	}
 
     void Game::addOtherPlayer(RakNet::Packet* a_Data)
@@ -404,7 +409,8 @@ namespace Confus
 
         ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
 		newPlayer->setTeamIdentifier(teamID, m_Device);
-		m_Players.emplace(id, PlayerPair(newPlayer, Audio::PlayerAudioEmitter(newPlayer, &m_AudioManager)));
+		m_Players.emplace(id, PlayerPair(newPlayer, Audio::PlayerAudioEmitter(newPlayer, &m_AudioManager),
+			RemotePlayerController(*newPlayer, *m_Connection)));
     }
 
     void Game::removePlayer(RakNet::Packet* a_Data)

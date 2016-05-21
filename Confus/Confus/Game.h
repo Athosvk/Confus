@@ -14,6 +14,8 @@
 #include "Audio/AudioManager.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "Announcer.h"
+#include "LocalPlayerController.h"
+#include "RemotePlayerController.h"
 
 namespace Confus
 {    
@@ -27,12 +29,22 @@ namespace Confus
 	private:
 		struct PlayerPair
 		{			
-			/// <summary>Initializes a new instance of the <see cref="PlayerPair"/> struct.</summary>
-			/// <param name="a_Player">The a_ player.</param>
-			/// <param name="a_AudioEmitter">The a_ audio emitter.</param>
-			PlayerPair(ConfusShared::Player* a_Player, Audio::PlayerAudioEmitter a_AudioEmitter);
-			ConfusShared::Player* Player;
-			Audio::PlayerAudioEmitter AudioEmitter;
+			/// <summary>Initializes a new instance of the <see cref="PlayerPair" /> struct.</summary>
+			/// <param name="a_Player">The player.</param>
+			/// <param name="a_AudioEmitter">The audio emitter.</param>
+			/// <param name="a_PlayerController">The player controller, ensuring this player is controlled by the server</param>
+			PlayerPair(ConfusShared::Player* a_Player, Audio::PlayerAudioEmitter a_AudioEmitter,
+				RemotePlayerController a_PlayerController);
+			
+			/// <summary>The player instance, mirrored from the server</summary>
+			ConfusShared::Player* Player;			
+			/// <summary>The audio emitter, playing audio for the associated player</summary>
+			Audio::PlayerAudioEmitter AudioEmitter;			
+			/// <summary>
+			/// The player controller that ensures synchronization between the local 
+			/// instantiations of the players and those on the server
+			/// </summary>
+			RemotePlayerController PlayerController;
 		};
 	public:
 		/// <summary>
@@ -64,6 +76,12 @@ namespace Confus
         /// The Players to test with.
         /// </summary>
         ConfusShared::Player m_PlayerNode;
+		
+		/// <summary>
+		/// The controller controlling the player instance of the client, so that 
+		/// inputs can be sent to the server
+		/// </summary>
+		LocalPlayerController m_PlayerController;
 
 		std::map<long long, PlayerPair> m_Players;
         /// <summary>
