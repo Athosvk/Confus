@@ -35,12 +35,5 @@ namespace ConfusTest
         {
             Assert::AreEqual(static_cast<char>(Flag->getTeamIdentifier()), static_cast<char>(ETeamIdentifier::TeamBlue));
         }
-
-        TEST_METHOD(test)
-        {
-            Flag->
-        }
-
-     
     };
 }
