@@ -23,6 +23,7 @@ namespace Confus
 		void heal(int a_Health);
 		void setDeathCallback(const std::function<bool(irr::scene::ISceneNode* a_DamageNode)>& a_DeathCallback);
 		int getHealth();
+		const int getMaxHealth() const;
 		
 		/// <summary> Restores the health back to it's initial state </summary>
 		void reset();
