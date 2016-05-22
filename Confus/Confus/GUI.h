@@ -15,19 +15,15 @@ namespace Confus
 		Player* m_PlayerNode;
 		irr::IrrlichtDevice* m_Device;
 		irr::gui::IGUIEnvironment* m_GUIEnvironment;
-		irr::gui::IGUIStaticText* m_HealthTextBox;
-		irr::core::stringw m_HealthString = L"";
 		irr::video::IVideoDriver* m_Driver;
-		irr::video::ITexture* m_BloodImage;
-		irr::gui::IGUIImage* m_BloodOverlay;
 		std::vector<std::unique_ptr<IUIElement>> m_Elements;
         Audio::Sound m_AudioSourceLowHealth;
+		
 		
 	public:
 		GUI(irr::IrrlichtDevice* a_Device, Player* a_Player, Audio::AudioManager* a_AudioManager);
 		~GUI();
 		void update();
-		void drawBloodOverlay();
 		void lowHealthAudio();
 		template<typename TElementType, typename... TArguments>
 		void addElement(TArguments&&... a_Arguments)

@@ -1,5 +1,8 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
+
+#include "EventManager.h"
+#include "Networking\ClientConnection.h"
 #include "Health.h"
 #include "Weapon.h"
 #include "../ConfusShared/TeamIdentifier.h"
@@ -7,26 +10,27 @@
 
 namespace Confus 
 {
-	namespace Audio 
-    {
-		class PlayerAudioEmitter;
         class AudioManager;
-	}
 	namespace Physics
 	{
 		class BoxCollider;
 		class PhysicsWorld;
 	}
-
+    namespace Audio
+    {
+        class PlayerAudioEmitter;
+        class AudioManager;
+    }
     enum class EFlagEnum;
     class EventManager;
     class Flag;
+    enum class EPlayerState : unsigned char
+    {
+        Alive, CarryingFlag, HeavyAttacking, LightAttacking, Dead
+    };
 
-    /// <summary> 
-    /// Player class
-    /// </summary>
     class Player : public irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
-    {   
+    { 
     public:
 		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
         irr::scene::IAnimatedMeshSceneNode* PlayerNode;
@@ -35,19 +39,22 @@ namespace Confus
 		EFlagEnum CarryingFlag;
 		ETeamIdentifier TeamIdentifier;    
         Flag* FlagPointer = nullptr;
-		Health PlayerHealth;
+
         /// <summary> Determines if this player is this users player or not </summary>
         bool MainPlayer = false;
 
         long long ID;
-	private:
+
+		static const unsigned LightAttackDamage;
+		static const unsigned HeavyAttackDamage;
+    private:
         Audio::PlayerAudioEmitter* m_SoundEmitter;
+		/// <summary> private value for health class </summary>
+		Health m_PlayerHealth;
 		Physics::BoxCollider* m_Collider;
 
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
-        static const unsigned LightAttackDamage;
-        static const unsigned HeavyAttackDamage;
 
         /// <summary> The player's weapon </summary>
         Weapon m_Weapon;
@@ -60,6 +67,16 @@ namespace Confus
 
         /// <summary> The player's mesh </summary>
         irr::scene::IAnimatedMesh* m_Mesh;
+        /// <summary> The player's unique ID. </summary>
+        RakNet::RakNetGUID m_PlayerID;
+        /// <summary> The player's active state. </summary>
+        EPlayerState m_PlayerState = EPlayerState::Alive;
+        /// <summary> The player's health, ranging from 127 to -127. </summary>
+        int8_t m_PlayerHealthPoints = 100;
+        /// <summary> The local time at which a state change took place. </summary>
+        RakNet::Time m_StateChangeTime = 0;
+        /// <summary> A reference to the eventmanager. </summary>
+        EventManager* m_EventManager;
     public:
         /// <summary> Player class constructor. </summary>
         /// <param name="a_Device">The active Irrlicht Device.</param>
@@ -84,6 +101,8 @@ namespace Confus
         /// <summary> Updates the position of this player. </summary>
         /// <param name="a_NewPosition">The new position for this player.</param>
         void updatePosition(irr::core::vector3df a_NewPosition);
+
+        void fixedUpdate();
         /// <summary> Required render function for the ISceneNode, does nothing as we render in the Game.cpp.</summary>
         virtual void render();
         /// <summary> Returns the bounding box of the player's mesh. </summary>
@@ -91,6 +110,16 @@ namespace Confus
         /// <summary> Handles the input based actions. </summary>
         /// <param name="a_EventManager">The current event manager. </param>
         void handleInput(EventManager& a_EventManager);
+        /// <summary> Sets the connection to the server. </summary>
+        void setConnection(Networking::ClientConnection* a_Connection);
+        
+
+		/// <summary> get/setter for health. Should really turn into const but gave some weird errors </summary>
+		Health* getHealthInstance();
+        /// <summary> Sets the connection to the server. </summary>
+        void updateServer() const;
+        /// <summary> Sets the eventmanager. </summary>
+        void setEventManager(EventManager* a_Manager);
     private:
         /// <summary> Starts the walking animation, which is the default animation. </summary>
         void startWalking() const;
@@ -104,6 +133,9 @@ namespace Confus
 
         /// <summary> Starts the heavy attack, which deals more damage. </summary>
         void startHeavyAttack();
+        
+        /// <summary> Changes the state of the player. </summary>
+        void changeState(EPlayerState a_NewState);
 
         /// <summary> Called when the animation finishes </summary>
         /// <remarks> Generally used for the attack animations only </remarks>

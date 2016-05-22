@@ -7,12 +7,12 @@ namespace Confus
 		m_Health = m_MaxHealth;
 	}
 
-	void Health::damage(int a_Damage)
+	void Health::damage(int a_Damage, EHitIdentifier a_HitIdentifier)
 	{
 		if (a_Damage > 0)
 		{
 			m_Health -= a_Damage;
-			// play hit sound
+			DamageEvent(a_HitIdentifier);
 			if (m_Health <= 0)
 			{
 				m_Health = 0;
@@ -44,6 +44,11 @@ namespace Confus
 	int Health::getHealth()
 	{
 		return m_Health;
+	}
+
+	const int Health::getMaxHealth() const
+	{
+		return m_MaxHealth;
 	}
 
 	void Health::reset()

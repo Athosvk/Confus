@@ -144,6 +144,9 @@
     <ClCompile Include="WinScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HealthGUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -278,16 +281,19 @@
     <ClInclude Include="Announcer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\TeamIdentifier.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Delegate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Networking\ClientConnection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\EHitIdentifier.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Networking\ClientConnection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthGUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

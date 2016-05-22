@@ -44,11 +44,21 @@ namespace ConfusServer
                 {
                     m_Connected = true;
                 }
-                handlePacket(packet, static_cast<unsigned char>(packet->data[0]));
 
+                handlePacket(packet, static_cast<unsigned char>(packet->data[0]));
                 m_Interface->DeallocatePacket(packet);
                 packet = m_Interface->Receive();
             }
+        }
+
+        std::vector<RakNet::SystemAddress> Connection::getOpenConnections()
+        {
+            auto connectionCount = getConnectionCount();
+            std::vector<RakNet::SystemAddress>
+                openConnections(static_cast<size_t>(connectionCount));
+            auto serverID = m_Interface->GetConnectionList(openConnections.data(),
+                &connectionCount);
+            return openConnections;
         }
 
         void Connection::addFunctionToMap(unsigned char a_Event, std::function<void(RakNet::Packet* a_Data)> a_Function)
@@ -83,11 +93,12 @@ namespace ConfusServer
             }
         }
 
-        void Connection::sendPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Address)
+        void Connection::handlePacket(RakNet::Packet* a_Data, unsigned char a_Event)
         {
-            RakNet::AddressOrGUID guid =  *a_Address;
-            m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
-                PacketReliability::RELIABLE_ORDERED, 0, guid, false);
+			for (size_t i = 0u; i < m_CallbackFunctionMap[a_Event].size(); i++)
+			{
+				m_CallbackFunctionMap[a_Event][i](a_Data);
+			}
         }
 
         void Connection::broadcastPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Excluded)
@@ -97,14 +108,6 @@ namespace ConfusServer
                     PacketReliability::RELIABLE_ORDERED, 0, guid, true);
         }
 
-        void Connection::handlePacket(RakNet::Packet* a_Data, unsigned char a_Event)
-        {
-            for(size_t i = 0u; i < m_CallbackFunctionMap[a_Event].size(); i++)
-            {
-                m_CallbackFunctionMap[a_Event][i](a_Data);
-            }
-        }
-
 		void Connection::printMessage(RakNet::BitStream& a_InputStream)
 		{
 			RakNet::RakString contents;
@@ -112,6 +115,25 @@ namespace ConfusServer
 			a_InputStream.Read(contents);
 			std::cout << "Message received: " << contents << std::endl;
 		}
+
+        void Connection::sendPacket(RakNet::BitStream& a_InputStream, PacketReliability a_Reliability, RakNet::SystemAddress a_Address)
+        {
+            if(m_Connected)
+            {
+                auto openConnections = getOpenConnections();
+                m_Interface->Send(&a_InputStream, PacketPriority::HIGH_PRIORITY, a_Reliability, 0, a_Address, false);
+            }
+        }
+
+        // Overload method, sends the message with unreliable packetreliablitiy if no reliability is specified.
+        void Connection::sendPacket(RakNet::BitStream& a_InputStream, RakNet::SystemAddress a_Address)
+        {
+            if(m_Connected)
+            {
+                auto openConnections = getOpenConnections();
+                m_Interface->Send(&a_InputStream, PacketPriority::HIGH_PRIORITY, PacketReliability::UNRELIABLE, 0, a_Address, false);
+            }
+        }
 
         void Connection::broadcastBitstream(RakNet::BitStream& a_BitStream)
         {
@@ -124,6 +146,13 @@ namespace ConfusServer
                     m_Interface->Send(&a_BitStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0, openConnections[i], false);
                 }
             }
+        }
+
+        void Connection::sendPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Address)
+        {
+            RakNet::AddressOrGUID guid = *a_Address;
+            m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
+                PacketReliability::RELIABLE_ORDERED, 0, guid, false);
         }
     }
 }

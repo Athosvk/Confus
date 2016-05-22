@@ -25,6 +25,7 @@ namespace Confus
         {
             m_Text->setText(L"Enter the ip of the host and the port of the host in the console now!");
             render();
+
             m_Text->setText(L"Press ESCAPE to go back to the main menu");
             runGame();
             m_Device->getSceneManager()->clear();

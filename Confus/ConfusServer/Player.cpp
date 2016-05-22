@@ -1,27 +1,33 @@
-#include <IrrAssimp/IrrAssimp.h>
+ #include <IrrAssimp/IrrAssimp.h>
+
+#include <RakNet/BitStream.h>
 #include <iostream>
-#include "Audio\PlayerAudioEmitter.h"
-#include "Player.h"
 #include "EventManager.h"
 #include "Flag.h"
+#include "../Confusshared/Physics/PhysicsWorld.h"
+#include "../Confusshared/Physics/BoxCollider.h"
+#include "../Confusshared/Physics/RigidBody.h"
+#include "Audio/PlayerAudioEmitter.h"
+
+#include "Player.h"
 
 namespace ConfusServer
 {
     const irr::u32 Player::WeaponJointIndex = 14u;
     const unsigned Player::LightAttackDamage = 10u;
     const unsigned Player::HeavyAttackDamage = 30u;
-	Player::Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer)
+	Player::Player(irr::IrrlichtDevice* a_Device, long long a_id, ETeamIdentifier a_TeamIdentifier, bool a_MainPlayer, RakNet::SystemAddress a_SystemAddress)
 		: m_Weapon(a_Device->getSceneManager(), irr::core::vector3df(1.0f, 1.0f, 4.0f)),
 		irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
 		TeamIdentifier(a_TeamIdentifier),
-		CarryingFlag(EFlagEnum::None)
+		CarryingFlag(EFlagEnum::None),
+        SystemAddress(a_SystemAddress)
     {
         auto sceneManager = a_Device->getSceneManager();
         auto videoDriver = a_Device->getVideoDriver();
 
         IrrAssimp irrAssimp(sceneManager);
         m_Mesh = sceneManager->getMesh("Media/ninja.b3d");
-
         PlayerNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh, 0, 1);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
 
@@ -63,7 +69,7 @@ namespace ConfusServer
 
         if(a_MainPlayer)
         {
-            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, m_KeyMap, 5, true, 0.5f, false, true);
+            CameraNode = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.01f, 1, nullptr, 5, true, 0.5f, false, true);
             CameraNode->setFOV(70.f);
             CameraNode->setNearValue(0.1f);
         }
@@ -101,7 +107,9 @@ namespace ConfusServer
         }
     }
 
-	Player::~Player() {
+    
+	Player::~Player() 
+    {
 	}
 
     const irr::core::aabbox3d<irr::f32>& Player::getBoundingBox() const
@@ -163,22 +171,29 @@ namespace ConfusServer
         m_Attacking = true;
         m_Weapon.enableCollider();
         m_Weapon.resetCollider();
+        std::cout << "Attacking on server" << std::endl;
     }
 
     void Player::startLightAttack()
     {
-        PlayerNode->setFrameLoop(38, 41);
-        PlayerNode->setCurrentFrame(38);
-        m_Weapon.Damage = LightAttackDamage;
-        initializeAttack();
+        if(!m_Attacking) 
+        {
+            PlayerNode->setFrameLoop(38, 41);
+            PlayerNode->setCurrentFrame(38);
+            m_Weapon.Damage = LightAttackDamage;
+            initializeAttack();
+        }
     }
 
     void Player::startHeavyAttack()
     {
-        PlayerNode->setFrameLoop(60, 66);
-        PlayerNode->setCurrentFrame(60);
-        m_Weapon.Damage = HeavyAttackDamage;
-        initializeAttack();
+        if(!m_Attacking)
+        {
+            PlayerNode->setFrameLoop(60, 66);
+            PlayerNode->setCurrentFrame(60);
+            m_Weapon.Damage = HeavyAttackDamage;
+            initializeAttack();
+        }
     }
 
     void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* node)
@@ -202,8 +217,90 @@ namespace ConfusServer
         }
     }
 
+    void Player::fixedUpdate()
+    {
+        updateClient();
+    }
+
     void Player::createAudioEmitter()
     {
         m_FootstepSoundEmitter = new Audio::PlayerAudioEmitter(PlayerNode);
+    }
+
+    void Player::updateClient()
+    {
+        RakNet::BitStream bitstreamOut;
+        bitstreamOut.Write(static_cast<RakNet::MessageID>(Networking::EPacketType::Player));
+        bitstreamOut.Write(CameraNode->getAbsolutePosition());
+        
+        m_Connection->sendPacket(bitstreamOut, SystemAddress);
+    }
+ 
+
+    void Player::setConnection(Networking::Connection* a_Connection)
+    {
+        m_Connection = a_Connection;
+
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Player), [this](RakNet::Packet* a_Data)
+        {
+            RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
+
+            RakNet::RakNetGUID playerID;
+            bitstreamIn.IgnoreBytes(sizeof(unsigned char));
+            bitstreamIn.Read(playerID);
+            
+            // Only continue if the playerID in the packet matches ours.
+            if(playerID == static_cast<RakNet::RakNetGUID>(ID))
+            {
+                irr::core::vector3df position;
+                irr::core::vector3df rotation;
+                EPlayerState state;
+                RakNet::Time stateChangeTime;
+                int8_t playerHealth;
+                bool forwardKeyPressed;
+                bool backwardKeyPressed;
+                bool leftKeyPressed;
+                bool rightKeyPressed;
+
+                bitstreamIn.Read(position);
+                bitstreamIn.Read(rotation);
+                bitstreamIn.Read(state);
+                bitstreamIn.Read(stateChangeTime);
+                bitstreamIn.Read(playerHealth);
+                bitstreamIn.Read(forwardKeyPressed);
+                bitstreamIn.Read(backwardKeyPressed);
+                bitstreamIn.Read(leftKeyPressed);
+                bitstreamIn.Read(rightKeyPressed);
+                
+                setRotation(rotation);
+
+                if(state == EPlayerState::LightAttacking)
+                {
+                    startLightAttack();
+                }
+                else if(state == EPlayerState::HeavyAttacking)
+                {
+                    startHeavyAttack();
+                }
+
+                auto movementDirection = irr::core::vector3df();
+                if(forwardKeyPressed)
+                {
+                    movementDirection.Z = 1.0f;
+                }
+                else if(backwardKeyPressed)
+                {
+                    movementDirection.Z = -1.0f;
+                }
+                if(leftKeyPressed)
+                {
+                    movementDirection.X = -1.0f;
+                }
+                else if(rightKeyPressed)
+                {
+                    movementDirection.X = 1.0f;
+                }
+            }
+    });
     }
 }
