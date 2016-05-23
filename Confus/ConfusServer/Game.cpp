@@ -210,7 +210,8 @@ namespace ConfusServer
     {
         updatePlayers();
 		m_MazeGenerator.fixedUpdate();
-    }
+		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
+	}
 
     void Game::broadcastMazeChange(int a_Seed) const
     {
