@@ -36,7 +36,6 @@ namespace Confus
         Physics::BoxCollider* m_Collider;
         irr::scene::ISceneNode* m_FlagOldParent = nullptr;
 
-
     public: 
 		/// <summary> Flag class constructor </summary>
 		/// <param name="a_Device">The active Irrlicht Device.</param>
@@ -74,6 +73,7 @@ namespace Confus
 		const irr::video::SColor getColor() const;
 		const ETeamIdentifier getTeamIdentifier() const;
 		const EFlagEnum getFlagStatus() const;
+        const irr::core::vector3df getPosition() const;
     private:
 		void setFlagStatus(EFlagEnum a_FlagStatus);
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
