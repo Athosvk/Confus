@@ -59,7 +59,22 @@ namespace ConfusServer
         }
     }
 
-    void Game::run()
+	void Game::updateSceneTransformations() const
+	{
+		//Recurses downwwards
+		std::function<void(irr::scene::ISceneNode* a_Node)> updateDownwards = [&updateDownwards](irr::scene::ISceneNode* a_Node)
+		{
+			a_Node->updateAbsolutePosition();
+			auto children = a_Node->getChildren();
+			for(auto child : children)
+			{
+				updateDownwards(child);
+			}
+		};
+		updateDownwards(m_Device->getSceneManager()->getRootSceneNode());
+	}
+
+	void Game::run()
     {
         initializeConnection();
         m_TeamScoreManager.setResetCallback([this] { resetGame(); });
@@ -69,6 +84,8 @@ namespace ConfusServer
         m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         sceneManager->loadScene("Media/IrrlichtScenes/Bases2.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
+		updateSceneTransformations();
+		initializeLevelColliders();
 
         m_Connection->addFunctionToMap(ID_NEW_INCOMING_CONNECTION, [this](RakNet::Packet* a_Data)
         {
@@ -153,7 +170,43 @@ namespace ConfusServer
         }
     }
 
-    void Game::fixedUpdate()
+	void Game::initializeLevelColliders()
+	{
+		irr::core::array<irr::scene::ISceneNode*> nodes;
+		m_Device->getSceneManager()->getSceneNodesFromType(irr::scene::ESNT_ANY, nodes, m_LevelRootNode);
+		for(irr::u32 i = 0; i < nodes.size(); ++i)
+		{
+			irr::scene::ISceneNode* node = nodes[i];
+			ConfusShared::Physics::Collider* collider = nullptr;
+
+			switch(node->getType())
+			{
+			case irr::scene::ESNT_CUBE:
+			case irr::scene::ESNT_ANIMATED_MESH:
+			case irr::scene::ESNT_MESH:
+				if(std::string(node->getName()).find("Ground", 0) != std::string::npos)
+				{
+					collider = m_PhysicsWorld.createBoxCollider(node, ConfusShared::Physics::ECollisionFilter::LevelStatic,
+						ConfusShared::Physics::ECollisionFilter::Player | ConfusShared::Physics::ECollisionFilter::Interactable);
+				}
+				else if(std::string(node->getName()).find("Basefolder", 0) == std::string::npos)
+				{
+					collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, ConfusShared::Physics::ECollisionFilter::LevelStatic |
+						ConfusShared::Physics::ECollisionFilter::Interactable,
+						ConfusShared::Physics::ECollisionFilter::Player);
+				}
+				if(collider != nullptr)
+				{
+					collider->getRigidBody()->makeStatic();
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	void Game::fixedUpdate()
     {
         updatePlayers();
 		m_MazeGenerator.fixedUpdate();

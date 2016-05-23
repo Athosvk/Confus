@@ -148,36 +148,29 @@ namespace Confus
 			irr::scene::ISceneNode* node = nodes[i];
 			ConfusShared::Physics::Collider* collider = nullptr;
 
-			if(node->isVisible())
+			switch(node->getType())
 			{
-				switch(node->getType())
+			case irr::scene::ESNT_CUBE:
+			case irr::scene::ESNT_ANIMATED_MESH:
+			case irr::scene::ESNT_MESH:
+				if(std::string(node->getName()).find("Ground", 0) != std::string::npos)
 				{
-				case irr::scene::ESNT_CUBE:
-				case irr::scene::ESNT_ANIMATED_MESH:
-				case irr::scene::ESNT_MESH:
-					if(std::string(node->getName()).find("Ground", 0) != std::string::npos)
-					{
-						collider = m_PhysicsWorld.createBoxCollider(node, ConfusShared::Physics::ECollisionFilter::LevelStatic,
-							ConfusShared::Physics::ECollisionFilter::Player | ConfusShared::Physics::ECollisionFilter::Interactable);
-					}
-					else if (std::string(node->getName()).find("Basefolder", 0) == std::string::npos)
-					{
-						collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, ConfusShared::Physics::ECollisionFilter::LevelStatic | 
-							ConfusShared::Physics::ECollisionFilter::Interactable,
-							ConfusShared::Physics::ECollisionFilter::Player);
-                    }
-					if(collider != nullptr)
-					{
-						collider->getRigidBody()->makeStatic();
-					}
-					break;
-				case irr::scene::ESNT_SPHERE:
-				case irr::scene::ESNT_TERRAIN:
-				case irr::scene::ESNT_OCTREE:
-					break;
-				default:
-					break;
+					collider = m_PhysicsWorld.createBoxCollider(node, ConfusShared::Physics::ECollisionFilter::LevelStatic,
+						ConfusShared::Physics::ECollisionFilter::Player | ConfusShared::Physics::ECollisionFilter::Interactable);
 				}
+				else if (std::string(node->getName()).find("Basefolder", 0) == std::string::npos)
+				{
+					collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, ConfusShared::Physics::ECollisionFilter::LevelStatic | 
+						ConfusShared::Physics::ECollisionFilter::Interactable,
+						ConfusShared::Physics::ECollisionFilter::Player);
+                }
+				if(collider != nullptr)
+				{
+					collider->getRigidBody()->makeStatic();
+				}
+				break;
+			default:
+				break;
 			}
 		}
 	}
@@ -354,8 +347,9 @@ namespace Confus
 		}
     }
 
-	void Game::updateSceneTransformations()
+	void Game::updateSceneTransformations() const
 	{
+		//Recurses downwwards
 		std::function<void(irr::scene::ISceneNode* a_Node)> updateDownwards = [&updateDownwards](irr::scene::ISceneNode* a_Node)
 		{
 			a_Node->updateAbsolutePosition();

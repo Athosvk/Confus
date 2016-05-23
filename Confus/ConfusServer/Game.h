@@ -139,6 +139,8 @@ namespace ConfusServer
         /// </summary>
         void processFixedUpdates();
 
+		void initializeLevelColliders();
+
         /// <summary> Updates the state of objects that require frame-rate independence </summary>
         void fixedUpdate();
 
@@ -168,5 +170,11 @@ namespace ConfusServer
 
         /// <summary> Reset game </summary>
         void resetGame();
+		
+		/// <summary> 
+		/// Updates the (absolute) transformations of all the scene nodes recursively downwards to make
+		/// sure that the absolute positions have been updated once the physics world requests them
+		/// </summary>
+		void updateSceneTransformations() const;
     };
 }
