@@ -181,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FlagTest.cpp" />
+    <ClCompile Include="CrosshairGUITest.cpp" />
     <ClCompile Include="MoveableWallTest.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

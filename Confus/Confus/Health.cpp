@@ -46,6 +46,11 @@ namespace Confus
 		return m_Health;
 	}
 
+	const int Health::getMaxHealth() const
+	{
+		return m_MaxHealth;
+	}
+
 	void Health::reset()
 	{
 		m_Health = m_MaxHealth;
