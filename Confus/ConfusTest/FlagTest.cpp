@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include <string>
+
 #include "../Confus/Flag.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 
@@ -27,42 +28,42 @@ namespace ConfusTest
 {
     TEST_CLASS(FlagTest)
     {
-        Confus::Physics::PhysicsWorld Physics;
-        Confus::Flag* Flag;
-        irr::IrrlichtDevice* Device;
+        Confus::Physics::PhysicsWorld m_Physics;
+        Confus::Flag* m_Flag;
+        irr::IrrlichtDevice* m_Device;
 
     public:
-        FlagTest() : Physics(Device)
+        FlagTest() : m_Physics(m_Device)
         {}
 
         TEST_METHOD_INITIALIZE(setupFlag)
         {
-            Device = irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL);
-            Flag = new Confus::Flag(Device, ETeamIdentifier::TeamBlue, Physics);
+            m_Device = irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL);
+            m_Flag = new Confus::Flag(m_Device, ETeamIdentifier::TeamBlue, m_Physics);
         }
 
         TEST_METHOD_CLEANUP(teardownFlag)
         {
-            Device->drop();
-            delete(Flag);
+            m_Device->drop();
+            delete(m_Flag);
         }
 
         TEST_METHOD(testGetFlagColorAfterConstruction)
         {
-            Assert::AreEqual(static_cast<char>(Flag->getTeamIdentifier()), static_cast<char>(ETeamIdentifier::TeamBlue));
+            Assert::AreEqual(static_cast<char>(m_Flag->getTeamIdentifier()), static_cast<char>(ETeamIdentifier::TeamBlue));
         }
 
         TEST_METHOD(testFlagStatusAfterConstruction)
         {
-            Assert::AreEqual(static_cast<char>(Flag->getFlagStatus()), static_cast<char>(Confus::EFlagEnum::FlagBase));
+            Assert::AreEqual(static_cast<char>(m_Flag->getFlagStatus()), static_cast<char>(Confus::EFlagEnum::FlagBase));
         }
 
         TEST_METHOD(testReturnToStartPosition)
         {
             irr::core::vector3df newPosition(8, 3, 2.14f);
-            Flag->setStartPosition(newPosition);
-            Flag->returnToStartPosition();
-            Assert::AreEqual(Flag->getPosition(), newPosition);
+            m_Flag->setStartPosition(newPosition);
+            m_Flag->returnToStartPosition();
+            Assert::AreEqual(m_Flag->getPosition(), newPosition);
         }
     };
 }
