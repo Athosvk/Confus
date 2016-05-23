@@ -135,20 +135,9 @@ namespace ConfusShared
 		return static_cast<int>(m_PlayerNode->getFrameNr());
 	}
 
-	void Player::setLocalDirection(irr::core::vector3df a_Direction) const
+	void Player::setWalkingDirection(irr::core::vector3df a_Direction)
 	{
-		auto rigidBody = m_Collider->getRigidBody();
-		if(a_Direction.getLengthSQ() > 0.0f)
-		{
-			const float Speed = 15.0f;
-			a_Direction.rotateXZBy(-getRotation().Y);
-			auto resultingVelocity = irr::core::vector3df(a_Direction.X, rigidBody->getVelocity().Y, a_Direction.Z) * Speed;
-			rigidBody->setVelocity(resultingVelocity);
-		}
-		else
-		{
-			rigidBody->setVelocity(irr::core::vector3df());
-		}
+		m_WalkingDirection = a_Direction;
 	}
 
 	void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* a_SceneNode)
@@ -176,7 +165,17 @@ namespace ConfusShared
         }
     }
 
-    void Player::update()
+	void Player::updateVelocity()
+	{
+		m_WalkingDirection.rotateXZBy(-getRotation().Y);
+		auto rigidBody = m_Collider->getRigidBody();
+		const float Speed = 15.0f;
+		auto resultingVelocity = irr::core::vector3df(m_WalkingDirection.X, 0.0f, m_WalkingDirection.Z) * Speed
+			+ irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
+		rigidBody->setVelocity(resultingVelocity);
+	}
+
+	void Player::update()
     {
         if(m_PlayerHealth.getHealth() <= 0) 
 		{
@@ -208,6 +207,7 @@ namespace ConfusShared
 				FlagPointer->returnToStartPosition();
 			}
         }
+		updateVelocity();
     }
 
     void Player::respawn()

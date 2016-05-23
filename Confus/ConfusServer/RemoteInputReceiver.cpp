@@ -50,6 +50,10 @@ namespace ConfusServer
 		{
 			direction.X = -1.0f;
 		}
-		m_Player.setLocalDirection(direction.normalize());
+		if(direction.getLengthSQ() > 0.0f)
+		{
+			direction = direction.normalize();
+		}
+		m_Player.setWalkingDirection(direction);
 	}
 }

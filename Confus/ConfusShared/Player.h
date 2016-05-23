@@ -64,6 +64,8 @@ namespace ConfusShared
 		irr::core::vector3df m_StartPosition = irr::core::vector3df();
 
 		ConfusShared::ETeamIdentifier m_TeamIdentifier;
+
+		irr::core::vector3df m_WalkingDirection;
     public:
 		/// <summary>Player class constructor.</summary>
 		/// <param name="a_Device">The active Irrlicht Device.</param>
@@ -98,7 +100,7 @@ namespace ConfusShared
 		/// and will update the velocity accordingly 
 		/// </summary>
 		/// <param name="a_Direction">The direction the player will start moving in in local terms</param>
-		void setLocalDirection(irr::core::vector3df a_Direction) const;
+		void setWalkingDirection(irr::core::vector3df a_Direction);
 
 		/// <summary>Gets the unique identifier.</summary>
 		/// <returns>The unique identifier of this player instance</returns>
@@ -109,6 +111,10 @@ namespace ConfusShared
 		/// <summary> Updates the color </summary>
 		/// <param name="a_Device"> The active irrlicht device </param>
 		void updateColor(irr::IrrlichtDevice* a_Device);
+		
+		/// <summary>Updates the velocity based on the walking direction</summary>
+		void updateVelocity();
+
 		void dropFlag();
         /// <summary> Starts the walking animation, which is the default animation. </summary>
         void startWalking() const;

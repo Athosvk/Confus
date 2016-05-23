@@ -31,7 +31,7 @@ namespace ConfusServer
 		/// <param name="a_Connection">The connection through which it is being controlled</param>
 		RemoteInputReceiver(ConfusShared::Player& a_Player, Networking::Connection& a_Connection);
 
-	private:		
+	private:
 		/// <summary>Synchronizes the player with the incoming data</summary>
 		/// <param name="a_Data">The data to synchronize the instance with</param>
 		void synchronize(RakNet::BitStream& a_Data) const;
