@@ -37,7 +37,7 @@ namespace Confus
 		bitstream.Write(m_Player.getRotation());
 		bitstream.Write(reinterpret_cast<char*>(&m_InputState));
 
-		//m_Connection.sendMessage(&bitstream, PacketReliability::UNRELIABLE);
+		m_Connection.sendMessage(&bitstream, PacketReliability::UNRELIABLE);
 		resetInputState();
 	}
 
