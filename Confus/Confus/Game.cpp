@@ -27,8 +27,8 @@ namespace Confus
         m_MazeGenerator(m_Device, 41, 40, (19 + 20 + 21 + 22 + 23 + 24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
             irr::core::vector2df(19., 20.), m_PhysicsWorld, &m_AudioManager),
         m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true, &m_AudioManager),
-        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_PhysicsWorld),
-        m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_PhysicsWorld),
+        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue),
+        m_RedFlag(m_Device, ETeamIdentifier::TeamRed),
         m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
         m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, -83.f)),
         m_GUI(m_Device, &m_PlayerNode, &m_AudioManager),
@@ -186,6 +186,8 @@ namespace Confus
         std::cin >> serverPort;
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
+        m_RedFlag.setConnection(m_Connection.get());
+        m_BlueFlag.setConnection(m_Connection.get());
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Data)
         {
             RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);

@@ -34,6 +34,7 @@ namespace ConfusServer
             ScoreUpdate = 6 + ID_USER_PACKET_ENUM,
             PlayerAttack = 7 + ID_USER_PACKET_ENUM,
             MazeChange = 8 + ID_USER_PACKET_ENUM,
+            Flag = 13 + ID_USER_PACKET_ENUM,
             Player = 9 + ID_USER_PACKET_ENUM,
             EndOfGame = 11 + ID_USER_PACKET_ENUM,
             UpdateHealth = 10 + ID_USER_PACKET_ENUM
@@ -51,12 +52,13 @@ namespace ConfusServer
         {
         public:
         private:
+            /// <summary> Is the server connected to a client? </summary>
+            bool m_Connected = false;
             /// <summary> The RakNet interface for interacting with RakNet </summary>
             RakNet::RakPeerInterface* m_Interface; 
             /// <summary> The map thast contains the server events and the functions that involve them. </summary>
             std::map<unsigned char, std::vector<std::function<void(RakNet::Packet* a_Data)>>> m_CallbackFunctionMap;
-            /// <summary> Is the server connected to any clients? </summary>
-            bool m_Connected = false;
+
         public:
             /// <summary> Initializes a new instance of the <see cref="Connection"/> class. </summary>
             Connection();

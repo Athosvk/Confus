@@ -1,4 +1,5 @@
 #pragma once
+#include "Networking\ClientConnection.h"
 #include "../ConfusShared/TeamIdentifier.h"
 #include <Irrlicht\irrlicht.h>
 #include "Delegate.h"
@@ -6,11 +7,6 @@
 namespace Confus 
 {
 	class Player;
-	namespace Physics
-	{
-		class BoxCollider;
-		class PhysicsWorld;
-	}
 
 	/// <summary> The Flag's status. A player can have flagtaken or no flag. A flag can be taken, dropped or at base. </summary>
 	enum class EFlagEnum
@@ -33,18 +29,17 @@ namespace Confus
         ETeamIdentifier m_TeamIdentifier;
 		EFlagEnum m_FlagStatus;
         irr::scene::IMeshSceneNode* m_FlagNode;
-        Physics::BoxCollider* m_Collider;
         irr::scene::ISceneNode* m_FlagOldParent = nullptr;
-
-
+        /// <summary> A pointer to the connection with the server. </summary>
+        Networking::ClientConnection* m_Connection;
     public: 
 		/// <summary> Flag class constructor </summary>
 		/// <param name="a_Device">The active Irrlicht Device.</param>
 		/// <param name="a_TeamIdentifier">The team's identifier the flag should have.</param>
 		/// <param name="a_PhysicsWorld">The physics world </param>
-		Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier,
-			Physics::PhysicsWorld& a_PhysicsWorld);
 
+        void setConnection(Networking::ClientConnection * a_Connection);
+		Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier);
         /// <summary> Flag class destructor </summary>
         ~Flag();
 
@@ -60,6 +55,10 @@ namespace Confus
 		/// <param name="a_Rotation"> The rotation the flag will reset to. </param>
         void setStartRotation(irr::core::vector3df a_Rotation);
 
+        /// <summary> Sets the position of the flagnode. </summary>
+        /// <param name="a_Rotation"> The new position to set the flag to. </param>
+        void setPosition(irr::core::vector3df a_Position);
+
 		/// <summary> Will drop the flag at the current position. </summary>
 		/// <param name="a_PlayerObject"> The player object that drops the flag. </param>
 		void drop(Player* a_PlayerObject);
@@ -74,8 +73,8 @@ namespace Confus
 		const irr::video::SColor getColor() const;
 		const ETeamIdentifier getTeamIdentifier() const;
 		const EFlagEnum getFlagStatus() const;
+        void setFlagStatus(EFlagEnum a_FlagStatus);
     private:
-		void setFlagStatus(EFlagEnum a_FlagStatus);
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
 		void setColor(irr::video::IVideoDriver* a_VideoDriver);
 	};

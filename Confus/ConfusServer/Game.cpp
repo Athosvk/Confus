@@ -60,7 +60,7 @@ namespace ConfusServer
         sceneManager->loadScene("Media/IrrlichtScenes/Bases2.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
-        
+
         processTriangleSelectors();
 
         m_BlueFlag.setCollisionTriangleSelector(m_Device->getSceneManager(), m_LevelRootNode->getTriangleSelector());
@@ -92,6 +92,8 @@ namespace ConfusServer
     {
         m_Connection = std::make_unique<Networking::Connection>();
         m_TeamScoreManager.setConnection(m_Connection.get());
+        m_RedFlag.setConnection(m_Connection.get());
+        m_BlueFlag.setConnection(m_Connection.get());
     }
 
 	void Game::processConnection()
@@ -156,6 +158,9 @@ namespace ConfusServer
         m_PreviousTicks = m_CurrentTicks;
         m_CurrentTicks = m_Device->getTimer()->getTime();
         m_DeltaTime = (m_CurrentTicks - m_PreviousTicks) / 1000.0;
+
+        m_BlueFlag.update();
+        m_RedFlag.update();
 
 
         for(auto player : m_PlayerArray)

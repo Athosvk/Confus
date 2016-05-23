@@ -34,6 +34,7 @@ namespace Confus
             PlayerAttack = 7 + ID_USER_PACKET_ENUM,
             MazeChange = 8 + ID_USER_PACKET_ENUM,
 			Player = 9 + ID_USER_PACKET_ENUM,
+            Flag = 13 + ID_USER_PACKET_ENUM,
             EndOfGame = 11 + ID_USER_PACKET_ENUM,
             UpdateHealth = 10 + ID_USER_PACKET_ENUM
         };
@@ -90,6 +91,11 @@ namespace Confus
 			/// </remarks>
 			RakNet::SystemAddress getServerAddress() const;			
 			/// <summary>
+			/// Dispatches the messages that the connection was not able to send yet
+			/// due to waiting for the connection to be established
+			/// </summary>
+			void dispatchStalledMessages();
+            /// <summary>
             /// Handles the incoming packet
             /// </summary>
             /// <param name="a_Data">The data.</param>

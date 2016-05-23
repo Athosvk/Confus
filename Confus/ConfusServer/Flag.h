@@ -1,5 +1,7 @@
 #pragma once
 #include "../ConfusShared/TeamIdentifier.h"
+#include "EventManager.h"
+#include "Networking\Connection.h"
 #include "TeamScore.h"
 
 namespace ConfusServer 
@@ -26,9 +28,11 @@ namespace ConfusServer
 		EFlagEnum m_FlagStatus;
         ETeamIdentifier m_TeamIdentifier;
         irr::scene::IMeshSceneNode* m_FlagNode;
-        Collider* m_Collider;
+        Collider* m_Collider = nullptr;
         irr::scene::ISceneNode* m_FlagOldParent = nullptr;
         TeamScore* m_TeamScore;
+        /// <summary> Pointer to the connection with the client(s). </summary>
+        Networking::Connection* m_Connection;
     public: 
         /// <summary> Flag class constructor. </summary>
         /// <param name="a_Device">The active Irrlicht Device.</param>
@@ -51,6 +55,10 @@ namespace ConfusServer
 		void drop(Player* a_PlayerObject);
 		/// <summary> Will return the flag to it's starting position and rotation. </summary>
 		void returnToStartPosition();
+        /// <summary> Sets the connection to the client(s). </summary>
+        void setConnection(Networking::Connection * a_Connection);
+        /// <summary> Updates the clients if the flag gets taken. </summary>
+        void updateClients();
 		/// <summary> The player carrying a flag has gotten a point. </summary>
 		/// <param name="a_PlayerObject"> Score a point for the player object. </param>
 		void score(Player* a_PlayerObject);
@@ -58,6 +66,8 @@ namespace ConfusServer
 		/// <param name="a_SceneManager"> Pass the scenemanager to add a physics animator. </param>
 		/// <param name="a_TriangleSelector"> The triangle seletor that has the level and players. </param>
         void setCollisionTriangleSelector(irr::scene::ISceneManager* a_SceneManager, irr::scene::ITriangleSelector* a_TriangleSelector);
+        /// <summary> Updates the flag. </summary>
+        void update();
     private:
 		void setFlagStatus(EFlagEnum a_FlagStatus);
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);

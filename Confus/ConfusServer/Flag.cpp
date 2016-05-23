@@ -1,5 +1,7 @@
 #include <irrlicht/irrlicht.h>
 #include <IrrAssimp/IrrAssimp.h>
+#include <iostream>
+#include <RakNet\BitStream.h>
 
 #include "Flag.h"
 #include "Player.h"
@@ -71,7 +73,7 @@ namespace ConfusServer {
 			break;
 		case ETeamIdentifier::TeamRed:
             m_FlagNode->setMaterialTexture(0, a_VideoDriver->getTexture("Media/Textures/Flag/FLAG_RED.png"));
-			m_StartPosition.set({ 1.5f, 15.f, -72.f });
+			m_StartPosition.set({ 1.5f, 15.0f, -72.f });
 			m_StartRotation.set({ 0.f, 180.f, 0.f });
             returnToStartPosition();
 			break;
@@ -213,8 +215,42 @@ namespace ConfusServer {
 		setFlagStatus(EFlagEnum::FlagBase);
     }
 
+    void Flag::setConnection(Networking::Connection* a_Connection)
+    {
+        m_Connection = a_Connection;
+
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::Flag), [this](RakNet::Packet* a_Packet) 
+        {
+            std::cout << "Getting a flag package for client. Not handling it now" << std::endl;
+        });
+    }
+
+    void Flag::updateClients()
+    {
+        // Only update when the flag is not at base.
+       if(m_FlagStatus != EFlagEnum::FlagBase) 
+       {
+           RakNet::BitStream outputStream;
+
+           outputStream.Write(Networking::EPacketType::Flag);
+           outputStream.Write(m_TeamIdentifier);
+           outputStream.Write(m_FlagStatus);
+           outputStream.Write(m_FlagNode->getPosition());
+
+           m_Connection->broadcastBitstream(outputStream);
+       }
+    }
+
+    void Flag::update()
+    {
+        updateClients();
+    }
+
 	Flag::~Flag() {
         m_FlagNode->setParent(m_FlagOldParent);
-		delete(m_Collider);
+        if(m_Collider != nullptr)
+        {
+            delete(m_Collider);
+        }
 	}
 }
