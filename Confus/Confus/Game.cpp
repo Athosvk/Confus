@@ -55,15 +55,9 @@ namespace Confus
 			videoDriver->getTexture("Media/Textures/Heart.png"),
 			videoDriver->getTexture("Media/Textures/Blood.png"),
 			irr::core::vector2df(0.0f, 0.02f));
-        try
-        {
-            m_GUI.addElement<CrosshairGUI>(m_Device, irr::core::dimension2du(70, 70),
+       
+        m_GUI.addElement<CrosshairGUI>(m_Device, irr::core::dimension2du(70, 70),
                 videoDriver->getTexture("Media/Textures/Crosshair.png"), irr::core::vector2df(0.50f, 0.50f));
-        }
-        catch(...)
-        {
-            std::cout << "Couldn't add crosshair element to the GUI." << std::endl;
-        }
     }
 
 

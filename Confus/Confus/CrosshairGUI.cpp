@@ -8,6 +8,8 @@ namespace Confus
     {
         if(a_CrosshairTexture == nullptr)
         {
+            // Throwing an exception here because otherwise the program crashes further on if the image isn't found.
+            // I also wanted to test for exceptions in my unit test. 
             throw std::exception("Couldn't load the texture");
         }
         irr::core::dimension2du offset = calculateOffset(a_ImageSize, a_CrosshairTexture);
