@@ -27,12 +27,12 @@ namespace ConfusServer
 
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),
-		m_MazeGenerator(m_Device, 41, 40, (19+20+21+22+23+24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-			irr::core::vector2df(19., 20.), m_PhysicsWorld),
+		m_PhysicsWorld(m_Device),
+        m_MazeGenerator(m_Device, 41, 40, (19+20+21+22+23+24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+	        irr::core::vector2df(19., 20.), m_PhysicsWorld),
         m_BlueFlag(m_Device, ConfusShared::ETeamIdentifier::TeamBlue, m_PhysicsWorld),
-        m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, m_PhysicsWorld),
-		m_TeamScoreManager(m_BlueFlag, m_RedFlag),
-		m_PhysicsWorld(m_Device)
+		m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, m_PhysicsWorld),
+		m_TeamScoreManager(m_BlueFlag, m_RedFlag)
     {
     }
 
@@ -134,6 +134,12 @@ namespace ConfusServer
             }
             currentDelay += static_cast<float>(m_DeltaTime);
         }
+
+		static int counter = 0;
+		if(counter++ % 30 == 0)
+		{
+			std::cout << "Updating\n";
+		}
     }
 
     void Game::processFixedUpdates()
@@ -191,11 +197,13 @@ namespace ConfusServer
         for(auto& playerPair : m_Players)
         {
 			if(playerPair.second.Player->getGUID() != id)
-            stream.Write(static_cast<long long>(playerPair.second.Player->getGUID()));
-            stream.Write(static_cast<ConfusShared::ETeamIdentifier>(playerPair.second.Player->getTeamIdentifier()));
+			{
+				stream.Write(static_cast<long long>(playerPair.second.Player->getGUID()));
+				stream.Write(static_cast<ConfusShared::ETeamIdentifier>(playerPair.second.Player->getTeamIdentifier()));
+			}
         }
         RakNet::AddressOrGUID guid = a_Data->guid;
-        //m_Connection->sendPacket(&stream, &guid);
+        m_Connection->sendPacket(&stream, &guid);
 
         RakNet::BitStream broadcastStream;
         broadcastStream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::OtherPlayerJoined));

@@ -18,13 +18,25 @@ namespace ConfusServer
     /// </summary>
     class Game
     {
-    private:
+    private:		
+		/// <summary>
+		/// Represents a combination of a Player and its RemoteInputReceiver, allowing it to bind input
+		/// to that particular player. Allows for easy removal of this combination once the player leaves
+		/// </summary>
 		struct PlayerPair
-		{
-			ConfusShared::Player* Player;
+		{			
+			/// <summary>The player representing a client's interface</summary>
+			ConfusShared::Player* Player;			
+			/// <summary>
+			/// The input receiver, registering the input that the client forwarded
+			/// to the server 
+			/// </summary>
 			std::unique_ptr<RemoteInputReceiver> Receiver;
 
-		public:
+		public:			
+			/// <summary>Initializes a new instance of the <see cref="PlayerPair"/> struct.</summary>
+			/// <param name="a_Player">The player</param>
+			/// <param name="a_Connection">The connection opened by the server, to construct an input receiver</param>
 			PlayerPair(ConfusShared::Player* a_Player, Networking::Connection& a_Connection);
 		};
 
@@ -59,8 +71,9 @@ namespace ConfusServer
         /// <summary>
         /// MazeGenerator that hasa accesible maze
         /// </summary>
-        ConfusShared::MazeGenerator m_MazeGenerator;
-        std::map<long long, PlayerPair> m_Players;
+        ConfusShared::MazeGenerator m_MazeGenerator;		
+		/// <summary>The players in the GameWorld, indexed by their ID so that we can find individuals easily</summary>
+		std::map<long long, PlayerPair> m_Players;
         /// <summary>
         /// The Blue Flag.
         /// </summary>
@@ -122,25 +135,37 @@ namespace ConfusServer
         /// </summary>
         void update();
         /// <summary>
-        /// Runs a set of fixed update calls based on the tim elapsed since the last
+        /// Runs a set of fixed update calls based on the time elapsed since the last frame
         /// </summary>
         void processFixedUpdates();
-        /// <summary>
-        /// Updates the state of objects that require frame-rate independence
-        /// </summary>
+
+        /// <summary> Updates the state of objects that require frame-rate independence </summary>
         void fixedUpdate();
-		/// <summary>
-		/// Processes the packets connection
-		/// </summary>
+
+		/// <summary> Processes the packets send over the connectionconnection </summary>
 		void processConnection();
-	    void addPlayer(RakNet::Packet* a_Data);
-        void removePlayer(RakNet::Packet* a_Data);
-        void updatePlayers();
-        void updateHealth(EHitIdentifier a_HitType, ConfusShared::Player* a_Player) const;
+		
+		/// <summary>Adds a player from the given data, so that it can be synced with the remote players</summary>
+		/// <param name="a_Data">The packet data containing the information needed to construct a player object</param>
+		void addPlayer(RakNet::Packet* a_Data);
+		
+		/// <summary>Removes a player that has disconnected, so that his player instance is no longer in the game world</summary>
+		/// <param name="a_Data">The packet containing the information needed to remove the player</param>
+		void removePlayer(RakNet::Packet* a_Data);
+		
+		/// <summary> Sends the new position and rotation information for each player so they can be updated locally</summary>
+		void updatePlayers();
+		
+		/// <summary>Sends the new health of </summary>
+		/// <param name="a_HitType">Type of the a_ hit.</param>
+		/// <param name="a_Player">The a_ player.</param>
+		void updateHealth(EHitIdentifier a_HitType, ConfusShared::Player* a_Player) const;
+
         /// <summary>
         /// Broadcast a maze change
         /// </summary>
         void broadcastMazeChange(int a_Seed) const;
+
         /// <summary> Reset game </summary>
         void resetGame();
     };
