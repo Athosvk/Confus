@@ -26,13 +26,18 @@ namespace Confus
     /// </summary>
     class Game : public ConfusShared::BaseGame
     {
-	private:
+	private:		
+		/// <summary>
+		/// Represents the instances of objects that is used for every single player instance, which are tied
+		/// together so that they can be update as pairs and can be removed at once when a player leaves 
+		/// the game
+		/// </summary>
 		struct PlayerConstruct
 		{			
 			/// <summary>Initializes a new instance of the <see cref="PlayerPair" /> struct.</summary>
 			/// <param name="a_Player">The player.</param>
 			/// <param name="a_AudioEmitter">The audio emitter.</param>
-			/// <param name="a_PlayerController">The player controller, ensuring this player is controlled by the server</param>
+			/// <param name="a_Connection">The connection to the server, used for constructing a remote controller</param>
 			PlayerConstruct(ConfusShared::Player* a_Player, std::unique_ptr<Audio::PlayerAudioEmitter> a_AudioEmitter,
 				Networking::ClientConnection& a_Connection);
 			
@@ -82,7 +87,11 @@ namespace Confus
 		/// inputs can be sent to the server
 		/// </summary>
 		std::unique_ptr<LocalPlayerController> m_PlayerController;
-
+		
+		/// <summary>
+		/// The players in the game world, indexed by their id (primarily ours)
+		/// so that we can look them up easily for updates, removals etc.
+		/// </summary>
 		std::map<long long, PlayerConstruct> m_Players;
         /// <summary>
         /// The Blue Flag.
@@ -97,6 +106,10 @@ namespace Confus
 		ConfusShared::RespawnFloor m_RedRespawnFloor;
 		ConfusShared::RespawnFloor m_BlueRespawnFloor;
 
+		/// <summary>
+		/// The level root node, under which all colliders fromt he scene file are placed
+		/// so that we can selectively create colliders for those nodes
+		/// </summary>
         irr::scene::ISceneNode* m_LevelRootNode;
 		/// <summary>
 		/// The connection as a client to the server that we are currently connected to

@@ -107,8 +107,12 @@ namespace ConfusServer
         /// </summary>
         irr::u32 m_CurrentTicks = 0;
         /// <summary> The connection to the clients of this server</summary>
-        std::unique_ptr<Networking::Connection> m_Connection;
-        irr::scene::ISceneNode* m_LevelRootNode = nullptr;
+        std::unique_ptr<Networking::Connection> m_Connection;		
+		/// <summary>
+		/// The level root node, under which all colliders fromt he scene file are placed
+		/// so that we can selectively create colliders for those nodes
+		/// </summary>
+		irr::scene::ISceneNode* m_LevelRootNode = nullptr;
         /// <summary> Team Score Manager </summary>
         TeamScore m_TeamScoreManager;
     public:
