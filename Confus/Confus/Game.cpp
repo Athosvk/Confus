@@ -72,15 +72,12 @@ namespace Confus
     {
         m_Device->setWindowCaption(L"Game");
         initializeConnection();
-
         m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
 		m_Device->getSceneManager()->loadScene("Media/IrrlichtScenes/Bases2.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
-        m_Device->setEventReceiver(m_EventManager);
 		updateSceneTransformations();
         initializeLevelColliders();
-
         m_Device->getCursorControl()->setVisible(false);
     }
 
@@ -156,7 +153,6 @@ namespace Confus
             bitstreamIn.Read(blueScore);
             m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamRed, redScore);
             m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamBlue, blueScore);
-            std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
         });
 
         m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::EndOfGame), [this](RakNet::Packet* a_Packet)
@@ -220,10 +216,6 @@ namespace Confus
 
     void Game::reset()
     {
-        // We actually would not need to call this method since the server will send score, and new positions.
-        m_BlueFlag.returnToStartPosition();
-        m_RedFlag.returnToStartPosition();
-        m_PlayerHandler.getMainPlayer()->respawn();
         m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamBlue, 0);
         m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamRed, 0);
     }
@@ -239,6 +231,7 @@ namespace Confus
     {
         m_BlueFlag.returnToStartPosition();
         m_RedFlag.returnToStartPosition();
+		m_Device->getCursorControl()->setVisible(true);
     }    
 
 	void Game::updateSceneTransformations() const
@@ -270,7 +263,6 @@ namespace Confus
 			default:
 				std::cout << "Could not connect to the server" << std::endl;
 		}
-
 		m_ShouldRun = false;
 	}
 

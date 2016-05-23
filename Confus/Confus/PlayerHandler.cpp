@@ -58,10 +58,10 @@ namespace Confus
 
 	void PlayerHandler::update()
 	{
-		for (auto& player : m_Players)
+		for (auto& playerPair : m_Players)
 		{
-			player.second.Player->update();
-			player.second.AudioEmitter->updatePosition();
+			playerPair.second.Player->update();
+			playerPair.second.AudioEmitter->updatePosition();
 		}
 	}
 
