@@ -133,9 +133,12 @@ namespace Confus
         /// Processes the input data
         /// </summary>
         void handleInput();
-        /// <summary> Updates the (absolute) transformations of all the scene nodes recursively downwards </summary>
-        void updateSceneTransformations();
 
+        /// <summary> 
+		/// Updates the (absolute) transformations of all the scene nodes recursively downwards to make
+		/// sure that the absolute positions have been updated once the physics world requests them
+		/// </summary>
+        void updateSceneTransformations();
 
         /// <summary>
         /// Creates a new Player object for this user, this player will be regarded as THEIR player.
