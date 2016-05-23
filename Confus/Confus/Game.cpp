@@ -262,21 +262,6 @@ namespace Confus
         irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10] );
         irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
         m_Listener.setDirection(forwardVector, upVector);    
-
-		static float timer = 0.0f;
-		timer += static_cast<float>(m_DeltaTime);
-		if(timer >= 3.0f)
-		{
-			m_BlueRespawnFloor.enableCollision();
-			m_RedRespawnFloor.enableCollision();
-		}
-		if(timer >= 20.0f)
-		{
-			timer = 0.0f;
-			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
-			m_BlueRespawnFloor.disableCollision();
-			m_RedRespawnFloor.disableCollision();
-		}
     }
 
     void Game::reset()
