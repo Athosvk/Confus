@@ -137,6 +137,11 @@ namespace Confus
 		 return m_FlagStatus;
 	 }
 
+     const irr::core::vector3df Flag::getPosition() const
+     {
+         return m_FlagNode->getPosition();
+     }
+
 	//This class handles what to do on collision
 	void Flag::captureFlag(Player* a_PlayerObject) 
     {

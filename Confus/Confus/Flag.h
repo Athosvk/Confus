@@ -25,7 +25,6 @@ namespace Confus
 	/// Flag class with status and team id
 	class Flag 
     {
-        friend class FlagTest;
 	public:
 		Delegate<void(ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum)> FlagStatusChangedEvent;
     private:		
@@ -36,7 +35,6 @@ namespace Confus
         irr::scene::IMeshSceneNode* m_FlagNode;
         Physics::BoxCollider* m_Collider;
         irr::scene::ISceneNode* m_FlagOldParent = nullptr;
-
 
     public: 
 		/// <summary> Flag class constructor </summary>
@@ -75,6 +73,7 @@ namespace Confus
 		const irr::video::SColor getColor() const;
 		const ETeamIdentifier getTeamIdentifier() const;
 		const EFlagEnum getFlagStatus() const;
+        const irr::core::vector3df getPosition() const;
     private:
 		void setFlagStatus(EFlagEnum a_FlagStatus);
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
