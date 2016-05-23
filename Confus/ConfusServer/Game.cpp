@@ -151,12 +151,6 @@ namespace ConfusServer
             }
             currentDelay += static_cast<float>(m_DeltaTime);
         }
-
-		static int counter = 0;
-		if(counter++ % 30 == 0)
-		{
-			std::cout << "Updating\n";
-		}
     }
 
     void Game::processFixedUpdates()
