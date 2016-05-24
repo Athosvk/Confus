@@ -13,5 +13,6 @@
 #include <ConfusShared/Player.h>
 #include <ConfusShared/Physics/PhysicsWorld.h>
 #include <ConfusShared/Flag.h>
+#include <ConfusShared/Physics/RigidBody.h>
 
 // TODO: reference additional headers your program requires here
