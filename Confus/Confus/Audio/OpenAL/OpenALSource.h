@@ -24,7 +24,10 @@ namespace Confus
                 ALuint m_Source = 0;
                 /// <summary> The current playing state</summary>
                 ALint m_PlayingState = 0;
-                /// <summary> The function to call once the sound/buffer has finished playing </summary>
+                /// <summary> 
+				/// The function to call once the sound/buffer has finished playing, so
+				/// that Sounds can deregister themselves from this particular AudioSource
+				/// </summary>
                 std::function<void()> m_FinishedPlayingCallback = nullptr;
 
             public:

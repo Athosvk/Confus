@@ -94,7 +94,7 @@ namespace ConfusServer
 
         m_Connection->addFunctionToMap(ID_DISCONNECTION_NOTIFICATION, [this](RakNet::Packet* a_Data)
         {
-            removePlayer(a_Data);
+//            removePlayer(a_Data);
         });
         m_Device->getCursorControl()->setVisible(false);
       
@@ -295,11 +295,11 @@ namespace ConfusServer
 
     void Game::updateHealth(EHitIdentifier a_HitType, ConfusShared::Player* a_Player) const
     {
-        RakNet::BitStream stream;
-        stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::UpdateHealth));
-		stream.Write(static_cast<long long>(a_Player->getGUID()));
-		stream.Write(static_cast<int>(a_Player->getHealthInstance()->getHealth()));
-		stream.Write(static_cast<EHitIdentifier>(a_HitType));
-		m_Connection->broadcastPacket(&stream, nullptr);
+  //      RakNet::BitStream stream;
+  //      stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::UpdateHealth));
+		//stream.Write(static_cast<long long>(a_Player->getGUID()));
+		//stream.Write(static_cast<int>(a_Player->getHealthInstance()->getHealth()));
+		//stream.Write(static_cast<EHitIdentifier>(a_HitType));
+		//m_Connection->broadcastPacket(&stream, nullptr);
     }
 }

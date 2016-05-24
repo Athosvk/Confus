@@ -97,5 +97,235 @@ namespace ConfusTest
 			player.update();
 			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
 		}
+
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
+
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
+
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
+
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
+
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
+
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
+
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
+
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
+
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
+		TEST_METHOD(testFlagStateReset)
+		{
+			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
+			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
+			const auto StartPosition = irr::core::vector3df(5.0f, 5.0f, 5.0f);
+			player.setStartPosition(StartPosition);
+
+			ConfusShared::Flag flag = ConfusShared::Flag(m_Device, ConfusShared::ETeamIdentifier::None, physicsWorld);
+			player.FlagPointer = &flag;
+			player.getHealthInstance()->damage(player.getHealthInstance()->getHealth(), EHitIdentifier::Light);
+			player.update();
+			Assert::IsTrue(flag.getFlagStatus() == ConfusShared::EFlagEnum::FlagDropped);
+		}
 	};
 }

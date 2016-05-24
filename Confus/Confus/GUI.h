@@ -19,7 +19,11 @@ namespace Confus
 		irr::core::stringw m_HealthString = L"";
 		irr::video::IVideoDriver* m_Driver;
 		irr::video::ITexture* m_BloodImage;
-		irr::gui::IGUIImage* m_BloodOverlay;
+		irr::gui::IGUIImage* m_BloodOverlay;		
+		/// <summary>
+		/// The GUI elements managed by this GUI, so that they can be kept active
+		/// and be updated automatically
+		/// </summary>
 		std::vector<std::unique_ptr<IUIElement>> m_Elements;
         Audio::Sound m_AudioSourceLowHealth;
 		
@@ -27,8 +31,14 @@ namespace Confus
 		GUI(irr::IrrlichtDevice* a_Device, ConfusShared::Player* a_Player, Audio::AudioManager* a_AudioManager);
 		~GUI();
 		void update();
-		void drawBloodOverlay();
+		void drawBloodOverlay();		
 		void lowHealthAudio();
+
+		/// <summary>
+		/// Creates and adds a GUI element of given type, which will be drawn on the screen and updated
+		/// by the GUI. This allows for having the lifetime of the gui elements managed 
+		/// by the GUI class itself
+		/// </summary>
 		template<typename TElementType, typename... TArguments>
 		void addElement(TArguments&&... a_Arguments)
 		{

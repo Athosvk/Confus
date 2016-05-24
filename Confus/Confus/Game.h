@@ -41,13 +41,21 @@ namespace Confus
 			PlayerConstruct(ConfusShared::Player* a_Player, std::unique_ptr<Audio::PlayerAudioEmitter> a_AudioEmitter,
 				Networking::ClientConnection& a_Connection);
 			
-			/// <summary>The player instance, mirrored from the server</summary>
-			ConfusShared::Player* Player;			
-			/// <summary>The audio emitter, playing audio for the associated player</summary>
+			/// <summary>
+			/// The player instance that is either the player of this instance or that of a 
+			/// different client connected to the server, so that we can update values such as position
+			/// and animation state of all Player instances
+			/// </summary>
+			ConfusShared::Player* Player;
+			/// <summary>
+			/// The audio emitter, playing audio for the associated player, placed along with the player instance
+			/// so that they can be removed in association at once
+			/// </summary>
 			std::unique_ptr<Audio::PlayerAudioEmitter> AudioEmitter;			
 			/// <summary>
 			/// The player controller that ensures synchronization between the local 
-			/// instantiations of the players and those on the server
+			/// instantiations of the players and those on the server, placed along with the player instance
+			/// so that they can be removed in association at once
 			/// </summary>
 			std::unique_ptr<RemotePlayerController> PlayerController;
 		};
@@ -112,7 +120,8 @@ namespace Confus
 		/// </summary>
         irr::scene::ISceneNode* m_LevelRootNode;
 		/// <summary>
-		/// The connection as a client to the server that we are currently connected to
+		/// The connection as a client to the server that we are currently connected to,
+		/// used for sending packets over the connection to the server and 
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
 		Audio::Sound m_MazeChangedSound;

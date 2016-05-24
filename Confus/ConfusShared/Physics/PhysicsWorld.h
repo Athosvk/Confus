@@ -24,9 +24,15 @@ namespace ConfusShared
 			struct ColliderPair
 			{
 			public:				
-				/// <summary> The (collider)shape of this collision structure </summary>
+				/// <summary> 
+				/// The (collider)shape of this collision structure,
+				/// storing the instance of the bullet (shape) type so that we can edit its properties continously 
+				/// </summary>
 				std::unique_ptr<Collider> Shape;
-				/// <summary> The rigid body of this collision structure </summary>
+				/// <summary> 
+				/// The rigid body associated with the collider, allowing to modify properties such as the
+				/// velocity
+				/// </summary>
 				std::unique_ptr<RigidBody> Body;
 
 				/// <summary> Initializes a new instance of the <see cref="ColliderPair"/> struct </summary>
