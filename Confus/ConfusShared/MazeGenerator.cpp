@@ -5,6 +5,7 @@
 
 namespace ConfusShared
 {
+
 	MazeGenerator::MazeGenerator(irr::IrrlichtDevice* a_Device, int a_MazeSizeX, int a_MazeSizeY, int a_InitialSeed,
 		irr::core::vector2df a_GenerateStartPoint, Physics::PhysicsWorld& a_PhysicsWorld)
 		: m_MainMaze(a_Device, a_MazeSizeX, a_MazeSizeY, a_PhysicsWorld, 1.5f, true), 

@@ -8,6 +8,7 @@ namespace Confus
 	class Announcer
 	{
 	private:
+
 		ConfusShared::Flag* m_RedFlag;
 		ConfusShared::Flag* m_BlueFlag;
 		ConfusShared::Player* m_Player;

@@ -69,22 +69,22 @@ namespace ConfusShared
 			/// <summary> Finalizes an instance of the <see cref="PhysicsWorld"/> class </summary>
 			~PhysicsWorld();
 
-			/// <summary>
-			/// Creates and places a new box collider into the physics world for simulations
-			/// </summary>
+			/// <summary>Creates and places a new box collider into the physics world for simulations</summary>
 			/// <param name="a_Extents">The extents/dimensions of the collider to be created</param>
 			/// <param name="a_AttachedNode">The node the collider is attached to</param>
-			/// <param name="a_Type"> The type of the boxcollider, which group it belongs to</param>
-			/// <param name="a_Mask"> The mask for ignoring collisions </param>
-			/// <returns>
-			/// A handle to the created box collider
-			/// </returns>
+			/// <param name="a_Group">The group mask this object belongs to</param>
+			/// <param name="a_Mask">The mask representing the objects it can collide with</param>
+			/// <returns>A handle to the created box collider</returns>
 			BoxCollider* createBoxCollider(irr::core::vector3df a_Extents, irr::scene::ISceneNode* a_AttachedNode,
 				ECollisionFilter a_Group = ECollisionFilter::All, ECollisionFilter a_Mask = ECollisionFilter::None);
 
-			/// <summary> Creates and places a new box collider from the scene node's bounding box into the physics world for simulations </summary>
-			/// <param name="a_AttachedNode"> The node the collider is attached to </param>
-			/// <returns> A handle to the created box collider </returns>
+			/// <summary>
+			/// Creates and places a new box collider from the scene node's bounding box into the physics world for simulations
+			/// </summary>
+			/// <param name="a_AttachedNode">The node the collider is attached to</param>
+			/// <param name="a_Group">The group mask this object belongs to</param>
+			/// <param name="a_Mask">The mask representing the objects it can collide with</param>
+			/// <returns>A handle to the created box collider</returns>
 			BoxCollider* createBoxCollider(irr::scene::ISceneNode* a_AttachedNode, ECollisionFilter a_Group = ECollisionFilter::Other,
 				ECollisionFilter a_Mask = ECollisionFilter::All);
 

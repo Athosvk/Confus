@@ -53,14 +53,13 @@ namespace ConfusShared
 		/// </summary>
 		Delegate<void()> m_OnMazeChange;
 	public:
-		/// <summary> Initializes a new instance of the <see cref="MazeGenerator" /> class </summary>
+		/// <summary>Initializes a new instance of the <see cref="MazeGenerator" /> class</summary>
 		/// <param name="a_Device">The instance of the IrrlichtDevice</param>
 		/// <param name="a_MazeSizeX">The maze size width.</param>
 		/// <param name="a_MazeSizeY">The maze size length.</param>
 		/// <param name="a_InitialSeed">The initial seed used to generate the first maze.</param>
 		/// <param name="a_GenerateStartPoint">The generation start point.</param>
-		/// <param name="a_PhysicsWorld">The physics world </param>
-		/// <param name="a_AudioManager">The audio manager </param>
+		/// <param name="a_PhysicsWorld">The physics world</param>
 		MazeGenerator(irr::IrrlichtDevice * a_Device, int a_MazeSizeX, int a_MazeSizeY, int a_InitialSeed,
 			irr::core::vector2df a_GenerateStartPoint, Physics::PhysicsWorld& a_PhysicsWorld);
 

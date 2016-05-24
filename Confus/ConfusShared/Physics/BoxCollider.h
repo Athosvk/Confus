@@ -26,12 +26,10 @@ namespace ConfusShared
 			/// <summary> The CollisionRegistrar that keeps track of the collisions occurred </summary>
 			CollisionRegistrar& m_CollisionRegistrar;
 		public:
-			/// <summary>
-			/// Initializes a new instance of the <see cref="BoxCollider" /> class
-			/// </summary>
+			/// <summary>Initializes a new instance of the <see cref="BoxCollider" /> class</summary>
 			/// <param name="a_Shape">The Bullet shape</param>
 			/// <param name="a_RigidBody">The attached rigid body</param>
-			/// <param name="a_CollisionObject">The collision object.</param>
+			/// <param name="a_CollisionRegistrar">The collision registrar for registering collisions</param>
 			BoxCollider(std::unique_ptr<btBoxShape>&& a_Shape, RigidBody* a_RigidBody,
 				CollisionRegistrar& a_CollisionRegistrar);
 			
