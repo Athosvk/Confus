@@ -4,7 +4,10 @@
 #include "Audio\Sound.h"
 
 namespace Confus
-{	
+{		
+	/// <summary>
+	/// Plays sounds based on the events occuring in the GameWorld, such as the flag being taken
+	/// </summary>
 	class Announcer
 	{
 	private:		
