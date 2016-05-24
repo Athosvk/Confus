@@ -1,5 +1,4 @@
 #include <Irrlicht/irrlicht.h>
-#include <time.h>
 #include <iostream>
 #include <RakNet/BitStream.h>
 #include <RakNet/MessageIdentifiers.h>
@@ -24,14 +23,15 @@ namespace Confus
         m_PhysicsWorld(m_Device),
         m_MazeGenerator(m_Device, 41, 40, (19 + 20 + 21 + 22 + 23 + 24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
 	        irr::core::vector2df(19., 20.), m_PhysicsWorld),
-        m_GUI(m_Device, &m_PlayerNode, &m_AudioManager),
-        m_PlayerNode(m_Device, m_PhysicsWorld, 1),
+		m_PlayerHandler(a_Device, m_PhysicsWorld, m_AudioManager),
+        m_GUI(m_Device, m_PlayerHandler.getMainPlayer(), &m_AudioManager),
         m_BlueFlag(m_Device, ConfusShared::ETeamIdentifier::TeamBlue, m_PhysicsWorld),
         m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, m_PhysicsWorld),
-        m_Announcer(&m_RedFlag,&m_BlueFlag,&m_PlayerNode, &m_AudioManager),
+        m_Announcer(&m_RedFlag,&m_BlueFlag, m_PlayerHandler.getMainPlayer(), &m_AudioManager),
 		m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
 		m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, -83.f)),
-		m_MazeChangedSound(m_AudioManager.createSound("Wall rising.wav"))
+		m_MazeChangedSound(m_AudioManager.createSound("Wall rising.wav")),
+		m_LevelRootNode(m_Device->getSceneManager()->addEmptySceneNode())
     {
 		auto videoDriver = m_Device->getVideoDriver();
 		m_GUI.addElement<FlagGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(50, 50),
@@ -59,84 +59,26 @@ namespace Confus
 		camera->setFOV(70.f);
 		camera->setNearValue(0.1f);
 		camera->setPosition(irr::core::vector3df(0.f, 0.0f, 0.2f));
-		camera->setParent(&m_PlayerNode);
+		camera->setParent(m_PlayerHandler.getMainPlayer());
     }
 
     Game::~Game()
     {
-        for(auto& player : m_Players)
-        {
-            //m_PlayerArray[i]->remove();
-            //delete(m_PlayerArray[i]);
-        }
+		m_Device->getGUIEnvironment()->clear();
         m_Device->getSceneManager()->clear();
     }
-
-	Game::PlayerConstruct::PlayerConstruct(ConfusShared::Player* a_Player, std::unique_ptr<Audio::PlayerAudioEmitter> a_AudioEmitter,
-		Networking::ClientConnection& a_Connection)
-		: Player(a_Player),
-		AudioEmitter(std::move(a_AudioEmitter)),
-		PlayerController(std::make_unique<RemotePlayerController>(*a_Player, a_Connection))
-	{
-	}
 
     void Game::start()
     {
         m_Device->setWindowCaption(L"Game");
-
         initializeConnection();
-
-        auto sceneManager = m_Device->getSceneManager();
-        m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
         m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
-        sceneManager->loadScene("Media/IrrlichtScenes/Bases2.irr", nullptr, m_LevelRootNode);
+		m_Device->getSceneManager()->loadScene("Media/IrrlichtScenes/Bases2.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
-        m_Device->setEventReceiver(m_EventManager);
 		updateSceneTransformations();
         initializeLevelColliders();
-
         m_Device->getCursorControl()->setVisible(false);
-
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::MainPlayerJoined), [this](RakNet::Packet* a_Data)
-        {
-            addOwnPlayer(a_Data);
-        });
-
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::PlayerLeft), [this](RakNet::Packet* a_Data)
-        {
-            removePlayer(a_Data);
-        });
-
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::OtherPlayerJoined), [this](RakNet::Packet* a_Data)
-        {
-            addOtherPlayer(a_Data);
-        });
-
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::UpdatePosition), [this](RakNet::Packet* a_Data)
-        {
-            updateOtherPlayer(a_Data);
-        });
-
-		m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::UpdateHealth), [this](RakNet::Packet* a_Data)
-		{
-			updateHealth(a_Data);
-		});
-        
-		m_Connection->addFunctionToMap(ID_NO_FREE_INCOMING_CONNECTIONS, [this](RakNet::Packet* a_Data)
-		{
-			denyConnection(a_Data);
-		});
-			
-		m_Connection->addFunctionToMap(ID_CONNECTION_ATTEMPT_FAILED, [this](RakNet::Packet* a_Data)
-		{
-			denyConnection(a_Data);
-		});
-
-		m_Connection->addFunctionToMap(ID_CONNECTION_LOST, [this](RakNet::Packet* a_Data)
-		{
-			denyConnection(a_Data);
-		});
     }
 
 	void Game::initializeLevelColliders()
@@ -186,8 +128,8 @@ namespace Confus
         std::cin >> serverPort;
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
-		m_PlayerController = std::make_unique<LocalPlayerController>(m_PlayerNode, *m_Connection);
-		m_PlayerNode.setGUID(m_Connection->getID());
+		m_PlayerHandler.setConnection(m_Connection.get());
+
         m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Data)
         {
             RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
@@ -211,7 +153,6 @@ namespace Confus
             bitstreamIn.Read(blueScore);
             m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamRed, redScore);
             m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamBlue, blueScore);
-            std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
         });
 
         m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::EndOfGame), [this](RakNet::Packet* a_Packet)
@@ -234,6 +175,21 @@ namespace Confus
                 m_ShouldRun = false;
             }
         });
+
+		m_Connection->addFunctionToMap(ID_NO_FREE_INCOMING_CONNECTIONS, [this](RakNet::Packet* a_Data)
+		{
+			denyConnection(a_Data);
+		});
+
+		m_Connection->addFunctionToMap(ID_CONNECTION_ATTEMPT_FAILED, [this](RakNet::Packet* a_Data)
+		{
+			denyConnection(a_Data);
+		});
+
+		m_Connection->addFunctionToMap(ID_CONNECTION_LOST, [this](RakNet::Packet* a_Data)
+		{
+			denyConnection(a_Data);
+		});
     }
 
     void Game::handleInput()
@@ -242,23 +198,17 @@ namespace Confus
         {
             m_ShouldRun = false;
         }
-		m_PlayerController->handleInput(*m_EventManager);
+		m_PlayerHandler.handleInput(m_EventManager);
     }
 
     void Game::update()
     {
         m_Connection->processPackets();
         handleInput();
-
-		for(auto& player : m_Players)
-		{			
-			player.second.Player->update();
-			player.second.AudioEmitter->updatePosition();
-		}
 		m_GUI.update();
-        m_Listener.setPosition(m_PlayerNode.getAbsolutePosition());
-
-        irr::core::matrix4 playerRotation(m_PlayerNode.getAbsoluteTransformation());
+		m_PlayerHandler.update();
+        m_Listener.setPosition(m_PlayerHandler.getMainPlayer()->getAbsolutePosition());
+        irr::core::matrix4 playerRotation(m_PlayerHandler.getMainPlayer()->getAbsoluteTransformation());
         irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10] );
         irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
         m_Listener.setDirection(forwardVector, upVector);    
@@ -266,10 +216,6 @@ namespace Confus
 
     void Game::reset()
     {
-        // We actually would not need to call this method since the server will send score, and new positions.
-        m_BlueFlag.returnToStartPosition();
-        m_RedFlag.returnToStartPosition();
-        m_PlayerNode.respawn();
         m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamBlue, 0);
         m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamRed, 0);
     }
@@ -278,59 +224,15 @@ namespace Confus
     {
 		m_MazeGenerator.fixedUpdate();
 		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
-		m_PlayerController->fixedUpdate();
+		m_PlayerHandler.fixedUpdate();
     }
 
     void Game::end()
     {
         m_BlueFlag.returnToStartPosition();
         m_RedFlag.returnToStartPosition();
-    }
-
-    void Game::updateOtherPlayer(RakNet::Packet* a_Data)
-    {
-        RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
-        
-        bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
-
-		for(size_t i = 0; i < m_Players.size(); ++i)
-		{
-			long long id;
-			bitstreamIn.Read(id);
-			auto& pair = m_Players.at(id);
-			irr::core::vector3df position;
-			irr::core::vector3df rotation;
-			bitstreamIn.Read(position);
-			bitstreamIn.Read(rotation);
-			pair.Player->setPosition(position);
-			pair.Player->setRotation(rotation);
-		}
-    }
-
-    void Game::updateHealth(RakNet::Packet* a_Data)
-    {
-        RakNet::BitStream inputStream(a_Data->data, a_Data->length, false);
-        inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
-
-        long long id;
-        inputStream.Read(id);
-
-		auto& player = m_Players.at(id);
-		int health;
-		EHitIdentifier hitIdentifier;
-
-		inputStream.Read(health);
-		inputStream.Read(hitIdentifier);
-
-		if(health > player.Player->getHealthInstance()->getHealth())
-		{
-			player.Player->getHealthInstance()->heal(health - player.Player->getHealthInstance()->getHealth());
-		}
-		else if(health < player.Player->getHealthInstance()->getHealth())
-		{
-			player.Player->getHealthInstance()->damage(player.Player->getHealthInstance()->getHealth() - health, hitIdentifier);
-		}
-    }
+		m_Device->getCursorControl()->setVisible(true);
+    }    
 
 	void Game::updateSceneTransformations() const
 	{
@@ -345,72 +247,7 @@ namespace Confus
 			}
 		};
 		updateDownwards(m_Device->getSceneManager()->getRootSceneNode());
-	}
-
-    //need to test of the guid.g is the right one, and not the one from the server
-    void Game::addOwnPlayer(RakNet::Packet* a_Data)
-    {
-        RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
-
-        bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
-		ConfusShared::ETeamIdentifier teamID;
-		bitstreamIn.Read(teamID);
-		m_PlayerNode.setTeamIdentifier(teamID, m_Device);
-        m_PlayerNode.respawn();
-
-        size_t size;
-        bitstreamIn.Read(size);
-		std::cout << "\n Player id " << m_PlayerNode.getGUID() << std::endl;
-        for(size_t i = 0u; i < size; i++)
-        {
-            long long id;
-            bitstreamIn.Read(id);
-            bitstreamIn.Read(teamID);
-
-			if(id != m_PlayerNode.getGUID())
-			{
-				ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
-				newPlayer->setTeamIdentifier(teamID, m_Device);
-				m_Players.emplace(id, PlayerConstruct(newPlayer, std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager),
-					*m_Connection));
-			}
-		}
-
-		// Add self
-		m_Players.emplace(m_PlayerNode.getGUID(), PlayerConstruct(&m_PlayerNode, std::make_unique<Audio::PlayerAudioEmitter>(&m_PlayerNode, &m_AudioManager),
-			*m_Connection));
-	}
-
-    void Game::addOtherPlayer(RakNet::Packet* a_Data)
-    {
-        RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
-
-        bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
-
-        long long id;
-		ConfusShared::ETeamIdentifier teamID;
-
-        bitstreamIn.Read(id);
-        bitstreamIn.Read(teamID);
-
-        ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
-		newPlayer->setTeamIdentifier(teamID, m_Device);
-		m_Players.emplace(id, PlayerConstruct(newPlayer, std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager),
-			*m_Connection));
-    }
-
-    void Game::removePlayer(RakNet::Packet* a_Data)
-    {
-        RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
-        bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
-
-        long long id;
-        bitstreamIn.Read(id);
-		auto& player = m_Players.at(id);
-		player.Player->remove();
-		delete(player.Player);
-		m_Players.erase(id);
-    }
+	}   
 
 	void Game::denyConnection(RakNet::Packet* a_Data)
 	{
@@ -426,7 +263,6 @@ namespace Confus
 			default:
 				std::cout << "Could not connect to the server" << std::endl;
 		}
-
 		m_ShouldRun = false;
 	}
 

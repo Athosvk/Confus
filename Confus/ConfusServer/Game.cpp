@@ -138,18 +138,18 @@ namespace ConfusServer
         m_MazeTimer += m_DeltaTime;
         if(m_MazeTimer >= MazeChangeInterval)
         {
-            if(currentDelay >= MazeDelay)
-            {
-                m_MazeGenerator.refillMainMaze(currentSeed);
-                m_MazeTimer = 0.0f;
-                currentDelay = 0.0f;
-            }
             if(currentDelay == 0.0f)
             {
                 currentSeed = static_cast<int>(time(nullptr)) % 1000;
                 broadcastMazeChange(currentSeed);
             }
             currentDelay += static_cast<float>(m_DeltaTime);
+			if (currentDelay >= MazeDelay)
+			{
+				m_MazeGenerator.refillMainMaze(currentSeed);
+				m_MazeTimer = 0.0f;
+				currentDelay = 0.0f;
+			}
         }
     }
 
