@@ -1,0 +1,5 @@
+<map id="ConfusShared::BaseGame" name="ConfusShared::BaseGame">
+<area shape="rect" id="node2" href="$class_confus_1_1_game.html" title="The Game instance itself, running the game loop. It ties the objects in the Game to the Irrlicht inst..." alt="" coords="5,80,111,107"/>
+<area shape="rect" id="node3" href="$class_confus_1_1_menu.html" title="Confus::Menu" alt="" coords="135,80,237,107"/>
+<area shape="rect" id="node4" href="$class_confus_1_1_win_screen.html" title="Confus::WinScreen" alt="" coords="261,80,396,107"/>
+</map>
