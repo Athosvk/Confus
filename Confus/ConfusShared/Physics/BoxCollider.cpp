@@ -3,6 +3,7 @@
 #include "BoxCollider.h"
 #include "RigidBody.h"
 #include "CollisionRegistrar.h"
+#include "PhysicsWorld.h"
 
 namespace ConfusShared
 {
@@ -19,6 +20,11 @@ namespace ConfusShared
 		void BoxCollider::setTriggerEnterCallback(const std::function<void(BoxCollider*a_Other)>& a_Callback)
 		{
 			m_CollisionRegistrar.setTriggerEnterCallback(this, a_Callback);
+		}
+
+		irr::core::vector3df BoxCollider::getDimensions() const
+		{
+			return PhysicsWorld::toIrrlichtVector(m_Shape->getHalfExtentsWithMargin() * 2);
 		}
 	}
 }

@@ -2,21 +2,6 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace Microsoft
-{
-	namespace VisualStudio
-	{
-		namespace CppUnitTestFramework
-		{
-			template<>
-			static std::wstring ToString<irr::core::vector3df>(const irr::core::vector3df  & vector)
-			{
-				return std::to_wstring(vector.X) + L" " + std::to_wstring(vector.Y) + L" " + std::to_wstring(vector.Z);
-			}
-		}
-	}
-}
-
 namespace ConfusTest
 {
 	TEST_CLASS(FlagTest)

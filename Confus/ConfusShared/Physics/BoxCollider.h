@@ -2,6 +2,7 @@
 #include <Bullet/btBulletCollisionCommon.h>
 #include <memory>
 #include <functional>
+#include <Irrlicht/irrlicht.h>
 
 #include "Collider.h"
 
@@ -39,6 +40,10 @@ namespace ConfusShared
 			/// <summary> Sets the trigger enter callback </summary>
 			/// <param name="a_Callback">The callback to use once a Trigger Enter event has occurred </param>
 			void setTriggerEnterCallback(const std::function<void(BoxCollider* a_Other)>& a_Callback);
+			
+			/// <summary>Gets the dimensions of the box collider</summary>
+			/// <returns>The dimensions</returns>
+			irr::core::vector3df getDimensions() const;
 		};
 	}
 }
