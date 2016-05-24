@@ -26,16 +26,28 @@ namespace ConfusShared
 	/// Flag class with status and team id
 	class Flag 
     {
-	public:
+	public:		
+		/// <summary>The event that is called once the state of the flag has changed</summary>
 		Delegate<void(ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum)> FlagStatusChangedEvent;
-    private:		
-		irr::core::vector3df m_StartPosition = irr::core::vector3df(0.f);
-		irr::core::vector3df m_StartRotation = irr::core::vector3df(0.f);
-        ConfusShared::ETeamIdentifier m_TeamIdentifier;
-		EFlagEnum m_FlagStatus;
-        irr::scene::IMeshSceneNode* m_FlagNode;
-        Physics::BoxCollider* m_Collider;
-        irr::scene::ISceneNode* m_FlagOldParent = nullptr;
+    private:			
+		/// <summary>The start position of the flag, to where it respawns as well, so it can be respawned at any point in the game</summary>
+		irr::core::vector3df m_StartPosition = irr::core::vector3df(0.f);		
+		/// <summary>The starting rotation</summary>
+		irr::core::vector3df m_StartRotation = irr::core::vector3df(0.f);		
+		/// <summary>The team this flag belongs to, so that we can determine who can pick this flag up, as well as determine its team color</summary>
+		ConfusShared::ETeamIdentifier m_TeamIdentifier;		
+		/// <summary>The current status of the flag, so that we can display it in the GUI</summary>
+		EFlagEnum m_FlagStatus;		
+		/// <summary>The meshnode that represents the flag visually</summary>
+		irr::scene::IMeshSceneNode* m_FlagNode;		
+		/// <summary>The collider associated with the flag, so that it can be turned off and on later in the game</summary>
+		Physics::BoxCollider* m_Collider;		
+		/// <summary>The previous parent of the flag, so that its state can be reset appropriately after being dropped</summary>
+		irr::scene::ISceneNode* m_FlagOldParent = nullptr;		
+		/// <summary>
+		/// The event that is called once this flag has been used to score a point, so that sounds and other events can 
+		/// be triggered externally 
+		/// </summary>
 		Delegate<void()> m_OnScore;
 
     public: 
@@ -83,6 +95,10 @@ namespace ConfusShared
 		/// <summary>Adds a callback that will be called once a team has scored a point</summary>
 		/// <param name="a_Callback">The callback to add to the delegate</param>
 		void addScoreCallback(std::function<void()> a_Callback);
+		
+		/// <summary>Gets the position of the flag in world space coordinates</summary>
+		/// <returns>The position of the flag</returns>
+		irr::core::vector3df getPosition() const;
     private:		
 		/// <summary>Sets the flag status.</summary>
 		/// <param name="a_FlagStatus">The new flag state</param>

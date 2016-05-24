@@ -180,6 +180,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FlagTest.cpp" />
     <ClCompile Include="MoveableWallTest.cpp" />
     <ClCompile Include="PlayerTest.cpp" />
     <ClCompile Include="stdafx.cpp">
