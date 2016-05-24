@@ -5,6 +5,10 @@
 
 namespace ConfusShared
 {
+	/// <summary>
+	/// Represents a collection of function callbacks, similar to the c# delegate, so they can all be invoked
+	/// at once
+	/// </summary>
 	template<typename TFunctionType>
 	class Delegate
 	{
@@ -36,11 +40,5 @@ namespace ConfusShared
 			m_Subscribers.push_back(a_Function);
 			return *this;
 		}
-
-		//Delegate& operator+=(std::function<TFunctionType>&& a_Function)
-		//{
-		//	m_Subscribers.push_back(std::move(a_Function));
-		//	return *this;
-		//}
 	};
 }

@@ -1,5 +1,0 @@
-<map id="ConfusShared::Delegate&lt; TFunctionType &gt;" name="ConfusShared::Delegate&lt; TFunctionType &gt;">
-<area shape="rect" id="node2" href="$class_confus_shared_1_1_delegate.html" title="ConfusShared::Delegate\l\&lt; void(ETeamIdentifier\l a_TeamIdentifier, EFlagEnum\l a_PreviousFlagEnum, EFlagEnum\l a_CurrentFlagEnum)\&gt;" alt="" coords="419,5,643,91"/>
-<area shape="rect" id="node3" href="$class_confus_shared_1_1_delegate.html" title="ConfusShared::Delegate\l\&lt; void()\&gt;" alt="" coords="449,115,612,157"/>
-<area shape="rect" id="node4" href="$class_confus_shared_1_1_delegate.html" title="ConfusShared::Delegate\l\&lt; void(EHitIdentifier\l a_HitIdentifier)\&gt;" alt="" coords="449,181,612,237"/>
-</map>

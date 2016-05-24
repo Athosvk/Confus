@@ -109,9 +109,12 @@ namespace Confus
         /// The Red Flag.
         /// </summary>
         ConfusShared::Flag m_RedFlag;
-
-		Announcer m_Announcer;
-		ConfusShared::RespawnFloor m_RedRespawnFloor;
+		
+		/// <summary>The announcer playing sounds related to capture events and such</summary>
+		Announcer m_Announcer;		
+		/// <summary>The red team's respawn floor</summary>
+		ConfusShared::RespawnFloor m_RedRespawnFloor;		
+		/// <summary>The blue team's respawn floor</summary>
 		ConfusShared::RespawnFloor m_BlueRespawnFloor;
 
 		/// <summary>
@@ -123,8 +126,10 @@ namespace Confus
 		/// The connection as a client to the server that we are currently connected to,
 		/// used for sending packets over the connection to the server and 
 		/// </summary>
-		std::unique_ptr<Networking::ClientConnection> m_Connection;
-		Audio::Sound m_MazeChangedSound;
+		std::unique_ptr<Networking::ClientConnection> m_Connection;		
+		/// <summary>The sound played once the maze changes seeds</summary>
+		Audio::Sound m_MazeChangedSound;		
+		/// <summary>The client side representation of the team score</summary>
 		ClientTeamScore m_ClientScore;
 
     public:
@@ -178,21 +183,32 @@ namespace Confus
         /// Updates health of all players
         /// </summary>
         void updateHealth(RakNet::Packet* a_Data);
-
-        void removePlayer(RakNet::Packet* a_Data);
-
+		
+		/// <summary>Removes the player instance from the local game instance</summary>
+		/// <param name="a_Data">The data containing the information of the player needed to remove the player</param>
+		void removePlayer(RakNet::Packet* a_Data);
+		
+		/// <summary>Denies the connection</summary>
+		/// <param name="a_Data">The data containing why the connection was refused</param>
 		void denyConnection(RakNet::Packet* a_Data);
+		
+		/// <summary>Starts this instance.</summary>
+		virtual void start() override;
 
-        virtual void start() override;
         /// <summary>
         /// Updates the state of the objects in the game
         /// </summary>
         virtual void update() override;
+
         /// <summary>
         /// Updates the state of objects that require frame-rate independence
         /// </summary>
         virtual void fixedUpdate() override;
-        virtual void end() override;
-        virtual void render() override;
+		
+		/// <summary>Ends this instance.</summary>
+		virtual void end() override;
+		
+		/// <summary>Renders the meshes and other objects in the game</summary>
+		virtual void render() override;
 	};
 }

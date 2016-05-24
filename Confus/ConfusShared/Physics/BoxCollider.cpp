@@ -8,7 +8,6 @@ namespace ConfusShared
 {
 	namespace Physics
 	{
-
 		BoxCollider::BoxCollider(std::unique_ptr<btBoxShape>&& a_Shape, RigidBody* a_RigidBody,
 			CollisionRegistrar& a_CollisionRegistrar)
 			: Collider(a_RigidBody),

@@ -40,7 +40,7 @@ namespace Confus
 			/// <summary>Initializes a new instance of the <see cref="PlayerAudioEmitter" /> class.</summary>
 			/// <param name="a_AttachedPlayer">The player that owns this emitter.</param>
 			/// <param name="a_AudioManager">The audio manager the sounds should be played on</param>
-/			PlayerAudioEmitter(ConfusShared::Player* a_AttachedPlayer, AudioManager* a_AudioManager);
+			PlayerAudioEmitter(ConfusShared::Player* a_AttachedPlayer, AudioManager* a_AudioManager);
             /// <summary>
             /// Plays a random footstep sound.
             /// </summary>

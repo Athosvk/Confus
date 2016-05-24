@@ -1,3 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_confus_1_1_audio_1_1_audio_manager.html" title="Keeps track of all the OpenALSource instances that used and pools them accordingly, so that they can easily be re&#45;used by various sounds/buffers, while also making that wave files are only loaded into memory once and re&#45;used otherwise " alt="" coords="5,5,200,32"/>
-</map>

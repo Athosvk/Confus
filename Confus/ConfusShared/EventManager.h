@@ -14,9 +14,11 @@ namespace ConfusShared
         std::array<bool, irr::KEY_KEY_CODES_COUNT> m_KeyIsDown = {false};
         /// <summary> Struct for the mouse state. </summary>
         struct MouseState
-        {
-            bool LeftButtonDown;
-            bool RightButtonDown;
+        {			
+			/// <summary>Whether the left mouse button is being pressed</summary>
+			bool LeftButtonDown;			
+			/// <summary>Whether the right mouse button is being pressed</summary>
+			bool RightButtonDown;
             MouseState() : LeftButtonDown(false), RightButtonDown(false) { }
         } m_MouseState;
     public:

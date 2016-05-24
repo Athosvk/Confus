@@ -67,14 +67,33 @@ namespace ConfusShared
 
 		/// <summary> The player carrying a flag has gotten a point. </summary>
 		void score();
-
+		
+		/// <summary>Gets the color of the flag, based on the team identifier</summary>
+		/// <returns>The current flag color</returns>
 		const irr::video::SColor getColor() const;
+		
+		/// <summary>Gets the team identifier of the team this flag belongs to</summary>
+		/// <returns>The flag's team identifier</returns>
 		const ConfusShared::ETeamIdentifier getTeamIdentifier() const;
+		
+		/// <summary>Gets the flag status.</summary>
+		/// <returns>The current state of the flag</returns>
 		const EFlagEnum getFlagStatus() const;
+		
+		/// <summary>Adds a callback that will be called once a team has scored a point</summary>
+		/// <param name="a_Callback">The callback to add to the delegate</param>
 		void addScoreCallback(std::function<void()> a_Callback);
-    private:
+    private:		
+		/// <summary>Sets the flag status.</summary>
+		/// <param name="a_FlagStatus">The new flag state</param>
 		void setFlagStatus(EFlagEnum a_FlagStatus);
-        void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
+		
+		/// <summary>Initializes the particle system associated with the flag</summary>
+		/// <param name="a_SceneManager">The scene manager to place the particle system in</param>
+		void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
+		
+		/// <summary>Sets the color </summary>
+		/// <param name="a_VideoDriver">So that it matches the color of the team it is associated with</param>
 		void setColor(irr::video::IVideoDriver* a_VideoDriver);
 	};
 }
