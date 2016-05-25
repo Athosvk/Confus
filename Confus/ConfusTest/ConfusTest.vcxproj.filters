@@ -30,6 +30,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ElementInArrayTest.cpp">
+    <ClCompile Include="CrosshairGUITest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

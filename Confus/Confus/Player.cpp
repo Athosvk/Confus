@@ -310,7 +310,6 @@ namespace Confus
          {
              m_PlayerState = a_NewState;
              m_StateChangeTime = RakNet::GetTime();
-             std::cout << "State changed! Time of change is: " << m_StateChangeTime;
          } 
      }
 
