@@ -1,11 +1,13 @@
 #pragma once
 #include "NewMaze.h"
 #include "NewMazeGenerator.h"
+#include "MoveableWall.h"
 namespace Confus
 {
 	class MazeManager
 	{
 	private:
+
 		/// <summary>
 		/// The maze that the players walk in.
 		/// </summary>
@@ -22,6 +24,14 @@ namespace Confus
 		/// </summary>
 		int m_Seed;
 
+		irr::IrrlichtDevice * m_Device;
+		Physics::PhysicsWorld& m_PhysicsWorld;
+
+		/// <summary>
+		/// This Scalar increases the scale of the walls and the position that that walls are from each other thus making larger paths.
+		/// </summary>
+		float m_MazeScalar;
+
 		/// <summary>
 		/// Generator to generate mazes
 		/// </summary>
@@ -37,11 +47,19 @@ namespace Confus
 		/// </summary>
 		bool hasBeenRefilled = true;
 
+		/// <summary>
+		/// A 2D vector that contains all the MoveableWalls
+		/// </summary>
+		std::vector<std::vector<std::shared_ptr<MoveableWall>>> MoveableWalls;
+
+		
+
 	public:
-		MazeManager(irr::core::vector2d<irr::u32> a_MazeSize);
+		MazeManager(irr::IrrlichtDevice * a_Device, irr::core::vector2d<irr::u32> a_MazeSize, int a_InitialSeed, Physics::PhysicsWorld& a_PhysicsWorld, float a_MazeScalar);
 		void fixedUpdate();
 		void refillMainMaze(int a_Seed);
 		void replaceMainMaze();
+		void setupSingleMoveableWalls(NewMaze & a_Maze, irr::core::vector2df a_Offset);
 		void refillMainMazeRequest(int a_Seed, int a_ChangeWantedTime);
 		~MazeManager();
 	};

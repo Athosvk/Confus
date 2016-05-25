@@ -5,9 +5,11 @@
 
 namespace Confus
 {
-	MazeManager::MazeManager(irr::core::vector2d<irr::u32> a_MazeSize)
-		:m_MainMaze(a_MazeSize), m_ReplacementMaze(a_MazeSize)
+	MazeManager::MazeManager(irr::IrrlichtDevice * a_Device, irr::core::vector2d<irr::u32> a_MazeSize, int a_InitialSeed, Physics::PhysicsWorld& a_PhysicsWorld, float a_MazeScalar)
+		:m_MainMaze(a_MazeSize), m_ReplacementMaze(a_MazeSize), m_Seed(a_InitialSeed),m_Device(a_Device), m_PhysicsWorld(a_PhysicsWorld), m_MazeScalar(a_MazeScalar)
 	{
+		m_MazeGenerator.generateMaze(m_MainMaze, a_InitialSeed, irr::core::vector2df(0, 0));
+		setupSingleMoveableWalls(m_MainMaze, irr::core::vector2df(30, -7));
 	}
 
 	void MazeManager::fixedUpdate()
@@ -19,13 +21,13 @@ namespace Confus
 			hasBeenRefilled = true;
 		}
 		
-		//for (auto wallVector : MazeTiles)
-		//{
-		//	for (auto wall : wallVector)
-		//	{
-		//		wall->fixedUpdate();
-		//	}
-		//}
+		for (auto wallVector : MoveableWalls)
+		{
+			for (auto wall : wallVector)
+			{
+				wall->fixedUpdate();
+			}
+		}
 	}
 
 	void MazeManager::refillMainMaze(int a_Seed)
@@ -46,7 +48,7 @@ namespace Confus
 					if (!m_MainMaze.MazeTiles[x][y]->Raised)
 					{
 						m_MainMaze.MazeTiles[x][y]->Raised = true;
-						m_MainMaze.MazeTiles[x][y]->getWall()->rise();
+						MoveableWalls[x][y]->rise();
 					}
 				}
 				else
@@ -54,8 +56,37 @@ namespace Confus
 					if (m_MainMaze.MazeTiles[x][y]->Raised)
 					{
 						m_MainMaze.MazeTiles[x][y]->Raised = false;
-						m_MainMaze.MazeTiles[x][y]->getWall()->hide();
+						MoveableWalls[x][y]->hide();
 					}
+				}
+			}
+		}
+	}
+
+	void MazeManager::setupSingleMoveableWalls(NewMaze & a_Maze, irr::core::vector2df a_Offset)
+	{
+		//MoveableWall(irr::IrrlichtDevice* a_Device, irr::core::vector3df a_RegularPosition,
+		//	irr::core::vector3df a_Scale, Physics::PhysicsWorld& a_PhysicsWorld);
+		MoveableWalls.clear();
+		for (int x = 0; x < static_cast<int>(a_Maze.mazeSize().X); x++)
+		{
+			std::vector<std::shared_ptr<MoveableWall>> tempVector;
+			MoveableWalls.push_back(tempVector);
+			for (int y = 0; y < static_cast<int>(a_Maze.mazeSize().Y) - 1; y++)
+			{
+				std::shared_ptr<MoveableWall> wall = std::make_shared<MoveableWall>(m_Device,
+					irr::core::vector3df(static_cast<float>(-x*m_MazeScalar + a_Offset.X), 0.5f, static_cast<float>(-y*m_MazeScalar + a_Offset.Y)),
+					irr::core::vector3df(m_MazeScalar, 1., m_MazeScalar), //do not want to raise the wall height
+					m_PhysicsWorld);
+				irr::scene::IAnimatedMeshSceneNode* wallMeshNode = wall->getMeshNode();
+				irr::core::vector3df boundingBox = wallMeshNode->getBoundingBox().getExtent();
+				wall->HiddenPosition = irr::core::vector3df(static_cast<float>(-x * m_MazeScalar + a_Offset.X),
+					-boundingBox.Y * wallMeshNode->getScale().Y, static_cast<float>(-y*m_MazeScalar + a_Offset.Y));
+				wall->TransitionSpeed = 0.01f;
+				MoveableWalls[x].push_back(wall);
+				if (!m_MainMaze.MazeTiles[x][y]->Raised)
+				{
+					MoveableWalls[x][y]->hide();
 				}
 			}
 		}

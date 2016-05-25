@@ -3,6 +3,7 @@
 
 #include "Networking/ClientConnection.h"
 #include "MazeGenerator.h"
+#include "MazeManager.h"
 #include "Audio/OpenAL\OpenALListener.h"
 #include "Player.h"
 #include "Audio\PlayerAudioEmitter.h"
@@ -43,9 +44,14 @@ namespace Confus
         Audio::AudioManager m_AudioManager;
 
 		/// <summary>
-		/// MazeGenerator that hasa accesible maze
+		/// MazeGenerator that has a accesible maze
 		/// </summary>
-		MazeGenerator m_MazeGenerator;
+		//MazeGenerator m_MazeGenerator;
+
+		/// <summary>
+		/// MazeManager that has a accesible maze
+		/// </summary>
+		MazeManager  m_MazeManager;
 
 		/// <summary>
 		/// The GUI for the Player

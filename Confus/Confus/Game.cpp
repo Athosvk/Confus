@@ -23,8 +23,9 @@ namespace Confus
 
     Game::Game(irr::IrrlichtDevice* a_Device, EventManager* a_EventManager) : BaseGame(a_Device, a_EventManager),
         m_PhysicsWorld(m_Device),
-        m_MazeGenerator(m_Device, 41, 40, (19 + 20 + 21 + 22 + 23 + 24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-            irr::core::vector2df(19., 20.), m_PhysicsWorld, &m_AudioManager),
+		m_MazeManager(a_Device,irr::core::vector2d<irr::u32>(40,40), (19 + 20 + 21 + 22 + 23 + 24),m_PhysicsWorld, 1.5f),
+        //m_MazeGenerator(m_Device, 41, 40, (19 + 20 + 21 + 22 + 23 + 24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+        //    irr::core::vector2df(19., 20.), m_PhysicsWorld, &m_AudioManager),
         m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true, &m_AudioManager),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_PhysicsWorld),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_PhysicsWorld),
@@ -185,7 +186,8 @@ namespace Confus
             bitstreamIn.Read(timeMazeChanges);
             bitstreamIn.Read(mazeSeed);
             std::cout << "Update is in " << (timeMazeChanges - static_cast<int>(RakNet::GetTimeMS())) << " ms, the seed is:\t" << mazeSeed << std::endl;
-            m_MazeGenerator.refillMainMazeRequest(mazeSeed, timeMazeChanges);
+            //m_MazeGenerator.refillMainMazeRequest(mazeSeed, timeMazeChanges);
+			m_MazeManager.refillMainMazeRequest(mazeSeed, timeMazeChanges);
         });
 
         m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [](RakNet::Packet* a_Data)
@@ -257,7 +259,8 @@ namespace Confus
 		if(timer >= 20.0f)
 		{
 			timer = 0.0f;
-			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
+			//m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
+			m_MazeManager.refillMainMaze(static_cast<int>(time(0)));
 			m_BlueRespawnFloor.disableCollision();
 			m_RedRespawnFloor.disableCollision();
 		}
@@ -275,7 +278,8 @@ namespace Confus
 
     void Game::fixedUpdate()
     {
-		m_MazeGenerator.fixedUpdate();
+		//m_MazeGenerator.fixedUpdate();
+		m_MazeManager.fixedUpdate();
 		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
         m_PlayerNode.fixedUpdate();
     }
