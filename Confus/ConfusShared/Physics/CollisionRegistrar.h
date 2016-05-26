@@ -3,7 +3,6 @@
 #include <unordered_map>
 #include <vector>
 #include <functional>
-#include "../Delegate.h"
 
 namespace ConfusShared
 {
@@ -41,7 +40,7 @@ namespace ConfusShared
 			/// <summary> The collisions that occurred during the current physics simulation step </summary>
 			std::vector<CollisionInfo> m_Collisions;			
 			/// <summary> The registered callbacks for the TriggerEnter event </summary>
-			std::unordered_map<BoxCollider*, Delegate<void(BoxCollider* a_Other)>> m_TriggerEnterCallbacks;			
+			std::unordered_map<BoxCollider*, std::function<void(BoxCollider* a_Other)>> m_TriggerEnterCallbacks;			
 			/// <summary> The collision world to keep track of collisions </summary>
 			btCollisionWorld* m_CollisionWorld;
 
