@@ -119,7 +119,6 @@ namespace Confus
 		ConfusShared::ETeamIdentifier teamID;
 		bitstreamIn.Read(teamID);
 		m_PlayerNode.setTeamIdentifier(teamID, m_Device);
-		m_PlayerNode.respawn();
 
 		size_t size;
 		bitstreamIn.Read(size);
@@ -127,17 +126,11 @@ namespace Confus
 		{
 			long long id;
 			bitstreamIn.Read(id);
-			bitstreamIn.Read(teamID);
-
-			if (id != m_PlayerNode.getGUID())
-			{
-				ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
-				newPlayer->setTeamIdentifier(teamID, m_Device);
-				m_Players.emplace(id, PlayerConstruct(newPlayer, std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager),
-					*m_Connection));
-			}
+ 			ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
+			newPlayer->setTeamIdentifier(teamID, m_Device);
+			m_Players.emplace(id, PlayerConstruct(newPlayer, std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager),
+				*m_Connection));
 		}
-
 		// Add self
 		m_Players.emplace(m_PlayerNode.getGUID(), PlayerConstruct(&m_PlayerNode, std::make_unique<Audio::PlayerAudioEmitter>(&m_PlayerNode, &m_AudioManager),
 			*m_Connection));
