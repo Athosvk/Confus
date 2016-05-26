@@ -258,6 +258,9 @@ namespace Confus
 			player.second.Player->update();
 			player.second.AudioEmitter->updatePosition();
 		}
+        m_RedFlag.update();
+        m_BlueFlag.update();
+
 		m_GUI.update();
         m_Listener.setPosition(m_PlayerNode.getAbsolutePosition());
 

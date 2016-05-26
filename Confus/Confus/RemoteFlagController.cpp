@@ -1,9 +1,9 @@
 #include "../ConfusShared/Flag.h"
 #include "../ConfusShared/TeamIdentifier.h"
 #include "../ConfusShared/PacketType.h"
+
 #include "RemoteFlagController.h"
 
-#include <iostream>
 namespace Confus
 {
     RemoteFlagController::RemoteFlagController(ConfusShared::Flag& a_Flag, Networking::ClientConnection& a_Connection)

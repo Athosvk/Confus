@@ -137,6 +137,8 @@ namespace ConfusServer
         {
             playerPair.second.Player->update();
         }
+        m_RedFlag.update();
+        m_BlueFlag.update();
 
         static float currentDelay = 0.0f;
         static int currentSeed;

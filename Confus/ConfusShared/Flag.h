@@ -35,7 +35,7 @@ namespace ConfusShared
 		EFlagEnum m_FlagStatus;
         irr::scene::IMeshSceneNode* m_FlagNode;
         Physics::BoxCollider* m_Collider;
-        irr::scene::ISceneNode* m_FlagOldParent = nullptr;
+        irr::scene::ISceneNode* m_FlagParent = nullptr;
 		Delegate<void()> m_OnScore;
 
     public: 
@@ -75,6 +75,7 @@ namespace ConfusShared
         void setFlagStatus(EFlagEnum a_FlagStatus);
         void setPosition(irr::core::vector3df a_Position);
         irr::core::vector3df getPosition();
+        void update();
     private:
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
 		void setColor(irr::video::IVideoDriver* a_VideoDriver);

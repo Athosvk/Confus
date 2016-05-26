@@ -213,6 +213,7 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Networking\Connection.cpp" />
+    <ClCompile Include="RemoteFlagUpdater.cpp" />
     <ClCompile Include="RemoteInputReceiver.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="TeamScore.cpp" />
@@ -246,6 +247,7 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClInclude Include="..\ConfusShared\Weapon.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Networking\Connection.h" />
+    <ClInclude Include="RemoteFlagUpdater.h" />
     <ClInclude Include="RemoteInputReceiver.h" />
     <ClInclude Include="TeamScore.h" />
   </ItemGroup>
