@@ -14,8 +14,7 @@
 #include "Audio/AudioManager.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "Announcer.h"
-#include "LocalPlayerController.h"
-#include "RemotePlayerController.h"
+#include "PlayerHandler.h"
 
 namespace Confus
 {    
@@ -26,39 +25,6 @@ namespace Confus
     /// </summary>
     class Game : public ConfusShared::BaseGame
     {
-	private:		
-		/// <summary>
-		/// Represents the instances of objects that is used for every single player instance, which are tied
-		/// together so that they can be update as pairs and can be removed at once when a player leaves 
-		/// the game
-		/// </summary>
-		struct PlayerConstruct
-		{			
-			/// <summary>Initializes a new instance of the <see cref="PlayerPair" /> struct.</summary>
-			/// <param name="a_Player">The player.</param>
-			/// <param name="a_AudioEmitter">The audio emitter.</param>
-			/// <param name="a_Connection">The connection to the server, used for constructing a remote controller</param>
-			PlayerConstruct(ConfusShared::Player* a_Player, std::unique_ptr<Audio::PlayerAudioEmitter> a_AudioEmitter,
-				Networking::ClientConnection& a_Connection);
-			
-			/// <summary>
-			/// The player instance that is either the player of this instance or that of a 
-			/// different client connected to the server, so that we can update values such as position
-			/// and animation state of all Player instances
-			/// </summary>
-			ConfusShared::Player* Player;
-			/// <summary>
-			/// The audio emitter, playing audio for the associated player, placed along with the player instance
-			/// so that they can be removed in association at once
-			/// </summary>
-			std::unique_ptr<Audio::PlayerAudioEmitter> AudioEmitter;			
-			/// <summary>
-			/// The player controller that ensures synchronization between the local 
-			/// instantiations of the players and those on the server, placed along with the player instance
-			/// so that they can be removed in association at once
-			/// </summary>
-			std::unique_ptr<RemotePlayerController> PlayerController;
-		};
 	public:
 		/// <summary>
 		/// The maximum score used to determine if someone has won
@@ -80,27 +46,17 @@ namespace Confus
 		/// MazeGenerator that hasa accesible maze
 		/// </summary>
 		ConfusShared::MazeGenerator m_MazeGenerator;
+		
+		/// <summary>
+		/// The Player handler that handles the own player and the newly joined ones.
+		/// </summary>
+		PlayerHandler m_PlayerHandler;
 
 		/// <summary>
 		/// The GUI for the Player
 		/// </summary>
 		GUI m_GUI;
-        /// <summary>
-        /// The Players to test with.
-        /// </summary>
-        ConfusShared::Player m_PlayerNode;
 		
-		/// <summary>
-		/// The controller controlling the player instance of the client, so that 
-		/// inputs can be sent to the server
-		/// </summary>
-		std::unique_ptr<LocalPlayerController> m_PlayerController;
-		
-		/// <summary>
-		/// The players in the game world, indexed by their id (primarily ours)
-		/// so that we can look them up easily for updates, removals etc.
-		/// </summary>
-		std::map<long long, PlayerConstruct> m_Players;
         /// <summary>
         /// The Blue Flag.
         /// </summary>
@@ -109,12 +65,9 @@ namespace Confus
         /// The Red Flag.
         /// </summary>
         ConfusShared::Flag m_RedFlag;
-		
-		/// <summary>The announcer playing sounds related to capture events and such</summary>
+
 		Announcer m_Announcer;
-		/// <summary>The red team's respawn floor</summary>
 		ConfusShared::RespawnFloor m_RedRespawnFloor;
-		/// <summary>The blue team's respawn floor</summary>
 		ConfusShared::RespawnFloor m_BlueRespawnFloor;
 
 		/// <summary>
@@ -123,13 +76,10 @@ namespace Confus
 		/// </summary>
         irr::scene::ISceneNode* m_LevelRootNode;
 		/// <summary>
-		/// The connection as a client to the server that we are currently connected to,
-		/// used for sending packets over the connection to the server and 
+		/// The connection as a client to the server that we are currently connected to
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
-		/// <summary>The sound played once the maze changes seeds</summary>
 		Audio::Sound m_MazeChangedSound;
-		/// <summary>The client side representation of the team score</summary>
 		ClientTeamScore m_ClientScore;
 
     public:
@@ -167,48 +117,18 @@ namespace Confus
 		/// </summary>
         void updateSceneTransformations() const;
 
-        /// <summary>
-        /// Creates a new Player object for this user, this player will be regarded as THEIR player.
-        /// </summary>
-        void addOwnPlayer(RakNet::Packet* a_Data);
-        /// <summary>
-        /// Creates a new Player object for a different user that just joined.
-        /// </summary>
-        void addOtherPlayer(RakNet::Packet* a_Data);
-        /// <summary>
-        /// Updates positions and rotations of all other players.
-        /// </summary>
-        void updateOtherPlayer(RakNet::Packet* a_Data);
-        /// <summary>
-        /// Updates health of all players
-        /// </summary>
-        void updateHealth(RakNet::Packet* a_Data);
-		
-		/// <summary>Removes the player instance from the local game instance</summary>
-		/// <param name="a_Data">The data containing the information of the player needed to remove the player</param>
-		void removePlayer(RakNet::Packet* a_Data);
-		
-		/// <summary>Denies the connection</summary>
-		/// <param name="a_Data">The data containing why the connection was refused</param>
 		void denyConnection(RakNet::Packet* a_Data);
-		
-		/// <summary>Starts this instance.</summary>
-		virtual void start() override;
 
+        virtual void start() override;
         /// <summary>
         /// Updates the state of the objects in the game
         /// </summary>
         virtual void update() override;
-
         /// <summary>
         /// Updates the state of objects that require frame-rate independence
         /// </summary>
         virtual void fixedUpdate() override;
-
-		/// <summary>Ends this instance.</summary>
-		virtual void end() override;
-
-		/// <summary>Renders the meshes and other objects in the game</summary>
-		virtual void render() override;
+        virtual void end() override;
+        virtual void render() override;
 	};
 }
