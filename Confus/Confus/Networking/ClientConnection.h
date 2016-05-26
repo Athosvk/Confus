@@ -52,10 +52,9 @@ namespace Confus
             /// requesting services
             /// </summary>
 			void processPackets();
-			/// <summary>
-			/// Sends a message to the server
-			/// </summary>
+			/// <summary>Sends a message to the server</summary>
 			/// <param name="a_Stream">The Bitstream that needs to be send.</param>
+			/// <param name="a_Reliability">The reliability to send the packet with</param>
 			void sendMessage(RakNet::BitStream* a_Stream, PacketReliability a_Reliability) const;
             /// <summary> Adds a function to the event in the callback function map. </summary>
             /// <param name="a_Event">The server event that should trigger the function.</param>

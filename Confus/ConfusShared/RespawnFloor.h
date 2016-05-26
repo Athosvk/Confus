@@ -22,6 +22,7 @@ namespace ConfusShared
         irr::video::ITexture* m_RegularTexture;
         /// <summary> The Transparent texture for the respawn floor. </summary>
         irr::video::ITexture* m_TransparentTexture;
+		/// <summary>The rigid body to handle collision for this respawn floor</summary>
 		Physics::RigidBody* m_RigidBody = nullptr;
     public:
 		/// <summary> The constructor for the respawn floor </summary>

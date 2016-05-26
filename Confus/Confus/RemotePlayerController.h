@@ -20,6 +20,10 @@ namespace Confus
 	/// Represents a player that is controlled by a remote server object, used so that the state of the server
 	/// (position, rotation) is up to date with the local player and player actions can be re-executed locally
 	/// </summary>
+	/// <remarks>
+	/// Separated from the player logic, so that we can share the player class between the server and 
+	/// client side, avoiding code duplication.
+	/// </remarks>
 	class RemotePlayerController
 	{
 	private:		

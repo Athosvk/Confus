@@ -229,6 +229,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="Networking\ClientConnection.cpp" />
     <ClCompile Include="Audio\Sound.cpp" />
     <ClCompile Include="RemoteFlagController.cpp" />
+    <ClCompile Include="PlayerHandler.cpp" />
     <ClCompile Include="RemotePlayerController.cpp" />
     <ClCompile Include="ScoreGUI.cpp" />
     <ClCompile Include="WinScreen.cpp" />
@@ -280,6 +281,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="Networking\ClientConnection.h" />
     <ClInclude Include="Audio\Sound.h" />
     <ClInclude Include="RemoteFlagController.h" />
+    <ClInclude Include="PlayerHandler.h" />
     <ClInclude Include="RemotePlayerController.h" />
     <ClInclude Include="ScoreGUI.h" />
     <ClInclude Include="WinScreen.h" />

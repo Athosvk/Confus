@@ -6,6 +6,11 @@ namespace ConfusShared
 {
 	namespace Physics
 	{
+		/// <summary>
+		/// The debugdrawer, capable of drawing the collision shapes, contact points and other information 
+		/// available in the world
+		/// </summary>
+		/// <seealso cref="btIDebugDraw" />
 		class DebugDrawer : public btIDebugDraw
 		{
 		private:
@@ -19,9 +24,9 @@ namespace ConfusShared
 			DefaultColors m_Colors;
 
 		public:			
-			/// <summary> Initializes a new instance of the <see cref="DebugDrawer"/> class. </summary>
-			/// <param name="a_Device">The active Irrlicth device </param>
-			/// <param name="a_World">The bullet collision world to draw </param>
+			/// <summary>Initializes a new instance of the <see cref="DebugDrawer" /> class.</summary>
+			/// <param name="a_Device">The active Irrlicth device</param>
+			/// <param name="a_World">The bullet collision world to draw</param>
 			DebugDrawer(irr::IrrlichtDevice* a_Device, btCollisionWorld* a_World);
 			
 			/// <summary> Draws the entire world's debug infromation </summary>
@@ -42,7 +47,7 @@ namespace ConfusShared
 			/// <param name="a_Normal"> The contact normal </param>
 			/// <param name="a_Distance"> The distance between the objects colliding </param>
 			/// <param name="a_LifeTime"> Unused </param>
-			/// <param name="a_Color> The color to draw with </param>
+			/// <param name="a_Color"> The color to draw with </param>
 			virtual void drawContactPoint(const btVector3& a_Point, const btVector3& a_Normal, btScalar a_Distance,
 				int a_LifeTime, const btVector3& a_Color) override;
 

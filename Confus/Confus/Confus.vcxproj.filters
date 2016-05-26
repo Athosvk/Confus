@@ -156,7 +156,10 @@
     <ClCompile Include="..\ConfusShared\Player.cpp">
       <Filter>Shared</Filter>
     </ClCompile>
-    <ClCompile Include="RemoteFlagController.cpp">
+    <ClCompile Include="PlayerHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+        <ClCompile Include="RemoteFlagController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -308,6 +311,9 @@
     <ClInclude Include="..\ConfusShared\PlayerInputState.h">
       <Filter>Shared</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerHandler.h">
+      <Filter>Header Files</Filter>
+      </ClInclude>
     <ClInclude Include="RemoteFlagController.h">
       <Filter>Header Files</Filter>
     </ClInclude>

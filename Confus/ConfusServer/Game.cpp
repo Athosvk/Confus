@@ -99,7 +99,7 @@ namespace ConfusServer
 
         m_Connection->addFunctionToMap(ID_DISCONNECTION_NOTIFICATION, [this](RakNet::Packet* a_Data)
         {
-            removePlayer(a_Data);
+//            removePlayer(a_Data);
         });
         m_Device->getCursorControl()->setVisible(false);
       
@@ -145,18 +145,18 @@ namespace ConfusServer
         m_MazeTimer += m_DeltaTime;
         if(m_MazeTimer >= MazeChangeInterval)
         {
-            if(currentDelay >= MazeDelay)
-            {
-                m_MazeGenerator.refillMainMaze(currentSeed);
-                m_MazeTimer = 0.0f;
-                currentDelay = 0.0f;
-            }
             if(currentDelay == 0.0f)
             {
                 currentSeed = static_cast<int>(time(nullptr)) % 1000;
                 broadcastMazeChange(currentSeed);
             }
             currentDelay += static_cast<float>(m_DeltaTime);
+			if (currentDelay >= MazeDelay)
+			{
+				m_MazeGenerator.refillMainMaze(currentSeed);
+				m_MazeTimer = 0.0f;
+				currentDelay = 0.0f;
+			}
         }
     }
 
@@ -245,7 +245,6 @@ namespace ConfusServer
 			newPlayer->setStartPosition(irr::core::vector3df(0.f, 10.f, -85.f));
 		}
 		newPlayer->respawn();
-        m_Players.emplace(newPlayer->getGUID(), PlayerPair(newPlayer, *m_Connection));
 
         RakNet::BitStream stream;
         stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::MainPlayerJoined));
@@ -253,14 +252,13 @@ namespace ConfusServer
         stream.Write(static_cast<size_t>(m_Players.size()));
         for(auto& playerPair : m_Players)
         {
-			if(playerPair.second.Player->getGUID() != id)
-			{
-				stream.Write(static_cast<long long>(playerPair.second.Player->getGUID()));
-				stream.Write(static_cast<ConfusShared::ETeamIdentifier>(playerPair.second.Player->getTeamIdentifier()));
-			}
+			stream.Write(static_cast<long long>(playerPair.second.Player->getGUID()));
+			stream.Write(static_cast<ConfusShared::ETeamIdentifier>(playerPair.second.Player->getTeamIdentifier()));
         }
         RakNet::AddressOrGUID guid = a_Data->guid;
         m_Connection->sendPacket(&stream, &guid);
+
+		m_Players.emplace(newPlayer->getGUID(), PlayerPair(newPlayer, *m_Connection));
 
         RakNet::BitStream broadcastStream;
         broadcastStream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::OtherPlayerJoined));
@@ -304,11 +302,11 @@ namespace ConfusServer
 
     void Game::updateHealth(EHitIdentifier a_HitType, ConfusShared::Player* a_Player) const
     {
-        RakNet::BitStream stream;
-        stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::UpdateHealth));
-		stream.Write(static_cast<long long>(a_Player->getGUID()));
-		stream.Write(static_cast<int>(a_Player->getHealthInstance()->getHealth()));
-		stream.Write(static_cast<EHitIdentifier>(a_HitType));
-		m_Connection->broadcastPacket(&stream, nullptr);
+  //      RakNet::BitStream stream;
+  //      stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::UpdateHealth));
+		//stream.Write(static_cast<long long>(a_Player->getGUID()));
+		//stream.Write(static_cast<int>(a_Player->getHealthInstance()->getHealth()));
+		//stream.Write(static_cast<EHitIdentifier>(a_HitType));
+		//m_Connection->broadcastPacket(&stream, nullptr);
     }
 }

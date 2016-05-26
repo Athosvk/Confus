@@ -34,7 +34,6 @@ namespace Confus
 
             m_Text->setText(L"Press ESCAPE to go back to the main menu");
             runGame();
-            m_Device->getSceneManager()->clear();
             m_Device->getGUIEnvironment()->clear();
             m_Text = m_Device->getGUIEnvironment()->addStaticText(L"Press SPACE to start the game, BACKSPACE to exit.", { 10, 500, 10 + 250, 500 + 80 });
         }

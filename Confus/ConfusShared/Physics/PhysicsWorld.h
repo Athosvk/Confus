@@ -20,13 +20,27 @@ namespace ConfusShared
 		class PhysicsWorld
 		{
 		private:
-			/// <summary> A combination of a RigidBody and a collider </summary>
+			/// <summary>
+			/// A combination of a RigidBody and a Collider, stored together since
+			/// they are coupled like they are in the Bullet Physics library and should be added
+			/// and removed together at once to the physics world
+			/// </summary>
 			struct ColliderPair
 			{
 			public:				
-				/// <summary> The (collider)shape of this collision structure </summary>
+				/// <summary> 
+				/// The (collider)shape of this collision structure,
+				/// storing the instance of the bullet (shape) type so that we can edit its properties continously.
+				/// This is allocated on the heap, so that we can distribute handles to the collider around in the code,
+				/// for modification of the collider
+				/// </summary>
 				std::unique_ptr<Collider> Shape;
-				/// <summary> The rigid body of this collision structure </summary>
+				/// <summary> 
+				/// The rigid body associated with the collider, allowing to modify properties such as the
+				/// velocity
+				/// This is allocated on the heap, so that we can distribute handles to the rigid body around in the code
+				/// for modification of the Rigid Body
+				/// </summary>
 				std::unique_ptr<RigidBody> Body;
 
 				/// <summary> Initializes a new instance of the <see cref="ColliderPair"/> struct </summary>
@@ -63,22 +77,22 @@ namespace ConfusShared
 			/// <summary> Finalizes an instance of the <see cref="PhysicsWorld"/> class </summary>
 			~PhysicsWorld();
 
-			/// <summary>
-			/// Creates and places a new box collider into the physics world for simulations
-			/// </summary>
+			/// <summary>Creates and places a new box collider into the physics world for simulations</summary>
 			/// <param name="a_Extents">The extents/dimensions of the collider to be created</param>
 			/// <param name="a_AttachedNode">The node the collider is attached to</param>
-			/// <param name="a_Type"> The type of the boxcollider, which group it belongs to</param>
-			/// <param name="a_Mask"> The mask for ignoring collisions </param>
-			/// <returns>
-			/// A handle to the created box collider
-			/// </returns>
+			/// <param name="a_Group">The group mask this object belongs to</param>
+			/// <param name="a_Mask">The mask representing the objects it can collide with</param>
+			/// <returns>A handle to the created box collider</returns>
 			BoxCollider* createBoxCollider(irr::core::vector3df a_Extents, irr::scene::ISceneNode* a_AttachedNode,
 				ECollisionFilter a_Group = ECollisionFilter::All, ECollisionFilter a_Mask = ECollisionFilter::None);
 
-			/// <summary> Creates and places a new box collider from the scene node's bounding box into the physics world for simulations </summary>
-			/// <param name="a_AttachedNode"> The node the collider is attached to </param>
-			/// <returns> A handle to the created box collider </returns>
+			/// <summary>
+			/// Creates and places a new box collider from the scene node's bounding box into the physics world for simulations
+			/// </summary>
+			/// <param name="a_AttachedNode">The node the collider is attached to</param>
+			/// <param name="a_Group">The group mask this object belongs to</param>
+			/// <param name="a_Mask">The mask representing the objects it can collide with</param>
+			/// <returns>A handle to the created box collider</returns>
 			BoxCollider* createBoxCollider(irr::scene::ISceneNode* a_AttachedNode, ECollisionFilter a_Group = ECollisionFilter::Other,
 				ECollisionFilter a_Mask = ECollisionFilter::All);
 

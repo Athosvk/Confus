@@ -27,6 +27,7 @@ namespace ConfusShared
 		/// </summary>
 		irr::IrrlichtDevice* m_IrrDevice;
 
+		/// <summary>The phsyics world to place the colliders for the maze in</summary>
 		Physics::PhysicsWorld& m_PhysicsWorld;
 
 		/// <summary>

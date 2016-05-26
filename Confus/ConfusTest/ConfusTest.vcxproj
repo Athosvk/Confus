@@ -180,8 +180,11 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BoxColliderTest.cpp" />
+    <ClCompile Include="FlagTest.cpp" />
     <ClCompile Include="MoveableWallTest.cpp" />
     <ClCompile Include="PlayerTest.cpp" />
+    <ClCompile Include="RigidBodyTest.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

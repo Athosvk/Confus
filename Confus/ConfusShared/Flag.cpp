@@ -109,6 +109,11 @@ namespace ConfusShared
         particleAffector->drop();
     }
 
+	irr::core::vector3df Flag::getPosition() const
+	{
+		return m_FlagNode->getPosition();
+	}
+
     const irr::video::SColor Flag::getColor() const
     {
         switch(m_TeamIdentifier)

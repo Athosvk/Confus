@@ -66,9 +66,6 @@
     <ClCompile Include="..\ConfusShared\Flag.cpp">
       <Filter>Shared Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\ConfusShared\Player.cpp">
       <Filter>Shared Files</Filter>
     </ClCompile>

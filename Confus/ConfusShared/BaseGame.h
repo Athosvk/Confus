@@ -42,7 +42,8 @@ namespace ConfusShared
         irr::IrrlichtDevice* m_Device;
         /// <summary> Will stop the game loop </summary>
         bool m_ShouldRun = true;
-        EventManager* m_EventManager;
+		/// <summary>The active event manager, used for handling input events</summary>
+		EventManager* m_EventManager;
     public:        
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseGame"/> class.
