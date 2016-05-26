@@ -32,13 +32,15 @@ namespace ConfusShared
 			MazeChange = 8 + ID_USER_PACKET_ENUM,
 			/// <summary> Sent to notify the server of the player's inputs, so that it can update the player state</summary>
 			Player = 9 + ID_USER_PACKET_ENUM,
-			/// <summary>
-			/// Sent when there has been an update in health of a player instance, so that 
+			/// <summary> Sent when there has been an update in health of a player instance, so that 
 			/// where needed, a player can update its visual representation for the GUI
 			/// </summary>
-			UpdateHealth = 10 + ID_USER_PACKET_ENUM,
-			/// <summary>Sent when the game has end, so that clients can present the winning screen and show the winning team</summary>
-			EndOfGame = 11 + ID_USER_PACKET_ENUM
+            UpdateHealth = 10 + ID_USER_PACKET_ENUM,
+            /// <summary>Sent when the game has end, so that clients can present the winning screen and show the winning team</summary>
+            EndOfGame = 11 + ID_USER_PACKET_ENUM,
+            
+            RedFlag = 12 + ID_USER_PACKET_ENUM,
+            BlueFlag = 13 + ID_USER_PACKET_ENUM,
 		};
 	}
 }

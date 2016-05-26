@@ -15,6 +15,9 @@
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "Announcer.h"
 #include "PlayerHandler.h"
+#include "LocalPlayerController.h"
+#include "RemotePlayerController.h"
+#include "RemoteFlagController.h"
 
 namespace Confus
 {    
@@ -57,6 +60,8 @@ namespace Confus
 		/// </summary>
 		GUI m_GUI;
 		
+        std::unique_ptr<RemoteFlagController> m_RedFlagController;
+        std::unique_ptr<RemoteFlagController> m_BlueFlagController;
         /// <summary>
         /// The Blue Flag.
         /// </summary>

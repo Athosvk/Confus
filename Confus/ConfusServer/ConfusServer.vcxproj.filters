@@ -93,6 +93,9 @@
     <ClCompile Include="RemoteInputReceiver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RemoteFlagUpdater.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -183,6 +186,9 @@
       <Filter>Shared Files</Filter>
     </ClInclude>
     <ClInclude Include="RemoteInputReceiver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RemoteFlagUpdater.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

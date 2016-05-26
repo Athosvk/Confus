@@ -42,8 +42,7 @@ namespace ConfusShared
 		irr::scene::IMeshSceneNode* m_FlagNode;
 		/// <summary>The collider associated with the flag, so that it can be turned off and on later in the game</summary>
 		Physics::BoxCollider* m_Collider;
-		/// <summary>The previous parent of the flag, so that its state can be reset appropriately after being dropped</summary>
-		irr::scene::ISceneNode* m_FlagOldParent = nullptr;
+        irr::scene::ISceneNode* m_FlagParent = nullptr;
 		/// <summary>
 		/// The event that is called once this flag has been used to score a point, so that sounds and other events can 
 		/// be triggered externally 
@@ -99,13 +98,13 @@ namespace ConfusShared
 		/// <summary>Gets the position of the flag in world space coordinates</summary>
 		/// <returns>The position of the flag</returns>
 		irr::core::vector3df getPosition() const;
-    private:
 		/// <summary>Sets the flag status.</summary>
 		/// <param name="a_FlagStatus">The new flag state</param>
-		void setFlagStatus(EFlagEnum a_FlagStatus);
-
-		/// <summary>Initializes the particle system associated with the flag</summary>
-		/// <param name="a_SceneManager">The scene manager to place the particle system in</param>
+        void setFlagStatus(EFlagEnum a_FlagStatus);
+        void setPosition(irr::core::vector3df a_Position);
+        irr::core::vector3df getPosition();
+        void update();
+    private:
 		void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
 
 		/// <summary>Sets the color </summary>
