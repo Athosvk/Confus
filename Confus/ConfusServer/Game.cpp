@@ -32,7 +32,7 @@ namespace ConfusServer
 	        irr::core::vector2df(19., 20.), m_PhysicsWorld),
         m_BlueFlag(m_Device, ConfusShared::ETeamIdentifier::TeamBlue, m_PhysicsWorld),
 		m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, m_PhysicsWorld),
-		m_TeamScoreManager(m_BlueFlag, m_RedFlag)
+		m_TeamScoreManager(m_BlueFlag, m_RedFlag) 
     {
     }
 
@@ -77,6 +77,8 @@ namespace ConfusServer
 	void Game::run()
     {
         initializeConnection();
+
+
         m_TeamScoreManager.setResetCallback([this] { resetGame(); });
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
@@ -86,6 +88,9 @@ namespace ConfusServer
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
 		updateSceneTransformations();
 		initializeLevelColliders();
+
+        m_RedFlagUpdater = std::make_unique<RemoteFlagUpdater>(m_RedFlag, *m_Connection.get());
+        m_BlueFlagUpdater = std::make_unique<RemoteFlagUpdater>(m_BlueFlag, *m_Connection.get());
 
         m_Connection->addFunctionToMap(ID_NEW_INCOMING_CONNECTION, [this](RakNet::Packet* a_Data)
         {
@@ -205,6 +210,8 @@ namespace ConfusServer
         updatePlayers();
 		m_MazeGenerator.fixedUpdate();
 		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
+        m_RedFlagUpdater->fixedUpdate();
+        m_BlueFlagUpdater->fixedUpdate();
 	}
 
     void Game::broadcastMazeChange(int a_Seed) const

@@ -16,6 +16,7 @@
 #include "Announcer.h"
 #include "LocalPlayerController.h"
 #include "RemotePlayerController.h"
+#include "RemoteFlagController.h"
 
 namespace Confus
 {    
@@ -81,13 +82,15 @@ namespace Confus
         /// The Players to test with.
         /// </summary>
         ConfusShared::Player m_PlayerNode;
-		
+
 		/// <summary>
 		/// The controller controlling the player instance of the client, so that 
 		/// inputs can be sent to the server
 		/// </summary>
 		std::unique_ptr<LocalPlayerController> m_PlayerController;
 		
+        std::unique_ptr<RemoteFlagController> m_RedFlagController;
+        std::unique_ptr<RemoteFlagController> m_BlueFlagController;
 		/// <summary>
 		/// The players in the game world, indexed by their id (primarily ours)
 		/// so that we can look them up easily for updates, removals etc.

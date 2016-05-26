@@ -72,8 +72,10 @@ namespace ConfusShared
 		const ConfusShared::ETeamIdentifier getTeamIdentifier() const;
 		const EFlagEnum getFlagStatus() const;
 		void addScoreCallback(std::function<void()> a_Callback);
+        void setFlagStatus(EFlagEnum a_FlagStatus);
+        void setPosition(irr::core::vector3df a_Position);
+        irr::core::vector3df getPosition();
     private:
-		void setFlagStatus(EFlagEnum a_FlagStatus);
         void initParticleSystem(irr::scene::ISceneManager* a_SceneManager);
 		void setColor(irr::video::IVideoDriver* a_VideoDriver);
 	};

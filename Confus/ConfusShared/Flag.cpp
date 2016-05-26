@@ -215,4 +215,14 @@ namespace ConfusShared
         m_FlagNode->setRotation(m_StartRotation);
 		setFlagStatus(EFlagEnum::FlagBase);
     }
+
+    void Flag::setPosition(irr::core::vector3df a_Position)
+    {
+        m_FlagNode->setPosition(a_Position);
+    }
+
+    irr::core::vector3df Flag::getPosition()
+    {
+        return m_FlagNode->getPosition();
+    }
 }

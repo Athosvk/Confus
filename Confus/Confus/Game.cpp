@@ -187,6 +187,9 @@ namespace Confus
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
 		m_PlayerController = std::make_unique<LocalPlayerController>(m_PlayerNode, *m_Connection);
+        m_RedFlagController = std::make_unique<RemoteFlagController>(m_RedFlag, *m_Connection);
+        m_BlueFlagController = std::make_unique<RemoteFlagController>(m_BlueFlag, *m_Connection);
+
 		m_PlayerNode.setGUID(m_Connection->getID());
         m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Data)
         {
