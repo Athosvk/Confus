@@ -88,7 +88,7 @@
     <IncludePath>$(SolutionDir)../Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)../Libraries/32 bit/Release;$(LibraryPath)</LibraryPath>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -209,12 +209,14 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="..\ConfusShared\Physics\PhysicsWorld.cpp" />
     <ClCompile Include="..\ConfusShared\Physics\RigidBody.cpp" />
     <ClCompile Include="Announcer.cpp" />
+    <ClCompile Include="CrosshairGUI.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Flag.cpp" />
     <ClCompile Include="FlagGUI.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="Health.cpp" />
+    <ClCompile Include="HealthGUI.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="MazeGenerator.cpp" />
@@ -256,6 +258,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="..\ConfusShared\Physics\PhysicsWorld.h" />
     <ClInclude Include="..\ConfusShared\Physics\RigidBody.h" />
     <ClInclude Include="Announcer.h" />
+    <ClInclude Include="CrosshairGUI.h" />
     <ClInclude Include="Delegate.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="Flag.h" />
@@ -263,6 +266,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="Game.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Health.h" />
+    <ClInclude Include="HealthGUI.h" />
     <ClInclude Include="IUIElement.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="MazeGenerator.h" />
