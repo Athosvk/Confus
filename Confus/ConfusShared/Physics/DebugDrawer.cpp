@@ -6,7 +6,6 @@ namespace ConfusShared
 {
 	namespace Physics
 	{
-
 		DebugDrawer::DebugDrawer(irr::IrrlichtDevice* a_Device, btCollisionWorld* a_World)
 			: m_Device(a_Device),
 			m_World(a_World)

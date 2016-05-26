@@ -6,20 +6,20 @@
 #include "Delegate.h"
 
 namespace ConfusShared
-{	
+{
 	/// <summary>
 	/// Represents a health instance, mostly used for the player, so that such instances can be killed 
 	/// gradually
 	/// </summary>
 	class Health
 	{
-	public:		
+	public:
 		/// <summary>
 		/// The event called once the instance associated with this health object gets damaged
 		/// so that sounds can be played and variables can be updated
 		/// </summary>
 		Delegate<void(EHitIdentifier a_HitIdentifier)> DamageEvent;
-	private:		
+	private:
 		/// <summary>
 		/// The callback called when the instance associated with this health object is killed,
 		/// so that variables can be reset and the instance can potentially be respawned
@@ -28,10 +28,10 @@ namespace ConfusShared
 		/// <summary>The node associated with the health object</summary>
 		irr::scene::ISceneNode* m_AttachedNode;
 		/// <summary>The current health of this instance</summary>
-		int m_Health;		
+		int m_Health;
 		/// <summary>The maximum and starting health of this instance</summary>
 		int m_MaxHealth = 100;
-	public:		
+	public:
 		/// <summary>Initializes a new instance of the <see cref="Health"/> class.</summary>
 		Health();
 		

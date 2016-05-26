@@ -14,15 +14,15 @@ namespace ConfusShared
         std::array<bool, irr::KEY_KEY_CODES_COUNT> m_KeyIsDown = {false};
 		/// <summary>Represents the current state of the mouse</summary>
 		struct MouseState
-        {			
+        {
 			/// <summary>Whether the left mouse button is being pressed</summary>
-			bool LeftButtonDown;			
+			bool LeftButtonDown;
 			/// <summary>Whether the right mouse button is being pressed</summary>
 			bool RightButtonDown;
 			
 			/// <summary>Initializes a new instance of the <see cref="MouseState"/> struct.</summary>
 			MouseState() : LeftButtonDown(false), RightButtonDown(false) { }
-        } 		
+        }
 		m_MouseState;
     public:
         /// <summary> Constructor for the Event Manager. </summary>

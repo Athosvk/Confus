@@ -21,9 +21,9 @@ namespace Confus
         class PlayerAudioEmitter
 		{
 			/// <summary> The sound played when you are hit by a heavy attack </summary>
-			Sound m_HitSoundHeavy;			
+			Sound m_HitSoundHeavy;
 			/// <summary>The sound played when you are hit by a ligth attack</summary>
-			Sound m_HitSoundLight;			
+			Sound m_HitSoundLight;
 			/// <summary>The sound played when you are hit by a heavy backstab</summary>
 			Sound m_HitSoundHeavyBackstab;
 			/// <summary>The sound played when you are hit by a light backstab</summary>

@@ -13,27 +13,27 @@ namespace Confus
 	/// <seealso cref="IUIElement" />
 	class FlagGUI : public IUIElement
 	{
-	private:		
+	private:
 		/// <summary>The flag to represent</summary>
-		ConfusShared::Flag* m_Flag;		
+		ConfusShared::Flag* m_Flag;
 		/// <summary>The image to show for the flag</summary>
-		irr::gui::IGUIImage* m_FlagImage;		
+		irr::gui::IGUIImage* m_FlagImage;
 		/// <summary>
 		/// The image of the exclamation mark that is used to show that the flag is 
 		/// currently not in the team's base
 		/// </summary>
-		irr::gui::IGUIImage* m_ExclamationMarkImage;		
+		irr::gui::IGUIImage* m_ExclamationMarkImage;
 		/// <summary>The texture for the flag image</summary>
-		irr::video::ITexture* m_FlagTexture;		
+		irr::video::ITexture* m_FlagTexture;
 		/// <summary>The texture for the exclamation mark image</summary>
-		irr::video::ITexture* m_ExclamationMarkTexture;		
+		irr::video::ITexture* m_ExclamationMarkTexture;
 		/// <summary>
 		/// The maximum size of either image, to restrict it from scaling too far up with the 
 		/// screen resolution
 		/// </summary>
 		irr::core::dimension2du m_ImageMaxSize;
 
-	public:		
+	public:
 		/// <summary>Initializes a new instance of the <see cref="FlagGUI"/> class.</summary>
 		/// <param name="a_Device">The active Irrlicht device</param>
 		/// <param name="a_Flag">The flag to represent the state of</param>
@@ -51,7 +51,7 @@ namespace Confus
 		void changeFlagState();
 
 		/// <summary>Updates this instance.</summary>
-		virtual void update() override;		
+		virtual void update() override;
 
 		/// <summary>Finalizes an instance of the <see cref="FlagGUI"/> class.</summary>
 		~FlagGUI();

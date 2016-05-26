@@ -9,7 +9,6 @@ namespace Confus
 {
     namespace Audio
     {
-
 		PlayerAudioEmitter::PlayerAudioEmitter(ConfusShared::Player* a_AttachedPlayer, AudioManager* a_AudioManager)
 			: m_HitSoundHeavy(a_AudioManager->createSound("SFX/Player/a_heavy_grunt.wav")),
 			m_HitSoundLight(a_AudioManager->createSound("SFX/Player/a_light_grunt.wav")),
@@ -71,7 +70,6 @@ namespace Confus
 			m_SwordSwoshes[std::rand() % 4].play();
         }
 
-
 		void PlayerAudioEmitter::playHitSound(EHitIdentifier a_HitIdentifier )
 		{
 			if (a_HitIdentifier == EHitIdentifier::Heavy)
@@ -123,7 +121,6 @@ namespace Confus
                 sound.setDirection(forwardVector, upVector);
             }
         }
-
 
 		void PlayerAudioEmitter::createAudioSources(AudioManager* a_AudioManager)
         {

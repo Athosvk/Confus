@@ -7,9 +7,8 @@
 namespace ConfusShared
 {
     const irr::u32 Player::WeaponJointIndex = 14u;
-	const unsigned Player::LightAttackDamage = 25u;
-	const unsigned Player::HeavyAttackDamage = 50u;
-
+    const unsigned Player::LightAttackDamage = 25u;
+    const unsigned Player::HeavyAttackDamage = 50u;
 
 	Player::Player(irr::IrrlichtDevice* a_Device, ConfusShared::Physics::PhysicsWorld& a_PhysicsWorld,
 		long long a_ID)

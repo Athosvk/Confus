@@ -41,7 +41,7 @@ namespace ConfusShared
         /// </summary>
         irr::IrrlichtDevice* m_Device;
         /// <summary> Will stop the game loop </summary>
-        bool m_ShouldRun = true;		
+        bool m_ShouldRun = true;
 		/// <summary>The active event manager, used for handling input events</summary>
 		EventManager* m_EventManager;
     public:        

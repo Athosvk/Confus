@@ -60,8 +60,7 @@ namespace ConfusShared
 			}
 		}
 
-
-		BoxCollider* PhysicsWorld::createBoxCollider(irr::core::vector3df a_Extents, irr::scene::ISceneNode* a_AttachedNode,
+		BoxCollider* PhysicsWorld::createBoxCollider(irr::core::vector3df a_Extents, irr::scene::ISceneNode* a_AttachedNode, 
 			ECollisionFilter a_Group, ECollisionFilter a_Mask)
 		{
 			auto shape = std::make_unique<btBoxShape>(toBulletVector(a_Extents / 2));
@@ -74,7 +73,6 @@ namespace ConfusShared
 				std::move(rigidBody));
 			return static_cast<BoxCollider*>(m_Colliders.back().Shape.get());
 		}
-
 
 		BoxCollider* PhysicsWorld::createBoxCollider(irr::scene::ISceneNode* a_AttachedNode, ECollisionFilter a_Group,
 			ECollisionFilter a_Mask)

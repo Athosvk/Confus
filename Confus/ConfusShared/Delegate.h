@@ -28,7 +28,7 @@ namespace ConfusShared
 				subscriber(std::forward<TArguments>(a_Arguments)...);
 			}
 		}
-		
+
 		/// <summary>
 		/// Adds the given function objec tto the delegate, so that it is called 
 		/// when the () operator is invoked

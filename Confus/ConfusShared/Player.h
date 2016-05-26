@@ -16,18 +16,18 @@ namespace ConfusShared
 		class BoxCollider;
 		class PhysicsWorld;
 	}
-	
+
 	/// <summary> Represents the state the player is currently in </summary>
 	enum class EPlayerState : unsigned char
-    {		
+    {
 		/// <summary> Represents the player as being alive</summary>
-		Alive, 		
+		Alive,
 		/// <summary> Represents the player as carrying a flag</summary>
-		CarryingFlag, 		
+		CarryingFlag,
 		/// <summary> Represents the player as executing a heavy attack</summary>
-		HeavyAttacking, 		
+		HeavyAttacking,
 		/// <summary> Represents the player as executing a light attack</summary>
-		LightAttacking, 		
+		LightAttacking,
 		/// <summary> Represents the player as being dead</summary>
 		Dead
     };
@@ -37,7 +37,7 @@ namespace ConfusShared
     /// </summary>
     class Player : public irr::scene::IAnimationEndCallBack, public irr::scene::ISceneNode
     {
-    public:		
+    public:
 		/// <summary>The state of the player carrying the flag</summary>
 		ConfusShared::EFlagEnum CarryingFlag;
 		/// <summary>The flag the player is currently holding</summary>
@@ -47,7 +47,7 @@ namespace ConfusShared
 		/// <summary>The damage to deal on a regular heavy attack</summary>
 		static const unsigned HeavyAttackDamage;
 		/// <summary>The event played once the player executes a light attack</summary>
-		ConfusShared::Delegate<void()> OnLightAttack;		
+		ConfusShared::Delegate<void()> OnLightAttack;
 		/// <summary>The event played once the player executes a heavy attack</summary>
 		ConfusShared::Delegate<void()> OnHeavyAttack;
     private:
@@ -56,9 +56,10 @@ namespace ConfusShared
 		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
 		irr::scene::IAnimatedMeshSceneNode* m_PlayerNode;
 		/// <summary> private value for health class </summary>
-		ConfusShared::Health m_PlayerHealth;		
+		ConfusShared::Health m_PlayerHealth;
 		/// <summary>The collider of the player used for the collision detection</summary>
 		ConfusShared::Physics::BoxCollider* m_Collider;
+
         /// <summary> The weapon bone index of the animation for the weapon </summary>
         static const irr::u32 WeaponJointIndex;
         /// <summary> The player's weapon </summary>
@@ -99,7 +100,7 @@ namespace ConfusShared
 		void startLightAttack();
 
 		/// <summary> Starts the heavy attack, which deals more damage. </summary>
-		void startHeavyAttack();		
+		void startHeavyAttack();
 		/// <summary>Gets the current state of the player, based on what it is currently doing</summary>
 		/// <returns>The current player state</returns>
 		EPlayerState getState() const;
@@ -130,7 +131,7 @@ namespace ConfusShared
 		/// <summary>Gets the unique identifier.</summary>
 		/// <returns>The unique identifier of this player instance</returns>
 		long long getGUID() const;
-		
+
 		/// <summary>Sets the unique identifier that the player uses over the network</summary>
 		/// <param name="a_ID">The new ID</param>
 		void setGUID(long long a_ID);
@@ -141,7 +142,7 @@ namespace ConfusShared
 		
 		/// <summary>Updates the velocity based on the walking direction</summary>
 		void updateVelocity();
-		
+
 		/// <summary>Drops the flag the player is currently holding</summary>
 		void dropFlag();
         /// <summary> Starts the walking animation, which is the default animation. </summary>

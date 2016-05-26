@@ -7,13 +7,13 @@
 /// </summary>
 class IUIElement
 {
-public:	
+public:
 	/// <summary>Updates this instance.</summary>
 	virtual void update() = 0;
 		
 	/// <summary>Finalizes an instance of the <see cref="IUIElement"/> class.</summary>
 	virtual ~IUIElement() = default;
-	
+
 	/// <summary>Calculates the offset needed to present the given image</summary>
 	/// <param name="a_ImageMaxSize">Maximum size of the image</param>
 	/// <param name="a_Texture">The texture associated with the image</param>
@@ -42,7 +42,7 @@ public:
 		return offset;
 	}
 	
-	/// <summary>Consturcts and adds a new image.</summary>
+	/// <summary>Constructs and adds a new image.</summary>
 	/// <param name="a_GUIEnvironment">The GUI environment to add the image to </param>
 	/// <param name="a_ScreenPixelPosition">The relative screen position for the image</param>
 	/// <param name="a_Texture">The texture to create an image instance for</param>

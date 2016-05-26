@@ -20,18 +20,26 @@ namespace ConfusShared
 		class PhysicsWorld
 		{
 		private:
-			/// <summary> A combination of a RigidBody and a collider </summary>
+			/// <summary>
+			/// A combination of a RigidBody and a Collider, stored together since
+			/// they are coupled like they are in the Bullet Physics library and should be added
+			/// and removed together at once to the physics world
+			/// </summary>
 			struct ColliderPair
 			{
 			public:				
 				/// <summary> 
 				/// The (collider)shape of this collision structure,
-				/// storing the instance of the bullet (shape) type so that we can edit its properties continously 
+				/// storing the instance of the bullet (shape) type so that we can edit its properties continously.
+				/// This is allocated on the heap, so that we can distribute handles to the collider around in the code,
+				/// for modification of the collider
 				/// </summary>
 				std::unique_ptr<Collider> Shape;
 				/// <summary> 
 				/// The rigid body associated with the collider, allowing to modify properties such as the
 				/// velocity
+				/// This is allocated on the heap, so that we can distribute handles to the rigid body around in the code
+				/// for modification of the Rigid Body
 				/// </summary>
 				std::unique_ptr<RigidBody> Body;
 

@@ -23,7 +23,7 @@ inline a_EnumType operator~ (a_EnumType a_Value) \
 }
 
 namespace ConfusShared
-{	
+{
 	/// <summary>
 	/// Provides several methods to extend the default functionality of enums that act as boolean flags
 	/// </summary>
@@ -51,7 +51,7 @@ namespace ConfusShared
 			return static_cast<TEnumType>(static_cast<std::underlying_type<TEnumType>::type>(a_Value1) &
 				static_cast<std::underlying_type<TEnumType>::type>(a_Value2));
 		}
-		
+
 		/// <summary>
 		/// Performs a bitwise XOR operation on the underlying types of the enums, so that it can be used 
 		/// to exclude certain enum values from comparison

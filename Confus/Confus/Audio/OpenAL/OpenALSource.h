@@ -55,9 +55,9 @@ namespace Confus
                 void setPosition(irr::core::vector3df a_Position);
 
                 /// <summary> Set the velocity at which sounds of this audiosoruce will be played at  </summary>
-                /// <param name="a_VelocityX">The a_ velocity x.</param>
-                /// <param name="a_VelocityY">The a_ velocity y.</param>
-                /// <param name="a_VelocityZ">The a_ velocity z.</param>
+                /// <param name="a_VelocityX">The x velocity.</param>
+                /// <param name="a_VelocityY">The y velocity.</param>
+                /// <param name="a_VelocityZ">The z velocity.</param>
                 /// <remarks> This creates a doppler effect </remarks>
                 void setVelocity(float a_VelocityX, float a_VelocityY, float a_VelocityZ);
 

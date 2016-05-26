@@ -111,9 +111,9 @@ namespace Confus
         ConfusShared::Flag m_RedFlag;
 		
 		/// <summary>The announcer playing sounds related to capture events and such</summary>
-		Announcer m_Announcer;		
+		Announcer m_Announcer;
 		/// <summary>The red team's respawn floor</summary>
-		ConfusShared::RespawnFloor m_RedRespawnFloor;		
+		ConfusShared::RespawnFloor m_RedRespawnFloor;
 		/// <summary>The blue team's respawn floor</summary>
 		ConfusShared::RespawnFloor m_BlueRespawnFloor;
 
@@ -126,9 +126,9 @@ namespace Confus
 		/// The connection as a client to the server that we are currently connected to,
 		/// used for sending packets over the connection to the server and 
 		/// </summary>
-		std::unique_ptr<Networking::ClientConnection> m_Connection;		
+		std::unique_ptr<Networking::ClientConnection> m_Connection;
 		/// <summary>The sound played once the maze changes seeds</summary>
-		Audio::Sound m_MazeChangedSound;		
+		Audio::Sound m_MazeChangedSound;
 		/// <summary>The client side representation of the team score</summary>
 		ClientTeamScore m_ClientScore;
 
@@ -204,10 +204,10 @@ namespace Confus
         /// Updates the state of objects that require frame-rate independence
         /// </summary>
         virtual void fixedUpdate() override;
-		
+
 		/// <summary>Ends this instance.</summary>
 		virtual void end() override;
-		
+
 		/// <summary>Renders the meshes and other objects in the game</summary>
 		virtual void render() override;
 	};

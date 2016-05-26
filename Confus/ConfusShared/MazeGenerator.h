@@ -46,7 +46,6 @@ namespace ConfusShared
         /// A bool that checks if the maze fill request has been fulfilled yet
         /// </summary>
         bool hasBeenRefilled = true;
-		
 		/// <summary> 
 		/// Called once the maze changes, so that we can perform actions such as send the new maze over the network
 		/// or play the associated sounds

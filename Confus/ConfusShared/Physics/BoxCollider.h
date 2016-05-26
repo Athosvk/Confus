@@ -19,12 +19,17 @@ namespace ConfusShared
 		private:
 			/// <summary> The collision shape used for Bullet physics </summary>
 			/// <remarks> 
-			/// Allocated on the heap, as this is how the PhysicsWorld creates it, which in turn
+			/// Allocated on the heap, as this is how the PhysicsWorld creates it and requires 
+			/// 16-byte alignment, which in turn
 			/// is necessary for Bullet to keep a pointer in the btRigidBody to the shape
 			/// </remarks>
 			std::unique_ptr<btBoxShape> m_Shape;
 
-			/// <summary> The CollisionRegistrar that keeps track of the collisions occurred </summary>
+			/// <summary> 
+			/// The CollisionRegistrar that keeps track of the collisions occurred 
+			/// that occurred in the prevous physics simulation and the current
+			/// simulation step, so that we can distribute callbacks  for such events
+			/// </summary>
 			CollisionRegistrar& m_CollisionRegistrar;
 		public:
 			/// <summary>Initializes a new instance of the <see cref="BoxCollider" /> class</summary>

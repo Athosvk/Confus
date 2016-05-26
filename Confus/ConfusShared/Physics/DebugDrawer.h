@@ -5,7 +5,7 @@
 namespace ConfusShared
 {
 	namespace Physics
-	{		
+	{
 		/// <summary>
 		/// The debugdrawer, capable of drawing the collision shapes, contact points and other information 
 		/// available in the world

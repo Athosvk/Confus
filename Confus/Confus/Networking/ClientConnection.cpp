@@ -77,7 +77,6 @@ namespace Confus
 			return m_Interface->GetGuidFromSystemAddress(RakNet::UNASSIGNED_SYSTEM_ADDRESS).g;
 		}
 
-
 		void ClientConnection::sendMessage(RakNet::BitStream* a_Stream, PacketReliability a_Reliability) const
 		{
 			if(m_Connected)
