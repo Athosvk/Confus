@@ -16,11 +16,9 @@ namespace Confus
 	{
 	}
 
-	PlayerHandler::PlayerConstruct::PlayerConstruct(ConfusShared::Player* a_Player, std::unique_ptr<Audio::PlayerAudioEmitter> a_AudioEmitter,
-		Networking::ClientConnection& a_Connection)
+	PlayerHandler::PlayerConstruct::PlayerConstruct(ConfusShared::Player* a_Player, std::unique_ptr<Audio::PlayerAudioEmitter> a_AudioEmitter)
 		: Player(a_Player),
-		AudioEmitter(std::move(a_AudioEmitter)),
-		PlayerController(std::make_unique<RemotePlayerController>(*a_Player, a_Connection))
+		AudioEmitter(std::move(a_AudioEmitter))
 	{
 	}
 
@@ -128,12 +126,10 @@ namespace Confus
 			bitstreamIn.Read(id);
  			ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
 			newPlayer->setTeamIdentifier(teamID, m_Device);
-			m_Players.emplace(id, PlayerConstruct(newPlayer, std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager),
-				*m_Connection));
+			m_Players.emplace(id, PlayerConstruct(newPlayer, std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager)));
 		}
 		// Add self
-		m_Players.emplace(m_PlayerNode.getGUID(), PlayerConstruct(&m_PlayerNode, std::make_unique<Audio::PlayerAudioEmitter>(&m_PlayerNode, &m_AudioManager),
-			*m_Connection));
+		m_Players.emplace(m_PlayerNode.getGUID(), PlayerConstruct(&m_PlayerNode, std::make_unique<Audio::PlayerAudioEmitter>(&m_PlayerNode, &m_AudioManager)));
 	}
 
 	void PlayerHandler::addOtherPlayer(RakNet::Packet* a_Data)
@@ -150,8 +146,7 @@ namespace Confus
 
 		ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
 		newPlayer->setTeamIdentifier(teamID, m_Device);
-		m_Players.emplace(id, PlayerConstruct(newPlayer, std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager),
-			*m_Connection));
+		m_Players.emplace(id, PlayerConstruct(newPlayer, std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager)));
 	}
 
 	void PlayerHandler::removePlayer(RakNet::Packet* a_Data)

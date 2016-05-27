@@ -3,7 +3,6 @@
 #include <map>
 
 #include "LocalPlayerController.h"
-#include "RemotePlayerController.h"
 #include "../ConfusShared/Player.h"
 
 namespace ConfusShared
@@ -44,9 +43,7 @@ namespace Confus
 			/// <summary>Initializes a new instance of the <see cref="PlayerPair" /> struct.</summary>
 			/// <param name="a_Player">The player.</param>
 			/// <param name="a_AudioEmitter">The audio emitter.</param>
-			/// <param name="a_Connection">The connection to the server, used for constructing a remote controller</param>
-			PlayerConstruct(ConfusShared::Player* a_Player, std::unique_ptr<Audio::PlayerAudioEmitter> a_AudioEmitter,
-				Networking::ClientConnection& a_Connection);
+			PlayerConstruct(ConfusShared::Player* a_Player, std::unique_ptr<Audio::PlayerAudioEmitter> a_AudioEmitter);
 
 			/// <summary>
 			/// The player instance that is either the player of this instance or that of a 
@@ -59,12 +56,6 @@ namespace Confus
 			/// so that they can be removed in association at once
 			/// </summary>
 			std::unique_ptr<Audio::PlayerAudioEmitter> AudioEmitter;
-			/// <summary>
-			/// The player controller that ensures synchronization between the local 
-			/// instantiations of the players and those on the server, placed along with the player instance
-			/// so that they can be removed in association at once
-			/// </summary>
-			std::unique_ptr<RemotePlayerController> PlayerController;
 		};
 	private:
 		/// <summary>
