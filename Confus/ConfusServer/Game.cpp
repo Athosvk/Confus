@@ -10,6 +10,7 @@
 #include "../ConfusShared/Debug.h"
 #include "../ConfusShared/TeamIdentifier.h"
 #include "../ConfusShared/PacketType.h"
+#include "../ConfusShared/PlayerInfo.h"
 
 namespace ConfusServer
 {
@@ -252,21 +253,27 @@ namespace ConfusServer
         stream.Write(static_cast<size_t>(m_Players.size()));
         for(auto& playerPair : m_Players)
         {
-			stream.Write(static_cast<long long>(playerPair.second.Player->getGUID()));
-			stream.Write(static_cast<ConfusShared::ETeamIdentifier>(playerPair.second.Player->getTeamIdentifier()));
+			ConfusShared::NewPlayerFromServer playerInfo;
+			playerInfo.ID = playerPair.second.Player->getGUID();
+			playerInfo.Team = playerPair.second.Player->getTeamIdentifier();
+			playerInfo.Position = playerPair.second.Player->getPosition();
+			playerInfo.Rotation = playerPair.second.Player->getRotation();
+			stream.Write(playerInfo);
         }
         RakNet::AddressOrGUID guid = a_Data->guid;
         m_Connection->sendPacket(&stream, &guid);
 
-		m_Players.emplace(newPlayer->getGUID(), PlayerPair(newPlayer, *m_Connection));
+		ConfusShared::NewPlayerFromServer playerInfo;
+		playerInfo.ID = newPlayer->getGUID();
+		playerInfo.Team = newPlayer->getTeamIdentifier();
+		playerInfo.Position = newPlayer->getPosition();
+		playerInfo.Rotation = newPlayer->getRotation();
 
         RakNet::BitStream broadcastStream;
-        broadcastStream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::OtherPlayerJoined));
-        broadcastStream.Write(static_cast<long long>(id));
-        broadcastStream.Write(static_cast<ConfusShared::ETeamIdentifier>(teamID));
-
+        broadcastStream.Write(playerInfo);
         m_Connection->broadcastPacket(&broadcastStream, &guid);
-		//Perhaps force a player update here?
+
+		m_Players.emplace(newPlayer->getGUID(), PlayerPair(newPlayer, *m_Connection));
         std::cout << id << " joined" << std::endl;
     }
 
@@ -293,9 +300,12 @@ namespace ConfusServer
         stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::UpdatePosition));
         for(auto& playerPair : m_Players)
         {
-            stream.Write(static_cast<long long>(playerPair.second.Player->getGUID()));
-            stream.Write(static_cast<irr::core::vector3df>(playerPair.second.Player->getPosition()));
-            stream.Write(static_cast<irr::core::vector3df>(playerPair.second.Player->getRotation()));
+			ConfusShared::PlayerUpdateFromServer playerUpdateFromServer;
+			playerUpdateFromServer.ID = playerPair.second.Player->getGUID();
+			playerUpdateFromServer.Position = playerPair.second.Player->getPosition();
+			playerUpdateFromServer.Rotation = playerPair.second.Player->getRotation();
+			playerUpdateFromServer.State = playerPair.second.Player->getState();
+			stream.Write(playerUpdateFromServer);
         }
         m_Connection->broadcastPacket(&stream);
     }

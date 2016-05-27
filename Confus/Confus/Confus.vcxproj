@@ -232,7 +232,6 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="Audio\Sound.cpp" />
     <ClCompile Include="RemoteFlagController.cpp" />
     <ClCompile Include="PlayerHandler.cpp" />
-    <ClCompile Include="RemotePlayerController.cpp" />
     <ClCompile Include="ScoreGUI.cpp" />
     <ClCompile Include="WinScreen.cpp" />
   </ItemGroup>
@@ -251,6 +250,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="..\ConfusShared\MoveableWall.h" />
     <ClInclude Include="..\ConfusShared\PacketType.h" />
     <ClInclude Include="..\ConfusShared\Player.h" />
+    <ClInclude Include="..\ConfusShared\PlayerInfo.h" />
     <ClInclude Include="..\ConfusShared\PlayerInputState.h" />
     <ClInclude Include="..\ConfusShared\RespawnFloor.h" />
     <ClInclude Include="..\ConfusShared\TeamIdentifier.h" />

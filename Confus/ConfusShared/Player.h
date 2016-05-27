@@ -22,14 +22,10 @@ namespace ConfusShared
     {
 		/// <summary> Represents the player as being alive</summary>
 		Alive,
-		/// <summary> Represents the player as carrying a flag</summary>
-		CarryingFlag,
 		/// <summary> Represents the player as executing a heavy attack</summary>
 		HeavyAttacking,
 		/// <summary> Represents the player as executing a light attack</summary>
-		LightAttacking,
-		/// <summary> Represents the player as being dead</summary>
-		Dead
+		LightAttacking
     };
 
     /// <summary> 
@@ -104,6 +100,9 @@ namespace ConfusShared
 		/// <summary>Gets the current state of the player, based on what it is currently doing</summary>
 		/// <returns>The current player state</returns>
 		EPlayerState getState() const;
+
+		/// <summary> Changes the state of the player. </summary>
+		void changeState(EPlayerState a_NewState);
 		
 		/// <summary>Sets the start position, which is where the player will be respawned once instructed to</summary>
 		/// <param name="a_Position">The new respawn position</param>
@@ -135,6 +134,9 @@ namespace ConfusShared
 		/// <summary>Sets the unique identifier that the player uses over the network</summary>
 		/// <param name="a_ID">The new ID</param>
 		void setGUID(long long a_ID);
+
+		/// <summary>Gets the unique identifier that the player uses over the network</summary>
+		long long Player::getGUID();
     private:
 		/// <summary> Updates the color </summary>
 		/// <param name="a_Device"> The active irrlicht device </param>
@@ -151,9 +153,6 @@ namespace ConfusShared
         void stopWalking() const;
         /// <summary> Initializes the shared attack variables. </summary>
         void initializeAttack();
-        
-        /// <summary> Changes the state of the player. </summary>
-        void changeState(EPlayerState a_NewState);
 
 		/// <summary>Called when the animation finishes</summary>
 		/// <param name="a_SceneNode">The scene node the animation ended on</param>

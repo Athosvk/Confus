@@ -5,6 +5,7 @@
 #include "Networking/Connection.h"
 #include "../ConfusShared/Player.h"
 #include "../ConfusShared/PlayerInputState.h"
+#include "../ConfusShared/PlayerInfo.h"
 
 namespace ConfusServer
 {
@@ -16,37 +17,33 @@ namespace ConfusServer
 		{
 			RakNet::BitStream data(a_Packet->data, a_Packet->length, false);
 			data.IgnoreBytes(sizeof(RakNet::MessageID));
-			long long id;
-			data.Read(id);
-			if(id == m_Player.getGUID())
+
+			ConfusShared::PlayerUpdateFromClient updateFromClient;
+			data.Read(updateFromClient);
+			if(updateFromClient.ID == m_Player.getGUID())
 			{
-				synchronize(data);
+				synchronize(updateFromClient);
 			}
 		});
 	}
 
-	void RemoteInputReceiver::synchronize(RakNet::BitStream& a_Data) const
+	void RemoteInputReceiver::synchronize(const ConfusShared::PlayerUpdateFromClient& a_UpdateFromClient) const
 	{
-		irr::core::vector3df rotation = irr::core::vector3df();
-		a_Data.Read(rotation);
-		m_Player.setRotation(rotation);
-
-		ConfusShared::PlayerInputState inputState;
-		a_Data.Read(inputState);
+		m_Player.setRotation(a_UpdateFromClient.Rotation);
 		irr::core::vector3df direction = irr::core::vector3df();
-		if(inputState.ForwardPressed)
+		if(a_UpdateFromClient.InputState.ForwardPressed)
 		{
 			direction.Y = 1.0f;
 		}
-		else if(inputState.BackwardPressed)
+		else if(a_UpdateFromClient.InputState.BackwardPressed)
 		{
 			direction.Y = -1.0f;
 		}
-		if(inputState.RightPressed)
+		if(a_UpdateFromClient.InputState.RightPressed)
 		{
 			direction.X = 1.0f;
 		}
-		else if(inputState.LeftPressed)
+		else if(a_UpdateFromClient.InputState.LeftPressed)
 		{
 			direction.X = -1.0f;
 		}
@@ -55,5 +52,15 @@ namespace ConfusServer
 			direction = direction.normalize();
 		}
 		m_Player.setWalkingDirection(direction);
+
+		// TODO: Handle Attacking Input
+		if (a_UpdateFromClient.InputState.LeftMouseButtonPressed)
+		{
+			m_Player.changeState(ConfusShared::EPlayerState::LightAttacking);
+		} 
+		else if (a_UpdateFromClient.InputState.RightMouseButtonPressed)
+		{
+			m_Player.changeState(ConfusShared::EPlayerState::HeavyAttacking);
+		}
 	}
 }

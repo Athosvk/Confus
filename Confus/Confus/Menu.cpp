@@ -11,14 +11,19 @@
 namespace Confus
 {
 	Menu::Menu(irr::IrrlichtDevice* a_Device, ConfusShared::EventManager* a_EventManager)
-		: BaseGame(a_Device, a_EventManager)
+		: BaseGame(a_Device, a_EventManager),
+		m_StartScreen(m_Device->getVideoDriver()->getTexture(("Media/Textures/Menu.png"))),
+		m_InfoScreen(m_Device->getVideoDriver()->getTexture(("Media/Textures/MenuInfo.png")))
 	{
 	}
 
     void Menu::start()
-    {
-        m_Device->setWindowCaption(L"Menu");
-        m_Text = m_Device->getGUIEnvironment()->addStaticText(L"Press SPACE to start the game, BACKSPACE to exit.", { 10, 500, 10 + 250, 500 + 80 });
+	{
+		m_Device->setWindowCaption(L"Menu");
+		auto screenSize = m_Device->getVideoDriver()->getScreenSize();
+		m_ScreenRect = irr::core::rect<irr::s32>(0, 0, screenSize.Width, screenSize.Height);
+		m_Image = m_Device->getGUIEnvironment()->addImage(m_ScreenRect);
+		m_Image->setImage(m_StartScreen);
     }
 
     void Menu::update()
@@ -29,13 +34,12 @@ namespace Confus
         }
         else if(m_EventManager->IsKeyDown(irr::KEY_SPACE))
         {
-            m_Text->setText(L"Enter the ip of the host and the port of the host in the console now!");
+			m_Image->setImage(m_InfoScreen);
             render();
-
-            m_Text->setText(L"Press ESCAPE to go back to the main menu");
-            runGame();
+			m_Image->setVisible(false);
+			auto text = m_Device->getGUIEnvironment()->addStaticText(L"Press ESCAPE to go back to the main menu", { 10, 500, 10 + 250, 500 + 80 });
+			runGame();
             m_Device->getGUIEnvironment()->clear();
-            m_Text = m_Device->getGUIEnvironment()->addStaticText(L"Press SPACE to start the game, BACKSPACE to exit.", { 10, 500, 10 + 250, 500 + 80 });
         }
     }
 
@@ -45,10 +49,6 @@ namespace Confus
 
     void Menu::end()
     {
-        if(m_Text != nullptr)
-        {
-            m_Text->remove();
-        }
     }
 
     void Menu::runGame()

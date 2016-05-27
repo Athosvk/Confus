@@ -4,6 +4,7 @@
 #include "../ConfusShared/PacketType.h"
 #include "../ConfusShared/EHitIdentifier.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
+#include "../ConfusShared/PlayerInfo.h"
 
 namespace Confus
 {
@@ -71,15 +72,16 @@ namespace Confus
 
 		for (size_t i = 0; i < m_Players.size(); ++i)
 		{
-			long long id;
-			bitstreamIn.Read(id);
-			auto& pair = m_Players.at(id);
-			irr::core::vector3df position;
-			irr::core::vector3df rotation;
-			bitstreamIn.Read(position);
-			bitstreamIn.Read(rotation);
-			pair.Player->setPosition(position);
-			pair.Player->setRotation(rotation);
+			ConfusShared::PlayerUpdateFromServer updateFromServer;
+			bitstreamIn.Read(updateFromServer);
+			auto& pair = m_Players.at(updateFromServer.ID);
+
+			pair.Player->setPosition(updateFromServer.Position);
+
+			if (updateFromServer.ID != m_PlayerNode.getGUID())
+			{
+				pair.Player->setRotation(updateFromServer.Rotation);
+			}
 		}
 	}
 
