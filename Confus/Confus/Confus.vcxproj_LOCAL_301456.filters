@@ -162,12 +162,6 @@
         <ClCompile Include="RemoteFlagController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CrosshairGUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-	<ClCompile Include="HealthGUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -319,14 +313,8 @@
     </ClInclude>
     <ClInclude Include="PlayerHandler.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
+      </ClInclude>
     <ClInclude Include="RemoteFlagController.h">
-	   <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CrosshairGUI.h">
-       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HealthGUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

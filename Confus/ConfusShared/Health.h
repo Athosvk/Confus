@@ -52,6 +52,10 @@ namespace ConfusShared
 		/// <returns>The current health value</returns>
 		int getHealth();
 		
+		/// <summary>Gets the maximum health value</summary>
+		/// <returns>The maximum health</returns>
+		int getMaxHealth() const;
+		
 		/// <summary> Restores the health back to it's initial state </summary>
 		void reset();
 	};

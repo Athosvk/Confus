@@ -21,23 +21,12 @@ namespace Confus
 		irr::IrrlichtDevice* m_Device;
 		/// <summary>The GUI environment used to draw the images</summary>
 		irr::gui::IGUIEnvironment* m_GUIEnvironment;
-		/// <summary>The text box used to display the health of the player</summary>
-		irr::gui::IGUIStaticText* m_HealthTextBox;
-		/// <summary>The string representing the health of the player</summary>
-		irr::core::stringw m_HealthString = L"";
 		/// <summary>The active Irrlicht video driver</summary>
 		irr::video::IVideoDriver* m_Driver;
-		/// <summary>The texture used for the blood overlay image</summary>
-		irr::video::ITexture* m_BloodImage;
-		/// <summary>The image shown once the player gets low on health</summary>
-		irr::gui::IGUIImage* m_BloodOverlay;
-		/// <summary>
-		/// The GUI elements managed by this GUI, so that they can be kept active
-		/// and be updated automatically
-		/// </summary>
 		std::vector<std::unique_ptr<IUIElement>> m_Elements;
 		/// <summary>The sound to play once the player gets low on health</summary>
 		Audio::Sound m_AudioSourceLowHealth;
+		
 		
 	public:
 		/// <summary>Initializes a new instance of the <see cref="GUI"/> class.</summary>
@@ -51,11 +40,6 @@ namespace Confus
 		
 		/// <summary>Updates this instance.</summary>
 		void update();
-
-		/// <summary>Draws the blood overlay.</summary>
-		void drawBloodOverlay();
-		
-		/// <summary>Plays the audio of the player being low on health</summary>
 		void lowHealthAudio();
 
 		/// <summary>

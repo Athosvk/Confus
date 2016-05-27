@@ -226,7 +226,7 @@ namespace ConfusShared
 
     irr::core::vector3df Flag::getPosition()
     {
-        return m_FlagNode->getAbsolutePosition();
+        return m_FlagNode->getPosition();
     }
 
     void Flag::update()

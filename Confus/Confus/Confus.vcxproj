@@ -88,7 +88,7 @@
     <IncludePath>$(SolutionDir)../Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)../Libraries/32 bit/Release;$(LibraryPath)</LibraryPath>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -224,6 +224,8 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="LocalPlayerController.cpp" />
+    <ClCompile Include="CrosshairGUI.cpp" />
+    <ClCompile Include="HealthGUI.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Networking\ClientConnection.cpp" />
@@ -275,6 +277,8 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="FlagGUI.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GUI.h" />
+    <ClInclude Include="CrosshairGUI.h" />
+    <ClInclude Include="HealthGUI.h" />
     <ClInclude Include="IUIElement.h" />
     <ClInclude Include="LocalPlayerController.h" />
     <ClInclude Include="Menu.h" />

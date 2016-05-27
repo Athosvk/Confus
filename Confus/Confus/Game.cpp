@@ -7,9 +7,11 @@
 #include "Game.h"
 #include "../ConfusShared/Flag.h"
 #include "FlagGUI.h"
+#include "CrosshairGUI.h"
 #include "WinScreen.h"
 #include "../ConfusShared/PacketType.h"
 #include "ScoreGUI.h"
+#include "HealthGUI.h"
 #define DEBUG_CONSOLE
 #include "../ConfusShared/Debug.h"
 #include "../ConfusShared/TeamIdentifier.h"
@@ -60,7 +62,16 @@ namespace Confus
 		camera->setNearValue(0.1f);
 		camera->setPosition(irr::core::vector3df(0.f, 0.0f, 0.2f));
 		camera->setParent(m_PlayerHandler.getMainPlayer());
+
+		m_GUI.addElement<HealthGUI>(m_Device, m_PlayerHandler.getMainPlayer(), irr::core::dimension2du(40, 40),
+			videoDriver->getTexture("Media/Textures/Heart.png"),
+			videoDriver->getTexture("Media/Textures/Blood.png"),
+			irr::core::vector2df(0.0f, 0.02f));
+       
+        m_GUI.addElement<CrosshairGUI>(m_Device, irr::core::dimension2du(70, 70),
+                videoDriver->getTexture("Media/Textures/Crosshair.png"), irr::core::vector2df(0.50f, 0.50f));
     }
+
 
     Game::~Game()
     {

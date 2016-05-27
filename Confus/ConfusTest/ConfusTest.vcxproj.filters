@@ -39,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BoxColliderTest.cpp">
+	      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CrosshairGUITest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

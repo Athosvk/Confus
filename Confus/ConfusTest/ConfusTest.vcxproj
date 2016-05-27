@@ -182,6 +182,7 @@
   <ItemGroup>
     <ClCompile Include="BoxColliderTest.cpp" />
     <ClCompile Include="FlagTest.cpp" />
+    <ClCompile Include="CrosshairGUITest.cpp" />
     <ClCompile Include="MoveableWallTest.cpp" />
     <ClCompile Include="PlayerTest.cpp" />
     <ClCompile Include="RigidBodyTest.cpp" />

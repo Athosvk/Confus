@@ -66,43 +66,43 @@ namespace Confus
 			/// </summary>
 			std::unique_ptr<RemotePlayerController> PlayerController;
 		};
-		private:
-			/// <summary>
-			/// The players in the game world, indexed by their id (primarily ours)
-			/// so that we can look them up easily for updates, removals etc.
-			/// </summary>
-			std::map<long long, PlayerConstruct> m_Players;
+	private:
+		/// <summary>
+		/// The players in the game world, indexed by their id (primarily ours)
+		/// so that we can look them up easily for updates, removals etc.
+		/// </summary>
+		std::map<long long, PlayerConstruct> m_Players;
 
-			/// <summary>
-			/// The Players to test with.
-			/// </summary>
-			ConfusShared::Player m_PlayerNode;
+		/// <summary>
+		/// The Players to test with.
+		/// </summary>
+		ConfusShared::Player m_PlayerNode;
 
-			/// <summary>
-			/// The controller controlling the player instance of the client, so that 
-			/// inputs can be sent to the server
-			/// </summary>
-			std::unique_ptr<LocalPlayerController> m_PlayerController;
+		/// <summary>
+		/// The controller controlling the player instance of the client, so that 
+		/// inputs can be sent to the server
+		/// </summary>
+		std::unique_ptr<LocalPlayerController> m_PlayerController;
 			
-			/// <summary>
-			/// A reference to the audio manager.
-			/// </summary>
-			Audio::AudioManager& m_AudioManager;
+		/// <summary>
+		/// A reference to the audio manager.
+		/// </summary>
+		Audio::AudioManager& m_AudioManager;
 
-			/// <summary>
-			/// A reference to the audio manager.
-			/// </summary>
-			ConfusShared::Physics::PhysicsWorld& m_PhysicsWorld;
+		/// <summary>
+		/// A reference to the audio manager.
+		/// </summary>
+		ConfusShared::Physics::PhysicsWorld& m_PhysicsWorld;
 
-			/// <summary>
-			/// A reference to the irr device.
-			/// </summary>
-			irr::IrrlichtDevice* m_Device;
+		/// <summary>
+		/// A reference to the irr device.
+		/// </summary>
+		irr::IrrlichtDevice* m_Device;
 
-			/// <summary>
-			/// A reference to the clientconnection.
-			/// </summary>
-			Confus::Networking::ClientConnection* m_Connection = nullptr;
+		/// <summary>
+		/// A reference to the clientconnection.
+		/// </summary>
+		Confus::Networking::ClientConnection* m_Connection = nullptr;
 			
 	public:
 		PlayerHandler(irr::IrrlichtDevice* a_Device, ConfusShared::Physics::PhysicsWorld& a_PhysicsWorld,
