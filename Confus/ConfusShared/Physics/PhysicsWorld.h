@@ -96,6 +96,10 @@ namespace ConfusShared
 			BoxCollider* createBoxCollider(irr::scene::ISceneNode* a_AttachedNode, ECollisionFilter a_Group = ECollisionFilter::Other,
 				ECollisionFilter a_Mask = ECollisionFilter::All);
 
+			/// <summary> Removes the collider (and attached rigidbody) from the physics world. </summary>
+			/// <param name="a_Collider">The collider body to delete.</param>
+			void removeCollider(Collider* a_Collider);
+
 			/// <summary> Advanced the physics simulation based on the entered delta time value </summary>
 			/// <param name="a_DeltaTime"> 
 			/// The time with which to advance the physics simulation usually equal to the interval between two 

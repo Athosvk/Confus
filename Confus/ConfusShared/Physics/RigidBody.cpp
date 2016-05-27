@@ -43,6 +43,11 @@ namespace ConfusShared
 			return m_AttachedNode;
 		}
 
+		btRigidBody* RigidBody::getbtRigidBody() const
+		{
+			return m_Body.get();
+		}
+
 		void RigidBody::makeDynamic()
 		{
 			m_Type = ERigidBodyType::Dynamic;

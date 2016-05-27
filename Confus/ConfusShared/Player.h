@@ -79,8 +79,12 @@ namespace ConfusShared
 		/// <param name="a_Device">The active Irrlicht Device.</param>
 		/// <param name="a_PhysicsWorld">The Physics World</param>
 		/// <param name="a_ID">The ID of the scenenode.</param>
-		Player(irr::IrrlichtDevice* a_Device, ConfusShared::Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID);
-        /// <summary> Update function, any tasks that need to be done every frame go here. </summary>
+		Player(irr::IrrlichtDevice* a_Device, ConfusShared::Physics::PhysicsWorld& a_PhysicsWorld, long long a_ID);		
+		/// <summary>
+		/// Finalizes an instance of the <see cref="Player"/> class.
+		/// </summary>
+		~Player();
+	    /// <summary> Update function, any tasks that need to be done every frame go here. </summary>
         void update();
         ///<summary> Respawns the player to their base, public so round resets etc. can call this. </summary>
         void respawn();

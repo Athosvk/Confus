@@ -72,6 +72,12 @@ namespace ConfusShared
 			/// <returns> The associated/attached scene node </returns>
 			irr::scene::ISceneNode* getAttachedNode() const;
 
+			/// <summary>
+			/// Gets the bullet rigid body.
+			/// </summary>
+			/// <returns> The bullet rigit body. </returns>
+			btRigidBody* getbtRigidBody() const;
+
 			/// <summary> Makes the RigidBody dynamic, causing it to be influenced by events in the Physics World </summary>
 			void makeDynamic();
 

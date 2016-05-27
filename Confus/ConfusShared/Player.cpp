@@ -38,6 +38,11 @@ namespace ConfusShared
 		m_PlayerNode->setAnimationEndCallback(this);
     }
 
+	Player::~Player()
+	{
+		m_Collider->deleteCollider();
+	}
+
 	ConfusShared::Health* Player::getHealthInstance()
 	{
 		return &m_PlayerHealth;

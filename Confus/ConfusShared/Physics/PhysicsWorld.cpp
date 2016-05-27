@@ -67,7 +67,7 @@ namespace ConfusShared
 			auto bulletRigidBody = createRigidBody(shape.get(), a_AttachedNode, a_Group, a_Mask);
 			auto bulletRigidBodyHandle = bulletRigidBody.get();
 			auto rigidBody = std::make_unique<RigidBody>(std::move(bulletRigidBody), a_AttachedNode);
-			auto collider = std::make_unique<BoxCollider>(std::move(shape), rigidBody.get(), m_CollisionRegistrar);
+			auto collider = std::make_unique<BoxCollider>(std::move(shape), rigidBody.get(), m_CollisionRegistrar, this);
 			bulletRigidBodyHandle->setUserPointer(collider.get());
 			m_Colliders.emplace_back(std::move(collider), 
 				std::move(rigidBody));
@@ -103,6 +103,18 @@ namespace ConfusShared
 			auto rigidBody = std::make_unique<btRigidBody>(rigidBodyInfo);
 			m_World.addRigidBody(rigidBody.get(), static_cast<short>(a_Group), static_cast<short>(a_Mask));
 			return rigidBody;
+		}
+
+		void PhysicsWorld::removeCollider(Collider* a_Collider)
+		{
+			for (size_t i = 0; i < m_Colliders.size(); ++i)
+			{
+				if (m_Colliders[i].Shape.get() == nullptr || m_Colliders[i].Shape.get() == a_Collider)
+				{
+					m_World.removeRigidBody(m_Colliders[i].Body->getbtRigidBody());
+					m_Colliders.erase(m_Colliders.begin() + i);
+				}
+			}
 		}
 	}
 }

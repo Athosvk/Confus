@@ -35,7 +35,12 @@ namespace ConfusShared
         });
     }
 
-    void Weapon::damagePlayer(Player* a_Player) const
+	Weapon::~Weapon()
+	{
+		m_Collider->deleteCollider();
+	}
+
+	void Weapon::damagePlayer(Player* a_Player) const
     {
         if(getAngle(a_Player->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle))
         {
