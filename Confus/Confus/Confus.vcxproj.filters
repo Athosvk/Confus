@@ -159,6 +159,9 @@
     <ClCompile Include="PlayerHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+        <ClCompile Include="RemoteFlagController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -309,6 +312,9 @@
       <Filter>Shared</Filter>
     </ClInclude>
     <ClInclude Include="PlayerHandler.h">
+      <Filter>Header Files</Filter>
+      </ClInclude>
+    <ClInclude Include="RemoteFlagController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -39,8 +39,6 @@ namespace ConfusShared
 			}
 		});
 
-        m_FlagOldParent = m_FlagNode->getParent();
-
         //Set Color
 		setColor(videoDriver);
 
@@ -156,7 +154,7 @@ namespace ConfusShared
 		if (a_PlayerObject->getTeamIdentifier() != m_TeamIdentifier && a_PlayerObject->CarryingFlag == EFlagEnum::None) 
         {
             // Capturing flag if player has no flag
-            m_FlagNode->setParent(a_PlayerObject);            
+            m_FlagParent = a_PlayerObject;
             setFlagStatus(EFlagEnum::FlagTaken);
             a_PlayerObject->FlagPointer = this;
             a_PlayerObject->CarryingFlag = EFlagEnum::FlagTaken;
@@ -198,7 +196,7 @@ namespace ConfusShared
 
 	void Flag::drop(irr::core::vector3df a_DropPosition) 
     {
-        m_FlagNode->setParent(m_FlagOldParent);
+        m_FlagParent = nullptr;
         m_FlagNode->setPosition(a_DropPosition);
 		setFlagStatus(EFlagEnum::FlagDropped);
 	}
@@ -215,9 +213,28 @@ namespace ConfusShared
 
 	void Flag::returnToStartPosition() 
 	{
-        m_FlagNode->setParent(m_FlagOldParent);
+        m_FlagParent = nullptr;
         m_FlagNode->setPosition(m_StartPosition);
         m_FlagNode->setRotation(m_StartRotation);
 		setFlagStatus(EFlagEnum::FlagBase);
+    }
+
+    void Flag::setPosition(irr::core::vector3df a_Position)
+    {
+        m_FlagNode->setPosition(a_Position);
+    }
+
+    irr::core::vector3df Flag::getPosition()
+    {
+        return m_FlagNode->getAbsolutePosition();
+    }
+
+    void Flag::update()
+    {
+        // Update the position of the flag if it has a parent. 
+        if(m_FlagParent != nullptr)
+        {
+            m_FlagNode->setPosition(m_FlagParent->getPosition());
+        }
     }
 }

@@ -129,6 +129,8 @@ namespace Confus
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
 		m_PlayerHandler.setConnection(m_Connection.get());
+        m_RedFlagController = std::make_unique<RemoteFlagController>(m_RedFlag, *m_Connection);
+        m_BlueFlagController = std::make_unique<RemoteFlagController>(m_BlueFlag, *m_Connection);
 
         m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Data)
         {
@@ -205,6 +207,9 @@ namespace Confus
     {
         m_Connection->processPackets();
         handleInput();
+        m_RedFlag.update();
+        m_BlueFlag.update();
+
 		m_GUI.update();
 		m_PlayerHandler.update();
         m_Listener.setPosition(m_PlayerHandler.getMainPlayer()->getAbsolutePosition());

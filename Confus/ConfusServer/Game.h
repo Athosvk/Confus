@@ -8,6 +8,7 @@
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "TeamScore.h"
 #include "RemoteInputReceiver.h"
+#include "RemoteFlagUpdater.h"
 
 namespace ConfusServer
 { 
@@ -32,7 +33,6 @@ namespace ConfusServer
 			/// to the server 
 			/// </summary>
 			std::unique_ptr<RemoteInputReceiver> Receiver;
-
 		public:			
 			/// <summary>Initializes a new instance of the <see cref="PlayerPair"/> struct.</summary>
 			/// <param name="a_Player">The player</param>
@@ -115,6 +115,9 @@ namespace ConfusServer
 		irr::scene::ISceneNode* m_LevelRootNode = nullptr;
         /// <summary> Team Score Manager </summary>
         TeamScore m_TeamScoreManager;
+
+        std::unique_ptr<RemoteFlagUpdater> m_RedFlagUpdater;
+        std::unique_ptr<RemoteFlagUpdater> m_BlueFlagUpdater;
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
