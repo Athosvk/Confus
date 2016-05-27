@@ -16,7 +16,6 @@
 #include "Announcer.h"
 #include "PlayerHandler.h"
 #include "LocalPlayerController.h"
-#include "RemotePlayerController.h"
 #include "RemoteFlagController.h"
 
 namespace Confus

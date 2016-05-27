@@ -150,22 +150,19 @@
     <ClCompile Include="LocalPlayerController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RemotePlayerController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\ConfusShared\Player.cpp">
       <Filter>Shared</Filter>
     </ClCompile>
     <ClCompile Include="PlayerHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-        <ClCompile Include="RemoteFlagController.cpp">
+    <ClCompile Include="RemoteFlagController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CrosshairGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-	<ClCompile Include="HealthGUI.cpp">
+    <ClCompile Include="HealthGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -305,9 +302,6 @@
     <ClInclude Include="LocalPlayerController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RemotePlayerController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\ConfusShared\Player.h">
       <Filter>Shared</Filter>
     </ClInclude>
@@ -321,10 +315,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RemoteFlagController.h">
-	   <Filter>Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CrosshairGUI.h">
-       <Filter>Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HealthGUI.h">
       <Filter>Header Files</Filter>
