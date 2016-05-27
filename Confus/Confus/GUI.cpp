@@ -2,11 +2,11 @@
 
 #include "GUI.h"
 #include "Game.h"
-#include "Audio\AudioManager.h"
+#include "Audio/AudioManager.h"
 
 namespace Confus
 {
-    GUI::GUI(irr::IrrlichtDevice* a_Device, Player* a_Player, Audio::AudioManager* a_AudioManager)
+    GUI::GUI(irr::IrrlichtDevice* a_Device, ConfusShared::Player* a_Player, Audio::AudioManager* a_AudioManager)
         : m_AudioSourceLowHealth(a_AudioManager->createSound("heartbeat.wav"))
 	{
 		m_Device = a_Device;

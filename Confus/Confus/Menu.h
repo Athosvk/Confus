@@ -1,24 +1,36 @@
 #pragma once
-
-#include "BaseGame.h"
+#include "../ConfusShared/BaseGame.h"
 
 namespace Confus
 {
-    class Menu : public BaseGame
+	/// <summary>
+	/// Represents the initial menu state the game once it is loaded
+	/// </summary>
+	/// <seealso cref="ConfusShared::BaseGame" />
+	class Menu : public ConfusShared::BaseGame
     {
     private:
-        irr::gui::IGUIStaticText* m_Text;
-		irr::gui::IGUIImage* m_Image;
-		irr::video::ITexture* m_StartScreen;
-		irr::video::ITexture* m_InfoScreen;
-		irr::core::rect<irr::s32> m_ScreenRect;
+		/// <summary>The text displayed in the menu</summary>
+		irr::gui::IGUIStaticText* m_Text;
     private:
-        virtual void start() override;
-        virtual void update() override;
-        virtual void fixedUpdate() override;
-        virtual void end() override;
-        void runGame();
+		/// <summary>Starts this instance</summary>
+		virtual void start() override;
+
+		/// <summary>Updates this instance.</summary>
+		virtual void update() override;
+
+		/// <summary>Fixeds the update.</summary>
+		virtual void fixedUpdate() override;
+
+		/// <summary>Ends this instance.</summary>
+		virtual void end() override;
+
+		/// <summary>Runs the game.</summary>
+		void runGame();
     public:
-        Menu(irr::IrrlichtDevice* a_Device, EventManager* a_EventManager) : BaseGame(a_Device, a_EventManager) {}
+		/// <summary>Initializes a new instance of the <see cref="Menu"/> class.</summary>
+		/// <param name="a_Device">The active Irrlicht device</param>
+		/// <param name="a_EventManager">The active event manager to handle input with</param>
+		Menu(irr::IrrlichtDevice* a_Device, ConfusShared::EventManager* a_EventManager);
     };
 }

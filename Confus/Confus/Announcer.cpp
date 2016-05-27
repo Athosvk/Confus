@@ -1,10 +1,9 @@
 #include "Announcer.h"
-#include "Audio\AudioManager.h"
+#include "Audio/AudioManager.h"
 
 namespace Confus
 {
-
-	Announcer::Announcer(Flag* a_RedFlag, Flag* a_BlueFlag, Player* a_Player, Audio::AudioManager* a_AudioManager)
+	Announcer::Announcer(ConfusShared::Flag* a_RedFlag, ConfusShared::Flag* a_BlueFlag, ConfusShared::Player* a_Player, Audio::AudioManager* a_AudioManager)
 		: m_RedFlag(a_RedFlag),
 		m_BlueFlag(a_BlueFlag),
 		m_Player(a_Player),
@@ -15,7 +14,8 @@ namespace Confus
 		m_FlagBlueTakenSound(a_AudioManager->createSound("SFX/FlagSounds/blue_flag_taken.wav")),
 		m_FlagBlueReturnedSound(a_AudioManager->createSound("SFX/FlagSounds/blue_flag_returned.wav"))
 	{
-		auto flagChangedEvents = [this](ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum) -> void 
+		auto flagChangedEvents = [this](ConfusShared::ETeamIdentifier a_TeamIdentifier, ConfusShared::EFlagEnum a_PreviousFlagEnum, 
+			ConfusShared::EFlagEnum a_CurrentFlagEnum) -> void 
 		{ 
 			playFlagEvent(a_TeamIdentifier, a_PreviousFlagEnum, a_CurrentFlagEnum); 
 		};
@@ -24,55 +24,56 @@ namespace Confus
 
 	}
 
-	void Announcer::playFlagEvent(ETeamIdentifier a_TeamIdentifier, EFlagEnum a_PreviousFlagEnum, EFlagEnum a_CurrentFlagEnum)
+	void Announcer::playFlagEvent(ConfusShared::ETeamIdentifier a_TeamIdentifier, ConfusShared::EFlagEnum a_PreviousFlagEnum, 
+		ConfusShared::EFlagEnum a_CurrentFlagEnum)
 	{
-		if (a_PreviousFlagEnum == EFlagEnum::FlagTaken && a_CurrentFlagEnum == EFlagEnum::FlagBase)
+		if (a_PreviousFlagEnum == ConfusShared::EFlagEnum::FlagTaken && a_CurrentFlagEnum == ConfusShared::EFlagEnum::FlagBase)
 		{
 			playScoredSound(a_TeamIdentifier);
 		}
 
-		if (a_PreviousFlagEnum == EFlagEnum::FlagDropped && a_CurrentFlagEnum == EFlagEnum::FlagBase)
+		if (a_PreviousFlagEnum == ConfusShared::EFlagEnum::FlagDropped && a_CurrentFlagEnum == ConfusShared::EFlagEnum::FlagBase)
 		{
 			playFlagReturnedSound(a_TeamIdentifier);
 		}
 
-		if (a_PreviousFlagEnum != EFlagEnum::FlagTaken && a_CurrentFlagEnum == EFlagEnum::FlagTaken)
+		if (a_PreviousFlagEnum != ConfusShared::EFlagEnum::FlagTaken && a_CurrentFlagEnum == ConfusShared::EFlagEnum::FlagTaken)
 		{
 			playFlagTakenSound(a_TeamIdentifier);
 		}
 	}
 
-	void Announcer::playScoredSound(ETeamIdentifier a_TeamIdentifier)
+	void Announcer::playScoredSound(ConfusShared::ETeamIdentifier a_TeamIdentifier)
 	{
-		if (a_TeamIdentifier == ETeamIdentifier::TeamBlue)
+		if (a_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamBlue)
 		{
 			m_BlueScoredSound.play();
 		}
-		else if (a_TeamIdentifier == ETeamIdentifier::TeamRed)
+		else if (a_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamRed)
 		{
 			m_RedScoredSound.play();
 		}
 	}
 
-	void Announcer::playFlagReturnedSound(ETeamIdentifier a_TeamIdentifier)
+	void Announcer::playFlagReturnedSound(ConfusShared::ETeamIdentifier a_TeamIdentifier)
 	{
-		if (a_TeamIdentifier == ETeamIdentifier::TeamBlue)
+		if (a_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamBlue)
 		{
 			m_FlagRedReturnedSound.play();
 		}
-		else if (a_TeamIdentifier == ETeamIdentifier::TeamRed)
+		else if (a_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamRed)
 		{
 			m_FlagBlueReturnedSound.play();
 		}
 	}
 
-	void Announcer::playFlagTakenSound(ETeamIdentifier a_TeamIdentifier)
+	void Announcer::playFlagTakenSound(ConfusShared::ETeamIdentifier a_TeamIdentifier)
 	{
-		if (a_TeamIdentifier == ETeamIdentifier::TeamBlue)
+		if (a_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamBlue)
 		{
 			m_FlagBlueTakenSound.play();
 		}
-		else if (a_TeamIdentifier == ETeamIdentifier::TeamRed)
+		else if (a_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamRed)
 		{
 			m_FlagRedTakenSound.play();
 		}

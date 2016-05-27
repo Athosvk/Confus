@@ -1,5 +1,5 @@
 #pragma once
-namespace Confus
+namespace ConfusShared
 {
 	namespace Physics
 	{

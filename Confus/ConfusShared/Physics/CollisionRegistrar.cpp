@@ -2,7 +2,7 @@
 #include "BoxCollider.h"
 #include "RigidBody.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	namespace Physics
 	{
@@ -13,7 +13,7 @@ namespace Confus
 		{
 		}
 
-		bool CollisionRegistrar::CollisionInfo::operator==(const CollisionInfo& a_Other)
+		bool CollisionRegistrar::CollisionInfo::operator==(const CollisionInfo& a_Other) const
 		{
 			return ColliderA == a_Other.ColliderA && ColliderB == a_Other.ColliderB;
 		}
@@ -24,15 +24,9 @@ namespace Confus
 		}
 
 		void CollisionRegistrar::setTriggerEnterCallback(BoxCollider* a_Collider,
-			std::function<void(BoxCollider* a_Other)>& a_Callback)
+			const std::function<void(BoxCollider* a_Other)>& a_Callback)
 		{
 			m_TriggerEnterCallbacks.emplace(a_Collider, a_Callback);
-		}
-
-		void CollisionRegistrar::setTriggerEnterCallback(BoxCollider* a_Collider,
-			std::function<void(BoxCollider* a_Other)>&& a_Callback)
-		{
-			m_TriggerEnterCallbacks.emplace(a_Collider, std::move(a_Callback));
 		}
 
 		void CollisionRegistrar::onPostPhysicsUpdate()
