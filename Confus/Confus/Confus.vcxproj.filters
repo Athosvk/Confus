@@ -323,9 +323,6 @@
     <ClInclude Include="HealthGUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RemotePlayerController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\ConfusShared\PlayerInfo.h">
       <Filter>Shared</Filter>
     </ClInclude>

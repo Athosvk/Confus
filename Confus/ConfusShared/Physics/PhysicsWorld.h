@@ -4,7 +4,6 @@
 #include <vector>
 #include <memory>
 
-#include "Collider.h"
 #include "RigidBody.h"
 #include "DebugDrawer.h"
 #include "ECollisionFilter.h"
@@ -15,6 +14,7 @@ namespace ConfusShared
 	namespace Physics
 	{
 		class BoxCollider;
+		class Collider;
 
 		/// <summary> The world in which all, rigid body, physics simulations are performed by the physics engine </summary>
 		class PhysicsWorld

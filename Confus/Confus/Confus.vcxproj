@@ -286,7 +286,6 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="Audio\Sound.h" />
     <ClInclude Include="RemoteFlagController.h" />
     <ClInclude Include="PlayerHandler.h" />
-    <ClInclude Include="RemotePlayerController.h" />
     <ClInclude Include="ScoreGUI.h" />
     <ClInclude Include="WinScreen.h" />
   </ItemGroup>
