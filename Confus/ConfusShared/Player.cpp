@@ -170,7 +170,7 @@ namespace ConfusShared
 		m_WalkingDirection.rotateXZBy(-getRotation().Y);
 		auto rigidBody = m_Collider->getRigidBody();
 		const float Speed = 15.0f;
-		auto resultingVelocity = irr::core::vector3df(m_WalkingDirection.X, 0.0f, m_WalkingDirection.Z) * Speed
+		auto resultingVelocity = irr::core::vector3df(m_WalkingDirection.X, 0.0f, m_WalkingDirection.Y) * Speed
 			+ irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
 		rigidBody->setVelocity(resultingVelocity);
 	}
