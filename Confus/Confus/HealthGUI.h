@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "IUIElement.h"
-
 #include "../ConfusShared/Player.h"
 
 namespace Confus
