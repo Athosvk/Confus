@@ -197,7 +197,7 @@ namespace Confus
 
 		m_Connection->addFunctionToMap(ID_CONNECTION_ATTEMPT_FAILED, [this](RakNet::Packet* a_Data)
 		{
-			denyConnection(a_Data);
+			//denyConnection(a_Data);
 		});
 
 		m_Connection->addFunctionToMap(ID_CONNECTION_LOST, [this](RakNet::Packet* a_Data)
