@@ -1,16 +1,15 @@
 #include <Irrlicht/irrlicht.h>
-#include <time.h>
 #include <iostream>
 #include <RakNet/BitStream.h>
 #include <RakNet/MessageIdentifiers.h>
 #include <RakNet/GetTime.h>
 
 #include "Game.h"
-#include "Player.h"
-#include "Flag.h"
+#include "../ConfusShared/Flag.h"
 #include "FlagGUI.h"
 #include "CrosshairGUI.h"
 #include "WinScreen.h"
+#include "../ConfusShared/PacketType.h"
 #include "ScoreGUI.h"
 #include "HealthGUI.h"
 #define DEBUG_CONSOLE
@@ -22,17 +21,19 @@ namespace Confus
 {
 	const int Game::MaxScore = 3; // dont change this for now. Breaks redside score.
 
-    Game::Game(irr::IrrlichtDevice* a_Device, EventManager* a_EventManager) : BaseGame(a_Device, a_EventManager),
+    Game::Game(irr::IrrlichtDevice* a_Device, ConfusShared::EventManager* a_EventManager) : BaseGame(a_Device, a_EventManager),
         m_PhysicsWorld(m_Device),
         m_MazeGenerator(m_Device, 41, 40, (19 + 20 + 21 + 22 + 23 + 24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-            irr::core::vector2df(19., 20.), m_PhysicsWorld, &m_AudioManager),
-        m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true, &m_AudioManager),
-        m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_PhysicsWorld),
-        m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_PhysicsWorld),
-        m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
-        m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, -83.f)),
-        m_GUI(m_Device, &m_PlayerNode, &m_AudioManager),
-		m_Announcer(&m_RedFlag,&m_BlueFlag,&m_PlayerNode, &m_AudioManager)
+	        irr::core::vector2df(19., 20.), m_PhysicsWorld),
+		m_PlayerHandler(a_Device, m_PhysicsWorld, m_AudioManager),
+        m_GUI(m_Device, m_PlayerHandler.getMainPlayer(), &m_AudioManager),
+        m_BlueFlag(m_Device, ConfusShared::ETeamIdentifier::TeamBlue, m_PhysicsWorld),
+        m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, m_PhysicsWorld),
+        m_Announcer(&m_RedFlag,&m_BlueFlag, m_PlayerHandler.getMainPlayer(), &m_AudioManager),
+		m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
+		m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, -83.f)),
+		m_MazeChangedSound(m_AudioManager.createSound("Wall rising.wav")),
+		m_LevelRootNode(m_Device->getSceneManager()->addEmptySceneNode())
     {
 		auto videoDriver = m_Device->getVideoDriver();
 		m_GUI.addElement<FlagGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(50, 50),
@@ -46,12 +47,23 @@ namespace Confus
 			irr::core::vector2df(0.56f, 0.0f), true);
 
 		m_GUI.addElement<ScoreGUI>(m_Device, &m_RedFlag, irr::core::dimension2du(30, 30),
-			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.59f, 0.061f));
+			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.59f, 0.061f), m_ClientScore);
 
 		m_GUI.addElement<ScoreGUI>(m_Device, &m_BlueFlag, irr::core::dimension2du(30, 30),
-			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.45f, 0.061f));
+			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.45f, 0.061f), m_ClientScore);
+		
+		m_MazeChangedSound.setVolume(0.2f);
+		m_MazeGenerator.addMazeChangedListener([this]()
+		{
+			m_MazeChangedSound.play();
+		});
+		irr::scene::ICameraSceneNode* camera = m_Device->getSceneManager()->addCameraSceneNodeFPS(m_Device->getSceneManager()->getRootSceneNode());
+		camera->setFOV(70.f);
+		camera->setNearValue(0.1f);
+		camera->setPosition(irr::core::vector3df(0.f, 0.0f, 0.2f));
+		camera->setParent(m_PlayerHandler.getMainPlayer());
 
-		m_GUI.addElement<HealthGUI>(m_Device, &m_PlayerNode, irr::core::dimension2du(40, 40),
+		m_GUI.addElement<HealthGUI>(m_Device, m_PlayerHandler.getMainPlayer(), irr::core::dimension2du(40, 40),
 			videoDriver->getTexture("Media/Textures/Heart.png"),
 			videoDriver->getTexture("Media/Textures/Blood.png"),
 			irr::core::vector2df(0.0f, 0.02f));
@@ -63,73 +75,21 @@ namespace Confus
 
     Game::~Game()
     {
-        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
-        {
-            //m_PlayerArray[i]->remove();
-            //delete(m_PlayerArray[i]);
-        }
+		m_Device->getGUIEnvironment()->clear();
         m_Device->getSceneManager()->clear();
     }
 
     void Game::start()
     {
         m_Device->setWindowCaption(L"Game");
-
         initializeConnection();
-        m_PlayerNode.setConnection(m_Connection.get());
-
-        auto sceneManager = m_Device->getSceneManager();
-        m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
         m_LevelRootNode->setPosition(irr::core::vector3df(1.0f, 1.0f, 1.0f));
-        sceneManager->loadScene("Media/IrrlichtScenes/Bases2.irr", nullptr, m_LevelRootNode);
+		m_Device->getSceneManager()->loadScene("Media/IrrlichtScenes/Bases2.irr", nullptr, m_LevelRootNode);
         m_LevelRootNode->setScale(irr::core::vector3df(1.0f, 1.0f, 1.0f));
         m_LevelRootNode->setVisible(true);
-        m_Device->setEventReceiver(m_EventManager);
 		updateSceneTransformations();
         initializeLevelColliders();
-
-        m_PlayerNode.setEventManager(m_EventManager);
         m_Device->getCursorControl()->setVisible(false);
-
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::MainPlayerJoined), [this](RakNet::Packet* a_Data)
-        {
-            addOwnPlayer(a_Data);
-        });
-
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::PlayerLeft), [this](RakNet::Packet* a_Data)
-        {
-            removePlayer(a_Data);
-        });
-
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::OtherPlayerJoined), [this](RakNet::Packet* a_Data)
-        {
-            addOtherPlayer(a_Data);
-        });
-
-        m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdatePosition), [this](RakNet::Packet* a_Data)
-        {
-            updateOtherPlayer(a_Data);
-        });
-
-		m_Connection->addFunctionToMap(static_cast<RakNet::MessageID>(Networking::EPacketType::UpdateHealth), [this](RakNet::Packet* a_Data)
-		{
-			updateHealth(a_Data);
-		});
-        
-		m_Connection->addFunctionToMap(ID_NO_FREE_INCOMING_CONNECTIONS, [this](RakNet::Packet* a_Data)
-		{
-			denyConnection(a_Data);
-		});
-			
-		m_Connection->addFunctionToMap(ID_CONNECTION_ATTEMPT_FAILED, [this](RakNet::Packet* a_Data)
-		{
-			denyConnection(a_Data);
-		});
-
-		m_Connection->addFunctionToMap(ID_CONNECTION_LOST, [this](RakNet::Packet* a_Data)
-		{
-			denyConnection(a_Data);
-		});
     }
 
 	void Game::initializeLevelColliders()
@@ -139,38 +99,31 @@ namespace Confus
 		for(irr::u32 i = 0; i < nodes.size(); ++i)
 		{
 			irr::scene::ISceneNode* node = nodes[i];
-			Physics::Collider* collider = nullptr;
+			ConfusShared::Physics::Collider* collider = nullptr;
 
-			if(node->isVisible())
+			switch(node->getType())
 			{
-				switch(node->getType())
+			case irr::scene::ESNT_CUBE:
+			case irr::scene::ESNT_ANIMATED_MESH:
+			case irr::scene::ESNT_MESH:
+				if(std::string(node->getName()).find("Ground", 0) != std::string::npos)
 				{
-				case irr::scene::ESNT_CUBE:
-				case irr::scene::ESNT_ANIMATED_MESH:
-				case irr::scene::ESNT_MESH:
-					if(std::string(node->getName()).find("Ground", 0) != std::string::npos)
-					{
-						collider = m_PhysicsWorld.createBoxCollider(node, Physics::ECollisionFilter::LevelStatic,
-							Physics::ECollisionFilter::Player | Physics::ECollisionFilter::Interactable);
-					}
-					else if (std::string(node->getName()).find("Basefolder", 0) == std::string::npos)
-					{
-						collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, Physics::ECollisionFilter::LevelStatic | Physics::ECollisionFilter::Interactable,
-							Physics::ECollisionFilter::Player);
-                    }
-                    else
-                    {
-                        break;
-                    }
-					collider->getRigidBody()->makeStatic();
-					break;
-				case irr::scene::ESNT_SPHERE:
-				case irr::scene::ESNT_TERRAIN:
-				case irr::scene::ESNT_OCTREE:
-					break;
-				default:
-					break;
+					collider = m_PhysicsWorld.createBoxCollider(node, ConfusShared::Physics::ECollisionFilter::LevelStatic,
+						ConfusShared::Physics::ECollisionFilter::Player | ConfusShared::Physics::ECollisionFilter::Interactable);
 				}
+				else if (std::string(node->getName()).find("Basefolder", 0) == std::string::npos)
+				{
+					collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, ConfusShared::Physics::ECollisionFilter::LevelStatic | 
+						ConfusShared::Physics::ECollisionFilter::Interactable,
+						ConfusShared::Physics::ECollisionFilter::Player);
+                }
+				if(collider != nullptr)
+				{
+					collider->getRigidBody()->makeStatic();
+				}
+				break;
+			default:
+				break;
 			}
 		}
 	}
@@ -186,7 +139,11 @@ namespace Confus
         std::cin >> serverPort;
 
         m_Connection = std::make_unique<Networking::ClientConnection>(serverIP, serverPort);
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Data)
+		m_PlayerHandler.setConnection(m_Connection.get());
+        m_RedFlagController = std::make_unique<RemoteFlagController>(m_RedFlag, *m_Connection);
+        m_BlueFlagController = std::make_unique<RemoteFlagController>(m_BlueFlag, *m_Connection);
+
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::MazeChange), [this](RakNet::Packet* a_Data)
         {
             RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
 
@@ -198,7 +155,7 @@ namespace Confus
             m_MazeGenerator.refillMainMazeRequest(mazeSeed, timeMazeChanges);
         });
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::ScoreUpdate), [](RakNet::Packet* a_Data)
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::ScoreUpdate), [this](RakNet::Packet* a_Data)
         {
             RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
 
@@ -207,14 +164,13 @@ namespace Confus
             bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
             bitstreamIn.Read(redScore);
             bitstreamIn.Read(blueScore);
-            ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, redScore);
-            ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, blueScore);
-            std::cout << "Score updated\tRed score: " << redScore << "\t Blue score: " << blueScore << std::endl;
+            m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamRed, redScore);
+            m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamBlue, blueScore);
         });
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(Networking::EPacketType::EndOfGame), [this](RakNet::Packet* a_Packet) 
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::EndOfGame), [this](RakNet::Packet* a_Packet)
         {
-            ETeamIdentifier a_TeamIdentifier;
+            ConfusShared::ETeamIdentifier a_TeamIdentifier;
             RakNet::BitStream inputStream(a_Packet->data, a_Packet->length, false);
             inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
             inputStream.Read(a_TeamIdentifier);
@@ -232,132 +188,71 @@ namespace Confus
                 m_ShouldRun = false;
             }
         });
+
+		m_Connection->addFunctionToMap(ID_NO_FREE_INCOMING_CONNECTIONS, [this](RakNet::Packet* a_Data)
+		{
+			denyConnection(a_Data);
+		});
+
+		m_Connection->addFunctionToMap(ID_CONNECTION_ATTEMPT_FAILED, [this](RakNet::Packet* a_Data)
+		{
+			denyConnection(a_Data);
+		});
+
+		m_Connection->addFunctionToMap(ID_CONNECTION_LOST, [this](RakNet::Packet* a_Data)
+		{
+			denyConnection(a_Data);
+		});
     }
 
     void Game::handleInput()
     {
-        m_PlayerNode.handleInput(*m_EventManager);
         if(m_EventManager->IsKeyDown(irr::KEY_ESCAPE))
         {
             m_ShouldRun = false;
         }
+		m_PlayerHandler.handleInput(m_EventManager);
     }
 
     void Game::update()
     {
         m_Connection->processPackets();
         handleInput();
+        m_RedFlag.update();
+        m_BlueFlag.update();
 
-        m_PlayerNode.update();
 		m_GUI.update();
-        m_Listener.setPosition(m_PlayerNode.getAbsolutePosition());
-
-        irr::core::matrix4 playerRotation(m_PlayerNode.getAbsoluteTransformation());
+		m_PlayerHandler.update();
+        m_Listener.setPosition(m_PlayerHandler.getMainPlayer()->getAbsolutePosition());
+        irr::core::matrix4 playerRotation(m_PlayerHandler.getMainPlayer()->getAbsoluteTransformation());
         irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10] );
         irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
         m_Listener.setDirection(forwardVector, upVector);    
-
-		static float timer = 0.0f;
-		timer += static_cast<float>(m_DeltaTime);
-		if(timer >= 3.0f)
-		{
-			m_BlueRespawnFloor.enableCollision();
-			m_RedRespawnFloor.enableCollision();
-		}
-		if(timer >= 20.0f)
-		{
-			timer = 0.0f;
-			m_MazeGenerator.refillMainMaze(static_cast<int>(time(0)));
-			m_BlueRespawnFloor.disableCollision();
-			m_RedRespawnFloor.disableCollision();
-		}
     }
 
     void Game::reset()
     {
-        // We actually would not need to call this method since the server will send score, and new positions.
-        m_BlueFlag.returnToStartPosition();
-        m_RedFlag.returnToStartPosition();
-        m_PlayerNode.respawn();
-        ClientTeamScore::setTeamScore(ETeamIdentifier::TeamBlue, 0);
-        ClientTeamScore::setTeamScore(ETeamIdentifier::TeamRed, 0);
+        m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamBlue, 0);
+        m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamRed, 0);
     }
 
     void Game::fixedUpdate()
     {
 		m_MazeGenerator.fixedUpdate();
 		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
-        m_PlayerNode.fixedUpdate();
+		m_PlayerHandler.fixedUpdate();
     }
 
     void Game::end()
     {
         m_BlueFlag.returnToStartPosition();
         m_RedFlag.returnToStartPosition();
-    }
+		m_Device->getCursorControl()->setVisible(true);
+    }    
 
-    void Game::updateOtherPlayer(RakNet::Packet* a_Data)
-    {
-        RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
-        
-        bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
-
-        long long id;
-        bitstreamIn.Read(id);
-
-        for(size_t j = 0u; j < m_PlayerArray.size(); j++)
-        {
-            for(size_t i = 0u; i < m_PlayerArray.size(); i++)
-            {
-                if(m_PlayerArray[i]->ID == id)
-                {
-                    irr::core::vector3df pos;
-                    irr::core::vector3df rot;
-
-                    bitstreamIn.Read(pos);
-                    bitstreamIn.Read(rot);
-
-                    m_PlayerArray[i]->setPosition(pos);
-                    m_PlayerArray[i]->setRotation(rot);
-                }
-            }
-            bitstreamIn.Read(id);
-        }
-    }
-
-    void Game::updateHealth(RakNet::Packet* a_Data)
-    {
-        RakNet::BitStream inputStream(a_Data->data, a_Data->length, false);
-        inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
-
-        long long id;
-        inputStream.Read(id);
-
-		for (size_t i = 0u; i < m_PlayerArray.size(); i++)
-		{
-			if (m_PlayerArray[i]->ID == id)
-			{
-				int health;
-				EHitIdentifier hitIdentifier;
-
-				inputStream.Read(health);
-				inputStream.Read(hitIdentifier);
-
-				if (health > m_PlayerArray[i]->getHealthInstance()->getHealth())
-				{
-					m_PlayerArray[i]->getHealthInstance()->heal(health - m_PlayerArray[i]->getHealthInstance()->getHealth());
-				}
-				else if (health < m_PlayerArray[i]->getHealthInstance()->getHealth())
-				{
-					m_PlayerArray[i]->getHealthInstance()->damage(m_PlayerArray[i]->getHealthInstance()->getHealth() - health, hitIdentifier);
-				}
-				break;
-			}
-		}
-    }
-
-	void Game::updateSceneTransformations()
+	void Game::updateSceneTransformations() const
 	{
+		//Recurses downwwards
 		std::function<void(irr::scene::ISceneNode* a_Node)> updateDownwards = [&updateDownwards](irr::scene::ISceneNode* a_Node)
 		{
 			a_Node->updateAbsolutePosition();
@@ -368,75 +263,7 @@ namespace Confus
 			}
 		};
 		updateDownwards(m_Device->getSceneManager()->getRootSceneNode());
-	}
-    //need to test of the guid.g is the right one, and not the one from the server
-    void Game::addOwnPlayer(RakNet::Packet* a_Data)
-    {
-        RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
-
-        bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
-
-        bitstreamIn.Read(m_PlayerNode.ID);
-        bitstreamIn.Read(m_PlayerNode.TeamIdentifier);
-        m_PlayerNode.respawn();
-        m_PlayerNode.updateColor(m_Device);
-
-        size_t size;
-        bitstreamIn.Read(size);
-
-        for(size_t i = 0u; i < size; i++)
-        {
-            long long id;
-            ETeamIdentifier teamID;
-
-            bitstreamIn.Read(id);
-            bitstreamIn.Read(teamID);
-
-            Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false, &m_AudioManager);
-            m_PlayerArray.push_back(newPlayer);
-        }
-
-        m_PlayerArray.push_back(&m_PlayerNode);
-    }
-
-    void Game::addOtherPlayer(RakNet::Packet* a_Data)
-    {
-        RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
-
-        bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
-
-        long long id;
-        ETeamIdentifier teamID;
-
-        bitstreamIn.Read(id);
-        bitstreamIn.Read(teamID);
-
-        Player* newPlayer = new Player(m_Device, m_PhysicsWorld, id, teamID, false, &m_AudioManager);
-        m_PlayerArray.push_back(newPlayer);
-    }
-
-    void Game::removePlayer(RakNet::Packet* a_Data)
-    {
-        RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
-
-        bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
-
-        long long id;
-
-        bitstreamIn.Read(id);
-
-        for(size_t i = 0u; i < m_PlayerArray.size(); i++)
-        {
-            if(m_PlayerArray[i]->ID == id)
-            {
-                m_PlayerArray[i]->remove();
-                delete(m_PlayerArray[i]);
-                m_PlayerArray.erase(m_PlayerArray.begin() + i);
-                break;
-            }
-        }
-        m_PlayerNode.fixedUpdate();
-    }
+	}   
 
 	void Game::denyConnection(RakNet::Packet* a_Data)
 	{
@@ -452,7 +279,6 @@ namespace Confus
 			default:
 				std::cout << "Could not connect to the server" << std::endl;
 		}
-
 		m_ShouldRun = false;
 	}
 

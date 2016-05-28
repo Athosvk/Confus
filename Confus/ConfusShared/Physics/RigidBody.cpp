@@ -4,7 +4,7 @@
 #include "RigidBody.h"
 #include "PhysicsWorld.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	namespace Physics
 	{
@@ -75,8 +75,8 @@ namespace Confus
 			if(m_Active)
 			{
 				m_Body->setCollisionFlags(m_Body->getCollisionFlags() | btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
-				m_Trigger = true;
 			}
+			m_Trigger = true;
 		}
 
 		void RigidBody::disableTriggerState()

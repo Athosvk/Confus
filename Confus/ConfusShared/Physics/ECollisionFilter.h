@@ -1,7 +1,7 @@
 #pragma once
 #include "../EnumUtility.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	namespace Physics
 	{		

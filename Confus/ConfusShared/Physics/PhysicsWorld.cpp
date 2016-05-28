@@ -1,7 +1,7 @@
 #include "PhysicsWorld.h"
 #include "BoxCollider.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	namespace Physics
 	{
@@ -59,7 +59,6 @@ namespace Confus
 				colliderPair.Body->onPostPhysicsUpdate();
 			}
 		}
-
 
 		BoxCollider* PhysicsWorld::createBoxCollider(irr::core::vector3df a_Extents, irr::scene::ISceneNode* a_AttachedNode, 
 			ECollisionFilter a_Group, ECollisionFilter a_Mask)

@@ -1,5 +1,4 @@
 #pragma once
-
 namespace ConfusShared
 {
     /// <summary> The Team's Identifier. There are two teams, blue and red. A player has a team, flag has a team, UI has a team, etc. </summary>
@@ -10,9 +9,6 @@ namespace ConfusShared
         /// <summary> This object has a red team identifier. </summary>
         TeamRed = 1u,
         /// <summary> This object has a blue team identifier. </summary>
-        TeamBlue = 2
+        TeamBlue = 2u
     };
 }
-
-
-using ConfusShared::ETeamIdentifier;

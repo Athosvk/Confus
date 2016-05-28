@@ -2,19 +2,21 @@
 #include <Irrlicht/irrlicht.h>
 
 #include "Networking/ClientConnection.h"
-#include "MazeGenerator.h"
-#include "Audio/OpenAL\OpenALListener.h"
-#include "Player.h"
-#include "Audio\PlayerAudioEmitter.h"
-#include "EventManager.h"
-#include "Flag.h"
-#include "RespawnFloor.h"
+#include "../ConfusShared/MazeGenerator.h"
+#include "Audio/OpenAL/OpenALListener.h"
+#include "Audio/PlayerAudioEmitter.h"
+#include "../ConfusShared/EventManager.h"
+#include "../ConfusShared/Flag.h"
+#include "../ConfusShared/RespawnFloor.h"
 #include "GUI.h"
 #include "ClientTeamScore.h"
-#include "BaseGame.h"
+#include "../ConfusShared/BaseGame.h"
 #include "Audio/AudioManager.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "Announcer.h"
+#include "PlayerHandler.h"
+#include "LocalPlayerController.h"
+#include "RemoteFlagController.h"
 
 namespace Confus
 {    
@@ -23,7 +25,7 @@ namespace Confus
     /// the Game to the Irrlicht instance, so that these can communicate through this
     /// with the active Irrlicht instance 
     /// </summary>
-    class Game : public BaseGame
+    class Game : public ConfusShared::BaseGame
     {
 	public:
 		/// <summary>
@@ -33,7 +35,7 @@ namespace Confus
     private:
         /// <summary>
 		/// <summary> The currently active physics world </summary>
-		Physics::PhysicsWorld m_PhysicsWorld;
+		ConfusShared::Physics::PhysicsWorld m_PhysicsWorld;
         /// The OpenAL listener that is attached to the camera.
         /// </summary>
         Audio::OpenAL::OpenALListener m_Listener;        
@@ -45,46 +47,52 @@ namespace Confus
 		/// <summary>
 		/// MazeGenerator that hasa accesible maze
 		/// </summary>
-		MazeGenerator m_MazeGenerator;
+		ConfusShared::MazeGenerator m_MazeGenerator;
+		
+		/// <summary>
+		/// The Player handler that handles the own player and the newly joined ones.
+		/// </summary>
+		PlayerHandler m_PlayerHandler;
 
 		/// <summary>
 		/// The GUI for the Player
 		/// </summary>
 		GUI m_GUI;
-        /// <summary>
-        /// The Players to test with.
-        /// </summary>
-        Player m_PlayerNode;
-
-
-        std::vector<Player*> m_PlayerArray;
+		
+        std::unique_ptr<RemoteFlagController> m_RedFlagController;
+        std::unique_ptr<RemoteFlagController> m_BlueFlagController;
         /// <summary>
         /// The Blue Flag.
         /// </summary>
-        Flag m_BlueFlag;
+        ConfusShared::Flag m_BlueFlag;
         /// <summary>
         /// The Red Flag.
         /// </summary>
-        Flag m_RedFlag;
+        ConfusShared::Flag m_RedFlag;
 
 		Announcer m_Announcer;
-		RespawnFloor m_RedRespawnFloor;
-		RespawnFloor m_BlueRespawnFloor;
+		ConfusShared::RespawnFloor m_RedRespawnFloor;
+		ConfusShared::RespawnFloor m_BlueRespawnFloor;
 
+		/// <summary>
+		/// The level root node, under which all colliders fromt he scene file are placed
+		/// so that we can selectively create colliders for those nodes
+		/// </summary>
         irr::scene::ISceneNode* m_LevelRootNode;
 		/// <summary>
 		/// The connection as a client to the server that we are currently connected to
 		/// </summary>
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
+		Audio::Sound m_MazeChangedSound;
+		ClientTeamScore m_ClientScore;
 
-		
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game" /> class.
         /// </summary>
         /// <param name="a_Device">The a_ device.</param>
         /// <param name="a_EventManager">The a_ event manager.</param>
-        Game(irr::IrrlichtDevice* a_Device, EventManager* a_EventManager);
+        Game(irr::IrrlichtDevice* a_Device, ConfusShared::EventManager* a_EventManager);
 
         /// <summary>
         /// Finalizes an instance of the <see cref="Game"/> class.
@@ -106,28 +114,12 @@ namespace Confus
         /// Processes the input data
         /// </summary>
         void handleInput();
-        /// <summary> Updates the (absolute) transformations of all the scene nodes recursively downwards </summary>
-        void updateSceneTransformations();
 
-
-        /// <summary>
-        /// Creates a new Player object for this user, this player will be regarded as THEIR player.
-        /// </summary>
-        void addOwnPlayer(RakNet::Packet* a_Data);
-        /// <summary>
-        /// Creates a new Player object for a different user that just joined.
-        /// </summary>
-        void addOtherPlayer(RakNet::Packet* a_Data);
-        /// <summary>
-        /// Updates positions and rotations of all other players.
-        /// </summary>
-        void updateOtherPlayer(RakNet::Packet* a_Data);
-        /// <summary>
-        /// Updates health of all players
-        /// </summary>
-        void updateHealth(RakNet::Packet* a_Data);
-
-        void removePlayer(RakNet::Packet* a_Data);
+        /// <summary> 
+		/// Updates the (absolute) transformations of all the scene nodes recursively downwards to make
+		/// sure that the absolute positions have been updated once the physics world requests them
+		/// </summary>
+        void updateSceneTransformations() const;
 
 		void denyConnection(RakNet::Packet* a_Data);
 
@@ -142,6 +134,5 @@ namespace Confus
         virtual void fixedUpdate() override;
         virtual void end() override;
         virtual void render() override;
-
-};
+	};
 }

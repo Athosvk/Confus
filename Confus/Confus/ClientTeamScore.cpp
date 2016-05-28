@@ -5,18 +5,15 @@
 
 namespace Confus
 {
-    int ClientTeamScore::RedTeamScore = 0;
-    int ClientTeamScore::BlueTeamScore = 0;
-
-    void ClientTeamScore::setTeamScore(ETeamIdentifier a_TeamIdentifier, int a_Score)
+    void ClientTeamScore::setTeamScore(ConfusShared::ETeamIdentifier a_TeamIdentifier, int a_Score)
     {
          switch(a_TeamIdentifier)
         {
         case ConfusShared::ETeamIdentifier::TeamRed:
-            RedTeamScore = a_Score;
+			m_RedTeamScore = a_Score;
             break;
         case ConfusShared::ETeamIdentifier::TeamBlue:
-            BlueTeamScore = a_Score;
+			m_BlueTeamScore = a_Score;
             break;
         default:
             throw std::logic_error("Team does not exist");
@@ -24,16 +21,16 @@ namespace Confus
         }
     }
 
-    int ClientTeamScore::getTeamScore(ETeamIdentifier a_TeamIdentifier)
+    int ClientTeamScore::getTeamScore(ConfusShared::ETeamIdentifier a_TeamIdentifier) const
     {
         int teamScoreValue = 0;
         switch(a_TeamIdentifier)
         {
         case ConfusShared::ETeamIdentifier::TeamRed:
-            teamScoreValue = RedTeamScore;
+            teamScoreValue = m_RedTeamScore;
             break;
         case ConfusShared::ETeamIdentifier::TeamBlue:
-            teamScoreValue = BlueTeamScore;
+            teamScoreValue = m_BlueTeamScore;
             break;
         default:
             throw std::logic_error("Team does not exist");

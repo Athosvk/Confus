@@ -7,7 +7,7 @@ namespace Confus
 {
 	const int Increment = 4; //Using the magic number 4, because we decrease the health by 25%
 
-	HealthGUI::HealthGUI(irr::IrrlichtDevice* a_Device, Player* a_PlayerNode, irr::core::dimension2du a_ImageMaxSize, irr::video::ITexture* a_HealthTexture, irr::video::ITexture* a_BloodTexture, irr::core::vector2df a_RelativePosition)
+	HealthGUI::HealthGUI(irr::IrrlichtDevice* a_Device, ConfusShared::Player* a_PlayerNode, irr::core::dimension2du a_ImageMaxSize, irr::video::ITexture* a_HealthTexture, irr::video::ITexture* a_BloodTexture, irr::core::vector2df a_RelativePosition)
 		:m_ImageMaxSize(a_ImageMaxSize), m_PlayerNode(a_PlayerNode)
 	{
 		irr::core::dimension2du offset = calculateOffset(m_ImageMaxSize, a_HealthTexture);

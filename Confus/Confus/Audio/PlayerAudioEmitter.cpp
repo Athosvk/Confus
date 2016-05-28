@@ -3,19 +3,34 @@
 
 #include "PlayerAudioEmitter.h"
 #include "AudioManager.h"
+#include "../../ConfusShared/Player.h"
 
 namespace Confus
 {
     namespace Audio
     {
-        PlayerAudioEmitter::PlayerAudioEmitter(irr::scene::ISceneNode* a_AttachedPlayer, AudioManager* a_AudioManager)
-			: m_AttachedPlayer(a_AttachedPlayer),
-			m_HitSoundHeavy(a_AudioManager->createSound("SFX/Player/a_heavy_grunt.wav")),
+		PlayerAudioEmitter::PlayerAudioEmitter(ConfusShared::Player* a_AttachedPlayer, AudioManager* a_AudioManager)
+			: m_HitSoundHeavy(a_AudioManager->createSound("SFX/Player/a_heavy_grunt.wav")),
 			m_HitSoundLight(a_AudioManager->createSound("SFX/Player/a_light_grunt.wav")),
 			m_HitSoundHeavyBackstab(a_AudioManager->createSound("SFX/Player/a_heavybackstab_grunt.wav")),
-			m_HitSoundLightBackstab(a_AudioManager->createSound("SFX/Player/a_lightbackstab_grunt.wav"))
+			m_HitSoundLightBackstab(a_AudioManager->createSound("SFX/Player/a_lightbackstab_grunt.wav")),
+			m_AttachedPlayer(a_AttachedPlayer)
         {
 			createAudioSources(a_AudioManager);
+			m_AttachedPlayer->getHealthInstance()->DamageEvent += [this](EHitIdentifier a_HitIdentifier) -> void
+			{
+				//playHitSound(a_HitIdentifier);
+			};
+
+			m_AttachedPlayer->OnHeavyAttack += [this]() -> void
+			{
+				//playHeavyAttack();
+			};
+
+			m_AttachedPlayer->OnLightAttack += [this]() -> void
+			{
+				//playLightAttack();
+			};
         }
 
         void PlayerAudioEmitter::playFootStepSound()
@@ -27,32 +42,31 @@ namespace Confus
 			
 			if (soundIterator != m_Footsteps.end())
 			{
-				soundIterator->play();
+				//soundIterator->play();
 			}
         }
 
-        void PlayerAudioEmitter::playAttackSound(bool a_HeavyAttack)
+		void PlayerAudioEmitter::playHeavyAttack()
+		{
+			//m_Footsteps[2].play();
+			//playRandomSwordSwosh();
+		}
+
+        void PlayerAudioEmitter::playLightAttack()
         {
-            if(!a_HeavyAttack)
-            {
-                playRandomGrunt();
-            }
-            else
-            {
-                m_Footsteps[2].play();
-            }
-            playRandomSwordSwosh();
+			//playRandomGrunt();
+            //playRandomSwordSwosh();
         }
 
         void PlayerAudioEmitter::playRandomGrunt()
         {
-            std::srand(static_cast<int>(time(NULL)));
-			m_Grunts[std::rand() % 2].play();
+            //std::srand(static_cast<int>(time(nullptr)));
+			//m_Grunts[std::rand() % 2].play();
         }
 
         void PlayerAudioEmitter::playRandomSwordSwosh()
         {
-			std::srand(static_cast<int>(time(NULL)));
+			//std::srand(static_cast<int>(time(nullptr)));
 			m_SwordSwoshes[std::rand() % 4].play();
         }
 
@@ -76,9 +90,16 @@ namespace Confus
 			}
 		}
 
-        void PlayerAudioEmitter::updatePosition() const
+        void PlayerAudioEmitter::updatePosition()
         {
             m_AttachedPlayer->updateAbsolutePosition();
+
+			int frameNumber = static_cast<int>(m_AttachedPlayer->getAnimationFrame());
+			if(frameNumber == 0 || frameNumber == 6)
+			{
+				playFootStepSound();
+			}
+
 			irr::core::matrix4 playerRotation = m_AttachedPlayer->getAbsoluteTransformation();
 			irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10]);
 			irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
@@ -101,7 +122,7 @@ namespace Confus
             }
         }
 
-        void PlayerAudioEmitter::createAudioSources(AudioManager* a_AudioManager)
+		void PlayerAudioEmitter::createAudioSources(AudioManager* a_AudioManager)
         {
             for(int i = 0; i < 4; i++)
             {

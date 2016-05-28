@@ -3,8 +3,9 @@
 #include "BoxCollider.h"
 #include "RigidBody.h"
 #include "CollisionRegistrar.h"
+#include "PhysicsWorld.h"
 
-namespace Confus
+namespace ConfusShared
 {
 	namespace Physics
 	{
@@ -16,14 +17,14 @@ namespace Confus
 		{
 		}
 
-		void BoxCollider::setTriggerEnterCallback(std::function<void(BoxCollider*a_Other)>& a_Callback)
+		void BoxCollider::setTriggerEnterCallback(const std::function<void(BoxCollider*a_Other)>& a_Callback)
 		{
 			m_CollisionRegistrar.setTriggerEnterCallback(this, a_Callback);
 		}
 
-		void BoxCollider::setTriggerEnterCallback(std::function<void(BoxCollider*a_Other)>&& a_Callback)
+		irr::core::vector3df BoxCollider::getDimensions() const
 		{
-			m_CollisionRegistrar.setTriggerEnterCallback(this, a_Callback);
+			return PhysicsWorld::toIrrlichtVector(m_Shape->getHalfExtentsWithMargin() * 2);
 		}
 	}
 }

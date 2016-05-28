@@ -1,9 +1,13 @@
 #pragma once
-#include <irrlicht/irrlicht.h>
 #include <vector>
 
 #include "Sound.h"
 #include "../../ConfusShared/EHitIdentifier.h"
+
+namespace ConfusShared
+{
+	class Player;
+}
 
 namespace Confus
 {
@@ -16,10 +20,13 @@ namespace Confus
         /// </summary>
         class PlayerAudioEmitter
 		{
-			/// <summary> Sound u emit when hit </summary>
+			/// <summary> The sound played when you are hit by a heavy attack </summary>
 			Sound m_HitSoundHeavy;
+			/// <summary>The sound played when you are hit by a ligth attack</summary>
 			Sound m_HitSoundLight;
+			/// <summary>The sound played when you are hit by a heavy backstab</summary>
 			Sound m_HitSoundHeavyBackstab;
+			/// <summary>The sound played when you are hit by a light backstab</summary>
 			Sound m_HitSoundLightBackstab;
 			/// <summary> The footstep sounds </summary>
 			std::vector<Sound> m_Footsteps;
@@ -28,22 +35,20 @@ namespace Confus
 			/// <summary> The sword slash sounds </summary>
 			std::vector<Sound> m_SwordSwoshes;            
 			/// <summary> The player emmitting the sounds </summary>
-			irr::scene::ISceneNode* m_AttachedPlayer;
+			ConfusShared::Player* m_AttachedPlayer;
         public:            
-            /// <summary>
-            /// Initializes a new instance of the <see cref="PlayerAudioEmitter"/> class.
-            /// </summary>
-            /// <param name="a_AttachedPlayer">The player that owns this emitter.</param>
-            PlayerAudioEmitter(irr::scene::ISceneNode* a_AttachedPlayer, AudioManager* a_AudioManager);
+			/// <summary>Initializes a new instance of the <see cref="PlayerAudioEmitter" /> class.</summary>
+			/// <param name="a_AttachedPlayer">The player that owns this emitter.</param>
+			/// <param name="a_AudioManager">The audio manager the sounds should be played on</param>
+			PlayerAudioEmitter(ConfusShared::Player* a_AttachedPlayer, AudioManager* a_AudioManager);
             /// <summary>
             /// Plays a random footstep sound.
             /// </summary>
-            void playFootStepSound();            
-            /// <summary>
-            /// Plays a random attack sound.
-            /// </summary>
-            /// <param name="a_HeavyAttack">Is it a heavy attack?</param>
-            void playAttackSound(bool a_HeavyAttack);
+            void playFootStepSound();			
+			/// <summary> Plays the heavy attack sound.</summary>
+			void playHeavyAttack();
+            /// <summary> Plays the light attack sound. </summary>
+            void playLightAttack();
             /// <summary>
             /// Plays a random grunt.
             /// </summary>
@@ -52,18 +57,20 @@ namespace Confus
             /// Plays a random sword swosh.
             /// </summary>
             void playRandomSwordSwosh();
-			/// <summary>
-			/// Plays a hit sound when you get hit.
-			/// </summary>
+
+			/// <summary>Plays a hit sound when you get hit.</summary>
+			/// <param name="a_HitIdentifier">
+			/// The hit identifier, to determine by what kind of attack the player was hit 
+			/// </param>
 			void playHitSound(EHitIdentifier a_HitIdentifier);
 			/// <summary>
             /// Updates the position of this instance.
             /// </summary>
-            void updatePosition() const;            
-            /// <summary>
-            /// Creates the audio sources.
-            /// </summary>
-            void createAudioSources(AudioManager* a_AudioManager);
+            void updatePosition();
+
+			/// <summary>Creates the sounds for the audio emitter to play once a player event occrus</summary>
+			/// <param name="a_AudioManager">The audio manager to create the sounds on</param>
+			void createAudioSources(AudioManager* a_AudioManager);
         };
     }
 }

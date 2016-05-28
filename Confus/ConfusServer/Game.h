@@ -1,16 +1,14 @@
 #pragma once
 #include <Irrlicht/irrlicht.h>
-#include <RakNet/BitStream.h>
 
 #include "Networking/Connection.h"
-#include "MazeGenerator.h"
-#include "OpenAL\OpenALListener.h"
-#include "Player.h"
-#include "Audio\PlayerAudioEmitter.h"
-#include "EventManager.h"
-#include "Flag.h"
+#include "../ConfusShared/MazeGenerator.h"
+#include "../ConfusShared/Player.h"
+#include "../ConfusShared/Flag.h"
+#include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "TeamScore.h"
-#include "../ConfusShared/EHitIdentifier.h"
+#include "RemoteInputReceiver.h"
+#include "RemoteFlagUpdater.h"
 
 namespace ConfusServer
 { 
@@ -21,7 +19,27 @@ namespace ConfusServer
     /// </summary>
     class Game
     {
-    private:
+    private:		
+		/// <summary>
+		/// Represents a combination of a Player and its RemoteInputReceiver, allowing it to bind input
+		/// to that particular player. Allows for easy removal of this combination once the player leaves
+		/// </summary>
+		struct PlayerPair
+		{			
+			/// <summary>The player representing a client's interface</summary>
+			ConfusShared::Player* Player;			
+			/// <summary>
+			/// The input receiver, registering the input that the client forwarded
+			/// to the server 
+			/// </summary>
+			std::unique_ptr<RemoteInputReceiver> Receiver;
+		public:			
+			/// <summary>Initializes a new instance of the <see cref="PlayerPair"/> struct.</summary>
+			/// <param name="a_Player">The player</param>
+			/// <param name="a_Connection">The connection opened by the server, to construct an input receiver</param>
+			PlayerPair(ConfusShared::Player* a_Player, Networking::Connection& a_Connection);
+		};
+
         /// <summary>
         /// The rate at which fixed updates are carried out
         /// </summary>
@@ -43,30 +61,27 @@ namespace ConfusServer
         /// </summary>
         static const double MazeDelay;
 
-
         /// <summary>
         /// The instance of the IrrlichtDevice
 		/// Statics are avoided to make code clearer, hence this is not a static
         /// </summary>
         irr::IrrlichtDevice* m_Device;
+		/// <summary>The physics world, allowing simulation of rigid bodies and colliders</summary>
+		ConfusShared::Physics::PhysicsWorld m_PhysicsWorld;
         /// <summary>
         /// MazeGenerator that hasa accesible maze
         /// </summary>
-        MazeGenerator m_MazeGenerator;
-        /// <summary>
-        /// The OpenAL listener that is attached to the camera.
-        /// </summary>
-        OpenALListener m_Listener;
-        EventManager m_EventManager;
-        std::vector<Player*> m_PlayerArray;
+        ConfusShared::MazeGenerator m_MazeGenerator;		
+		/// <summary>The players in the GameWorld, indexed by their ID so that we can find individuals easily</summary>
+		std::map<long long, PlayerPair> m_Players;
         /// <summary>
         /// The Blue Flag.
         /// </summary>
-        Flag m_BlueFlag;
+        ConfusShared::Flag m_BlueFlag;
         /// <summary>
         /// The Red Flag.
         /// </summary>
-        Flag m_RedFlag;
+        ConfusShared::Flag m_RedFlag;
         /// <summary>
         /// The delay between the last and future fixed update
         /// </summary>
@@ -92,10 +107,17 @@ namespace ConfusServer
         /// </summary>
         irr::u32 m_CurrentTicks = 0;
         /// <summary> The connection to the clients of this server</summary>
-        std::unique_ptr<Networking::Connection> m_Connection;
-        irr::scene::ISceneNode* m_LevelRootNode;
+        std::unique_ptr<Networking::Connection> m_Connection;		
+		/// <summary>
+		/// The level root node, under which all colliders fromt he scene file are placed
+		/// so that we can selectively create colliders for those nodes
+		/// </summary>
+		irr::scene::ISceneNode* m_LevelRootNode = nullptr;
         /// <summary> Team Score Manager </summary>
         TeamScore m_TeamScoreManager;
+
+        std::unique_ptr<RemoteFlagUpdater> m_RedFlagUpdater;
+        std::unique_ptr<RemoteFlagUpdater> m_BlueFlagUpdater;
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.
@@ -116,43 +138,50 @@ namespace ConfusServer
         /// </summary>
         void initializeConnection();
         /// <summary>
-        /// Processes the triangle selectors.
-        /// </summary>
-        void processTriangleSelectors();
-        irr::scene::IMetaTriangleSelector* processLevelMetaTriangles();
-        /// <summary>
-        /// Processes the input data
-        /// </summary>
-        void handleInput();
-        /// <summary>
         /// Updates the state of the objects in the game
         /// </summary>
         void update();
         /// <summary>
-        /// Runs a set of fixed update calls based on the tim elapsed since the last
+        /// Runs a set of fixed update calls based on the time elapsed since the last frame
         /// </summary>
         void processFixedUpdates();
-        /// <summary>
-        /// Updates the state of objects that require frame-rate independence
-        /// </summary>
+
+		void initializeLevelColliders();
+
+        /// <summary> Updates the state of objects that require frame-rate independence </summary>
         void fixedUpdate();
-        /// <summary>
-        /// Renders the objects in the game
-        /// </summary>
-        void render();
-		/// <summary>
-		/// Processes the packets connection
-		/// </summary>
+
+		/// <summary> Processes the packets send over the connectionconnection </summary>
 		void processConnection();
-	    void addPlayer(RakNet::Packet* a_Data);
-        void removePlayer(RakNet::Packet* a_Data);
-        void updatePlayers();
-        void updateHealth(EHitIdentifier a_HitType, Player* a_Player);
+		
+		/// <summary>Adds a player from the given data, so that it can be synced with the remote players</summary>
+		/// <param name="a_Data">The packet data containing the information needed to construct a player object</param>
+		void addPlayer(RakNet::Packet* a_Data);
+		
+		/// <summary>Removes a player that has disconnected, so that his player instance is no longer in the game world</summary>
+		/// <param name="a_Data">The packet containing the information needed to remove the player</param>
+		void removePlayer(RakNet::Packet* a_Data);
+		
+		/// <summary> Sends the new position and rotation information for each player so they can be updated locally</summary>
+		void updatePlayers();
+		
+		/// <summary>Sends the new health of </summary>
+		/// <param name="a_HitType">Type of the a_ hit.</param>
+		/// <param name="a_Player">The a_ player.</param>
+		void updateHealth(EHitIdentifier a_HitType, ConfusShared::Player* a_Player) const;
+
         /// <summary>
         /// Broadcast a maze change
         /// </summary>
-        void broadcastMazeChange(int a_Seed);
+        void broadcastMazeChange(int a_Seed) const;
+
         /// <summary> Reset game </summary>
         void resetGame();
+		
+		/// <summary> 
+		/// Updates the (absolute) transformations of all the scene nodes recursively downwards to make
+		/// sure that the absolute positions have been updated once the physics world requests them
+		/// </summary>
+		void updateSceneTransformations() const;
     };
 }

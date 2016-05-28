@@ -6,9 +6,15 @@
 #include "Menu.h"
 #include "../ConfusShared/Debug.h"
 #include "Game.h"
+#include "../ConfusShared/EventManager.h"
 
 namespace Confus
 {
+	Menu::Menu(irr::IrrlichtDevice* a_Device, ConfusShared::EventManager* a_EventManager)
+		: BaseGame(a_Device, a_EventManager)
+	{
+	}
+
     void Menu::start()
     {
         m_Device->setWindowCaption(L"Menu");
@@ -28,7 +34,6 @@ namespace Confus
 
             m_Text->setText(L"Press ESCAPE to go back to the main menu");
             runGame();
-            m_Device->getSceneManager()->clear();
             m_Device->getGUIEnvironment()->clear();
             m_Text = m_Device->getGUIEnvironment()->addStaticText(L"Press SPACE to start the game, BACKSPACE to exit.", { 10, 500, 10 + 250, 500 + 80 });
         }
@@ -45,6 +50,7 @@ namespace Confus
             m_Text->remove();
         }
     }
+
     void Menu::runGame()
     {
         Game game(m_Device, m_EventManager);
