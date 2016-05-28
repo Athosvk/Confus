@@ -4,14 +4,12 @@
 
 namespace Confus
 {
-	CameraController::CameraController(irr::IrrlichtDevice* a_Device, irr::scene::ICameraSceneNode* a_CameraNode,
-		irr::scene::ISceneNode* a_DirectionNode)
+	CameraController::CameraController(irr::IrrlichtDevice* a_Device, irr::scene::ICameraSceneNode* a_CameraNode)
 		: m_Device(a_Device),
-		m_CameraNode(a_CameraNode),
-		m_DirectionNode(a_DirectionNode)
+		m_CameraNode(a_CameraNode)
 	{
 		m_Device->getCursorControl()->setPosition(0.5f, 0.5f);
-		//m_Device->getCursorControl()->setVisible(false);
+		m_Device->getCursorControl()->setVisible(false);
 	}
 
 	void CameraController::update()
@@ -26,6 +24,11 @@ namespace Confus
 		}
 		m_PreviousPosition = m_Device->getCursorControl()->getRelativePosition();
 		m_Wrapped = false;
+	}
+
+	irr::core::vector3df CameraController::getRotation() const
+	{
+		return m_Rotation;
 	}
 
 	void CameraController::wrapMouse()
@@ -48,17 +51,17 @@ namespace Confus
 	void CameraController::updateTarget()
 	{
 		auto cursor = m_Device->getCursorControl();
-
 		auto deltaPosition = (m_PreviousPosition - cursor->getRelativePosition()) * m_MouseSensitivity * m_AxesMultiplier;
-		auto rotationY = m_DirectionNode->getRotation().Y + deltaPosition.X;
-		m_DirectionNode->setRotation(irr::core::vector3df(m_DirectionNode->getRotation().X, rotationY,
-			m_DirectionNode->getRotation().Z));
+		irr::core::vector3df rotation = m_Rotation;
 
-		m_XRotation = irr::core::clamp(m_XRotation + deltaPosition.Y, m_MinimumXRotation, m_MaximumXRotation);
+		rotation.Y += deltaPosition.X;
+		rotation.X = irr::core::clamp(rotation.X + deltaPosition.Y, m_MinimumXRotation, m_MaximumXRotation);
 
 		irr::core::vector3df lookAt(0.0f, 0.0f, 1.0f);
-		lookAt.rotateXZBy(-rotationY);
-		lookAt.rotateYZBy(m_XRotation);
+		lookAt.rotateXZBy(rotation.Y);
+		lookAt.rotateYZBy(rotation.X);
 		m_CameraNode->setTarget(lookAt);
+
+		m_Rotation = rotation;
 	}
 }
