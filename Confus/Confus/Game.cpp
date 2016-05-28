@@ -219,7 +219,7 @@ namespace Confus
     {
 		m_Camera->update();
 		auto targetRotation = m_PlayerHandler.getMainPlayer()->getRotation();
-		targetRotation.Y = -m_Camera->getRotation().Y;
+		targetRotation.Y = m_Camera->getYRotation();
 		m_PlayerHandler.getMainPlayer()->setRotation(targetRotation);
         m_Connection->processPackets();
         handleInput();

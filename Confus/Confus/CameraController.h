@@ -28,21 +28,22 @@ namespace Confus
 		/// The rotation of the node, stored so that we do not have to derive this from the
 		/// target vector of the camera and to prevent errors with using the camera to store the rotation
 		/// </summary>
-		irr::core::vector3df m_Rotation = irr::core::vector3df();
+		irr::core::quaternion m_Rotation = irr::core::quaternion();
 		/// <summary>The maximum rotation around the X axis, so that we cannot look over 360 degrees, which is unnatural</summary>
 		float m_MaximumXRotation = 60.0f;		
 		/// <summary>The minimum rotation around the X axis, so that we cannot look over 360 degrees, which is unnatural</summary>
 		float m_MinimumXRotation = -60.0f;
 		/// <summary>
-		/// The sensitivity of the mouse, where the units correspond to the movement from 
+		/// The sensitivity of the mouse, where one unit in radian correspond to the movement from 
 		/// one window boundary to the other on their respective axis
 		/// </summary>
-		irr::core::vector2df m_MouseSensitivity = irr::core::vector2df(100.0f, 100.0f);
+		irr::core::vector2df m_MouseSensitivity = irr::core::vector2df(90.0f, 90.0f);
 		/// <summary>
 		/// The multiplier for the axes, so that we can invert them at our desire
 		/// and decouple this multiplier from the mouse sensitivity
 		/// </summary>
-		irr::core::vector2df m_AxesMultiplier = irr::core::vector2df(1.0f, -1.0f);
+		irr::core::vector2df m_AxesMultiplier = irr::core::vector2df(-1.0f, -1.0f);
+		float m_YRotation = 0.0f;
 
 	public:		
 		/// <summary>Initializes a new instance of the <see cref="CameraController"/> class.</summary>
@@ -53,12 +54,14 @@ namespace Confus
 		/// <summary>Updates the target vector of the camera and direction of the attached node</summary>
 		void update();
 
-		irr::core::vector3df getRotation() const;
+		float getYRotation() const;
 	private:		
 		/// <summary>Wraps the mouse within the boundaries of the screen</summary>
 		void wrapMouse();
 		
 		/// <summary>Updates the target of the camera in a way that it will be pointing in the direction of the mouse</summary>
 		void updateTarget();
+
+		irr::core::quaternion fromAxisAngle(irr::core::vector3df a_Axis, float a_Angle);
 	};
 }

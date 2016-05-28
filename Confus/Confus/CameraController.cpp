@@ -26,9 +26,9 @@ namespace Confus
 		m_Wrapped = false;
 	}
 
-	irr::core::vector3df CameraController::getRotation() const
+	float CameraController::getYRotation() const
 	{
-		return m_Rotation;
+		return m_YRotation;
 	}
 
 	void CameraController::wrapMouse()
@@ -52,16 +52,22 @@ namespace Confus
 	{
 		auto cursor = m_Device->getCursorControl();
 		auto deltaPosition = (m_PreviousPosition - cursor->getRelativePosition()) * m_MouseSensitivity * m_AxesMultiplier;
-		irr::core::vector3df rotation = m_Rotation;
-
-		rotation.Y += deltaPosition.X;
-		rotation.X = irr::core::clamp(rotation.X + deltaPosition.Y, m_MinimumXRotation, m_MaximumXRotation);
+		auto clampedX = irr::core::clamp(deltaPosition.Y, m_MinimumXRotation, m_MaximumXRotation);
+		auto xRotation = fromAxisAngle(irr::core::vector3df(1.0f, 0.0f, 0.0f), clampedX * 
+			irr::core::DEGTORAD);
+		auto yRotation = fromAxisAngle(irr::core::vector3df(0.0f, 1.0f, 0.0f), deltaPosition.X * irr::core::DEGTORAD);
+		m_Rotation *= yRotation * xRotation;
 
 		irr::core::vector3df lookAt(0.0f, 0.0f, 1.0f);
-		lookAt.rotateXZBy(rotation.Y);
-		lookAt.rotateYZBy(rotation.X);
+		lookAt = m_Rotation * lookAt;
 		m_CameraNode->setTarget(lookAt);
+		m_YRotation += deltaPosition.X;
+	}
 
-		m_Rotation = rotation;
+	irr::core::quaternion CameraController::fromAxisAngle(irr::core::vector3df a_Axis, float a_Angle)
+	{
+		auto quaternion = irr::core::quaternion();
+		quaternion.fromAngleAxis(a_Angle, a_Axis);
+		return quaternion;
 	}
 }
