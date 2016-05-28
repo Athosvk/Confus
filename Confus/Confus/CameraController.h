@@ -25,8 +25,8 @@ namespace Confus
 		/// </summary>
 		bool m_Wrapped = true;		
 		/// <summary>
-		/// The rotation of the node, stored so that we do not have to derive this from the
-		/// target vector of the camera and to prevent errors with using the camera to store the rotation
+		/// The rotation of the node, stored so that we can used it as a sequence of rotation, rather than derive
+		/// the quaternion from the target vector of the camera
 		/// </summary>
 		irr::core::quaternion m_Rotation = irr::core::quaternion();
 		/// <summary>The maximum rotation around the X axis, so that we cannot look over 360 degrees, which is unnatural</summary>
@@ -42,7 +42,11 @@ namespace Confus
 		/// The multiplier for the axes, so that we can invert them at our desire
 		/// and decouple this multiplier from the mouse sensitivity
 		/// </summary>
-		irr::core::vector2df m_AxesMultiplier = irr::core::vector2df(-1.0f, -1.0f);
+		irr::core::vector2df m_AxesMultiplier = irr::core::vector2df(-1.0f, -1.0f);		
+		/// <summary>
+		/// The Y rotation in euler angles, stored since the toEulerAngles method is clamped for Y rotation,
+		/// so we manually set this
+		/// </summary>
 		float m_YRotation = 0.0f;
 
 	public:		
@@ -53,15 +57,21 @@ namespace Confus
 		
 		/// <summary>Updates the target vector of the camera and direction of the attached node</summary>
 		void update();
-
+		
+		/// <summary>Gets the y rotation of the camera in euler angles in degrees</summary>
+		/// <returns></returns>
 		float getYRotation() const;
-	private:		
+	private:
 		/// <summary>Wraps the mouse within the boundaries of the screen</summary>
 		void wrapMouse();
 		
 		/// <summary>Updates the target of the camera in a way that it will be pointing in the direction of the mouse</summary>
 		void updateTarget();
-
+		
+		/// <summary> Gives a quaternion derived from an axis and angle. Serves as helper method, since it is not available</summary>
+		/// <param name="a_Axis">The axis the rotation is about</param>
+		/// <param name="a_Angle">The angle in radians around the axis</param>
+		/// <returns>The resulting quaternion</returns>
 		irr::core::quaternion fromAxisAngle(irr::core::vector3df a_Axis, float a_Angle);
 	};
 }
