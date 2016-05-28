@@ -57,11 +57,13 @@ namespace Confus
 		{
 			m_MazeChangedSound.play();
 		});
-		irr::scene::ICameraSceneNode* camera = m_Device->getSceneManager()->addCameraSceneNodeFPS(m_Device->getSceneManager()->getRootSceneNode());
+
+		irr::scene::ICameraSceneNode* camera = m_Device->getSceneManager()->addCameraSceneNode(m_Device->getSceneManager()->getRootSceneNode());
 		camera->setFOV(70.f);
 		camera->setNearValue(0.1f);
 		camera->setPosition(irr::core::vector3df(0.f, 0.0f, 0.2f));
 		camera->setParent(m_PlayerHandler.getMainPlayer());
+		m_Camera = std::make_unique<CameraController>(m_Device, camera, m_PlayerHandler.getMainPlayer());
 
 		m_GUI.addElement<HealthGUI>(m_Device, m_PlayerHandler.getMainPlayer(), irr::core::dimension2du(40, 40),
 			videoDriver->getTexture("Media/Textures/Heart.png"),
@@ -89,7 +91,6 @@ namespace Confus
         m_LevelRootNode->setVisible(true);
 		updateSceneTransformations();
         initializeLevelColliders();
-        m_Device->getCursorControl()->setVisible(false);
     }
 
 	void Game::initializeLevelColliders()
@@ -216,6 +217,7 @@ namespace Confus
 
     void Game::update()
     {
+		m_Camera->update();
         m_Connection->processPackets();
         handleInput();
         m_RedFlag.update();
