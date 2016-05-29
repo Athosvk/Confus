@@ -24,8 +24,6 @@ namespace Confus
     Game::Game(irr::IrrlichtDevice* a_Device, EventManager* a_EventManager) : BaseGame(a_Device, a_EventManager),
         m_PhysicsWorld(m_Device),
 		m_MazeManager(a_Device,irr::core::vector2d<irr::u32>(40,40), (19 + 20 + 21 + 22 + 23 + 24),m_PhysicsWorld, 1.5f),
-        //m_MazeGenerator(m_Device, 41, 40, (19 + 20 + 21 + 22 + 23 + 24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-        //    irr::core::vector2df(19., 20.), m_PhysicsWorld, &m_AudioManager),
         m_PlayerNode(m_Device, m_PhysicsWorld, 1, ETeamIdentifier::TeamBlue, true, &m_AudioManager),
         m_BlueFlag(m_Device, ETeamIdentifier::TeamBlue, m_PhysicsWorld),
         m_RedFlag(m_Device, ETeamIdentifier::TeamRed, m_PhysicsWorld),

@@ -70,8 +70,4 @@ namespace Confus
 
 		return neighbours;
 	}
-
-	NewMazeGenerator::~NewMazeGenerator()
-	{
-	}
 }

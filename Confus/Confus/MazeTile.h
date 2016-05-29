@@ -38,7 +38,7 @@ namespace Confus
 		virtual void fixedUpdate();
 
 		/// <summary>
-		/// Virtual method, returns nullptr
+		/// Virtual method, returns nullptr.
 		/// </summary>
 		virtual MoveableWall* getWall();
 

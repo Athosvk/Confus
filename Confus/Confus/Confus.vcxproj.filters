@@ -156,6 +156,9 @@
     <ClCompile Include="MazeManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NewMazeGenerator2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -312,6 +315,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MazeManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NewMazeGenerator2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -225,6 +225,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="MoveableWall.cpp" />
     <ClCompile Include="Networking\ClientConnection.cpp" />
     <ClCompile Include="NewMaze.cpp" />
+    <ClCompile Include="NewMazeGenerator2.cpp" />
     <ClCompile Include="NewMazeTile.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RespawnFloor.cpp" />
@@ -275,6 +276,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClInclude Include="MoveableWall.h" />
     <ClInclude Include="Networking\ClientConnection.h" />
     <ClInclude Include="NewMaze.h" />
+    <ClInclude Include="NewMazeGenerator2.h" />
     <ClInclude Include="NewMazeTile.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RespawnFloor.h" />
