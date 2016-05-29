@@ -12,6 +12,7 @@ namespace Confus
 	{
 		m_Device->getCursorControl()->setPosition(0.5f, 0.5f);
 		m_Device->getCursorControl()->setVisible(false);
+        m_OrbitNode->setPosition(irr::core::vector3df(0.0f, 1.f, 1.5f));
 	}
 
 	void CameraController::update()

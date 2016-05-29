@@ -98,10 +98,21 @@ namespace ConfusServer
             addPlayer(a_Data);
         });
 
-        m_Connection->addFunctionToMap(ID_DISCONNECTION_NOTIFICATION, [this](RakNet::Packet* a_Data)
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::Player), [this](RakNet::Packet* a_Packet)
         {
-//            removePlayer(a_Data);
+            RakNet::BitStream data(a_Packet->data, a_Packet->length, false);
+            data.IgnoreBytes(sizeof(RakNet::MessageID));
+
+            ConfusShared::Networking::Client::PlayerUpdate updateFromClient;
+            data.Read(updateFromClient);
+            m_Players.at(static_cast<long long>(a_Packet->guid.g)).Receiver->synchronize(updateFromClient);
         });
+
+        m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::PlayerLeft), [this](RakNet::Packet* a_Data)
+        {
+            removePlayer(a_Data);
+        });
+
         m_Device->getCursorControl()->setVisible(false);
       
         while(m_Device->run())
@@ -137,7 +148,16 @@ namespace ConfusServer
         for(auto& playerPair : m_Players)
         {
             playerPair.second.Player->update();
+            if(playerPair.second.Receiver->userTimedOut())
+            {
+                long long id = playerPair.second.Player->getGUID();
+                std::cout << "[Game] Player id: " << id << " timed out." << std::endl;
+                delete(playerPair.second.Player);
+                auto iterator = m_Players.find(id);
+                m_Players.erase(iterator);
+            }
         }
+
         m_RedFlag.update();
         m_BlueFlag.update();
 
@@ -230,7 +250,6 @@ namespace ConfusServer
 
     void Game::addPlayer(RakNet::Packet* a_Data)
     {
-        std::cout << a_Data->systemAddress.ToString() << " is the address of the player that joined\n";
         long long id = static_cast<long long>(a_Data->guid.g);
 		ConfusShared::ETeamIdentifier teamID = m_Players.size() % 2 == 0 ? 
 			ConfusShared::ETeamIdentifier::TeamRed : ConfusShared::ETeamIdentifier::TeamBlue;
@@ -265,18 +284,19 @@ namespace ConfusServer
         m_Connection->broadcastPacket(&broadcastStream, &guid);
 
 		m_Players.emplace(newPlayer->getGUID(), PlayerPair(newPlayer, *m_Connection));
-        std::cout << id << " joined" << std::endl;
+        std::cout << "[Game] Player id: " << id << " joined." << std::endl;
     }
 
     void Game::removePlayer(RakNet::Packet* a_Data)
     {
         long long id = static_cast<long long>(a_Data->guid.g);
-        std::cout << id << " left" << std::endl;
+        std::cout << "[Game] Player id: " << id << " left." << std::endl;
 
 		PlayerPair& playerPair = m_Players.at(id);
 		playerPair.Player->remove();
 		delete(playerPair.Player);
-		m_Players.erase(id);
+        auto iterator = m_Players.find(id);
+        m_Players.erase(iterator);
 
         RakNet::BitStream stream;
         stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::PlayerLeft));
