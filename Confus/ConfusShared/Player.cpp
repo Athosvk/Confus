@@ -38,6 +38,11 @@ namespace ConfusShared
 		m_PlayerNode->setAnimationEndCallback(this);
     }
 
+	Player::~Player()
+	{
+        m_Collider->remove();
+	}
+
 	ConfusShared::Health* Player::getHealthInstance()
 	{
 		return &m_PlayerHealth;
@@ -51,6 +56,11 @@ namespace ConfusShared
 	void Player::setGUID(long long a_ID)
 	{
 		m_ID = a_ID;
+	}
+
+	long long Player::getGUID()
+	{
+		return m_ID;
 	}
 
 	void Player::render()
@@ -91,7 +101,6 @@ namespace ConfusShared
 
     void Player::startLightAttack()
     {
-        changeState(EPlayerState::LightAttacking);
         m_PlayerNode->setFrameLoop(38, 41);
         m_PlayerNode->setCurrentFrame(38);
         m_Weapon.Damage = LightAttackDamage;
@@ -101,7 +110,6 @@ namespace ConfusShared
 
     void Player::startHeavyAttack()
     {
-        changeState(EPlayerState::HeavyAttacking);
         m_PlayerNode->setFrameLoop(60, 66);
         m_PlayerNode->setCurrentFrame(60);
         m_Weapon.Damage = HeavyAttackDamage;
@@ -147,7 +155,6 @@ namespace ConfusShared
             m_Attacking = false;
             m_Weapon.disableCollider();
             startWalking();
-            // Reset the player state.
             changeState(EPlayerState::Alive);
         }
     }
@@ -222,6 +229,14 @@ namespace ConfusShared
         if(a_NewState != m_PlayerState) 
         {
             m_PlayerState = a_NewState;
+
+			if (m_PlayerState == EPlayerState::LightAttacking)
+			{
+				startLightAttack();
+			} else if (m_PlayerState == EPlayerState::HeavyAttacking)
+			{
+				startHeavyAttack();
+			}
         } 
     }
 

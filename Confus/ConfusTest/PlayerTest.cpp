@@ -14,7 +14,7 @@ namespace ConfusTest
 		{
 			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
 			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
-			player.startLightAttack();
+			player.changeState(ConfusShared::EPlayerState::LightAttacking);
 			Assert::IsTrue(player.getState() == ConfusShared::EPlayerState::LightAttacking);
 		}
 
@@ -22,7 +22,7 @@ namespace ConfusTest
 		{
 			ConfusShared::Physics::PhysicsWorld physicsWorld(m_Device);
 			ConfusShared::Player player = ConfusShared::Player(m_Device, physicsWorld, 0);
-			player.startHeavyAttack();
+			player.changeState(ConfusShared::EPlayerState::HeavyAttacking);
 			Assert::IsTrue(player.getState() == ConfusShared::EPlayerState::HeavyAttacking);
 		}
 

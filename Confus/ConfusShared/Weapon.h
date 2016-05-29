@@ -38,7 +38,11 @@ namespace ConfusShared
 		/// <param name="a_World">The physics world </param>
 		/// <param name="a_Dimensions">The dimensions of the weapon</param>
 		Weapon(irr::scene::ISceneManager* a_SceneManager, Physics::PhysicsWorld& a_World,
-			irr::core::vector3df a_Dimensions);
+			irr::core::vector3df a_Dimensions);		
+		/// <summary>
+		/// Finalizes an instance of the <see cref="Weapon"/> class.
+		/// </summary>
+		~Weapon();
 
         /// <summary> Enables the collider.of the weapon, making it possible to damage players </summary>
         /// <remarks> 

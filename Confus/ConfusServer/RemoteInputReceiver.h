@@ -1,6 +1,13 @@
 #pragma once
 namespace ConfusShared
 {
+    namespace Networking 
+    {
+        namespace Client 
+        {
+            struct PlayerUpdate;
+        }
+    }
 	class Player;
 }
 
@@ -34,6 +41,6 @@ namespace ConfusServer
 	private:
 		/// <summary>Synchronizes the player with the incoming data</summary>
 		/// <param name="a_Data">The data to synchronize the instance with</param>
-		void synchronize(RakNet::BitStream& a_Data) const;
+		void synchronize(const ConfusShared::Networking::Client::PlayerUpdate& a_UpdateFromClient) const;
 	};
 }
