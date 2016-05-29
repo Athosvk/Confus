@@ -17,6 +17,7 @@
 #include "PlayerHandler.h"
 #include "LocalPlayerController.h"
 #include "RemoteFlagController.h"
+#include "CameraController.h"
 
 namespace Confus
 {    
@@ -85,6 +86,7 @@ namespace Confus
 		std::unique_ptr<Networking::ClientConnection> m_Connection;
 		Audio::Sound m_MazeChangedSound;
 		ClientTeamScore m_ClientScore;
+		std::unique_ptr<CameraController> m_Camera;
 
     public:
         /// <summary>

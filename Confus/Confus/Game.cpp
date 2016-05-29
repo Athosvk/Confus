@@ -57,11 +57,16 @@ namespace Confus
 		{
 			m_MazeChangedSound.play();
 		});
-		irr::scene::ICameraSceneNode* camera = m_Device->getSceneManager()->addCameraSceneNodeFPS(m_Device->getSceneManager()->getRootSceneNode());
+
+		irr::scene::ICameraSceneNode* camera = m_Device->getSceneManager()->addCameraSceneNode(m_Device->getSceneManager()->getRootSceneNode());
 		camera->setFOV(70.f);
 		camera->setNearValue(0.1f);
-		camera->setPosition(irr::core::vector3df(0.f, 0.0f, 0.2f));
-		camera->setParent(m_PlayerHandler.getMainPlayer());
+		camera->setPosition(irr::core::vector3df(0.f, 0.0f, 2.0f));
+		auto orbitNode = m_Device->getSceneManager()->addEmptySceneNode();
+		orbitNode->setRotation(irr::core::vector3df(0.0f, 180.0f, 0.0f));
+		camera->setParent(orbitNode);
+		orbitNode->setParent(m_PlayerHandler.getMainPlayer());
+		m_Camera = std::make_unique<CameraController>(m_Device, camera, orbitNode);
 
 		m_GUI.addElement<HealthGUI>(m_Device, m_PlayerHandler.getMainPlayer(), irr::core::dimension2du(40, 40),
 			videoDriver->getTexture("Media/Textures/Heart.png"),
@@ -71,7 +76,6 @@ namespace Confus
         m_GUI.addElement<CrosshairGUI>(m_Device, irr::core::dimension2du(70, 70),
                 videoDriver->getTexture("Media/Textures/Crosshair.png"), irr::core::vector2df(0.50f, 0.50f));
     }
-
 
     Game::~Game()
     {
@@ -89,7 +93,6 @@ namespace Confus
         m_LevelRootNode->setVisible(true);
 		updateSceneTransformations();
         initializeLevelColliders();
-        m_Device->getCursorControl()->setVisible(false);
     }
 
 	void Game::initializeLevelColliders()
@@ -216,6 +219,10 @@ namespace Confus
 
     void Game::update()
     {
+		m_Camera->update();
+		auto targetRotation = m_PlayerHandler.getMainPlayer()->getRotation();
+		targetRotation.Y = m_Camera->getYRotation();
+		m_PlayerHandler.getMainPlayer()->setRotation(targetRotation);
         m_Connection->processPackets();
         handleInput();
         m_RedFlag.update();
