@@ -4,9 +4,11 @@
 
 namespace Confus
 {
-	CameraController::CameraController(irr::IrrlichtDevice* a_Device, irr::scene::ICameraSceneNode* a_CameraNode)
+	CameraController::CameraController(irr::IrrlichtDevice* a_Device, irr::scene::ICameraSceneNode* a_CameraNode,
+		irr::scene::ISceneNode* m_OrbitNode)
 		: m_Device(a_Device),
-		m_CameraNode(a_CameraNode)
+		m_CameraNode(a_CameraNode),
+		m_OrbitNode(m_OrbitNode)
 	{
 		m_Device->getCursorControl()->setPosition(0.5f, 0.5f);
 		m_Device->getCursorControl()->setVisible(false);
@@ -52,15 +54,13 @@ namespace Confus
 	{
 		auto cursor = m_Device->getCursorControl();
 		auto deltaPosition = (m_PreviousPosition - cursor->getRelativePosition()) * m_MouseSensitivity * m_AxesMultiplier;
-		auto clampedX = irr::core::clamp(deltaPosition.Y, m_MinimumXRotation, m_MaximumXRotation);
-		auto xRotation = fromAxisAngle(irr::core::vector3df(1.0f, 0.0f, 0.0f), clampedX * 
-			irr::core::DEGTORAD);
-		auto yRotation = fromAxisAngle(irr::core::vector3df(0.0f, 1.0f, 0.0f), deltaPosition.X * irr::core::DEGTORAD);
-		m_Rotation *= yRotation * xRotation;
+		auto clampedX = irr::core::clamp(deltaPosition.Y + m_OrbitNode->getRotation().X, 
+			m_MinimumXRotation, m_MaximumXRotation);
+		m_OrbitNode->setRotation(irr::core::vector3df(clampedX, m_OrbitNode->getRotation().Y, m_OrbitNode->getRotation().Z));
 
-		irr::core::vector3df lookAt(0.0f, 0.0f, 1.0f);
-		lookAt = m_Rotation * lookAt;
-		m_CameraNode->setTarget(lookAt);
+		m_CameraNode->updateAbsolutePosition();
+		m_CameraNode->setRotation(irr::core::vector3df(deltaPosition.Y, 0.0f, 0.0f));
+		m_CameraNode->setTarget(m_OrbitNode->getAbsolutePosition());
 		m_YRotation += deltaPosition.X;
 	}
 

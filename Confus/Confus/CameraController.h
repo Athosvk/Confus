@@ -48,12 +48,16 @@ namespace Confus
 		/// so we manually set this
 		/// </summary>
 		float m_YRotation = 0.0f;
+		/// <summary>The node to orbit around</summary>
+		irr::scene::ISceneNode* m_OrbitNode;
 
 	public:		
-		/// <summary>Initializes a new instance of the <see cref="CameraController"/> class.</summary>
+		/// <summary>Initializes a new instance of the <see cref="CameraController" /> class.</summary>
 		/// <param name="a_Device">The active Irrlicht device</param>
 		/// <param name="a_CameraNode">The camera node to control</param>
-		CameraController(irr::IrrlichtDevice* a_Device, irr::scene::ICameraSceneNode* a_CameraNode);
+		/// <param name="a_OrbitNode">The node to orbit around</param>
+		CameraController(irr::IrrlichtDevice* a_Device, irr::scene::ICameraSceneNode* a_CameraNode,
+			irr::scene::ISceneNode* a_OrbitNode);
 		
 		/// <summary>Updates the target vector of the camera and direction of the attached node</summary>
 		void update();
