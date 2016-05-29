@@ -10,7 +10,7 @@
 #include "../ConfusShared/Debug.h"
 #include "../ConfusShared/TeamIdentifier.h"
 #include "../ConfusShared/PacketType.h"
-#include "../ConfusShared/PlayerInfo.h"
+#include "../ConfusShared/Networking/PlayerStructs.h"
 
 namespace ConfusServer
 {
@@ -253,7 +253,7 @@ namespace ConfusServer
         stream.Write(static_cast<size_t>(m_Players.size()));
         for(auto& playerPair : m_Players)
         {
-			ConfusShared::NewPlayerFromServer playerInfo;
+			ConfusShared::Networking::Server::NewPlayer playerInfo;
 			playerInfo.ID = playerPair.second.Player->getGUID();
 			playerInfo.Team = playerPair.second.Player->getTeamIdentifier();
 			playerInfo.Position = playerPair.second.Player->getPosition();
@@ -263,7 +263,7 @@ namespace ConfusServer
         RakNet::AddressOrGUID guid = a_Data->guid;
         m_Connection->sendPacket(&stream, &guid);
 
-		ConfusShared::NewPlayerFromServer playerInfo;
+		ConfusShared::Networking::Server::NewPlayer playerInfo;
 		playerInfo.ID = newPlayer->getGUID();
 		playerInfo.Team = newPlayer->getTeamIdentifier();
 		playerInfo.Position = newPlayer->getPosition();
@@ -300,7 +300,7 @@ namespace ConfusServer
         stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::UpdatePosition));
         for(auto& playerPair : m_Players)
         {
-			ConfusShared::PlayerUpdateFromServer playerUpdateFromServer;
+			ConfusShared::Networking::Server::PlayerUpdate playerUpdateFromServer;
 			playerUpdateFromServer.ID = playerPair.second.Player->getGUID();
 			playerUpdateFromServer.Position = playerPair.second.Player->getPosition();
 			playerUpdateFromServer.Rotation = playerPair.second.Player->getRotation();

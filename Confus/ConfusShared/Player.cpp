@@ -40,7 +40,7 @@ namespace ConfusShared
 
 	Player::~Player()
 	{
-		m_Collider->deleteCollider();
+        m_Collider->remove();
 	}
 
 	ConfusShared::Health* Player::getHealthInstance()

@@ -4,7 +4,7 @@
 #include "../ConfusShared/PacketType.h"
 #include "../ConfusShared/EHitIdentifier.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
-#include "../ConfusShared/PlayerInfo.h"
+#include "../ConfusShared/Networking/PlayerStructs.h"
 
 namespace Confus
 {
@@ -72,7 +72,7 @@ namespace Confus
 
 		for (size_t i = 0; i < m_Players.size(); ++i)
 		{
-			ConfusShared::PlayerUpdateFromServer updateFromServer;
+			ConfusShared::Networking::Server::PlayerUpdate updateFromServer;
 			bitstreamIn.Read(updateFromServer);
 			auto& pair = m_Players.at(updateFromServer.ID);
 

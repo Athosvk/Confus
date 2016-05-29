@@ -19,8 +19,8 @@ namespace ConfusShared
 			/// <summary>
 			/// Initializes a new instance of the <see cref="Collider" /> class.
 			/// </summary>
-			/// <param name="a_RigidBody">The a_ rigid body.</param>
-			/// <param name="a_PhysicsWorld">The a_ physics world.</param>
+			/// <param name="a_RigidBody">Reference to the rigid body.</param>
+			/// <param name="a_PhysicsWorld">Reference to the physics world.</param>
 			Collider(RigidBody* a_RigidBody, PhysicsWorld* a_PhysicsWorld);
 		public:			
 			/// <summary> Finalizes an instance of the <see cref="Collider"/> class </summary>
@@ -31,7 +31,7 @@ namespace ConfusShared
 			RigidBody* getRigidBody();
 
 			/// <summary> Deletes the collider and removes it from the world. </summary>
-			void deleteCollider();
+			void remove();
 		};
 	}
 }

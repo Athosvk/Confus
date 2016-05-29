@@ -4,8 +4,7 @@
 #include "../ConfusShared/PacketType.h"
 #include "Networking/Connection.h"
 #include "../ConfusShared/Player.h"
-#include "../ConfusShared/PlayerInputState.h"
-#include "../ConfusShared/PlayerInfo.h"
+#include "../ConfusShared/Networking/PlayerStructs.h"
 
 namespace ConfusServer
 {
@@ -18,7 +17,7 @@ namespace ConfusServer
 			RakNet::BitStream data(a_Packet->data, a_Packet->length, false);
 			data.IgnoreBytes(sizeof(RakNet::MessageID));
 
-			ConfusShared::PlayerUpdateFromClient updateFromClient;
+			ConfusShared::Networking::Client::PlayerUpdate updateFromClient;
 			data.Read(updateFromClient);
 			if(updateFromClient.ID == m_Player.getGUID())
 			{
@@ -27,7 +26,7 @@ namespace ConfusServer
 		});
 	}
 
-	void RemoteInputReceiver::synchronize(const ConfusShared::PlayerUpdateFromClient& a_UpdateFromClient) const
+	void RemoteInputReceiver::synchronize(const ConfusShared::Networking::Client::PlayerUpdate& a_UpdateFromClient) const
 	{
 		m_Player.setRotation(a_UpdateFromClient.Rotation);
 		irr::core::vector3df direction = irr::core::vector3df();
@@ -53,7 +52,6 @@ namespace ConfusServer
 		}
 		m_Player.setWalkingDirection(direction);
 
-		// TODO: Handle Attacking Input
 		if (a_UpdateFromClient.InputState.LeftMouseButtonPressed)
 		{
 			m_Player.changeState(ConfusShared::EPlayerState::LightAttacking);

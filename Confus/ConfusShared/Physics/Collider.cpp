@@ -13,8 +13,9 @@ namespace ConfusShared
 		{
 		}
 
-		void Collider::deleteCollider()
+		void Collider::remove()
 		{
+            m_RigidBody->remove();
 			m_PhysicsWorld->removeCollider(this);
 		}
 		

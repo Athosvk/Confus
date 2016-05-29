@@ -323,8 +323,8 @@
     <ClInclude Include="HealthGUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\ConfusShared\PlayerInfo.h">
-      <Filter>Shared</Filter>
+    <ClInclude Include="..\ConfusShared\Networking\PlayerStructs.h">
+      <Filter>Shared\Networking</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

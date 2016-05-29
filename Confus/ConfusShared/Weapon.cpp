@@ -37,7 +37,7 @@ namespace ConfusShared
 
 	Weapon::~Weapon()
 	{
-		m_Collider->deleteCollider();
+		m_Collider->remove();
 	}
 
 	void Weapon::damagePlayer(Player* a_Player) const

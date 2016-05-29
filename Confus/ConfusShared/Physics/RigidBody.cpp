@@ -8,11 +8,12 @@ namespace ConfusShared
 {
 	namespace Physics
 	{
-		RigidBody::RigidBody(std::unique_ptr<btRigidBody>&& a_RigidBody, irr::scene::ISceneNode* a_AttachedNode)
+		RigidBody::RigidBody(std::unique_ptr<btRigidBody>&& a_RigidBody, irr::scene::ISceneNode* a_AttachedNode, PhysicsWorld* a_PhysicsWorld)
 			: m_Body(std::move(a_RigidBody)),
 			m_AttachedNode(a_AttachedNode),
 			m_Mass(static_cast<btScalar>(1.0) / m_Body->getInvMass()),
-			m_MotionState(std::make_unique<btDefaultMotionState>(extractTransform()))
+			m_MotionState(std::make_unique<btDefaultMotionState>(extractTransform())),
+            m_PhysicsWorld(a_PhysicsWorld)
 		{
 			m_Body->setMotionState(m_MotionState.get());
 			m_Body->getInvMass() <= static_cast<btScalar>(0.00001) ? makeStatic() : makeDynamic();
@@ -41,11 +42,6 @@ namespace ConfusShared
 		irr::scene::ISceneNode* RigidBody::getAttachedNode() const
 		{
 			return m_AttachedNode;
-		}
-
-		btRigidBody* RigidBody::getbtRigidBody() const
-		{
-			return m_Body.get();
 		}
 
 		void RigidBody::makeDynamic()
@@ -88,6 +84,11 @@ namespace ConfusShared
 		{
 			m_Body->setCollisionFlags(m_Body->getCollisionFlags() & ~btRigidBody::CollisionFlags::CF_NO_CONTACT_RESPONSE);
 			m_Trigger = false;
+		}
+
+        void RigidBody::remove() const
+		{
+            m_PhysicsWorld->removeRigidbody(m_Body.get());
 		}
 
 		void RigidBody::setVelocity(irr::core::vector3df a_Velocity) const

@@ -4,7 +4,7 @@
 #include "../ConfusShared/EventManager.h"
 #include "../ConfusShared/Player.h"
 #include "../ConfusShared/PacketType.h"
-#include "../ConfusShared/PlayerInfo.h"
+#include "../ConfusShared/Networking/PlayerStructs.h"
 
 namespace Confus
 {
@@ -38,7 +38,7 @@ namespace Confus
 		RakNet::BitStream bitstream;
 		bitstream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::Player));
 
-		ConfusShared::PlayerUpdateFromClient updateToServer;
+		ConfusShared::Networking::Client::PlayerUpdate updateToServer;
 		updateToServer.ID = m_Player.getGUID();
 		updateToServer.Rotation = m_Player.getRotation();
 		updateToServer.InputState = m_InputState;
