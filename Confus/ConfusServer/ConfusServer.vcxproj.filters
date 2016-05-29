@@ -96,6 +96,9 @@
     <ClCompile Include="RemoteFlagUpdater.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ConfusShared\Networking\PlayerStructs.cpp">
+      <Filter>Shared Files\Networking</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -190,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="RemoteFlagUpdater.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\Networking\PlayerStructs.h">
+      <Filter>Shared Files\Networking</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

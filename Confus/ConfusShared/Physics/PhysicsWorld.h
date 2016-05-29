@@ -4,7 +4,6 @@
 #include <vector>
 #include <memory>
 
-#include "Collider.h"
 #include "RigidBody.h"
 #include "DebugDrawer.h"
 #include "ECollisionFilter.h"
@@ -15,6 +14,7 @@ namespace ConfusShared
 	namespace Physics
 	{
 		class BoxCollider;
+		class Collider;
 
 		/// <summary> The world in which all, rigid body, physics simulations are performed by the physics engine </summary>
 		class PhysicsWorld
@@ -96,6 +96,10 @@ namespace ConfusShared
 			BoxCollider* createBoxCollider(irr::scene::ISceneNode* a_AttachedNode, ECollisionFilter a_Group = ECollisionFilter::Other,
 				ECollisionFilter a_Mask = ECollisionFilter::All);
 
+			/// <summary> Removes the collider (and attached rigidbody) from the physics world. </summary>
+			/// <param name="a_Collider">The collider body to delete.</param>
+			void removeCollider(Collider* a_Collider);
+
 			/// <summary> Advanced the physics simulation based on the entered delta time value </summary>
 			/// <param name="a_DeltaTime"> 
 			/// The time with which to advance the physics simulation usually equal to the interval between two 
@@ -117,6 +121,12 @@ namespace ConfusShared
 			/// <param name="a_Vector"> The vector as Bullets type </param>
 			/// <returns> The vector as Irrlichts type </returns>
 			static irr::core::vector3df toIrrlichtVector(const btVector3& a_Vector);
+
+            /// <summary>
+            /// Removes the RigidBody from the physics world
+            /// </summary>
+            /// <param name="a_RigidBody">The rigidbody to remove</param>
+            void removeRigidbody(btRigidBody * a_RigidBody);
 		private:			
 			/// <summary> Executes the operations necessary before the actual simulation step occurs </summary>
 			void prePhysicsUpdate() const;	

@@ -10,8 +10,14 @@ namespace Confus
 	class Menu : public ConfusShared::BaseGame
     {
     private:
-		/// <summary>The text displayed in the menu</summary>
-		irr::gui::IGUIStaticText* m_Text;
+		/// <summary>The irrlicht image we use to display the menu images</summary>
+		irr::gui::IGUIImage* m_Image;
+		/// <summary>The texture of the start screen</summary>
+		irr::video::ITexture* m_StartScreen;
+		/// <summary>The texture of the info screen</summary>
+		irr::video::ITexture* m_InfoScreen;
+		/// <summary>The rectangle of the screen</summary>
+		irr::core::rect<irr::s32> m_ScreenRect;
     private:
 		/// <summary>Starts this instance</summary>
 		virtual void start() override;

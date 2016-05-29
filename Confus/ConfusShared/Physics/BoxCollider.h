@@ -10,6 +10,7 @@ namespace ConfusShared
 {
 	namespace Physics
 	{
+		class PhysicsWorld;
 		class CollisionRegistrar;
 
 		/// <summary> A collider in the shape of a Box to handle collisions </summary>
@@ -36,8 +37,9 @@ namespace ConfusShared
 			/// <param name="a_Shape">The Bullet shape</param>
 			/// <param name="a_RigidBody">The attached rigid body</param>
 			/// <param name="a_CollisionRegistrar">The collision registrar for registering collisions</param>
+			/// <param name="a_PhysicsWorld">Reference to the physics world.</param>
 			BoxCollider(std::unique_ptr<btBoxShape>&& a_Shape, RigidBody* a_RigidBody,
-				CollisionRegistrar& a_CollisionRegistrar);
+				CollisionRegistrar& a_CollisionRegistrar, PhysicsWorld* a_PhysicsWorld);
 			
 			/// <summary> Finalizes an instance of the <see cref="BoxCollider"/> class. </summary>
 			virtual ~BoxCollider() override = default;

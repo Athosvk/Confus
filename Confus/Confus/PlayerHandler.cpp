@@ -4,6 +4,7 @@
 #include "../ConfusShared/PacketType.h"
 #include "../ConfusShared/EHitIdentifier.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
+#include "../ConfusShared/Networking/PlayerStructs.h"
 
 namespace Confus
 {
@@ -71,15 +72,16 @@ namespace Confus
 
 		for (size_t i = 0; i < m_Players.size(); ++i)
 		{
-			long long id;
-			bitstreamIn.Read(id);
-			auto& pair = m_Players.at(id);
-			irr::core::vector3df position;
-			irr::core::vector3df rotation;
-			bitstreamIn.Read(position);
-			bitstreamIn.Read(rotation);
-			pair.Player->setPosition(position);
-			pair.Player->setRotation(rotation);
+			ConfusShared::Networking::Server::PlayerUpdate updateFromServer;
+			bitstreamIn.Read(updateFromServer);
+			auto& pair = m_Players.at(updateFromServer.ID);
+
+			pair.Player->setPosition(updateFromServer.Position);
+
+			if (updateFromServer.ID != m_PlayerNode.getGUID())
+			{
+				pair.Player->setRotation(updateFromServer.Rotation);
+			}
 		}
 	}
 
@@ -108,7 +110,6 @@ namespace Confus
 		}
 	}
 
-	//need to test of the guid.g is the right one, and not the one from the server
 	void PlayerHandler::addOwnPlayer(RakNet::Packet* a_Data)
 	{
 		RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
@@ -122,11 +123,12 @@ namespace Confus
 		bitstreamIn.Read(size);
 		for (size_t i = 0u; i < size; i++)
 		{
-			long long id;
-			bitstreamIn.Read(id);
- 			ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
-			newPlayer->setTeamIdentifier(teamID, m_Device);
-			m_Players.emplace(id, PlayerConstruct(newPlayer, std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager)));
+			ConfusShared::Networking::Server::NewPlayer playerInfo;
+			bitstreamIn.Read(playerInfo);
+ 			ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, playerInfo.ID);
+			newPlayer->setTeamIdentifier(playerInfo.Team, m_Device);
+			m_Players.emplace(playerInfo.ID, PlayerConstruct(newPlayer, 
+				std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager)));
 		}
 		// Add self
 		m_Players.emplace(m_PlayerNode.getGUID(), PlayerConstruct(&m_PlayerNode, std::make_unique<Audio::PlayerAudioEmitter>(&m_PlayerNode, &m_AudioManager)));

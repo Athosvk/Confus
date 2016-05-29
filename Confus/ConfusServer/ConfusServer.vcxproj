@@ -200,6 +200,7 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClCompile Include="..\ConfusShared\MazeGenerator.cpp" />
     <ClCompile Include="..\ConfusShared\MazeTile.cpp" />
     <ClCompile Include="..\ConfusShared\MoveableWall.cpp" />
+    <ClCompile Include="..\ConfusShared\Networking\PlayerStructs.cpp" />
     <ClCompile Include="..\ConfusShared\Physics\BoxCollider.cpp" />
     <ClCompile Include="..\ConfusShared\Physics\Collider.cpp" />
     <ClCompile Include="..\ConfusShared\Physics\CollisionRegistrar.cpp" />
@@ -230,6 +231,7 @@ lib /out:ConfusServer.lib *.obj</Command>
     <ClInclude Include="..\ConfusShared\MazeGenerator.h" />
     <ClInclude Include="..\ConfusShared\MazeTile.h" />
     <ClInclude Include="..\ConfusShared\MoveableWall.h" />
+    <ClInclude Include="..\ConfusShared\Networking\PlayerStructs.h" />
     <ClInclude Include="..\ConfusShared\PacketType.h" />
     <ClInclude Include="..\ConfusShared\Physics\BoxCollider.h" />
     <ClInclude Include="..\ConfusShared\Physics\Collider.h" />

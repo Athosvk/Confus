@@ -18,8 +18,12 @@ namespace ConfusShared
 			Kinematic
 		};
 
-		/// <summary> Represents the RigidBody in the Physics World, associated with some collision shape </summary>
-		class RigidBody
+        class PhysicsWorld;
+
+        /// <summary>
+        /// Represents the RigidBody in the Physics World, associated with some collision shape
+        /// </summary>
+        class RigidBody
 		{
 		private:
 			/// <summary> The RigidBody used for Bullet physics </summary>
@@ -31,6 +35,9 @@ namespace ConfusShared
 
 			/// <summary> The SceneNode with which this RigidBody is associated </summary>
 			irr::scene::ISceneNode* m_AttachedNode;
+                 
+            /// <summary> The SceneNode with which this RigidBody is associated </summary>
+            PhysicsWorld* m_PhysicsWorld;
 
 			/// <summary> The mass of the Rigid Body </summary>
 			/// <remarks> Mirrored to retain state of mass when body is changed to static/kinematic </remarks>
@@ -60,7 +67,8 @@ namespace ConfusShared
 			/// <summary> Initializes a new instance of the <see cref="RigidBody"/> class </summary>
 			/// <param name="a_RigidBody">The Bullet rigid body </param>
 			/// <param name="a_AttachedNode">The attached/associated scene node </param>
-			RigidBody(std::unique_ptr<btRigidBody>&& a_RigidBody, irr::scene::ISceneNode* a_AttachedNode);
+            /// <param name="a_AttachedNode">The associated physicsworld </param>
+			RigidBody(std::unique_ptr<btRigidBody>&& a_RigidBody, irr::scene::ISceneNode* a_AttachedNode, PhysicsWorld* a_PhysicsWorld);
 
 			/// <summary> Updates the physics world simulation structure before the physics update commences </summary>
 			void onPrePhysicsUpdate() const;
@@ -88,6 +96,9 @@ namespace ConfusShared
 
 			/// <summary> Makes this RigidBody a regular collider, causing it to start being influenced and start influencing collision responses </summary>
 			void disableTriggerState();
+            
+            /// <summary> Removes the rigidbody from the PhysicsWorld. </summary>
+            void remove() const;
 			
 			/// <summary> Sets the velocity </summary>
 			/// <param name="a_Velocity"> The new velocity </param>
