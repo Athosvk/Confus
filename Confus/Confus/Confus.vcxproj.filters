@@ -165,6 +165,9 @@
     <ClCompile Include="HealthGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ConfusShared\Networking\PlayerStructs.cpp">
+      <Filter>Shared\Networking</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">

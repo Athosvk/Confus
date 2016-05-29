@@ -199,6 +199,7 @@ lib /out:Confus.lib *.obj</Command>
     <ClCompile Include="..\ConfusShared\MazeGenerator.cpp" />
     <ClCompile Include="..\ConfusShared\MazeTile.cpp" />
     <ClCompile Include="..\ConfusShared\MoveableWall.cpp" />
+    <ClCompile Include="..\ConfusShared\Networking\PlayerStructs.cpp" />
     <ClCompile Include="..\ConfusShared\Player.cpp" />
     <ClCompile Include="..\ConfusShared\RespawnFloor.cpp" />
     <ClCompile Include="..\ConfusShared\WalledMazeTile.cpp" />
