@@ -250,25 +250,16 @@ namespace ConfusServer
         RakNet::BitStream stream;
         stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::MainPlayerJoined));
         stream.Write(static_cast<ConfusShared::ETeamIdentifier>(teamID));
-        stream.Write(static_cast<size_t>(m_Players.size()));
+        stream.Write(m_Players.size());
         for(auto& playerPair : m_Players)
         {
-			ConfusShared::Networking::Server::NewPlayer playerInfo;
-			playerInfo.ID = playerPair.second.Player->getGUID();
-			playerInfo.Team = playerPair.second.Player->getTeamIdentifier();
-			playerInfo.Position = playerPair.second.Player->getPosition();
-			playerInfo.Rotation = playerPair.second.Player->getRotation();
+			ConfusShared::Networking::Server::NewPlayer playerInfo(playerPair.second.Player);
 			stream.Write(playerInfo);
         }
         RakNet::AddressOrGUID guid = a_Data->guid;
         m_Connection->sendPacket(&stream, &guid);
 
-		ConfusShared::Networking::Server::NewPlayer playerInfo;
-		playerInfo.ID = newPlayer->getGUID();
-		playerInfo.Team = newPlayer->getTeamIdentifier();
-		playerInfo.Position = newPlayer->getPosition();
-		playerInfo.Rotation = newPlayer->getRotation();
-
+		ConfusShared::Networking::Server::NewPlayer playerInfo(newPlayer);
         RakNet::BitStream broadcastStream;
         broadcastStream.Write(playerInfo);
         m_Connection->broadcastPacket(&broadcastStream, &guid);

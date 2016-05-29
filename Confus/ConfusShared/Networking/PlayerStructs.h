@@ -1,4 +1,7 @@
+#include <Irrlicht/irrlicht.h>
+
 #include "../PlayerInputState.h"
+#include "../Player.h"
 
 namespace ConfusShared
 {
@@ -9,7 +12,7 @@ namespace ConfusShared
         {
 #pragma pack(push, 1)
             /// <summary> Represents the information of the server from the client that is networked </summary>
-            struct  PlayerUpdate
+            struct PlayerUpdate
             {
                 /// <summary> The guid of a player</summary>
                 long long ID = 0;
@@ -22,7 +25,7 @@ namespace ConfusShared
             };
 
             /// <summary> Represents the all the information of a player, that is needed to add him to the world </summary>
-            struct  NewPlayer
+            struct NewPlayer
             {
                 /// <summary> The guid of a player</summary>
                 long long ID = 0;
@@ -32,6 +35,13 @@ namespace ConfusShared
                 irr::core::vector3df Position = irr::core::vector3df(0.f);
                 /// <summary> The rotation of a player</summary>
                 irr::core::vector3df Rotation = irr::core::vector3df(0.f);
+				
+				/// <summary>Initializes a new instance of the <see cref="NewPlayer"/> struct.</summary>
+				/// <param name="a_Player">The player to construct the info from</param>
+				NewPlayer(ConfusShared::Player* a_Player);
+
+				/// <summary>Initializes a new instance of the <see cref="NewPlayer"/> struct.</summary>
+				NewPlayer() = default;
             };
         }
 
@@ -39,7 +49,7 @@ namespace ConfusShared
         namespace Client
         {
             /// <summary> Represents the information of a client that is networked </summary>
-            struct  PlayerUpdate
+            struct PlayerUpdate
             {
                 /// <summary> The guid of a player</summary>
                 long long ID = 0;

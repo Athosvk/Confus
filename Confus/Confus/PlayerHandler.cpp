@@ -110,7 +110,6 @@ namespace Confus
 		}
 	}
 
-	//need to test of the guid.g is the right one, and not the one from the server
 	void PlayerHandler::addOwnPlayer(RakNet::Packet* a_Data)
 	{
 		RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
@@ -124,11 +123,12 @@ namespace Confus
 		bitstreamIn.Read(size);
 		for (size_t i = 0u; i < size; i++)
 		{
-			long long id;
-			bitstreamIn.Read(id);
- 			ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
-			newPlayer->setTeamIdentifier(teamID, m_Device);
-			m_Players.emplace(id, PlayerConstruct(newPlayer, std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager)));
+			ConfusShared::Networking::Server::NewPlayer playerInfo;
+			bitstreamIn.Read(playerInfo);
+ 			ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, playerInfo.ID);
+			newPlayer->setTeamIdentifier(playerInfo.Team, m_Device);
+			m_Players.emplace(playerInfo.ID, PlayerConstruct(newPlayer, 
+				std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager)));
 		}
 		// Add self
 		m_Players.emplace(m_PlayerNode.getGUID(), PlayerConstruct(&m_PlayerNode, std::make_unique<Audio::PlayerAudioEmitter>(&m_PlayerNode, &m_AudioManager)));
