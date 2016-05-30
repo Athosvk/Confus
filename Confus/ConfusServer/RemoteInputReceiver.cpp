@@ -28,11 +28,11 @@ namespace ConfusServer
 		irr::core::vector3df direction = irr::core::vector3df();
 		if(a_UpdateFromClient.InputState.ForwardPressed)
 		{
-			direction.Y = 1.0f;
+			direction.Z = 1.0f;
 		}
 		else if(a_UpdateFromClient.InputState.BackwardPressed)
 		{
-			direction.Y = -1.0f;
+			direction.Z = -1.0f;
 		}
 		if(a_UpdateFromClient.InputState.RightPressed)
 		{

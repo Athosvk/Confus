@@ -246,7 +246,7 @@ namespace Confus
     void Game::fixedUpdate()
     {
 		m_MazeGenerator.fixedUpdate();
-		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
+		//m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
 		m_PlayerHandler.fixedUpdate();
     }
 

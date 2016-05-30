@@ -154,7 +154,10 @@ namespace ConfusServer
                 std::cout << "[Game] Player id: " << id << " timed out." << std::endl;
                 delete(playerPair.second.Player);
                 auto iterator = m_Players.find(id);
-                m_Players.erase(iterator);
+				if (iterator != m_Players.end())
+				{
+					m_Players.erase(iterator);					
+				}
             }
         }
 
