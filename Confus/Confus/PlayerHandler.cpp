@@ -124,7 +124,7 @@ namespace Confus
 
 		size_t size;
 		bitstreamIn.Read(size);
-		for (size_t i = 0u; i < size; i++)
+    		for (size_t i = 0u; i < size; i++)
 		{
 			ConfusShared::Networking::Server::NewPlayer playerInfo;
 			bitstreamIn.Read(playerInfo);
@@ -144,7 +144,7 @@ namespace Confus
 		bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
 
 		ConfusShared::Networking::Server::NewPlayer player;
-		bitstreamIn.Read(player);
+		bitstreamIn.Read(player);   
 
 		ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, player.ID);
 		newPlayer->setTeamIdentifier(player.Team, m_Device);
