@@ -268,6 +268,7 @@ namespace ConfusServer
 
         RakNet::BitStream stream;
         stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::MainPlayerJoined));
+        stream.Write(static_cast<long long>(id));
         stream.Write(static_cast<ConfusShared::ETeamIdentifier>(teamID));
         stream.Write(m_Players.size());
         for(auto& playerPair : m_Players)
@@ -280,6 +281,7 @@ namespace ConfusServer
 
 		ConfusShared::Networking::Server::NewPlayer playerInfo(newPlayer);
         RakNet::BitStream broadcastStream;
+        broadcastStream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::OtherPlayerJoined));
         broadcastStream.Write(playerInfo);
         m_Connection->broadcastPacket(&broadcastStream, &guid);
 

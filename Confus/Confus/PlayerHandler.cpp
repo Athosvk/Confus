@@ -115,6 +115,9 @@ namespace Confus
 		RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
 
 		bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
+        long long newPlayerID;
+        bitstreamIn.Read(newPlayerID);
+        m_PlayerNode.setGUID(newPlayerID);
 		ConfusShared::ETeamIdentifier teamID;
 		bitstreamIn.Read(teamID);
 		m_PlayerNode.setTeamIdentifier(teamID, m_Device);
