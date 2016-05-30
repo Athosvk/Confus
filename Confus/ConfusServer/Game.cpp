@@ -154,7 +154,10 @@ namespace ConfusServer
                 std::cout << "[Game] Player id: " << id << " timed out." << std::endl;
                 delete(playerPair.second.Player);
                 auto iterator = m_Players.find(id);
-                m_Players.erase(iterator);
+				if (iterator != m_Players.end())
+				{
+					m_Players.erase(iterator);					
+				}
             }
         }
 
@@ -280,6 +283,7 @@ namespace ConfusServer
 
 		ConfusShared::Networking::Server::NewPlayer playerInfo(newPlayer);
         RakNet::BitStream broadcastStream;
+		broadcastStream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::OtherPlayerJoined));
         broadcastStream.Write(playerInfo);
         m_Connection->broadcastPacket(&broadcastStream, &guid);
 

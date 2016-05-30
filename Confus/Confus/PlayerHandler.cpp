@@ -140,15 +140,12 @@ namespace Confus
 
 		bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
 
-		long long id;
-		ConfusShared::ETeamIdentifier teamID;
+		ConfusShared::Networking::Server::NewPlayer player;
+		bitstreamIn.Read(player);
 
-		bitstreamIn.Read(id);
-		bitstreamIn.Read(teamID);
-
-		ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
-		newPlayer->setTeamIdentifier(teamID, m_Device);
-		m_Players.emplace(id, PlayerConstruct(newPlayer, std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager)));
+		ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, player.ID);
+		newPlayer->setTeamIdentifier(player.Team, m_Device);
+		m_Players.emplace(player.ID, PlayerConstruct(newPlayer, std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager)));
 	}
 
 	void PlayerHandler::removePlayer(RakNet::Packet* a_Data)
