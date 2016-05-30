@@ -6,6 +6,7 @@
 #include <RakNet/RakPeerInterface.h>
 
 #include "ClientConnection.h"
+#include "../../ConfusShared/PacketType.h"
 
 namespace Confus
 {
@@ -33,12 +34,20 @@ namespace Confus
         {
 			//True is sent to notify the server so we can exit gracefully
 			if(m_Connected)
-			m_Interface->CloseConnection(getServerAddress(), true);
-            //spin wait to allow CloseConnection to finish
-            while(getConnectionCount() > 0)
-            {
+			{
+                RakNet::BitStream bitStream;
+                bitStream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::PlayerLeft));
+                bitStream.Write(static_cast<long long>(getID()));
+                sendMessage(&bitStream, PacketReliability::RELIABLE);
+                m_Interface->CloseConnection(getServerAddress(), true);
+                m_Interface->CloseConnection(getServerAddress(), true);
+                //spin wait to allow CloseConnection to finish
+                while(getConnectionCount() > 0)
+                {
 
-            }
+                }
+			}
+
             RakNet::RakPeerInterface::DestroyInstance(m_Interface);
         }
 
