@@ -16,7 +16,7 @@ namespace ConfusServer
 {
     const double Game::FixedUpdateInterval = 0.02;
     const double Game::MaxFixedUpdateInterval = 0.1;
-	const double Game::BroadcastInterval = 0.02;
+	const double Game::BroadcastInterval = 0.015;
     const double Game::MazeDelay = 2.0;
     const double Game::MazeChangeInterval = 60.0 - MazeDelay;
 
