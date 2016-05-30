@@ -15,7 +15,7 @@ namespace Confus
 		{
 			std::vector<std::shared_ptr<NewMazeTile>> tempVector;
 			MazeTiles.push_back(tempVector);
-			for (unsigned int y = 0; y < m_MazeSize.Y - 1; y++)
+			for (unsigned int y = 0; y < m_MazeSize.Y; y++)
 			{
 				std::shared_ptr<NewMazeTile> mazeTile = std::make_shared<NewMazeTile>();
 				MazeTiles[x].push_back(mazeTile);

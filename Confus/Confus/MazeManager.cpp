@@ -8,7 +8,7 @@ namespace Confus
 	MazeManager::MazeManager(irr::IrrlichtDevice * a_Device, irr::core::vector2d<irr::u32> a_MazeSize, int a_InitialSeed, Physics::PhysicsWorld& a_PhysicsWorld, float a_MazeScalar)
 		:m_MainMaze(a_MazeSize), m_ReplacementMaze(a_MazeSize), m_Seed(a_InitialSeed),m_Device(a_Device), m_PhysicsWorld(a_PhysicsWorld), m_MazeScalar(a_MazeScalar)
 	{
-		m_MazeGenerator.generateMaze(m_MainMaze, a_InitialSeed, irr::core::vector2df(0, 0));
+		m_MazeGenerator.generateMaze(m_MainMaze, a_InitialSeed, irr::core::vector2d<irr::u32>(20, 20));
 		setupSingleMoveableWalls(m_MainMaze, irr::core::vector2df(30, -7));
 	}
 
@@ -32,7 +32,7 @@ namespace Confus
 
 	void MazeManager::refillMainMaze(int a_Seed)
 	{
-		m_MazeGenerator.generateMaze(m_ReplacementMaze, a_Seed, irr::core::vector2df(0,0));
+		m_MazeGenerator.generateMaze(m_ReplacementMaze, a_Seed, irr::core::vector2d<irr::u32>(20, 20));
 		replaceMainMaze();
 		m_ReplacementMaze.resetMaze();
 	}

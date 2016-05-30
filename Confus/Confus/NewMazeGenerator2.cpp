@@ -10,29 +10,34 @@ namespace Confus
 	{
 		//setup globals & variables
 		srand(a_Seed);
-		std::shared_ptr<NewMazeTile> currentTile = a_Maze.MazeTiles[a_GenerateStartPoint.X][a_GenerateStartPoint.Y];
-
-		//Startcell must be set to visited, add to visitedcount
-		currentTile->Raised = false;
+		std::shared_ptr<NewMazeTile> currentTile = SetTileDown(a_Maze, a_GenerateStartPoint);
 
 		do
 		{
-			std::vector<std::shared_ptr<NewMazeTile>> Neighbours = getNeighbours(a_Maze.MazeTiles, *currentTile);
+			std::vector<std::shared_ptr<NewMazeTile>> Neighbours = getNeighbours(a_Maze, *currentTile);
 			if (Neighbours.size() != 0)
 			{
-				m_TileStack.push(currentTile);
 				std::shared_ptr<NewMazeTile> tile = Neighbours[rand() % Neighbours.size()];
-				int xmovement = (tile->XPos - currentTile->XPos) / 2;
-				int ymovement = (tile->YPos - currentTile->YPos) / 2;
+				irr::core::vector2d<irr::u32> tilePosition = irr::core::vector2d<irr::u32>(tile->XPos, tile->YPos);
+				int xmovement = (tile->XPos - currentTile->XPos);
+				int ymovement = (tile->YPos - currentTile->YPos);
 
-				if (xmovement != 0 || ymovement != 0)
+				if (xmovement < 0)
 				{
-					std::shared_ptr<NewMazeTile>  inBetweenTile = a_Maze.MazeTiles[currentTile->XPos + xmovement][currentTile->YPos + ymovement];
-					inBetweenTile->Raised = false;
+					SetTileLeft(a_Maze, tilePosition);
 				}
-
-				currentTile = tile;
-				currentTile->Raised = false;
+				else if (xmovement > 0)
+				{
+					SetTileRight(a_Maze, tilePosition);
+				}
+				else if (ymovement < 0)
+				{
+					SetTileUp(a_Maze, tilePosition);
+				}
+				else if (ymovement > 0)
+				{
+					SetTileDown(a_Maze, tilePosition);
+				}
 			}
 			else if (m_TileStack.size() != 0)
 			{
@@ -43,7 +48,11 @@ namespace Confus
 		} while (m_TileStack.size() != 0);
 	}
 
-	std::vector<std::shared_ptr<NewMazeTile>> NewMazeGenerator2::getNeighbours(std::vector<std::vector<std::shared_ptr<NewMazeTile>>> & a_Maze, NewMazeTile& a_Tile)
+	NewMazeGenerator2::~NewMazeGenerator2()
+	{
+	}
+
+	std::vector<std::shared_ptr<NewMazeTile>> NewMazeGenerator2::getNeighbours(NewMaze &  a_Maze, NewMazeTile& a_Tile)
 	{
 		std::vector<std::shared_ptr<NewMazeTile>> neighbours;
 		size_t x = static_cast<size_t>(a_Tile.XPos);
@@ -51,32 +60,32 @@ namespace Confus
 
 
 		//check if the neighbour is not out of bounds, and is not visited, else add to neighbours
-		if (x > 1 && a_Maze[x - 2][y]->Raised)
+		if (CheckLeftNeighbours(a_Maze, a_Tile))
 		{
-			neighbours.push_back(a_Maze[x - 2][y]);
+			neighbours.push_back(a_Maze.MazeTiles[x - 1][y]);
 		}
-		if (x < a_Maze.size() - 2 && a_Maze[x + 2][y]->Raised)
+		if (CheckRightNeighbours(a_Maze, a_Tile))
 		{
-			neighbours.push_back(a_Maze[x + 2][y]);
+			neighbours.push_back(a_Maze.MazeTiles[x + 1][y]);
 		}
-		if (y > 1 && a_Maze[x][y - 2]->Raised)
+		if (CheckUpNeighbours(a_Maze, a_Tile))
 		{
-			neighbours.push_back(a_Maze[x][y - 2]);
+			neighbours.push_back(a_Maze.MazeTiles[x][y - 1]);
 		}
-		if (y < a_Maze[0].size() - 2 && a_Maze[x][y + 2]->Raised)
+		if (CheckDownNeighbours(a_Maze, a_Tile))
 		{
-			neighbours.push_back(a_Maze[x][y + 2]);
+			neighbours.push_back(a_Maze.MazeTiles[x][y + 1]);
 		}
 
 		return neighbours;
 	}
 
-	std::shared_ptr<NewMazeTile> NewMazeGenerator2::CheckLeftNeighbours(NewMaze &  a_Maze, NewMazeTile& a_Tile)
+	bool NewMazeGenerator2::CheckLeftNeighbours(NewMaze &  a_Maze, NewMazeTile& a_Tile)
 	{
 		size_t x = static_cast<size_t>(a_Tile.XPos);
 		size_t y = static_cast<size_t>(a_Tile.YPos);
 
-		if (x > 2 && y < a_Maze.MazeTiles.size()) // is not out of bounds
+		if (x > 2 && y + 1 < a_Maze.MazeTiles.size()) // is not out of bounds
 		{
 			if (a_Maze.MazeTiles[x - 1][y]->Raised && a_Maze.MazeTiles[x - 1][y + 1]->Raised) // tile next to it is not lowered
 			{
@@ -84,19 +93,20 @@ namespace Confus
 				{
 					if (a_Maze.MazeTiles[x - 3][y]->Raised && a_Maze.MazeTiles[x - 3][y + 1]->Raised) // third tile shift is not lowered
 					{
-						return a_Maze.MazeTiles[x - 1][y];
+						return true;
 					}
 				}
 			}
 		}
+		return false;
 	}
 
-	std::shared_ptr<NewMazeTile> NewMazeGenerator2::CheckRightNeighbours(NewMaze &  a_Maze, NewMazeTile& a_Tile)
+	bool NewMazeGenerator2::CheckRightNeighbours(NewMaze &  a_Maze, NewMazeTile& a_Tile)
 	{
 		size_t x = static_cast<size_t>(a_Tile.XPos);
 		size_t y = static_cast<size_t>(a_Tile.YPos);
 
-		if (x < a_Maze.MazeTiles.size()-2 && y < a_Maze.MazeTiles.size()) // is not out of bounds
+		if (x < a_Maze.MazeTiles.size()-3 && y+ 1 < a_Maze.MazeTiles.size()) // is not out of bounds
 		{
 			if (a_Maze.MazeTiles[x + 1][y]->Raised && a_Maze.MazeTiles[x + 1][y + 1]->Raised) // tile next to it is not lowered
 			{
@@ -104,19 +114,20 @@ namespace Confus
 				{
 					if (a_Maze.MazeTiles[x + 3][y]->Raised && a_Maze.MazeTiles[x + 3][y + 1]->Raised) // third tile shift is not lowered
 					{
-						return a_Maze.MazeTiles[x + 1][y];
+						return true;
 					}
 				}
 			}
 		}
+		return false;
 	}
 
-	std::shared_ptr<NewMazeTile> NewMazeGenerator2::CheckDownNeighbours(NewMaze &  a_Maze, NewMazeTile& a_Tile)
+	bool NewMazeGenerator2::CheckUpNeighbours(NewMaze &  a_Maze, NewMazeTile& a_Tile)
 	{
 		size_t x = static_cast<size_t>(a_Tile.XPos);
 		size_t y = static_cast<size_t>(a_Tile.YPos);
 
-		if (x < a_Maze.MazeTiles.size() && y < a_Maze.MazeTiles.size() - 2) // is not out of bounds
+		if (x + 1 < a_Maze.MazeTiles.size() && y > 2) // is not out of bounds
 		{
 			if (a_Maze.MazeTiles[x][y-1]->Raised && a_Maze.MazeTiles[x + 1][y - 1]->Raised) // tile next to it is not lowered
 			{
@@ -124,19 +135,20 @@ namespace Confus
 				{
 					if (a_Maze.MazeTiles[x][y-3]->Raised && a_Maze.MazeTiles[x + 1][y - 3]->Raised) // third tile shift is not lowered
 					{
-						return a_Maze.MazeTiles[x][y];
+						return true;
 					}
 				}
 			}
 		}
+		return false;
 	}
 
-	std::shared_ptr<NewMazeTile> NewMazeGenerator2::CheckUpNeighbours(NewMaze &  a_Maze, NewMazeTile& a_Tile)
+	bool NewMazeGenerator2::CheckDownNeighbours(NewMaze &  a_Maze, NewMazeTile& a_Tile)
 	{
 		size_t x = static_cast<size_t>(a_Tile.XPos);
 		size_t y = static_cast<size_t>(a_Tile.YPos);
 
-		if (x < a_Maze.MazeTiles.size() && y > 2) // is not out of bounds
+		if (x + 1 < a_Maze.MazeTiles.size() && y  < a_Maze.MazeTiles.size() - 3) // is not out of bounds
 		{
 			if (a_Maze.MazeTiles[x][y + 1]->Raised && a_Maze.MazeTiles[x + 1][y + 1]->Raised) // tile next to it is not lowered
 			{
@@ -144,52 +156,61 @@ namespace Confus
 				{
 					if (a_Maze.MazeTiles[x][y + 3]->Raised && a_Maze.MazeTiles[x + 1][y + 3]->Raised) // third tile shift is not lowered
 					{
-						return a_Maze.MazeTiles[x][y];
+						return true;
 					}
 				}
 			}
 		}
+		return false;
 	}
 
 	//for the sake of finishing stuff for the market, assuming generatestart is in the middle of the maze
-	void NewMazeGenerator2::SetTileDown(NewMaze &  a_Maze, irr::core::vector2d<irr::u32> a_GenerateStartPoint)
+	std::shared_ptr<NewMazeTile> NewMazeGenerator2::SetTileDown(NewMaze &  a_Maze, irr::core::vector2d<irr::u32> a_GenerateStartPoint)
 	{
 		SetTileVisited(a_Maze, a_GenerateStartPoint);
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(0, 1));
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(0, 2));
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(1, 0));
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(1, 1));
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(1, 2));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(0, 1));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(0, 2));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(1, 0));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(1, 1));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(1, 2));
+		irr::core::vector2d<irr::u32> temp = irr::core::vector2d<irr::u32>(a_GenerateStartPoint + irr::core::vector2d<irr::u32>(0, 2));
+		return a_Maze.MazeTiles[temp.X][temp.Y];
 	}
 
-	void NewMazeGenerator2::SetTileUp(NewMaze &  a_Maze, irr::core::vector2d<irr::u32> a_GenerateStartPoint)
+	std::shared_ptr<NewMazeTile> NewMazeGenerator2::SetTileUp(NewMaze &  a_Maze, irr::core::vector2d<irr::u32> a_GenerateStartPoint)
 	{
 		SetTileVisited(a_Maze, a_GenerateStartPoint);
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(0, -1));
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(0, -2));
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(1, 0));
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(1, -1));
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(1, -2));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(0, -1));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(0, -2));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(1, 0));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(1, -1));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(1, -2));
+		irr::core::vector2d<irr::u32> temp = irr::core::vector2d<irr::u32>(a_GenerateStartPoint + irr::core::vector2d<irr::u32>(0, -2));
+		return a_Maze.MazeTiles[temp.X][temp.Y];
 	}
 
-	void NewMazeGenerator2::SetTileRight(NewMaze &  a_Maze, irr::core::vector2d<irr::u32> a_GenerateStartPoint)
+	std::shared_ptr<NewMazeTile> NewMazeGenerator2::SetTileRight(NewMaze &  a_Maze, irr::core::vector2d<irr::u32> a_GenerateStartPoint)
 	{
 		SetTileVisited(a_Maze, a_GenerateStartPoint);
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(1, 0));
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(2, 0));
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(0, 1));
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(1, 1));
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(2, 1));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(1, 0));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(2, 0));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(0, 1));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(1, 1));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(2, 1));
+		irr::core::vector2d<irr::u32> temp = irr::core::vector2d<irr::u32>(a_GenerateStartPoint + irr::core::vector2d<irr::u32>(2, 0));
+		return a_Maze.MazeTiles[temp.X][temp.Y];
 	}
 
-	void NewMazeGenerator2::SetTileLeft(NewMaze &  a_Maze, irr::core::vector2d<irr::u32> a_GenerateStartPoint)
+	std::shared_ptr<NewMazeTile> NewMazeGenerator2::SetTileLeft(NewMaze &  a_Maze, irr::core::vector2d<irr::u32> a_GenerateStartPoint)
 	{
 		SetTileVisited(a_Maze, a_GenerateStartPoint);
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(-1, 0));
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(-2, 0));
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(0, 1));
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(-1, 1));
-		SetTileVisited(a_Maze, a_GenerateStartPoint - irr::core::vector2d<irr::u32>(-2, 1));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(-1, 0));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(-2, 0));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(0, 1));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(-1, 1));
+		SetTileVisited(a_Maze, a_GenerateStartPoint + irr::core::vector2d<irr::u32>(-2, 1));
+		irr::core::vector2d<irr::u32> temp = irr::core::vector2d<irr::u32>(a_GenerateStartPoint + irr::core::vector2d<irr::u32>(-2, 0));
+		return a_Maze.MazeTiles[temp.X][temp.Y];
 	}
 
 	void NewMazeGenerator2::SetTileVisited(NewMaze &  a_Maze, irr::core::vector2d<irr::u32> a_Position)

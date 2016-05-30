@@ -1,6 +1,9 @@
 #pragma once
+#include <vector>
+
 #include "NewMaze.h"
-#include "NewMazeGenerator.h"
+//#include "NewMazeGenerator.h"
+#include "NewMazeGenerator2.h"
 #include "MoveableWall.h"
 namespace Confus
 {
@@ -35,7 +38,7 @@ namespace Confus
 		/// <summary>
 		/// Generator to generate mazes
 		/// </summary>
-		NewMazeGenerator m_MazeGenerator;
+		NewMazeGenerator2 m_MazeGenerator;
 
 		/// <summary>
 		/// The time at which the generator will refill the maze again

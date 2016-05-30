@@ -99,11 +99,11 @@ namespace ConfusServer
     {
         if(TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
-            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 0.f));
+            CameraNode->setPosition(irr::core::vector3df(0.f, 30.f, 0.f));
         }
         else if(TeamIdentifier == ETeamIdentifier::TeamRed)
         {
-            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
+            CameraNode->setPosition(irr::core::vector3df(0.f, 30.f, -85.f));
         }
     }
 

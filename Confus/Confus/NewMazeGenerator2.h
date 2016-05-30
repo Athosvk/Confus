@@ -1,5 +1,7 @@
 #pragma once
 #include <stack>
+#include <vector>
+
 #include "NewMaze.h"
 
 namespace Confus
@@ -33,15 +35,15 @@ namespace Confus
 		/// </summary>
 		/// <param name="a_Maze">The 2d vector to be used to check for neighbours.</param>
 		/// <param name="a_Tile">The tile in the 2d vector that is checked for neighbours.</param>
-		std::vector<std::shared_ptr<NewMazeTile>> getNeighbours(std::vector<std::vector<std::shared_ptr<NewMazeTile>>> & a_Maze, NewMazeTile& a_Tile);
-		std::shared_ptr<NewMazeTile> CheckLeftNeighbours(NewMaze & a_Maze, NewMazeTile & a_Tile);
-		std::shared_ptr<NewMazeTile> CheckRightNeighbours(NewMaze & a_Maze, NewMazeTile & a_Tile);
-		std::shared_ptr<NewMazeTile> CheckDownNeighbours(NewMaze & a_Maze, NewMazeTile & a_Tile);
-		std::shared_ptr<NewMazeTile> CheckUpNeighbours(NewMaze & a_Maze, NewMazeTile & a_Tile);
-		void SetTileDown(NewMaze &  a_Maze, irr::core::vector2d<irr::u32> a_GenerateStartPoint);
-		void SetTileUp(NewMaze & a_Maze, irr::core::vector2d<irr::u32> a_GenerateStartPoint);
-		void SetTileRight(NewMaze & a_Maze, irr::core::vector2d<irr::u32> a_GenerateStartPoint);
-		void SetTileLeft(NewMaze & a_Maze, irr::core::vector2d<irr::u32> a_GenerateStartPoint);
+		std::vector<std::shared_ptr<NewMazeTile>> getNeighbours(NewMaze &  a_Maze, NewMazeTile& a_Tile);
+		bool CheckLeftNeighbours(NewMaze & a_Maze, NewMazeTile & a_Tile);
+		bool CheckRightNeighbours(NewMaze & a_Maze, NewMazeTile & a_Tile);
+		bool CheckDownNeighbours(NewMaze & a_Maze, NewMazeTile & a_Tile);
+		bool CheckUpNeighbours(NewMaze & a_Maze, NewMazeTile & a_Tile);
+		std::shared_ptr<NewMazeTile> SetTileDown(NewMaze &  a_Maze, irr::core::vector2d<irr::u32> a_GenerateStartPoint);
+		std::shared_ptr<NewMazeTile> SetTileUp(NewMaze & a_Maze, irr::core::vector2d<irr::u32> a_GenerateStartPoint);
+		std::shared_ptr<NewMazeTile> SetTileRight(NewMaze & a_Maze, irr::core::vector2d<irr::u32> a_GenerateStartPoint);
+		std::shared_ptr<NewMazeTile> SetTileLeft(NewMaze & a_Maze, irr::core::vector2d<irr::u32> a_GenerateStartPoint);
 		void SetTileVisited(NewMaze & a_Maze, irr::core::vector2d<irr::u32> a_Position);
 	};
 }

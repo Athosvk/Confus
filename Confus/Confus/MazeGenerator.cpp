@@ -135,23 +135,24 @@ namespace Confus
 		size_t x = static_cast<size_t>(a_Tile.XPos);
 		size_t y = static_cast<size_t>(a_Tile.YPos);
 
+		const int stepSize = 3;
 
 		//check if the neighbour is not out of bounds, and is not visited, else add to neighbours
-		if (x > 1 && a_Maze[x - 2][y]->Raised)
+		if (x > stepSize-1 && a_Maze[x - stepSize][y]->Raised)
 		{
-			neighbours.push_back(a_Maze[x - 2][y]);
+			neighbours.push_back(a_Maze[x - stepSize][y]);
 		}
-		if (x < a_Maze.size() - 2 && a_Maze[x + 2][y]->Raised)
+		if (x < a_Maze.size() - stepSize && a_Maze[x + stepSize][y]->Raised)
 		{
-			neighbours.push_back(a_Maze[x + 2][y]);
+			neighbours.push_back(a_Maze[x + stepSize][y]);
 		}
-		if (y > 1 && a_Maze[x][y - 2]->Raised)
+		if (y > stepSize - 1 && a_Maze[x][y - stepSize]->Raised)
 		{
-			neighbours.push_back(a_Maze[x][y - 2]);
+			neighbours.push_back(a_Maze[x][y - stepSize]);
 		}
-		if (y < a_Maze[0].size() - 2 && a_Maze[x][y + 2]->Raised)
+		if (y < a_Maze[0].size() - stepSize && a_Maze[x][y + stepSize]->Raised)
 		{
-			neighbours.push_back(a_Maze[x][y + 2]);
+			neighbours.push_back(a_Maze[x][y + stepSize]);
 		}
 
 		return neighbours;

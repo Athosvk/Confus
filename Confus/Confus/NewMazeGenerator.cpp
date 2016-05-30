@@ -43,6 +43,10 @@ namespace Confus
 		} while (m_TileStack.size() != 0);
 	}
 
+	NewMazeGenerator::~NewMazeGenerator()
+	{
+	}
+
 	std::vector<std::shared_ptr<NewMazeTile>> NewMazeGenerator::getNeighbours(std::vector<std::vector<std::shared_ptr<NewMazeTile>>> & a_Maze, NewMazeTile& a_Tile)
 	{
 		std::vector<std::shared_ptr<NewMazeTile>> neighbours;

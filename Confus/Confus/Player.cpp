@@ -51,7 +51,7 @@ namespace Confus
         PlayerNode = sceneManager->addAnimatedMeshSceneNode(m_Mesh, nullptr);
         PlayerNode->setMaterialFlag(irr::video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
         PlayerNode->setScale(irr::core::vector3df(0.3f, 0.3f, 0.3f));
-        PlayerNode->setPosition(irr::core::vector3df(0.f, -2.0f, -0.2f));
+        PlayerNode->setPosition(irr::core::vector3df(0.f, 30.0f, -0.2f));
         PlayerNode->setName({"Player"});
 
         if(a_TeamIdentifier == ETeamIdentifier::TeamBlue) {
@@ -247,11 +247,11 @@ namespace Confus
 		m_PlayerHealth.reset();
         if(TeamIdentifier == ETeamIdentifier::TeamBlue)
         {
-            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, 11.f));
+            CameraNode->setPosition(irr::core::vector3df(0.f, 30.f, 11.f));
         }
         else if(TeamIdentifier == ETeamIdentifier::TeamRed)
         {
-            CameraNode->setPosition(irr::core::vector3df(0.f, 10.f, -85.f));
+            CameraNode->setPosition(irr::core::vector3df(0.f, 30.f, -85.f));
         }
     }
 
