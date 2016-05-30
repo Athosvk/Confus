@@ -110,7 +110,7 @@ namespace ConfusShared
         else if(m_Raised)
         {
             m_Transitioning = false;
-			m_MeshNode->setVisible(false);
+			//m_MeshNode->setVisible(false);
 			m_Raised = false;
         }
 		else if (!m_Raised)
