@@ -40,6 +40,8 @@ namespace Confus
 			auto text = m_Device->getGUIEnvironment()->addStaticText(L"Press ESCAPE to go back to the main menu", { 10, 500, 10 + 250, 500 + 80 });
 			runGame();
             m_Device->getGUIEnvironment()->clear();
+			m_Image = m_Device->getGUIEnvironment()->addImage(m_ScreenRect);
+			m_Image->setImage(m_StartScreen);
         }
     }
 

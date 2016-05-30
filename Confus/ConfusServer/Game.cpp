@@ -99,7 +99,7 @@ namespace ConfusServer
 
         m_Connection->addFunctionToMap(ID_DISCONNECTION_NOTIFICATION, [this](RakNet::Packet* a_Data)
         {
-			removePlayer(a_Data);
+            removePlayer(a_Data);
         });
         m_Device->getCursorControl()->setVisible(false);
       
