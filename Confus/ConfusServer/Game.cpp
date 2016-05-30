@@ -101,6 +101,17 @@ namespace ConfusServer
         {
             removePlayer(a_Data);
         });
+
+		m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::Player), [this](RakNet::Packet* a_Packet)
+		{
+			RakNet::BitStream data(a_Packet->data, a_Packet->length, false);
+			data.IgnoreBytes(sizeof(RakNet::MessageID));
+
+			ConfusShared::Networking::Client::PlayerUpdate updateFromClient;
+			data.Read(updateFromClient);
+			m_Players.at(static_cast<long long>(a_Packet->guid.g)).Receiver->synchronize(updateFromClient);
+		});
+
         m_Device->getCursorControl()->setVisible(false);
       
         while(m_Device->run())
