@@ -49,6 +49,8 @@ namespace ConfusShared
     private:
 		/// <summary>The m_ identifier</summary>
 		long long m_ID;
+        /// <summary>The previous position of the player </summary>
+        irr::core::vector3df m_PreviousPosition;
 		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
 		irr::scene::IAnimatedMeshSceneNode* m_PlayerNode;
 		/// <summary> private value for health class </summary>

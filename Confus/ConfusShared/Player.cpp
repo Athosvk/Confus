@@ -189,6 +189,7 @@ namespace ConfusShared
 
 	void Player::update()
     {
+        
         if(m_PlayerHealth.getHealth() <= 0) 
 		{
             respawn();
@@ -197,7 +198,7 @@ namespace ConfusShared
 				dropFlag();
 			}
         }
-        if(m_Collider->getRigidBody()->getVelocity().X != 0.0f && m_Collider->getRigidBody()->getVelocity().Z != 0.0f)
+        if(m_PreviousPosition != m_PlayerNode->getPosition())
         {
             if(!m_Attacking && !m_Walking)
             {
@@ -210,6 +211,7 @@ namespace ConfusShared
             stopWalking();
             m_Walking = false;
         }
+        m_PreviousPosition = m_PlayerNode->getPosition();
 
         if(getPosition().Y <= -10) 
 		{
