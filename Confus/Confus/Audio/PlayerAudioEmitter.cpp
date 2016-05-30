@@ -67,7 +67,7 @@ namespace Confus
         void PlayerAudioEmitter::playRandomSwordSwosh()
         {
             //std::srand(static_cast<int>(time(nullptr)));
-			//m_SwordSwoshes[std::rand() % 4].play();
+			m_SwordSwoshes[std::rand() % 4].play();
         }
 
 		void PlayerAudioEmitter::playHitSound(EHitIdentifier a_HitIdentifier )
