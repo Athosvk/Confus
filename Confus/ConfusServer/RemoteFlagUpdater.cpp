@@ -18,19 +18,14 @@ namespace ConfusServer
     {
     }
 
-    void RemoteFlagUpdater::fixedUpdate() const
+    void RemoteFlagUpdater::broadcast() const
     {
-        updateClient();
-    }
+		RakNet::BitStream outputStream;
 
-    void RemoteFlagUpdater::updateClient() const
-    {
-        RakNet::BitStream outputStream;
+		outputStream.Write(m_PacketType);
+		outputStream.Write(m_Flag.getFlagStatus());
+		outputStream.Write(m_Flag.getPosition());
 
-        outputStream.Write(m_PacketType);
-        outputStream.Write(m_Flag.getFlagStatus());
-        outputStream.Write(m_Flag.getPosition());
-
-        m_Connection.broadcastBitstream(outputStream);
-    }
+		m_Connection.broadcastBitstream(outputStream);
+	}
 }

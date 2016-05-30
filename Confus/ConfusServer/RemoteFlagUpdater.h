@@ -15,8 +15,8 @@ namespace ConfusServer
     public:
         RemoteFlagUpdater(ConfusShared::Flag& a_Flag, Networking::Connection& a_Connection);
         ~RemoteFlagUpdater();
-        void fixedUpdate() const;
-        void updateClient() const;
+
+        void broadcast() const;
     };
 }
 

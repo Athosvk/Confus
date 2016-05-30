@@ -41,6 +41,10 @@ namespace ConfusShared
 	Player::~Player()
 	{
         m_Collider->remove();
+		if(FlagPointer != nullptr)
+		{
+			dropFlag();
+		}
 	}
 
 	ConfusShared::Health* Player::getHealthInstance()
