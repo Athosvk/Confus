@@ -16,7 +16,7 @@ namespace ConfusServer
 {
     const double Game::FixedUpdateInterval = 0.02;
     const double Game::MaxFixedUpdateInterval = 0.1;
-	const double Game::ProcessPacketsInterval = 0.03;
+	const double Game::BroadcastInterval = 0.015;
     const double Game::MazeDelay = 2.0;
     const double Game::MazeChangeInterval = 60.0 - MazeDelay;
 
@@ -79,7 +79,6 @@ namespace ConfusServer
     {
         initializeConnection();
 
-
         m_TeamScoreManager.setResetCallback([this] { resetGame(); });
         auto sceneManager = m_Device->getSceneManager();
         m_LevelRootNode = m_Device->getSceneManager()->addEmptySceneNode();
@@ -98,28 +97,18 @@ namespace ConfusServer
             addPlayer(a_Data);
         });
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::Player), [this](RakNet::Packet* a_Packet)
+        m_Connection->addFunctionToMap(ID_DISCONNECTION_NOTIFICATION, [this](RakNet::Packet* a_Data)
         {
-            RakNet::BitStream data(a_Packet->data, a_Packet->length, false);
-            data.IgnoreBytes(sizeof(RakNet::MessageID));
-
-            ConfusShared::Networking::Client::PlayerUpdate updateFromClient;
-            data.Read(updateFromClient);
-            m_Players.at(static_cast<long long>(a_Packet->guid.g)).Receiver->synchronize(updateFromClient);
+			removePlayer(a_Data);
         });
-
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::PlayerLeft), [this](RakNet::Packet* a_Data)
-        {
-            removePlayer(a_Data);
-        });
-
         m_Device->getCursorControl()->setVisible(false);
       
         while(m_Device->run())
         {
-			processConnection();
+			m_Connection->processPackets();
             update();
             processFixedUpdates();
+			processBroadcasts();
         }
     }
 
@@ -128,16 +117,6 @@ namespace ConfusServer
         m_Connection = std::make_unique<Networking::Connection>();
         m_TeamScoreManager.setConnection(m_Connection.get());
     }
-
-	void Game::processConnection()
-	{
-		m_ConnectionUpdateTimer += m_DeltaTime;
-		if (m_ConnectionUpdateTimer >= ProcessPacketsInterval)
-		{
-			m_ConnectionUpdateTimer = 0;
-			m_Connection->processPackets();
-		}
-	}
 
     void Game::update()
     {
@@ -148,19 +127,7 @@ namespace ConfusServer
         for(auto& playerPair : m_Players)
         {
             playerPair.second.Player->update();
-            if(playerPair.second.Receiver->userTimedOut())
-            {
-                long long id = playerPair.second.Player->getGUID();
-                std::cout << "[Game] Player id: " << id << " timed out." << std::endl;
-                delete(playerPair.second.Player);
-                auto iterator = m_Players.find(id);
-				if (iterator != m_Players.end())
-				{
-					m_Players.erase(iterator);					
-				}
-            }
         }
-
         m_RedFlag.update();
         m_BlueFlag.update();
 
@@ -183,6 +150,23 @@ namespace ConfusServer
 			}
         }
     }
+
+	void Game::processBroadcasts()
+	{
+		m_BroadcastTimer += m_DeltaTime;
+		if(m_BroadcastTimer >= BroadcastInterval)
+		{
+			m_BroadcastTimer = 0.0f;
+			broadcastUpdates();
+		}
+	}
+
+	void Game::broadcastUpdates()
+	{
+		m_RedFlagUpdater->broadcast();
+		m_BlueFlagUpdater->broadcast();
+		sendPlayerUpdates();
+	}
 
     void Game::processFixedUpdates()
     {
@@ -233,11 +217,8 @@ namespace ConfusServer
 
 	void Game::fixedUpdate()
     {
-        updatePlayers();
 		m_MazeGenerator.fixedUpdate();
 		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
-        m_RedFlagUpdater->fixedUpdate();
-        m_BlueFlagUpdater->fixedUpdate();
 	}
 
     void Game::broadcastMazeChange(int a_Seed) const
@@ -253,6 +234,7 @@ namespace ConfusServer
 
     void Game::addPlayer(RakNet::Packet* a_Data)
     {
+        std::cout << a_Data->systemAddress.ToString() << " is the address of the player that joined\n";
         long long id = static_cast<long long>(a_Data->guid.g);
 		ConfusShared::ETeamIdentifier teamID = m_Players.size() % 2 == 0 ? 
 			ConfusShared::ETeamIdentifier::TeamRed : ConfusShared::ETeamIdentifier::TeamBlue;
@@ -261,11 +243,11 @@ namespace ConfusServer
 		newPlayer->setTeamIdentifier(teamID, m_Device);
 		if(teamID == ConfusShared::ETeamIdentifier::TeamBlue)
 		{
-			newPlayer->setStartPosition(irr::core::vector3df(0.f, 10.f, 0.f));
+			newPlayer->setStartPosition(irr::core::vector3df(0.f, 10.f, -85.f));
 		}
 		else if(teamID == ConfusShared::ETeamIdentifier::TeamRed)
 		{
-			newPlayer->setStartPosition(irr::core::vector3df(0.f, 10.f, -85.f));
+			newPlayer->setStartPosition(irr::core::vector3df(0.f, 10.f, 0.f));
 		}
 		newPlayer->respawn();
 
@@ -284,24 +266,22 @@ namespace ConfusServer
 
 		ConfusShared::Networking::Server::NewPlayer playerInfo(newPlayer);
         RakNet::BitStream broadcastStream;
-        broadcastStream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::OtherPlayerJoined));
         broadcastStream.Write(playerInfo);
         m_Connection->broadcastPacket(&broadcastStream, &guid);
 
 		m_Players.emplace(newPlayer->getGUID(), PlayerPair(newPlayer, *m_Connection));
-        std::cout << "[Game] Player id: " << id << " joined." << std::endl;
+        std::cout << id << " joined" << std::endl;
     }
 
     void Game::removePlayer(RakNet::Packet* a_Data)
     {
         long long id = static_cast<long long>(a_Data->guid.g);
-        std::cout << "[Game] Player id: " << id << " left." << std::endl;
+        std::cout << id << " left" << std::endl;
 
 		PlayerPair& playerPair = m_Players.at(id);
 		playerPair.Player->remove();
 		delete(playerPair.Player);
-        auto iterator = m_Players.find(id);
-        m_Players.erase(iterator);
+		m_Players.erase(id);
 
         RakNet::BitStream stream;
         stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::PlayerLeft));
@@ -310,7 +290,7 @@ namespace ConfusServer
         m_Connection->broadcastPacket(&stream, &guid);
     }
 
-    void Game::updatePlayers()
+    void Game::sendPlayerUpdates()
     {
         RakNet::BitStream stream;
         stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::UpdatePosition));

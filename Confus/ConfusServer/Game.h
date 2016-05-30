@@ -51,7 +51,7 @@ namespace ConfusServer
 		/// <summary>
 		/// The interval at which packets queue before processed
 		/// </summary>
-		static const double ProcessPacketsInterval;
+		static const double BroadcastInterval;
         /// <summary>
         /// The interval at which packets queue before processed
         /// </summary>
@@ -89,7 +89,7 @@ namespace ConfusServer
 		/// <summary>
 		/// The delay between the last and future packet update
 		/// </summary>
-		double m_ConnectionUpdateTimer = 0.0;
+		double m_BroadcastTimer = 0.0;
         /// <summary>
 		/// The time interval between the last update and the second-last
         /// </summary>
@@ -141,6 +141,10 @@ namespace ConfusServer
         /// Updates the state of the objects in the game
         /// </summary>
         void update();
+
+		void processBroadcasts();
+
+		void broadcastUpdates();
         /// <summary>
         /// Runs a set of fixed update calls based on the time elapsed since the last frame
         /// </summary>
@@ -150,9 +154,6 @@ namespace ConfusServer
 
         /// <summary> Updates the state of objects that require frame-rate independence </summary>
         void fixedUpdate();
-
-		/// <summary> Processes the packets send over the connectionconnection </summary>
-		void processConnection();
 		
 		/// <summary>Adds a player from the given data, so that it can be synced with the remote players</summary>
 		/// <param name="a_Data">The packet data containing the information needed to construct a player object</param>
@@ -163,7 +164,7 @@ namespace ConfusServer
 		void removePlayer(RakNet::Packet* a_Data);
 		
 		/// <summary> Sends the new position and rotation information for each player so they can be updated locally</summary>
-		void updatePlayers();
+		void sendPlayerUpdates();
 		
 		/// <summary>Sends the new health of </summary>
 		/// <param name="a_HitType">Type of the a_ hit.</param>
