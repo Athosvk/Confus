@@ -39,7 +39,6 @@ namespace Confus
 		bitstream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::Player));
 
 		ConfusShared::Networking::Client::PlayerUpdate updateToServer;
-		updateToServer.ID = m_Player.getGUID();
 		updateToServer.Rotation = m_Player.getRotation();
 		updateToServer.InputState = m_InputState;
 		bitstream.Write(updateToServer);

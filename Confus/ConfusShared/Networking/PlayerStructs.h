@@ -51,8 +51,6 @@ namespace ConfusShared
             /// <summary> Represents the information of a client that is networked </summary>
             struct PlayerUpdate
             {
-                /// <summary> The guid of a player</summary>
-                long long ID = 0;
                 /// <summary> The rotation of a player</summary>
                 irr::core::vector3df Rotation = irr::core::vector3df(0.f);
                 /// <summary> The input state of a player</summary>

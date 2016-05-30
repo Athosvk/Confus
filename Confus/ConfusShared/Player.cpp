@@ -233,7 +233,8 @@ namespace ConfusShared
 			if (m_PlayerState == EPlayerState::LightAttacking)
 			{
 				startLightAttack();
-			} else if (m_PlayerState == EPlayerState::HeavyAttacking)
+			} 
+            else if (m_PlayerState == EPlayerState::HeavyAttacking)
 			{
 				startHeavyAttack();
 			}
