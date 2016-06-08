@@ -120,6 +120,10 @@ namespace ConfusServer
             update();
             processFixedUpdates();
 			processBroadcasts();
+
+            m_Device->getVideoDriver()->beginScene();
+            m_Device->getSceneManager()->drawAll();
+            m_Device->getVideoDriver()->endScene();
         }
     }
 

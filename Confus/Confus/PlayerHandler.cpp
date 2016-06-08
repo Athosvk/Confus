@@ -77,10 +77,12 @@ namespace Confus
 			auto& pair = m_Players.at(updateFromServer.ID);
 
 			pair.Player->setPosition(updateFromServer.Position);
+   
 
 			if (updateFromServer.ID != m_PlayerNode.getGUID())
 			{
 				pair.Player->setRotation(updateFromServer.Rotation);
+                pair.Player->changeState(updateFromServer.State);
 			}
 		}
 	}
