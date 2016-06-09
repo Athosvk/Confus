@@ -22,6 +22,10 @@ namespace ConfusShared
         /// <summary> The angle at which an attack is seen as a backstab</summary>
         irr::f32 BackstabAngle = 45.0f;
     private:
+
+        /// <summary> The player this weapon is attached to </summary>
+        Player& m_AttachedPlayer;
+
         /// <summary> The collider </summary>
 		Physics::BoxCollider* m_Collider;
 
@@ -37,8 +41,9 @@ namespace ConfusShared
 		/// <param name="a_SceneManager">The active scene manager</param>
 		/// <param name="a_World">The physics world </param>
 		/// <param name="a_Dimensions">The dimensions of the weapon</param>
+        /// <param name="a_AttachedPlayer">The player this weapon is attached to</param>
 		Weapon(irr::scene::ISceneManager* a_SceneManager, Physics::PhysicsWorld& a_World,
-			irr::core::vector3df a_Dimensions);		
+			irr::core::vector3df a_Dimensions, Player& a_AttachedPlayer);
 		/// <summary>
 		/// Finalizes an instance of the <see cref="Weapon"/> class.
 		/// </summary>

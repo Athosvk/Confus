@@ -143,6 +143,9 @@ namespace ConfusShared
 
 		/// <summary>Gets the unique identifier that the player uses over the network</summary>
 		long long Player::getGUID();
+
+        /// <summary>Stops the attack if the player is currently attacking</summary>
+        void stopAttacking();
     private:
 		/// <summary> Updates the color </summary>
 		/// <param name="a_Device"> The active irrlicht device </param>

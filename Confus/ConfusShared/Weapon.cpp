@@ -10,7 +10,8 @@
 namespace ConfusShared
 {
     Weapon::Weapon(irr::scene::ISceneManager* a_SceneManager, Physics::PhysicsWorld& a_World,
-		irr::core::vector3df a_Dimensions)
+		irr::core::vector3df a_Dimensions, Player& a_AttachedPlayer) 
+        : m_AttachedPlayer(a_AttachedPlayer)
     {
         m_Node = a_SceneManager->addCubeSceneNode(1.0f, nullptr, -1, irr::core::vector3df(), irr::core::vector3df(),
             a_Dimensions);
@@ -26,9 +27,10 @@ namespace ConfusShared
             if(!m_Collided)
             {
 				auto playerNode = dynamic_cast<Player*>(a_Other->getRigidBody()->getAttachedNode());
-				if(playerNode != nullptr)
+				if(playerNode != nullptr && playerNode->getTeamIdentifier() != m_AttachedPlayer.getTeamIdentifier())
 				{
 					damagePlayer(playerNode);
+                    m_AttachedPlayer.stopAttacking();
 					m_Collided = true;
 				}
             }
@@ -42,20 +44,14 @@ namespace ConfusShared
 
 	void Weapon::damagePlayer(Player* a_Player) const
     {
-        if(getAngle(a_Player->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle))
+        if(Damage == Player::LightAttackDamage)
         {
-			if (Damage == Player::LightAttackDamage)
-				a_Player->getHealthInstance()->damage(Damage*2, EHitIdentifier::LightBackstab);
-			else
-				a_Player->getHealthInstance()->damage(Damage*2, EHitIdentifier::HeavyBackstab);
+            a_Player->getHealthInstance()->damage(getAngle(a_Player->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle) ? Damage * 2 : Damage, EHitIdentifier::LightBackstab);
         }
-		else
-		{
-			if(Damage == Player::LightAttackDamage)
-				a_Player->getHealthInstance()->damage(Damage,EHitIdentifier::Light);
-			else
-				a_Player->getHealthInstance()->damage(Damage, EHitIdentifier::Heavy);
-		}
+        else
+        {
+            a_Player->getHealthInstance()->damage(getAngle(a_Player->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle) ? Damage * 2 : Damage, EHitIdentifier::HeavyBackstab);
+        }
     }
 
     float Weapon::getAngle(irr::core::vector3df a_Vector1, irr::core::vector3df a_Vector2) const

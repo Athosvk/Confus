@@ -15,7 +15,7 @@ namespace ConfusShared
 		: irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
 		CarryingFlag(ConfusShared::EFlagEnum::None),
 		m_ID(a_ID),
-		m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f))
+		m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f), *this)
     {
 		setParent(SceneManager->getRootSceneNode());
         auto sceneManager = a_Device->getSceneManager();
@@ -152,8 +152,8 @@ namespace ConfusShared
 		m_WalkingDirection = a_Direction;
 	}
 
-	void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* a_SceneNode)
-    {
+    void Player::stopAttacking()
+	{
         if(m_Attacking)
         {
             m_Attacking = false;
@@ -161,6 +161,11 @@ namespace ConfusShared
             startWalking();
             changeState(EPlayerState::Alive);
         }
+	}
+
+	void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* a_SceneNode)
+    {
+        stopAttacking();
     }
 
     void Player::updateColor(irr::IrrlichtDevice* a_Device)
