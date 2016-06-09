@@ -246,10 +246,14 @@ namespace ConfusShared
 			{
 				startLightAttack();
 			} 
-            else if (m_PlayerState == EPlayerState::HeavyAttacking)
-			{
-				startHeavyAttack();
-			}
+            else if(m_PlayerState == EPlayerState::HeavyAttacking)
+            {
+                startHeavyAttack();
+            }
+            else
+            {
+                stopAttacking();
+            }
         } 
     }
 
