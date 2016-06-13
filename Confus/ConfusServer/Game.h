@@ -184,5 +184,12 @@ namespace ConfusServer
 		/// sure that the absolute positions have been updated once the physics world requests them
 		/// </summary>
 		void updateSceneTransformations() const;
+        
+        /// <summary>
+        /// Gets the playerpair from the map, might return a nullpointer.
+        /// </summary>
+        /// <param name="a_PlayerId">The player identifier.</param>
+        /// <returns> The player or a nullpointer</returns>
+        Game::PlayerPair* getPlayer(const long long & a_PlayerId);
     };
 }

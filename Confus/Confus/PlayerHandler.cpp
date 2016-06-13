@@ -5,6 +5,7 @@
 #include "../ConfusShared/EHitIdentifier.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "../ConfusShared/Networking/PlayerStructs.h"
+#include <iostream>
 
 namespace Confus
 {
@@ -62,30 +63,47 @@ namespace Confus
 			playerPair.second.Player->update();
 			playerPair.second.AudioEmitter->updatePosition();
 		}
+        m_PlayerController->update();
+	}
+
+    ConfusShared::Player* PlayerHandler::getPlayer(const long long & a_PlayerId)
+	{
+        try
+        {
+            auto& pair = m_Players.at(a_PlayerId);
+            return pair.Player;
+        }
+        catch(const std::out_of_range& e)
+        {
+            std::cerr << e.what() << std::endl;
+            return nullptr;
+        }
 	}
 
 	void PlayerHandler::updateOtherPlayer(RakNet::Packet* a_Data)
 	{
 		RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
-
 		bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
 
 		for (size_t i = 0; i < m_Players.size(); ++i)
 		{
 			ConfusShared::Networking::Server::PlayerUpdate updateFromServer;
 			bitstreamIn.Read(updateFromServer);
-			auto& pair = m_Players.at(updateFromServer.ID);
 
-			pair.Player->setPosition(updateFromServer.Position);
-   
-
-			if (updateFromServer.ID != m_PlayerNode.getGUID())
-			{
-				pair.Player->setRotation(updateFromServer.Rotation);
-                pair.Player->changeState(updateFromServer.State);
-			}
+            auto player = getPlayer(updateFromServer.ID);
+            if(player != nullptr)
+            {
+                player->setPosition(updateFromServer.Position);
+                player->changeState(updateFromServer.State);
+                if(updateFromServer.ID != m_PlayerNode.getGUID())
+                {
+                    player->setRotation(updateFromServer.Rotation);
+                }
+            }
 		}
 	}
+
+
 
 	void PlayerHandler::updateHealth(RakNet::Packet* a_Data)
 	{
@@ -95,21 +113,24 @@ namespace Confus
 		long long id;
 		inputStream.Read(id);
 
-		auto& player = m_Players.at(id);
-		int health;
-		EHitIdentifier hitIdentifier;
+		auto player = getPlayer(id);
+        if (player != nullptr)
+        {
+            int health;
+            EHitIdentifier hitIdentifier;
 
-		inputStream.Read(health);
-		inputStream.Read(hitIdentifier);
+            inputStream.Read(health);
+            inputStream.Read(hitIdentifier);
 
-		if (health > player.Player->getHealthInstance()->getHealth())
-		{
-			player.Player->getHealthInstance()->heal(health - player.Player->getHealthInstance()->getHealth());
-		}
-		else if (health < player.Player->getHealthInstance()->getHealth())
-		{
-			player.Player->getHealthInstance()->damage(player.Player->getHealthInstance()->getHealth() - health, hitIdentifier);
-		}
+            if(health > player->getHealthInstance()->getHealth())
+            {
+                player->getHealthInstance()->heal(health - player->getHealthInstance()->getHealth());
+            }
+            else if(health < player->getHealthInstance()->getHealth())
+            {
+                player->getHealthInstance()->damage(player->getHealthInstance()->getHealth() - health, hitIdentifier);
+            }
+        }
 	}
 
 	void PlayerHandler::addOwnPlayer(RakNet::Packet* a_Data)
@@ -160,20 +181,18 @@ namespace Confus
 
 		long long id;
 		bitstreamIn.Read(id);
-		auto& player = m_Players.at(id);
-		player.Player->remove();
-		delete(player.Player);
-		m_Players.erase(id);
+		auto player = getPlayer(id);
+        if (player != nullptr)
+        {
+            player->remove();
+            delete(player);
+            m_Players.erase(id);
+        }
 	}
 
 	void PlayerHandler::handleInput(ConfusShared::EventManager* a_EventManager) const
 	{
 		m_PlayerController->handleInput(*a_EventManager);
-	}
-
-	void PlayerHandler::fixedUpdate() const
-	{
-		m_PlayerController->fixedUpdate();
 	}
 
 	ConfusShared::Player* PlayerHandler::getMainPlayer()

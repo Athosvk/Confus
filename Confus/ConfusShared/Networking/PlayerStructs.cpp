@@ -14,6 +14,14 @@ namespace ConfusShared
 				Rotation(a_Player->getRotation())
 			{
 			}
-		}
+
+            PlayerUpdate::PlayerUpdate(ConfusShared::Player * a_Player)
+                : ID(a_Player->getGUID()),
+                Position(a_Player->getPosition()),
+                Rotation(a_Player->getRotation()),
+                State(a_Player->getState())
+            {
+            }
+        }
 	}
 }

@@ -43,7 +43,7 @@ namespace ConfusServer
 
         /// <summary>Checks if a user timed out</summary>
         /// <returns>Returns if the player has timed out</returns>
-        bool userTimedOut();
+        bool userTimedOut() const;
 
         /// <summary>Synchronizes the player with the incoming data</summary>
         /// <param name="a_Data">The data to synchronize the instance with</param>

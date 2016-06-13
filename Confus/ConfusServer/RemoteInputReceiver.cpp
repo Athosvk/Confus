@@ -15,7 +15,7 @@ namespace ConfusServer
         m_LastUpdateTime = RakNet::GetTimeMS() / 1000;
 	}
 
-    bool RemoteInputReceiver::userTimedOut()
+    bool RemoteInputReceiver::userTimedOut() const
 	{
         int currentTime = static_cast<int>((RakNet::GetTimeMS()) / 1000);
         return currentTime > m_LastUpdateTime + UserTimedOutTime;
