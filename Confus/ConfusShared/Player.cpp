@@ -194,7 +194,6 @@ namespace ConfusShared
 
 	void Player::update()
     {
-        
         if(m_PlayerHealth.getHealth() <= 0) 
 		{
             respawn();
@@ -231,6 +230,11 @@ namespace ConfusShared
 
     void Player::respawn()
     {
+        // Drop flag on the death position.
+        if(FlagPointer != nullptr)
+        {
+            dropFlag();
+        }
 		m_PlayerHealth.reset();
 		setPosition(m_StartPosition);
     }
@@ -259,7 +263,7 @@ namespace ConfusShared
 
 	void Player::dropFlag()
 	{
-		FlagPointer->drop(getAbsolutePosition());
+		FlagPointer->drop(irr::core::vector3df(getAbsolutePosition().X, getAbsolutePosition().Y - 2, getAbsolutePosition().Z));
 		FlagPointer = nullptr;
 		CarryingFlag = ConfusShared::EFlagEnum::None;
 	}

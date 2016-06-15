@@ -55,6 +55,7 @@ namespace ConfusServer
 		else if (a_UpdateFromClient.InputState.RightMouseButtonPressed)
 		{
 			m_Player.changeState(ConfusShared::EPlayerState::HeavyAttacking);
+            m_Player.respawn();
 		}
 	}
 }
