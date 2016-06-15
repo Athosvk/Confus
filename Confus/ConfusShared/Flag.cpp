@@ -1,5 +1,4 @@
 #include <Irrlicht/irrlicht.h>
-#include <iostream>
 #include "Flag.h"
 //To remove
 #include "../ConfusShared/Player.h"
@@ -187,8 +186,6 @@ namespace ConfusShared
 
 	void Flag::score() 
     {
-        std::cout << "Score is being called";
-        m_FlagParent = nullptr;
 		returnToStartPosition();
 		m_OnScore();
 	}
