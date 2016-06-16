@@ -35,7 +35,7 @@ namespace Confus
 		void handleInput(ConfusShared::EventManager& a_EventManager);
 
         /// <summary>Sends the current player state to the server, so that the player can be updated remotely</summary>
-        void update();
+        void fixedUpdate();
 	private:		
 		/// <summary>Resets the input state back to normal, so that newly pressed keys are registered</summary>
 		void resetInputState();

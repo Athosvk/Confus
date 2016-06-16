@@ -117,11 +117,6 @@ namespace ConfusServer
             addPlayer(a_Data);
         });
 
-        m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::PlayerLeft), [this](RakNet::Packet* a_Data)
-        {
-            removePlayer(a_Data);
-        });
-
         m_Connection->addFunctionToMap(ID_DISCONNECTION_NOTIFICATION, [this](RakNet::Packet* a_Data)
         {
             removePlayer(a_Data);
@@ -134,10 +129,11 @@ namespace ConfusServer
 
             ConfusShared::Networking::Client::PlayerUpdate updateFromClient;
             data.Read(updateFromClient);
-            auto playerPair = getPlayer(a_Packet->guid.g);
-            if (playerPair != nullptr)
+
+            auto iterator = m_Players.find(a_Packet->guid.g);
+            if (iterator != m_Players.end())
             {
-                playerPair->Receiver->synchronize(updateFromClient);
+                iterator->second.Receiver->synchronize(updateFromClient);
             }
         });
     }
@@ -156,7 +152,7 @@ namespace ConfusServer
                 std::cout << "[Game] Player id: " << id << " timed out." << std::endl;
                 iterator->second.Player->remove();
                 delete(iterator->second.Player);
-                m_Players.erase(iterator++);
+                m_Players.erase(iterator++);                
             }
             else
             {
@@ -319,39 +315,21 @@ namespace ConfusServer
     {
         long long id = static_cast<long long>(a_Data->guid.g);
 
+ 
+        std::cout << "[Game] " << id << " left." << std::endl;
 
-        auto playerPair = getPlayer(id);
-        if (playerPair != nullptr)
-        {
-            std::cout << "[Game] " << id << " left." << std::endl;
+        auto iterator = m_Players.find(id);
+        if(iterator != m_Players.end())
+        {            
+            iterator->second.Player->remove();
+            delete(iterator->second.Player);
+            m_Players.erase(iterator);
 
-            auto iterator = m_Players.find(id);
-            if(iterator != m_Players.end())
-            {
-                playerPair->Player->remove();
-                delete(playerPair->Player);
-                m_Players.erase(iterator);
-
-                RakNet::BitStream stream;
-                stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::PlayerLeft));
-                stream.Write(id);
-                RakNet::AddressOrGUID guid = a_Data->guid;
-                m_Connection->broadcastPacket(&stream, PacketPriority::LOW_PRIORITY, PacketReliability::RELIABLE, &guid);
-            }
-        }
-    }
-
-    Game::PlayerPair* Game::getPlayer(const long long & a_PlayerId)
-    {
-        try
-        {
-            auto& pair = m_Players.at(a_PlayerId);
-            return &pair;
-        }
-        catch(const std::out_of_range& e)
-        {
-            std::cerr << e.what() << std::endl;
-            return nullptr;
+            RakNet::BitStream stream;
+            stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::PlayerLeft));
+            stream.Write(id);
+            RakNet::AddressOrGUID guid = a_Data->guid;
+            m_Connection->broadcastPacket(&stream, PacketPriority::LOW_PRIORITY, PacketReliability::RELIABLE, &guid);
         }
     }
 

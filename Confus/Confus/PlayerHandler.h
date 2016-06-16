@@ -100,6 +100,7 @@ namespace Confus
 			Audio::AudioManager& a_AudioManager);
 		void setConnection(Confus::Networking::ClientConnection* a_Connection);
 		void update();
+        void fixedUpdate() const;
 		void handleInput(ConfusShared::EventManager* a_EventManager) const;
 		ConfusShared::Player* getMainPlayer();
 	private:
@@ -122,10 +123,6 @@ namespace Confus
 		/// <summary>Removes the player instance from the local game instance</summary>
 		/// <param name="a_Data">The data containing the information of the player needed to remove the player</param>
 		void removePlayer(RakNet::Packet* a_Data);
-
-        /// <summary>Returns the player at the id</summary>
-        /// <param name="a_PlayerId">The id of the player</param>
-        ConfusShared::Player* getPlayer(const long long & a_PlayerId);
 	};
 
 }

@@ -99,6 +99,7 @@ namespace ConfusShared
         m_PlayerNode->setAnimationEndCallback(this);
         m_PlayerNode->setAnimationSpeed(10);
         m_Attacking = true;
+        m_Walking = false;
         m_Weapon.enableCollider();
         m_Weapon.resetCollider();
     }
@@ -193,8 +194,7 @@ namespace ConfusShared
 	}
 
 	void Player::update()
-    {
-        
+    {        
         if(m_PlayerHealth.getHealth() <= 0) 
 		{
             respawn();
@@ -203,19 +203,24 @@ namespace ConfusShared
 				dropFlag();
 			}
         }
-        if(m_PreviousPosition != m_PlayerNode->getPosition())
+
+        if (!m_Attacking)
         {
-            if(!m_Attacking && !m_Walking)
+            if(m_PreviousPosition != m_PlayerNode->getPosition())
             {
-                startWalking();
-                m_Walking = true;
+                if(!m_Walking)
+                {
+                    startWalking();
+                    m_Walking = true;
+                }
+            }
+            else if(m_Walking )
+            {
+                stopWalking();
+                m_Walking = false;
             }
         }
-        else if(m_Walking && !m_Attacking)
-        {
-            stopWalking();
-            m_Walking = false;
-        }
+
         m_PreviousPosition = m_PlayerNode->getPosition();
 
         if(getPosition().Y <= -10) 

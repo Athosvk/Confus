@@ -5,7 +5,6 @@
 #include "../ConfusShared/EHitIdentifier.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "../ConfusShared/Networking/PlayerStructs.h"
-#include <iostream>
 
 namespace Confus
 {
@@ -63,21 +62,11 @@ namespace Confus
 			playerPair.second.Player->update();
 			playerPair.second.AudioEmitter->updatePosition();
 		}
-        m_PlayerController->update();
 	}
 
-    ConfusShared::Player* PlayerHandler::getPlayer(const long long & a_PlayerId)
+    void PlayerHandler::fixedUpdate() const
 	{
-        try
-        {
-            auto& pair = m_Players.at(a_PlayerId);
-            return pair.Player;
-        }
-        catch(const std::out_of_range& e)
-        {
-            std::cerr << e.what() << std::endl;
-            return nullptr;
-        }
+        m_PlayerController->fixedUpdate();
 	}
 
 	void PlayerHandler::updateOtherPlayer(RakNet::Packet* a_Data)
@@ -90,9 +79,10 @@ namespace Confus
 			ConfusShared::Networking::Server::PlayerUpdate updateFromServer;
 			bitstreamIn.Read(updateFromServer);
 
-            auto player = getPlayer(updateFromServer.ID);
-            if(player != nullptr)
+            auto iterator = m_Players.find(updateFromServer.ID);
+            if (iterator != m_Players.end())
             {
+                auto player = iterator->second.Player;
                 player->setPosition(updateFromServer.Position);
                 player->changeState(updateFromServer.State);
                 if(updateFromServer.ID != m_PlayerNode.getGUID())
@@ -110,10 +100,10 @@ namespace Confus
 
         long long id;
 		inputStream.Read(id);
-		auto player = getPlayer(id);
-
-        if (player != nullptr)
+        auto iterator = m_Players.find(id);
+        if (iterator != m_Players.end())
         {
+            auto player = iterator->second.Player;
             int health;
             EHitIdentifier hitIdentifier;
 
@@ -179,12 +169,12 @@ namespace Confus
 
 		long long id;
 		bitstreamIn.Read(id);
-		auto player = getPlayer(id);
-        if (player != nullptr)
+        auto playerPair = m_Players.find(id);
+        if (playerPair != m_Players.end())
         {
-            player->remove();
-            delete(player);
-            m_Players.erase(id);
+            playerPair->second.Player->remove();
+            delete(playerPair->second.Player);
+            m_Players.erase(playerPair);
         }
 	}
 
