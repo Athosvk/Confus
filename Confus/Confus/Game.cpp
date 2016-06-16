@@ -61,7 +61,6 @@ namespace Confus
 		irr::scene::ICameraSceneNode* camera = m_Device->getSceneManager()->addCameraSceneNode(m_Device->getSceneManager()->getRootSceneNode());
 		camera->setFOV(70.f);
 		camera->setNearValue(0.1f);
-		camera->setPosition(irr::core::vector3df(0.f, 0.0f, 2.0f));
 		auto orbitNode = m_Device->getSceneManager()->addEmptySceneNode();
 		orbitNode->setRotation(irr::core::vector3df(0.0f, 180.0f, 0.0f));
 		camera->setParent(orbitNode);
@@ -219,7 +218,6 @@ namespace Confus
 
     void Game::update()
     {
-		m_Camera->update();
 		auto targetRotation = m_PlayerHandler.getMainPlayer()->getRotation();
 		targetRotation.Y = m_Camera->getYRotation();
 		m_PlayerHandler.getMainPlayer()->setRotation(targetRotation);
@@ -245,6 +243,7 @@ namespace Confus
 
     void Game::fixedUpdate()
     {
+		m_Camera->fixedUpdate();
 		m_MazeGenerator.fixedUpdate();
         m_PlayerHandler.fixedUpdate();
     }
