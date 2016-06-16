@@ -103,17 +103,15 @@ namespace Confus
 		}
 	}
 
-
-
 	void PlayerHandler::updateHealth(RakNet::Packet* a_Data)
 	{
 		RakNet::BitStream inputStream(a_Data->data, a_Data->length, false);
 		inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
-		long long id;
+        long long id;
 		inputStream.Read(id);
-
 		auto player = getPlayer(id);
+
         if (player != nullptr)
         {
             int health;
@@ -147,7 +145,7 @@ namespace Confus
 
 		size_t size;
 		bitstreamIn.Read(size);
-    		for (size_t i = 0u; i < size; i++)
+    	for (size_t i = 0u; i < size; i++)
 		{
 			ConfusShared::Networking::Server::NewPlayer playerInfo;
 			bitstreamIn.Read(playerInfo);

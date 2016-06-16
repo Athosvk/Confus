@@ -26,6 +26,6 @@ namespace ConfusServer
 		outputStream.Write(m_Flag.getFlagStatus());
 		outputStream.Write(m_Flag.getPosition());
 
-		m_Connection.broadcastBitstream(outputStream);
+		m_Connection.broadcastPacket(&outputStream);
 	}
 }

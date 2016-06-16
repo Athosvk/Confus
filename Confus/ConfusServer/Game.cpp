@@ -287,6 +287,10 @@ namespace ConfusServer
 			newPlayer->setStartPosition(irr::core::vector3df(0.f, 10.f, 0.f));
 		}
 		newPlayer->respawn();
+        newPlayer->getHealthInstance()->DamageEvent += [this, newPlayer](EHitIdentifier a_HitIdentifier) -> void
+        {
+            updateHealth(a_HitIdentifier, newPlayer);
+        };
 
         RakNet::BitStream stream;
         stream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::MainPlayerJoined));

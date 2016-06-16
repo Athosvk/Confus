@@ -35,7 +35,7 @@ namespace ConfusServer
         bitStream.Write(m_RedTeamScore);
 		bitStream.Write(m_BlueTeamScore);
 
-        m_Connection->broadcastBitstream(bitStream);
+        m_Connection->broadcastPacket(&bitStream);
     }
 
     void TeamScore::onTeamScored(ConfusShared::ETeamIdentifier a_TeamScored)
@@ -45,7 +45,7 @@ namespace ConfusServer
             RakNet::BitStream bitStream;
             bitStream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::EndOfGame));
             bitStream.Write(a_TeamScored);
-            m_Connection->broadcastBitstream(bitStream);
+            m_Connection->broadcastPacket(&bitStream);
             std::cout << "Team has won: " << static_cast<int>(a_TeamScored) << std::endl;
             m_ResetGameCallback();
         }
