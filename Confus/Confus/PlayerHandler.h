@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <memory>
 #include <map>
+#include <RakNet/GetTime.h>
 
 #include "LocalPlayerController.h"
 #include "../ConfusShared/Player.h"
@@ -29,6 +30,8 @@ namespace Confus
 	{
 		class ClientConnection;
 	}
+
+	class Game;
 
 	class PlayerHandler
 	{
@@ -91,13 +94,20 @@ namespace Confus
 		irr::IrrlichtDevice* m_Device;
 
 		/// <summary>
+		/// A reference to the maingame.
+		/// </summary>
+		Game& m_MainGame;
+
+		/// <summary>
 		/// A reference to the clientconnection.
 		/// </summary>
 		Confus::Networking::ClientConnection* m_Connection = nullptr;
+
+
 			
 	public:
 		PlayerHandler(irr::IrrlichtDevice* a_Device, ConfusShared::Physics::PhysicsWorld& a_PhysicsWorld,
-			Audio::AudioManager& a_AudioManager);
+			Audio::AudioManager& a_AudioManager, Game& a_MainGame);
 		void setConnection(Confus::Networking::ClientConnection* a_Connection);
 		void update();
 		void handleInput(ConfusShared::EventManager* a_EventManager) const;

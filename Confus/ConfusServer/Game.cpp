@@ -142,19 +142,18 @@ namespace ConfusServer
         m_BlueFlag.update();
 
         static float currentDelay = 0.0f;
-        static int currentSeed;
         m_MazeTimer += m_DeltaTime;
         if(m_MazeTimer >= MazeChangeInterval)
         {
             if(currentDelay == 0.0f)
             {
-                currentSeed = static_cast<int>(time(nullptr)) % 1000;
-                broadcastMazeChange(currentSeed);
+                m_CurrentSeed = static_cast<int>(time(nullptr)) % 1000;
+                broadcastMazeChange(m_CurrentSeed);
             }
             currentDelay += static_cast<float>(m_DeltaTime);
 			if (currentDelay >= MazeDelay)
 			{
-				m_MazeGenerator.refillMainMaze(currentSeed);
+				m_MazeGenerator.refillMainMaze(m_CurrentSeed);
 				m_MazeTimer = 0.0f;
 				currentDelay = 0.0f;
 			}
@@ -257,6 +256,11 @@ namespace ConfusServer
 			stream.Write(playerInfo);
         }
         RakNet::AddressOrGUID guid = a_Data->guid;
+		// after GUID add in syncing data
+		stream.Write(m_TeamScoreManager.getPointsOfTeam(ConfusShared::ETeamIdentifier::TeamRed));
+		stream.Write(m_TeamScoreManager.getPointsOfTeam(ConfusShared::ETeamIdentifier::TeamBlue));
+		stream.Write(m_CurrentSeed);
+
         m_Connection->sendPacket(&stream, &guid);
 
 		ConfusShared::Networking::Server::NewPlayer playerInfo(newPlayer);
