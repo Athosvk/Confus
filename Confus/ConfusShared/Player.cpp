@@ -41,6 +41,10 @@ namespace ConfusShared
 	Player::~Player()
 	{
         m_Collider->remove();
+		if(FlagPointer != nullptr)
+		{
+			dropFlag();
+		}
 	}
 
 	ConfusShared::Health* Player::getHealthInstance()
@@ -174,10 +178,11 @@ namespace ConfusShared
 
 	void Player::updateVelocity()
 	{
-		m_WalkingDirection.rotateXZBy(-getRotation().Y);
-		auto rigidBody = m_Collider->getRigidBody();
+		auto direction = m_WalkingDirection;
+		direction.rotateXZBy(-getRotation().Y);
 		const float Speed = 15.0f;
-		auto resultingVelocity = irr::core::vector3df(m_WalkingDirection.X, 0.0f, m_WalkingDirection.Y) * Speed
+		auto rigidBody = m_Collider->getRigidBody();
+		auto resultingVelocity = irr::core::vector3df(direction.X, 0.0f, direction.Z) * Speed
 			+ irr::core::vector3df(0.0f, rigidBody->getVelocity().Y, 0.0f);
 		rigidBody->setVelocity(resultingVelocity);
 	}
@@ -233,7 +238,8 @@ namespace ConfusShared
 			if (m_PlayerState == EPlayerState::LightAttacking)
 			{
 				startLightAttack();
-			} else if (m_PlayerState == EPlayerState::HeavyAttacking)
+			} 
+            else if (m_PlayerState == EPlayerState::HeavyAttacking)
 			{
 				startHeavyAttack();
 			}

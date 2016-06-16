@@ -12,25 +12,27 @@ namespace Confus
 	{
 		m_Device->getCursorControl()->setPosition(0.5f, 0.5f);
 		m_Device->getCursorControl()->setVisible(false);
+		updateTarget();
 	}
 
-	void CameraController::update()
+	void CameraController::fixedUpdate()
 	{
 		if(m_Device->isWindowFocused())
 		{
 			wrapMouse();
+			if(!m_Wrapped)
+			{
+				updateRotation();
+				updateTarget();
+			}
+			m_PreviousPosition = m_Device->getCursorControl()->getRelativePosition();
+			m_Wrapped = false;
 		}
-		if(!m_Wrapped)
-		{
-			updateTarget();
-		}
-		m_PreviousPosition = m_Device->getCursorControl()->getRelativePosition();
-		m_Wrapped = false;
 	}
 
 	float CameraController::getYRotation() const
 	{
-		return m_YRotation;
+		return m_Rotation.Y;
 	}
 
 	void CameraController::wrapMouse()
@@ -50,24 +52,22 @@ namespace Confus
 		m_Device->getCursorControl()->setPosition(position.X, position.Y);
 	}
 
-	void CameraController::updateTarget()
+	void CameraController::updateRotation()
 	{
 		auto cursor = m_Device->getCursorControl();
 		auto deltaPosition = (m_PreviousPosition - cursor->getRelativePosition()) * m_MouseSensitivity * m_AxesMultiplier;
-		auto clampedX = irr::core::clamp(deltaPosition.Y + m_OrbitNode->getRotation().X, 
-			m_MinimumXRotation, m_MaximumXRotation);
-		m_OrbitNode->setRotation(irr::core::vector3df(clampedX, m_OrbitNode->getRotation().Y, m_OrbitNode->getRotation().Z));
 
-		m_CameraNode->updateAbsolutePosition();
-		m_CameraNode->setRotation(irr::core::vector3df(deltaPosition.Y, 0.0f, 0.0f));
-		m_CameraNode->setTarget(m_OrbitNode->getAbsolutePosition());
-		m_YRotation += deltaPosition.X;
+		auto clampedXRotation = irr::core::clamp(deltaPosition.Y + m_Rotation.X,
+			m_MinimumXRotation, m_MaximumXRotation);
+		auto yRotation = m_Rotation.Y + deltaPosition.X;
+
+		m_Rotation = irr::core::vector3df(clampedXRotation, yRotation, 0.0f);
 	}
 
-	irr::core::quaternion CameraController::fromAxisAngle(irr::core::vector3df a_Axis, float a_Angle)
+	void CameraController::updateTarget()
 	{
-		auto quaternion = irr::core::quaternion();
-		quaternion.fromAngleAxis(a_Angle, a_Axis);
-		return quaternion;
+		irr::core::vector3df target = m_Rotation.rotationToDirection() * 100000.0f;
+		m_CameraNode->setTarget(target);
+		m_CameraNode->updateAbsolutePosition();
 	}
 }

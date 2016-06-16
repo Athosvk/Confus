@@ -1,42 +1,38 @@
-#include <RakNet/BitStream.h>
-
 #include "RemoteInputReceiver.h"
-#include "../ConfusShared/PacketType.h"
 #include "Networking/Connection.h"
 #include "../ConfusShared/Player.h"
 #include "../ConfusShared/Networking/PlayerStructs.h"
+#include <RakNet/GetTime.h>
 
 namespace ConfusServer
 {
+    const int RemoteInputReceiver::UserTimedOutTime = 20;
+
 	RemoteInputReceiver::RemoteInputReceiver(ConfusShared::Player& a_Player, Networking::Connection& a_Connection)
 		: m_Player(a_Player),
 		m_Connection(a_Connection)
 	{
-		m_Connection.addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::Player), [this](RakNet::Packet* a_Packet)
-		{
-			RakNet::BitStream data(a_Packet->data, a_Packet->length, false);
-			data.IgnoreBytes(sizeof(RakNet::MessageID));
-
-			ConfusShared::Networking::Client::PlayerUpdate updateFromClient;
-			data.Read(updateFromClient);
-			if(updateFromClient.ID == m_Player.getGUID())
-			{
-				synchronize(updateFromClient);
-			}
-		});
+        m_LastUpdateTime = RakNet::GetTimeMS() / 1000;
 	}
 
-	void RemoteInputReceiver::synchronize(const ConfusShared::Networking::Client::PlayerUpdate& a_UpdateFromClient) const
+    bool RemoteInputReceiver::userTimedOut()
 	{
+        int currentTime = static_cast<int>((RakNet::GetTimeMS()) / 1000);
+        return currentTime > m_LastUpdateTime + UserTimedOutTime;
+	}
+
+	void RemoteInputReceiver::synchronize(const ConfusShared::Networking::Client::PlayerUpdate& a_UpdateFromClient)
+	{
+        m_LastUpdateTime = RakNet::GetTimeMS() / 1000;
 		m_Player.setRotation(a_UpdateFromClient.Rotation);
 		irr::core::vector3df direction = irr::core::vector3df();
 		if(a_UpdateFromClient.InputState.ForwardPressed)
 		{
-			direction.Y = 1.0f;
+			direction.Z = 1.0f;
 		}
 		else if(a_UpdateFromClient.InputState.BackwardPressed)
 		{
-			direction.Y = -1.0f;
+			direction.Z = -1.0f;
 		}
 		if(a_UpdateFromClient.InputState.RightPressed)
 		{

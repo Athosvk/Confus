@@ -48,6 +48,7 @@ namespace ConfusShared
         m_TargetPosition = m_RegularPosition;
         m_Transitioning = true;
 		m_MeshNode->setVisible(true);
+        m_Raised = false;
     }
 
     void MoveableWall::fixedUpdate()
@@ -109,7 +110,7 @@ namespace ConfusShared
         else if(m_Raised)
         {
             m_Transitioning = false;
-			m_MeshNode->setVisible(false);
+			//m_MeshNode->setVisible(false);
 			m_Raised = false;
         }
 		else if (!m_Raised)

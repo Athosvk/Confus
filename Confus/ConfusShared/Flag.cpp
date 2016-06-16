@@ -29,13 +29,10 @@ namespace ConfusShared
 		m_Collider->setTriggerEnterCallback([this](Physics::BoxCollider* a_Other)
 		{
 			auto collidedNode = a_Other->getRigidBody()->getAttachedNode();
-			if (!collidedNode->getChildren().empty())
+			ConfusShared::Player* player = dynamic_cast<ConfusShared::Player*>(collidedNode);
+			if (player != nullptr)
 			{
-				ConfusShared::Player* player = dynamic_cast<ConfusShared::Player*>(*collidedNode->getChildren().begin());
-				if (player != nullptr)
-				{
-					captureFlag(player);
-				}
+				captureFlag(player);
 			}
 		});
 

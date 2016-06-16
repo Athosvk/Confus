@@ -25,7 +25,7 @@ namespace ConfusShared
         {
             if(!m_Collided)
             {
-				auto playerNode = dynamic_cast<Player*>(*a_Other->getRigidBody()->getAttachedNode()->getChildren().begin());
+				auto playerNode = dynamic_cast<Player*>(a_Other->getRigidBody()->getAttachedNode());
 				if(playerNode != nullptr)
 				{
 					damagePlayer(playerNode);
