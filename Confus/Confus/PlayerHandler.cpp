@@ -64,24 +64,32 @@ namespace Confus
 		}
 	}
 
+    void PlayerHandler::fixedUpdate() const
+	{
+        m_PlayerController->fixedUpdate();
+	}
+
 	void PlayerHandler::updateOtherPlayer(RakNet::Packet* a_Data)
 	{
 		RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
-
 		bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
 
 		for (size_t i = 0; i < m_Players.size(); ++i)
 		{
 			ConfusShared::Networking::Server::PlayerUpdate updateFromServer;
 			bitstreamIn.Read(updateFromServer);
-			auto& pair = m_Players.at(updateFromServer.ID);
 
-			pair.Player->setPosition(updateFromServer.Position);
-
-			if (updateFromServer.ID != m_PlayerNode.getGUID())
-			{
-				pair.Player->setRotation(updateFromServer.Rotation);
-			}
+            auto iterator = m_Players.find(updateFromServer.ID);
+            if (iterator != m_Players.end())
+            {
+                auto player = iterator->second.Player;
+                player->setPosition(updateFromServer.Position);
+                player->changeState(updateFromServer.State);
+                if(updateFromServer.ID != m_PlayerNode.getGUID())
+                {
+                    player->setRotation(updateFromServer.Rotation);
+                }
+            }
 		}
 	}
 
@@ -90,24 +98,27 @@ namespace Confus
 		RakNet::BitStream inputStream(a_Data->data, a_Data->length, false);
 		inputStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
-		long long id;
+        long long id;
 		inputStream.Read(id);
+        auto iterator = m_Players.find(id);
+        if (iterator != m_Players.end())
+        {
+            auto player = iterator->second.Player;
+            int health;
+            EHitIdentifier hitIdentifier;
 
-		auto& player = m_Players.at(id);
-		int health;
-		EHitIdentifier hitIdentifier;
+            inputStream.Read(health);
+            inputStream.Read(hitIdentifier);
 
-		inputStream.Read(health);
-		inputStream.Read(hitIdentifier);
-
-		if (health > player.Player->getHealthInstance()->getHealth())
-		{
-			player.Player->getHealthInstance()->heal(health - player.Player->getHealthInstance()->getHealth());
-		}
-		else if (health < player.Player->getHealthInstance()->getHealth())
-		{
-			player.Player->getHealthInstance()->damage(player.Player->getHealthInstance()->getHealth() - health, hitIdentifier);
-		}
+            if(health > player->getHealthInstance()->getHealth())
+            {
+                player->getHealthInstance()->heal(health - player->getHealthInstance()->getHealth());
+            }
+            else if(health < player->getHealthInstance()->getHealth())
+            {
+                player->getHealthInstance()->damage(player->getHealthInstance()->getHealth() - health, hitIdentifier);
+            }
+        }
 	}
 
 	void PlayerHandler::addOwnPlayer(RakNet::Packet* a_Data)
@@ -124,7 +135,7 @@ namespace Confus
 
 		size_t size;
 		bitstreamIn.Read(size);
-    		for (size_t i = 0u; i < size; i++)
+    	for (size_t i = 0u; i < size; i++)
 		{
 			ConfusShared::Networking::Server::NewPlayer playerInfo;
 			bitstreamIn.Read(playerInfo);
@@ -158,20 +169,18 @@ namespace Confus
 
 		long long id;
 		bitstreamIn.Read(id);
-		auto& player = m_Players.at(id);
-		player.Player->remove();
-		delete(player.Player);
-		m_Players.erase(id);
+        auto playerPair = m_Players.find(id);
+        if (playerPair != m_Players.end())
+        {
+            playerPair->second.Player->remove();
+            delete(playerPair->second.Player);
+            m_Players.erase(playerPair);
+        }
 	}
 
 	void PlayerHandler::handleInput(ConfusShared::EventManager* a_EventManager) const
 	{
 		m_PlayerController->handleInput(*a_EventManager);
-	}
-
-	void PlayerHandler::fixedUpdate() const
-	{
-		m_PlayerController->fixedUpdate();
 	}
 
 	ConfusShared::Player* PlayerHandler::getMainPlayer()

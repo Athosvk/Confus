@@ -100,8 +100,8 @@ namespace Confus
 			Audio::AudioManager& a_AudioManager);
 		void setConnection(Confus::Networking::ClientConnection* a_Connection);
 		void update();
+        void fixedUpdate() const;
 		void handleInput(ConfusShared::EventManager* a_EventManager) const;
-		void fixedUpdate() const;
 		ConfusShared::Player* getMainPlayer();
 	private:
 		/// <summary>

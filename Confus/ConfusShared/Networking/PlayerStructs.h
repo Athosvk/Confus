@@ -22,6 +22,13 @@ namespace ConfusShared
                 irr::core::vector3df Rotation = irr::core::vector3df(0.f);
                 /// <summary> The attacking state of a player</summary>
                 EPlayerState State = EPlayerState::Alive;
+
+                /// <summary>Initializes a new instance of the <see cref="PlayerUpdate"/> struct.</summary>
+                /// <param name="a_Player">The player to construct the info from</param>
+                PlayerUpdate(ConfusShared::Player* a_Player);
+
+                /// <summary>Initializes a new instance of the <see cref="NewPlayer"/> struct.</summary>
+                PlayerUpdate() = default;
             };
 
             /// <summary> Represents the all the information of a player, that is needed to add him to the world </summary>

@@ -49,6 +49,8 @@ namespace ConfusShared
     private:
 		/// <summary>The m_ identifier</summary>
 		long long m_ID;
+        /// <summary>The previous position of the player </summary>
+        irr::core::vector3df m_PreviousPosition;
 		/// <summary> The IAnimatedMeshSceneNode for the player </summary>
 		irr::scene::IAnimatedMeshSceneNode* m_PlayerNode;
 		/// <summary> private value for health class </summary>
@@ -141,6 +143,9 @@ namespace ConfusShared
 
 		/// <summary>Gets the unique identifier that the player uses over the network</summary>
 		long long Player::getGUID();
+
+        /// <summary>Stops the attack if the player is currently attacking</summary>
+        void stopAttacking();
     private:
 		/// <summary> Updates the color </summary>
 		/// <param name="a_Device"> The active irrlicht device </param>

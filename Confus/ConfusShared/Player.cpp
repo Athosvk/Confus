@@ -15,7 +15,7 @@ namespace ConfusShared
 		: irr::scene::ISceneNode(nullptr, a_Device->getSceneManager(), -1),
 		CarryingFlag(ConfusShared::EFlagEnum::None),
 		m_ID(a_ID),
-		m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f))
+		m_Weapon(a_Device->getSceneManager(), a_PhysicsWorld, irr::core::vector3df(0.3f, 0.3f, 0.9f), *this)
     {
 		setParent(SceneManager->getRootSceneNode());
         auto sceneManager = a_Device->getSceneManager();
@@ -99,6 +99,7 @@ namespace ConfusShared
         m_PlayerNode->setAnimationEndCallback(this);
         m_PlayerNode->setAnimationSpeed(10);
         m_Attacking = true;
+        m_Walking = false;
         m_Weapon.enableCollider();
         m_Weapon.resetCollider();
     }
@@ -152,8 +153,8 @@ namespace ConfusShared
 		m_WalkingDirection = a_Direction;
 	}
 
-	void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* a_SceneNode)
-    {
+    void Player::stopAttacking()
+	{
         if(m_Attacking)
         {
             m_Attacking = false;
@@ -161,6 +162,11 @@ namespace ConfusShared
             startWalking();
             changeState(EPlayerState::Alive);
         }
+	}
+
+	void Player::OnAnimationEnd(irr::scene::IAnimatedMeshSceneNode* a_SceneNode)
+    {
+        stopAttacking();
     }
 
     void Player::updateColor(irr::IrrlichtDevice* a_Device)
@@ -188,7 +194,7 @@ namespace ConfusShared
 	}
 
 	void Player::update()
-    {
+    {        
         if(m_PlayerHealth.getHealth() <= 0) 
 		{
             respawn();
@@ -197,19 +203,25 @@ namespace ConfusShared
 				dropFlag();
 			}
         }
-        if(m_Collider->getRigidBody()->getVelocity().X != 0.0f && m_Collider->getRigidBody()->getVelocity().Z != 0.0f)
+
+        if (!m_Attacking)
         {
-            if(!m_Attacking && !m_Walking)
+            if(m_PreviousPosition != m_PlayerNode->getPosition())
             {
-                startWalking();
-                m_Walking = true;
+                if(!m_Walking)
+                {
+                    startWalking();
+                    m_Walking = true;
+                }
+            }
+            else if(m_Walking )
+            {
+                stopWalking();
+                m_Walking = false;
             }
         }
-        else if(m_Walking && !m_Attacking)
-        {
-            stopWalking();
-            m_Walking = false;
-        }
+
+        m_PreviousPosition = m_PlayerNode->getPosition();
 
         if(getPosition().Y <= -10) 
 		{
@@ -239,10 +251,14 @@ namespace ConfusShared
 			{
 				startLightAttack();
 			} 
-            else if (m_PlayerState == EPlayerState::HeavyAttacking)
-			{
-				startHeavyAttack();
-			}
+            else if(m_PlayerState == EPlayerState::HeavyAttacking)
+            {
+                startHeavyAttack();
+            }
+            else
+            {
+                stopAttacking();
+            }
         } 
     }
 

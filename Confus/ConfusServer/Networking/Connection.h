@@ -55,10 +55,7 @@ namespace ConfusServer
             void sendPacket(RakNet::BitStream& a_InputStream, PacketReliability a_Reliability, RakNet::SystemAddress a_Address);
             void sendPacket(RakNet::BitStream& a_InputStream, RakNet::SystemAddress a_Address);
             void sendPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Address);
-            void broadcastPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Excluded = nullptr);
-            /// <summary> Send Package to all clients </summary>
-            /// <param name="a_BitStream">The packet to send.</param>
-            void broadcastBitstream(RakNet::BitStream& a_BitStream);
+            void broadcastPacket(RakNet::BitStream* a_Stream, PacketPriority a_Priority = PacketPriority::HIGH_PRIORITY, PacketReliability a_Reliability = PacketReliability::RELIABLE, RakNet::AddressOrGUID* a_Excluded = nullptr);
 		private:
 			/// <summary> Gets the amount of clients connected to this server instance </summary>
 			/// <returns>The amount of clients connected</returns>

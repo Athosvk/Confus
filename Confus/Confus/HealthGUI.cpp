@@ -1,7 +1,5 @@
 #include "HealthGUI.h"
 #include "GUI.h"
-#include "Game.h"
-#include "ClientTeamScore.h"
 
 namespace Confus
 {

@@ -245,7 +245,7 @@ namespace Confus
     {
 		m_Camera->fixedUpdate();
 		m_MazeGenerator.fixedUpdate();
-		m_PlayerHandler.fixedUpdate();
+        m_PlayerHandler.fixedUpdate();
     }
 
     void Game::end()

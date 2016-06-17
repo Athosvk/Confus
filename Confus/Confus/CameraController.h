@@ -37,7 +37,7 @@ namespace Confus
 		/// The multiplier for the axes, so that we can invert them at our desire
 		/// and decouple this multiplier from the mouse sensitivity
 		/// </summary>
-		irr::core::vector2df m_AxesMultiplier = irr::core::vector2df(-1.0f, 1.0f);
+		irr::core::vector2df m_AxesMultiplier = irr::core::vector2df(-1.0f, -1.0f);
 		/// <summary>
 		/// The pseudo mirror of the camera's rotation
 		/// </summary>

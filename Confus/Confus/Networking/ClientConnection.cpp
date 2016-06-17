@@ -35,11 +35,6 @@ namespace Confus
 			//True is sent to notify the server so we can exit gracefully
 			if(m_Connected)
 			{
-                RakNet::BitStream bitStream;
-                bitStream.Write(static_cast<RakNet::MessageID>(ConfusShared::Networking::EPacketType::PlayerLeft));
-                bitStream.Write(static_cast<long long>(getID()));
-                sendMessage(&bitStream, PacketReliability::RELIABLE);
-                m_Interface->CloseConnection(getServerAddress(), true);
                 m_Interface->CloseConnection(getServerAddress(), true);
                 //spin wait to allow CloseConnection to finish
                 while(getConnectionCount() > 0)
@@ -47,7 +42,6 @@ namespace Confus
 
                 }
 			}
-
             RakNet::RakPeerInterface::DestroyInstance(m_Interface);
         }
 

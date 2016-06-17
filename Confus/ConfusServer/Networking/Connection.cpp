@@ -101,11 +101,10 @@ namespace ConfusServer
 			}
         }
 
-        void Connection::broadcastPacket(RakNet::BitStream* a_Stream, RakNet::AddressOrGUID* a_Excluded)
+        void Connection::broadcastPacket(RakNet::BitStream* a_Stream, PacketPriority a_Priority, PacketReliability a_Reliability,  RakNet::AddressOrGUID* a_Excluded)
         {
             RakNet::AddressOrGUID guid = a_Excluded != nullptr ? *a_Excluded : m_Interface->GetMyGUID();
-            m_Interface->Send(a_Stream, PacketPriority::HIGH_PRIORITY,
-                    PacketReliability::RELIABLE_ORDERED, 0, guid, true);
+            m_Interface->Send(a_Stream, a_Priority, a_Reliability, 0, guid, true);
         }
 
 		void Connection::printMessage(RakNet::BitStream& a_InputStream)
@@ -130,16 +129,6 @@ namespace ConfusServer
             if(m_Connected)
             {
                 m_Interface->Send(&a_InputStream, PacketPriority::HIGH_PRIORITY, PacketReliability::UNRELIABLE, 0, a_Address, false);
-            }
-        }
-
-        void Connection::broadcastBitstream(RakNet::BitStream& a_BitStream)
-        {
-            auto openConnections = getOpenConnections();
-
-            for(unsigned short i = 0u; i < openConnections.size(); ++i)
-            {
-                m_Interface->Send(&a_BitStream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0, openConnections[i], false);
             }
         }
 
