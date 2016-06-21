@@ -44,13 +44,14 @@ namespace ConfusShared
 
 	void Weapon::damagePlayer(Player* a_Player) const
     {
+        bool backHit = getAngle(a_Player->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle);
         if(Damage == Player::LightAttackDamage)
         {
-            a_Player->getHealthInstance()->damage(getAngle(a_Player->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle) ? Damage * 2 : Damage, EHitIdentifier::LightBackstab);
+            a_Player->getHealthInstance()->damage(backHit ? Damage * 2 : Damage, backHit ? EHitIdentifier::LightBackstab : EHitIdentifier::Light);
         }
-        else
+        else if (Damage == Player::HeavyAttackDamage)
         {
-            a_Player->getHealthInstance()->damage(getAngle(a_Player->getPosition(), m_Node->getPosition()) <= (180.0f - BackstabAngle) ? Damage * 2 : Damage, EHitIdentifier::HeavyBackstab);
+            a_Player->getHealthInstance()->damage(backHit ? Damage * 2 : Damage, backHit ? EHitIdentifier::HeavyBackstab : EHitIdentifier::Heavy);
         }
     }
 
