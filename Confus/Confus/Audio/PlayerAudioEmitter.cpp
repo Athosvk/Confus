@@ -1,141 +1,137 @@
 #include <time.h> 
+#include <algorithm>
 
 #include "PlayerAudioEmitter.h"
+#include "AudioManager.h"
+#include "../../ConfusShared/Player.h"
 
 namespace Confus
 {
     namespace Audio
     {
-        PlayerAudioEmitter::PlayerAudioEmitter(irr::scene::IAnimatedMeshSceneNode* a_AttachedPlayer) : m_AttachedPlayer(a_AttachedPlayer)
+        PlayerAudioEmitter::PlayerAudioEmitter(ConfusShared::Player* a_AttachedPlayer, AudioManager* a_AudioManager)
+            : m_HitSoundHeavy(a_AudioManager->createSound("SFX/Player/a_heavy_grunt.wav")),
+            m_HitSoundLight(a_AudioManager->createSound("SFX/Player/a_light_grunt.wav")),
+            m_HitSoundHeavyBackstab(a_AudioManager->createSound("SFX/Player/a_heavybackstab_grunt.wav")),
+            m_HitSoundLightBackstab(a_AudioManager->createSound("SFX/Player/a_lightbackstab_grunt.wav")),
+            m_AttachedPlayer(a_AttachedPlayer)
         {
-        createAudioSources();
+            createAudioSources(a_AudioManager);
+            m_AttachedPlayer->getHealthInstance()->DamageEvent += [this](EHitIdentifier a_HitIdentifier) -> void
+            {
+                playHitSound(a_HitIdentifier);
+            };
+
+            m_AttachedPlayer->OnHeavyAttack += [this]() -> void
+            {
+                playHeavyAttack();
+            };
+
+            m_AttachedPlayer->OnLightAttack += [this]() -> void
+            {
+                playLightAttack();
+            };
         }
 
-        PlayerAudioEmitter::~PlayerAudioEmitter()
+        void PlayerAudioEmitter::playFootStepSound()
         {
-            for(auto audioSource : m_AudioSourceFootsteps)
+            auto soundIterator = std::find_if(m_Footsteps.begin(), m_Footsteps.end(), [](const Sound& a_Sound)->bool
             {
-                delete(audioSource);
-            }
-            for(auto audioSource : m_AudioSourceGrunts)
+                return !a_Sound.isPlaying();
+            });
+
+            if(soundIterator != m_Footsteps.end())
             {
-                delete(audioSource);
-            }
-            for(auto audioSource : m_AudioSourceSwordSwoshes)
-            {
-                delete(audioSource);
+                soundIterator->play();
             }
         }
 
-        void PlayerAudioEmitter::playFootStepSound() const
+        void PlayerAudioEmitter::playHeavyAttack()
         {
-            if(!m_AudioSourceFootsteps[0]->isPlaying())
-            {
-                m_AudioSourceFootsteps[0]->play();
-            }
-            else if(!m_AudioSourceFootsteps[1]->isPlaying())
-            {
-                m_AudioSourceFootsteps[1]->play();
-            }
-            else
-            {
-                m_AudioSourceFootsteps[2]->play();
-            }
-        }
-
-
-        void PlayerAudioEmitter::playAttackSound(bool a_HeavyAttack) const
-        {
-            if(!a_HeavyAttack)
-            {
-                playRandomGrunt();
-            }
-            else
-            {
-                m_AudioSourceGrunts[2]->play();
-            }
+            m_Footsteps[2].play();
             playRandomSwordSwosh();
         }
 
-        void PlayerAudioEmitter::playRandomGrunt() const
+        void PlayerAudioEmitter::playLightAttack()
         {
-            std::srand(static_cast<int>(time(NULL)));
-            auto randomNumber = std::rand() % 2;
+            playRandomGrunt();
+            playRandomSwordSwosh();
+        }
 
-            switch(randomNumber)
+        void PlayerAudioEmitter::playRandomGrunt()
+        {
+            std::srand(static_cast<int>(time(nullptr)));
+            m_Grunts[std::rand() % 2].play();
+        }
+
+        void PlayerAudioEmitter::playRandomSwordSwosh()
+        {
+            std::srand(static_cast<int>(time(nullptr)));
+            m_SwordSwoshes[std::rand() % 4].play();
+        }
+
+        void PlayerAudioEmitter::playHitSound(EHitIdentifier a_HitIdentifier)
+        {
+            if(a_HitIdentifier == EHitIdentifier::Heavy)
             {
-            case 0:
-                m_AudioSourceGrunts[0]->play();
-                break;
-            case 1:
-                m_AudioSourceGrunts[1]->play();
-                break;
-            default:
-                break;
+                m_HitSoundHeavy.play();
+            }
+            else if(a_HitIdentifier == EHitIdentifier::Light)
+            {
+                m_HitSoundLight.play();
+            }
+            else if(a_HitIdentifier == EHitIdentifier::LightBackstab)
+            {
+                m_HitSoundLightBackstab.play();
+            }
+            else if(a_HitIdentifier == EHitIdentifier::HeavyBackstab)
+            {
+                m_HitSoundHeavyBackstab.play();
             }
         }
 
-        void PlayerAudioEmitter::playRandomSwordSwosh() const
+        void PlayerAudioEmitter::updatePosition()
         {
-            std::srand(static_cast<int>(time(NULL)));
-            auto randomNumber = std::rand() % 4;
+            m_AttachedPlayer->updateAbsolutePosition();
 
-            switch(randomNumber)
+            irr::core::matrix4 playerRotation = m_AttachedPlayer->getAbsoluteTransformation();
+            irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10]);
+            irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
+
+            for(auto sound : m_Grunts)
             {
-            case 0:
-                m_AudioSourceSwordSwoshes[0]->play();
-                break;
-            case 1:
-                m_AudioSourceSwordSwoshes[1]->play();
-                break;
-            case 2:
-                m_AudioSourceSwordSwoshes[2]->play();
-                break;
-            case 3:
-                m_AudioSourceSwordSwoshes[3]->play();
-                break;
-            default:
-                break;
+                sound.setPosition(m_AttachedPlayer->getAbsolutePosition());
+                sound.setDirection(forwardVector, upVector);
+            }
+
+            for(auto sound : m_SwordSwoshes)
+            {
+                sound.setPosition(m_AttachedPlayer->getAbsolutePosition());
+                sound.setDirection(forwardVector, upVector);
             }
         }
 
-        void PlayerAudioEmitter::updatePosition() const
+        void PlayerAudioEmitter::createAudioSources(AudioManager* a_AudioManager)
         {
-            for(auto audioSource : m_AudioSourceFootsteps)
+            for(int i = 0; i < 4; i++)
             {
-                audioSource->setPosition(m_AttachedPlayer->getAbsolutePosition());
+                if(i < 3)
+                {
+                    m_Footsteps.push_back(a_AudioManager->createSound("Footstep" + std::to_string(i + 1) + "_Concrete.wav"));
+                }
+                if(i < 2)
+                {
+                    m_Grunts.push_back(a_AudioManager->createSound("Grunt" + std::to_string(i + 1) + ".wav"));
+                }
+                m_SwordSwoshes.push_back(a_AudioManager->createSound("Sword_swing_" + std::to_string(i + 1) + ".wav"));
             }
 
-            for (auto audioSource : m_AudioSourceGrunts)
+            m_Grunts.push_back(a_AudioManager->createSound("GruntHeavy.wav"));
+
+            for(auto sound : m_Grunts)
             {
-                audioSource->setPosition(m_AttachedPlayer->getAbsolutePosition());
+                sound.setVolume(0.1f);
             }
-
-            for(auto audioSource : m_AudioSourceSwordSwoshes)
-            {
-                audioSource->setPosition(m_AttachedPlayer->getAbsolutePosition());
-            }
-        }
-
-        void PlayerAudioEmitter::createAudioSources()
-        {
-            m_AudioSourceFootsteps[0] = new OpenALSource("Footstep1_Concrete.wav");
-            m_AudioSourceFootsteps[1] = new OpenALSource("Footstep2_Concrete.wav");
-            m_AudioSourceFootsteps[2] = new OpenALSource("Footstep3_Concrete.wav");
-
-            m_AudioSourceGrunts[0] = new OpenALSource("Grunt1.wav");
-            m_AudioSourceGrunts[1] = new OpenALSource("Grunt2.wav");
-            m_AudioSourceGrunts[2] = new OpenALSource("GruntHeavy.wav");
-
-            for(auto audioSource : m_AudioSourceGrunts)
-            {
-                audioSource->setVolume(0.1f);
-            }
-            
-            m_AudioSourceSwordSwoshes[0] = new OpenALSource("Sword_swing_1.wav");
-            m_AudioSourceSwordSwoshes[1] = new OpenALSource("Sword_swing_2.wav");
-            m_AudioSourceSwordSwoshes[2] = new OpenALSource("Sword_swing_3.wav");
-            m_AudioSourceSwordSwoshes[3] = new OpenALSource("Sword_swing_4.wav");
         }
     }
 }

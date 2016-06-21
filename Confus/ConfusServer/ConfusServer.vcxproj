@@ -74,27 +74,28 @@
     <IncludePath>$(SolutionDir)../Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)../Libraries/32 bit/Debug;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <SourcePath>$(SolutionDir)Common;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)../Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)../Libraries/64 bit/Debug;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)../Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)../Libraries/32 bit/Release;$(LibraryPath)</LibraryPath>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)../Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)../Libraries/64 bit/Release;$(LibraryPath)</LibraryPath>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -105,14 +106,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <EnablePREfast>true</EnablePREfast>
+      <EnablePREfast>false</EnablePREfast>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib;MSVCRTD.LIB;RakNet.lib;ws2_32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;MSVCRTD.LIB;RakNet.lib;ws2_32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\Lansenou\Desktop\Confus\Libraries\32 bit\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -127,7 +128,7 @@ lib /out:ConfusServer.lib *.obj</Command>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <EnablePREfast>true</EnablePREfast>
+      <EnablePREfast>false</EnablePREfast>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
     </ClCompile>
     <Link>
@@ -151,7 +152,7 @@ lib /out:ConfusServer.lib *.obj</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <EnablePREfast>true</EnablePREfast>
+      <EnablePREfast>false</EnablePREfast>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -159,7 +160,7 @@ lib /out:ConfusServer.lib *.obj</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib;MSVCRT.LIB;RakNet.lib;ws2_32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht.lib;IrrAssimp.lib;OpenAL32.lib;assimp.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;MSVCRT.LIB;RakNet.lib;ws2_32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>cd "$(SolutionDir)ConfusServer/$(ConfigurationName)/"
@@ -175,7 +176,7 @@ lib /out:ConfusServer.lib *.obj</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <EnablePREfast>true</EnablePREfast>
+      <EnablePREfast>false</EnablePREfast>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -191,52 +192,65 @@ lib /out:ConfusServer.lib *.obj</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Collider.cpp" />
-    <ClCompile Include="EventManager.cpp" />
-    <ClCompile Include="Flag.cpp" />
+    <ClCompile Include="..\ConfusShared\BaseGame.cpp" />
+    <ClCompile Include="..\ConfusShared\EventManager.cpp" />
+    <ClCompile Include="..\ConfusShared\Flag.cpp" />
+    <ClCompile Include="..\ConfusShared\Health.cpp" />
+    <ClCompile Include="..\ConfusShared\Maze.cpp" />
+    <ClCompile Include="..\ConfusShared\MazeGenerator.cpp" />
+    <ClCompile Include="..\ConfusShared\MazeTile.cpp" />
+    <ClCompile Include="..\ConfusShared\MoveableWall.cpp" />
+    <ClCompile Include="..\ConfusShared\Networking\PlayerStructs.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\BoxCollider.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\Collider.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\CollisionRegistrar.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\DebugDrawer.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\PhysicsWorld.cpp" />
+    <ClCompile Include="..\ConfusShared\Physics\RigidBody.cpp" />
+    <ClCompile Include="..\ConfusShared\Player.cpp" />
+    <ClCompile Include="..\ConfusShared\RespawnFloor.cpp" />
+    <ClCompile Include="..\ConfusShared\WalledMazeTile.cpp" />
+    <ClCompile Include="..\ConfusShared\Weapon.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Health.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Maze.cpp" />
-    <ClCompile Include="MazeGenerator.cpp" />
-    <ClCompile Include="MazeTile.cpp" />
-    <ClCompile Include="MoveableWall.cpp" />
     <ClCompile Include="Networking\Connection.cpp" />
-    <ClCompile Include="OpenAL\Framework\aldlist.cpp" />
-    <ClCompile Include="OpenAL\Framework\CWaves.cpp" />
-    <ClCompile Include="OpenAL\Framework\Framework.cpp" />
-    <ClCompile Include="OpenAL\Framework\LoadOAL.cpp" />
-    <ClCompile Include="OpenAL\OpenALListener.cpp" />
-    <ClCompile Include="OpenAL\OpenALSource.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Audio\PlayerAudioEmitter.cpp" />
-    <ClCompile Include="StaticWall.cpp" />
-    <ClCompile Include="WalledMazeTile.cpp" />
-    <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="RemoteFlagUpdater.cpp" />
+    <ClCompile Include="RemoteInputReceiver.cpp" />
+    <ClCompile Include="TeamScore.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Collider.h" />
-    <ClInclude Include="EventManager.h" />
-    <ClInclude Include="Debug.h" />
-    <ClInclude Include="Flag.h" />
+    <ClInclude Include="..\ConfusShared\BaseGame.h" />
+    <ClInclude Include="..\ConfusShared\Debug.h" />
+    <ClInclude Include="..\ConfusShared\Delegate.h" />
+    <ClInclude Include="..\ConfusShared\EHitIdentifier.h" />
+    <ClInclude Include="..\ConfusShared\EnumUtility.h" />
+    <ClInclude Include="..\ConfusShared\EventManager.h" />
+    <ClInclude Include="..\ConfusShared\Flag.h" />
+    <ClInclude Include="..\ConfusShared\Health.h" />
+    <ClInclude Include="..\ConfusShared\Maze.h" />
+    <ClInclude Include="..\ConfusShared\MazeGenerator.h" />
+    <ClInclude Include="..\ConfusShared\MazeTile.h" />
+    <ClInclude Include="..\ConfusShared\MoveableWall.h" />
+    <ClInclude Include="..\ConfusShared\Networking\PlayerStructs.h" />
+    <ClInclude Include="..\ConfusShared\PacketType.h" />
+    <ClInclude Include="..\ConfusShared\Physics\BoxCollider.h" />
+    <ClInclude Include="..\ConfusShared\Physics\Collider.h" />
+    <ClInclude Include="..\ConfusShared\Physics\CollisionRegistrar.h" />
+    <ClInclude Include="..\ConfusShared\Physics\DebugDrawer.h" />
+    <ClInclude Include="..\ConfusShared\Physics\ECollisionFilter.h" />
+    <ClInclude Include="..\ConfusShared\Physics\PhysicsWorld.h" />
+    <ClInclude Include="..\ConfusShared\Physics\RigidBody.h" />
+    <ClInclude Include="..\ConfusShared\Player.h" />
+    <ClInclude Include="..\ConfusShared\PlayerInputState.h" />
+    <ClInclude Include="..\ConfusShared\RespawnFloor.h" />
+    <ClInclude Include="..\ConfusShared\TeamIdentifier.h" />
+    <ClInclude Include="..\ConfusShared\WalledMazeTile.h" />
+    <ClInclude Include="..\ConfusShared\Weapon.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Health.h" />
-    <ClInclude Include="Maze.h" />
-    <ClInclude Include="MazeGenerator.h" />
-    <ClInclude Include="MazeTile.h" />
-    <ClInclude Include="MoveableWall.h" />
     <ClInclude Include="Networking\Connection.h" />
-    <ClInclude Include="OpenAL\Framework\aldlist.h" />
-    <ClInclude Include="OpenAL\Framework\CWaves.h" />
-    <ClInclude Include="OpenAL\Framework\Framework.h" />
-    <ClInclude Include="OpenAL\Framework\LoadOAL.h" />
-    <ClInclude Include="OpenAL\OpenALListener.h" />
-    <ClInclude Include="OpenAL\OpenALSource.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Audio\PlayerAudioEmitter.h" />
-    <ClInclude Include="StaticWall.h" />
-    <ClInclude Include="WalledMazeTile.h" />
-    <ClInclude Include="Weapon.h" />
+    <ClInclude Include="RemoteFlagUpdater.h" />
+    <ClInclude Include="RemoteInputReceiver.h" />
+    <ClInclude Include="TeamScore.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
