@@ -99,6 +99,21 @@
     <ClCompile Include="..\ConfusShared\Networking\PlayerStructs.cpp">
       <Filter>Shared Files\Networking</Filter>
     </ClCompile>
+    <ClCompile Include="..\ConfusShared\MazeManager.cpp">
+      <Filter>Shared Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\NewMaze.cpp">
+      <Filter>Shared Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\NewMazeGenerator.cpp">
+      <Filter>Shared Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\NewMazeGenerator2.cpp">
+      <Filter>Shared Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\NewMazeTile.cpp">
+      <Filter>Shared Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -196,6 +211,21 @@
     </ClInclude>
     <ClInclude Include="..\ConfusShared\Networking\PlayerStructs.h">
       <Filter>Shared Files\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\MazeManager.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\NewMaze.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\NewMazeGenerator.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\NewMazeGenerator2.h">
+      <Filter>Shared Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\NewMazeTile.h">
+      <Filter>Shared Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

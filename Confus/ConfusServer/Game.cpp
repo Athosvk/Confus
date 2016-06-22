@@ -29,8 +29,8 @@ namespace ConfusServer
     Game::Game()
         : m_Device(irr::createDevice(irr::video::E_DRIVER_TYPE::EDT_NULL)),
 		m_PhysicsWorld(m_Device),
-        m_MazeGenerator(m_Device, 41, 40, (19+20+21+22+23+24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
-	        irr::core::vector2df(19., 20.), m_PhysicsWorld),
+		m_MazeManager(m_Device, irr::core::vector2d<irr::u32>(41, 40), (19 + 20 + 21 + 22 + 23 + 24),  // magic number is just so everytime the first maze is generated it looks the same, not a specific number is chosen
+			m_PhysicsWorld, 1.5f),
         m_BlueFlag(m_Device, ConfusShared::ETeamIdentifier::TeamBlue, m_PhysicsWorld),
 		m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, m_PhysicsWorld),
 		m_TeamScoreManager(m_BlueFlag, m_RedFlag) 
@@ -177,7 +177,7 @@ namespace ConfusServer
             currentDelay += static_cast<float>(m_DeltaTime);
 			if (currentDelay >= MazeDelay)
 			{
-				m_MazeGenerator.refillMainMaze(currentSeed);
+				m_MazeManager.refillMainMaze(currentSeed);
 				m_MazeTimer = 0.0f;
 				currentDelay = 0.0f;
 			}
@@ -250,7 +250,7 @@ namespace ConfusServer
 
 	void Game::fixedUpdate()
     {
-		m_MazeGenerator.fixedUpdate();
+		m_MazeManager.fixedUpdate();
 		m_PhysicsWorld.stepSimulation(static_cast<float>(FixedUpdateInterval));
 	}
 

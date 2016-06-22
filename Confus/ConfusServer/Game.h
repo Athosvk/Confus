@@ -2,7 +2,7 @@
 #include <Irrlicht/irrlicht.h>
 
 #include "Networking/Connection.h"
-#include "../ConfusShared/MazeGenerator.h"
+#include "../ConfusShared/MazeManager.h"
 #include "../ConfusShared/Player.h"
 #include "../ConfusShared/Flag.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
@@ -71,7 +71,7 @@ namespace ConfusServer
         /// <summary>
         /// MazeGenerator that hasa accesible maze
         /// </summary>
-        ConfusShared::MazeGenerator m_MazeGenerator;		
+        ConfusShared::MazeManager m_MazeManager;		
 		/// <summary>The players in the GameWorld, indexed by their ID so that we can find individuals easily</summary>
 		std::map<long long, PlayerPair> m_Players;
         /// <summary>
