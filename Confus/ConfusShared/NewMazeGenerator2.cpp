@@ -41,8 +41,26 @@ namespace ConfusShared
 			}
 			else if (m_TileStack.size() != 0)
 			{
-				currentTile = m_TileStack.top();
-				m_TileStack.pop();
+				if (m_TileStack.size() >= 6)
+				{
+					std::vector<std::shared_ptr<NewMazeTile>> topSixTiles;
+					for (int i = 0; i < 6; i++)
+					{
+						topSixTiles.push_back(m_TileStack.top());
+						m_TileStack.pop();
+					}
+					currentTile = topSixTiles[rand() % topSixTiles.size()];
+					for (int i = 0; i < 6; i++)
+					{
+						if (currentTile != topSixTiles[i])
+							m_TileStack.push(topSixTiles[i]);
+					}
+				}
+				else
+				{
+					currentTile = m_TileStack.top();
+					m_TileStack.pop();
+				}
 			}
 
 		} while (m_TileStack.size() != 0);
