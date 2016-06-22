@@ -19,7 +19,7 @@ namespace ConfusShared
 			m_World.setDebugDrawer(&m_DebugDrawer);
 			m_DebugDrawer.setDebugMode(btIDebugDraw::DBG_DrawWireframe | btIDebugDraw::DBG_DrawContactPoints
 			| btIDebugDraw::DBG_DrawText);
-			m_World.setGravity(btVector3(0.0f, -9.81f, 0.0f));
+			m_World.setGravity(btVector3(0.0f, -20.81f, 0.0f));
 		}
 
 		PhysicsWorld::~PhysicsWorld()
