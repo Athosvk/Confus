@@ -53,10 +53,10 @@ namespace Confus
 			videoDriver->getTexture("Media/Textures/Orb.png"), irr::core::vector2df(0.45f, 0.061f), m_ClientScore);
 		
 		m_MazeChangedSound.setVolume(0.2f);
-		//m_MazeManager.addMazeChangedListener([this]()
-		//{
-		//	m_MazeChangedSound.play();
-		//});
+		m_MazeManager.addMazeChangedListener([this]()
+		{
+			m_MazeChangedSound.play();
+		});
 
 		irr::scene::ICameraSceneNode* camera = m_Device->getSceneManager()->addCameraSceneNode(m_Device->getSceneManager()->getRootSceneNode());
 		camera->setFOV(70.f);
