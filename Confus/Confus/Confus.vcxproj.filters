@@ -168,8 +168,23 @@
     <ClCompile Include="..\ConfusShared\Networking\PlayerStructs.cpp">
       <Filter>Shared\Networking</Filter>
     </ClCompile>
-     <ClCompile Include="CameraController.cpp">
+    <ClCompile Include="CameraController.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\NewMaze.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\NewMazeGenerator.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\NewMazeGenerator2.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\NewMazeTile.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfusShared\MazeManager.cpp">
+      <Filter>Shared</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -334,6 +349,21 @@
     </ClInclude>
     <ClInclude Include="..\ConfusShared\Networking\PlayerStructs.h">
       <Filter>Shared\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\NewMaze.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\NewMazeGenerator.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\NewMazeGenerator2.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\NewMazeTile.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfusShared\MazeManager.h">
+      <Filter>Shared</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

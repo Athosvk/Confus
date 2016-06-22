@@ -2,7 +2,7 @@
 #include <Irrlicht/irrlicht.h>
 
 #include "Networking/ClientConnection.h"
-#include "../ConfusShared/MazeGenerator.h"
+#include "../ConfusShared/MazeManager.h"
 #include "Audio/OpenAL/OpenALListener.h"
 #include "Audio/PlayerAudioEmitter.h"
 #include "../ConfusShared/EventManager.h"
@@ -48,7 +48,7 @@ namespace Confus
 		/// <summary>
 		/// MazeGenerator that hasa accesible maze
 		/// </summary>
-		ConfusShared::MazeGenerator m_MazeGenerator;
+		ConfusShared::MazeManager m_MazeManager;
 		
 		/// <summary>
 		/// The Player handler that handles the own player and the newly joined ones.
@@ -107,7 +107,7 @@ namespace Confus
         void reset();
 
 		ClientTeamScore& getClientTeamScore() { return m_ClientScore; };
-		ConfusShared::MazeGenerator& getMazeGenerator() { return m_MazeGenerator; };
+		ConfusShared::MazeManager& getMazeGenerator() { return m_MazeManager; };
     private:
         /// <summary> Creates all the colliders for the level </summary>
         void initializeLevelColliders();
