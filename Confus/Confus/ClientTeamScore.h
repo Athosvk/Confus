@@ -9,9 +9,9 @@ namespace Confus
     {
 	private:
 		/// <summary> The red team score, static so it can be accessed from anywhere. </summary>
-		int m_RedTeamScore;
+		int m_RedTeamScore = 0;
 		/// <summary> The blue team score, static so it can accessed from anywhere. </summary>
-		int m_BlueTeamScore;
+		int m_BlueTeamScore = 0;
     public:
 		/// <summary>Sets the team score for this client instance</summary>
 		/// <param name="a_TeamIdentifier">The team to set the score for</param>

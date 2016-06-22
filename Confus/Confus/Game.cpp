@@ -160,12 +160,19 @@ namespace Confus
         m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::ScoreUpdate), [this](RakNet::Packet* a_Data)
         {
             RakNet::BitStream bitstreamIn(a_Data->data, a_Data->length, false);
-
             int redScore, blueScore;
             
             bitstreamIn.IgnoreBytes(sizeof(RakNet::MessageID));
             bitstreamIn.Read(redScore);
             bitstreamIn.Read(blueScore);
+			if(redScore > m_ClientScore.getTeamScore(ConfusShared::ETeamIdentifier::TeamRed))
+			{
+				m_BlueFlag.score();
+			}
+			else
+			{
+				m_RedFlag.score();
+			}
             m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamRed, redScore);
             m_ClientScore.setTeamScore(ConfusShared::ETeamIdentifier::TeamBlue, blueScore);
         });

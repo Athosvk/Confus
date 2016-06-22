@@ -2,12 +2,11 @@
 
 #include "ClientTeamScore.h"
 
-
 namespace Confus
 {
     void ClientTeamScore::setTeamScore(ConfusShared::ETeamIdentifier a_TeamIdentifier, int a_Score)
     {
-         switch(a_TeamIdentifier)
+        switch(a_TeamIdentifier)
         {
         case ConfusShared::ETeamIdentifier::TeamRed:
 			m_RedTeamScore = a_Score;
