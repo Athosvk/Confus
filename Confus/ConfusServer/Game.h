@@ -118,6 +118,12 @@ namespace ConfusServer
 
         std::unique_ptr<RemoteFlagUpdater> m_RedFlagUpdater;
         std::unique_ptr<RemoteFlagUpdater> m_BlueFlagUpdater;
+
+		///<summar>The time selected for the maze change, need this for new players joining after the broadcast time</summary>
+		int m_ChangeTime = 1000;
+
+		///<summar>The time selected for the maze change, need this for new players joining after the broadcast time</summary>
+		int m_CurrentSeed = 19 + 20 + 21 + 22 + 23 + 24;
     public:
         /// <summary>
         /// Initializes a new instance of the <see cref="Game"/> class.

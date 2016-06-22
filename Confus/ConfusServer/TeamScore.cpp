@@ -25,6 +25,7 @@ namespace ConfusServer
 	void TeamScore::setConnection(Networking::Connection* a_Connection)
     {
         m_Connection = a_Connection;
+		sendScoreToClients();
     }
 
     void TeamScore::sendScoreToClients()
