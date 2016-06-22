@@ -1,7 +1,6 @@
 #include <Irrlicht/irrlicht.h>
 
 #include "Flag.h"
-//To remove
 #include "../ConfusShared/Player.h"
 
 #include "../ConfusShared/Physics/PhysicsWorld.h"
@@ -10,8 +9,7 @@
 namespace ConfusShared
 {
 	Flag::Flag(irr::IrrlichtDevice* a_Device, ETeamIdentifier a_TeamIdentifier, Physics::PhysicsWorld& a_PhysicsWorld) : 
-		m_TeamIdentifier(a_TeamIdentifier),
-		m_FlagStatus(EFlagEnum::FlagBase) 
+		m_TeamIdentifier(a_TeamIdentifier)
 	{
         //Get drivers to load model
         auto sceneManager = a_Device->getSceneManager();
@@ -171,10 +169,8 @@ namespace ConfusShared
                     if(a_PlayerObject->FlagPointer != nullptr) 
 					{
                         // Player scored a point!
-                        score();
-						a_PlayerObject->FlagPointer = nullptr;
-						a_PlayerObject->CarryingFlag = EFlagEnum::None;
-						returnToStartPosition();
+						score();
+						a_PlayerObject->FlagPointer->returnToStartPosition();
                     }
 					else
 					{
@@ -187,7 +183,6 @@ namespace ConfusShared
 
 	void Flag::score() 
     {
-		returnToStartPosition();
 		m_OnScore();
 	}
 
@@ -210,6 +205,11 @@ namespace ConfusShared
 
 	void Flag::returnToStartPosition() 
 	{
+		if(m_FlagParent != nullptr)
+		{
+			m_FlagParent->FlagPointer = nullptr;
+			m_FlagParent->CarryingFlag = EFlagEnum::None;
+		}
         m_FlagParent = nullptr;
         m_FlagNode->setPosition(m_StartPosition);
         m_FlagNode->setRotation(m_StartRotation);

@@ -14,9 +14,9 @@
 
 namespace ConfusServer
 {
-    const double Game::FixedUpdateInterval = 0.02;
+    const double Game::FixedUpdateInterval = 0.01;
     const double Game::MaxFixedUpdateInterval = 0.1;
-	const double Game::BroadcastInterval = 0.015;
+	const double Game::BroadcastInterval = 0.01;
     const double Game::MazeDelay = 2.0;
     const double Game::MazeChangeInterval = 60.0 - MazeDelay;
 
@@ -229,6 +229,11 @@ namespace ConfusServer
 				{
 					collider = m_PhysicsWorld.createBoxCollider(node, ConfusShared::Physics::ECollisionFilter::LevelStatic,
 						ConfusShared::Physics::ECollisionFilter::Player | ConfusShared::Physics::ECollisionFilter::Interactable);
+				}
+				else if(std::string(node->getName()).find("MoveableWall", 0) != std::string::npos)
+				{
+					collider = m_PhysicsWorld.createBoxCollider(node, ConfusShared::Physics::ECollisionFilter::LevelStatic,
+						ConfusShared::Physics::ECollisionFilter::Player);
 				}
 				else if(std::string(node->getName()).find("Basefolder", 0) == std::string::npos)
 				{

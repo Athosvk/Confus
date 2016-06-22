@@ -21,17 +21,29 @@ namespace Confus
 		};
 		m_RedFlag->FlagStatusChangedEvent += flagChangedEvents;
 		m_BlueFlag->FlagStatusChangedEvent += flagChangedEvents;
+		m_RedFlag->addScoreCallback([this]()
+		{
+			playScoredSound(ConfusShared::ETeamIdentifier::TeamBlue);
+		});
+		m_BlueFlag->addScoreCallback([this]()
+		{
+			playScoredSound(ConfusShared::ETeamIdentifier::TeamRed);
+		});
+	}
 
+	void Announcer::update()
+	{
+		m_RedScoredSound.setPosition(m_Player->getAbsolutePosition());
+		m_FlagRedTakenSound.setPosition(m_Player->getAbsolutePosition());
+		m_FlagRedReturnedSound.setPosition(m_Player->getAbsolutePosition());
+		m_BlueScoredSound.setPosition(m_Player->getAbsolutePosition());
+		m_FlagBlueTakenSound.setPosition(m_Player->getAbsolutePosition());
+		m_FlagBlueReturnedSound.setPosition(m_Player->getAbsolutePosition());
 	}
 
 	void Announcer::playFlagEvent(ConfusShared::ETeamIdentifier a_TeamIdentifier, ConfusShared::EFlagEnum a_PreviousFlagEnum, 
 		ConfusShared::EFlagEnum a_CurrentFlagEnum)
 	{
-		if (a_PreviousFlagEnum == ConfusShared::EFlagEnum::FlagTaken && a_CurrentFlagEnum == ConfusShared::EFlagEnum::FlagBase)
-		{
-			playScoredSound(a_TeamIdentifier);
-		}
-
 		if (a_PreviousFlagEnum == ConfusShared::EFlagEnum::FlagDropped && a_CurrentFlagEnum == ConfusShared::EFlagEnum::FlagBase)
 		{
 			playFlagReturnedSound(a_TeamIdentifier);
@@ -59,11 +71,11 @@ namespace Confus
 	{
 		if (a_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamBlue)
 		{
-			m_FlagRedReturnedSound.play();
+			m_FlagBlueReturnedSound.play();
 		}
 		else if (a_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamRed)
 		{
-			m_FlagBlueReturnedSound.play();
+			m_FlagRedReturnedSound.play();
 		}
 	}
 
@@ -77,9 +89,5 @@ namespace Confus
 		{
 			m_FlagRedTakenSound.play();
 		}
-	}
-
-	Announcer::~Announcer()
-	{
 	}
 }

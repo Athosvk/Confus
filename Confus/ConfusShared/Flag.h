@@ -37,12 +37,12 @@ namespace ConfusShared
 		/// <summary>The team this flag belongs to, so that we can determine who can pick this flag up, as well as determine its team color</summary>
 		ConfusShared::ETeamIdentifier m_TeamIdentifier;
 		/// <summary>The current status of the flag, so that we can display it in the GUI</summary>
-		EFlagEnum m_FlagStatus;
+		EFlagEnum m_FlagStatus = EFlagEnum::FlagBase;
 		/// <summary>The meshnode that represents the flag visually</summary>
 		irr::scene::IMeshSceneNode* m_FlagNode;
 		/// <summary>The collider associated with the flag, so that it can be turned off and on later in the game</summary>
 		Physics::BoxCollider* m_Collider;
-        irr::scene::ISceneNode* m_FlagParent = nullptr;
+        Player* m_FlagParent = nullptr;
 		/// <summary>
 		/// The event that is called once this flag has been used to score a point, so that sounds and other events can 
 		/// be triggered externally 
