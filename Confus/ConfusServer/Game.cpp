@@ -231,6 +231,11 @@ namespace ConfusServer
 					collider = m_PhysicsWorld.createBoxCollider(node, ConfusShared::Physics::ECollisionFilter::LevelStatic,
 						ConfusShared::Physics::ECollisionFilter::Player | ConfusShared::Physics::ECollisionFilter::Interactable);
 				}
+				else if(std::string(node->getName()).find("MoveableWall", 0) != std::string::npos)
+				{
+					collider = m_PhysicsWorld.createBoxCollider(node, ConfusShared::Physics::ECollisionFilter::LevelStatic,
+						ConfusShared::Physics::ECollisionFilter::Player);
+				}
 				else if(std::string(node->getName()).find("Basefolder", 0) == std::string::npos)
 				{
 					collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, ConfusShared::Physics::ECollisionFilter::LevelStatic |
