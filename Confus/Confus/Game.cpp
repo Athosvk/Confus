@@ -240,11 +240,6 @@ namespace Confus
         irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10] );
         irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
         m_Listener.setDirection(forwardVector, upVector);    
-		static int counter = 0;
-		if(counter++ % 20 == 0)
-		{
-			std::cout << "FPS: " << 1.0 / m_DeltaTime << std::endl;
-		}
     }
 
     void Game::reset()
