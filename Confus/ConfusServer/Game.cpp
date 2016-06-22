@@ -182,6 +182,11 @@ namespace ConfusServer
 				currentDelay = 0.0f;
 			}
         }
+		static int counter = 0;
+		if(counter++ % 20 == 0)
+		{
+			std::cout << "FPS: " << 1.0 / m_DeltaTime << std::endl;
+		}
     }
 
 	void Game::processBroadcasts()
