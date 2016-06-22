@@ -176,7 +176,11 @@ namespace ConfusServer
             currentDelay += static_cast<float>(m_DeltaTime);
 			if (currentDelay >= MazeDelay)
 			{
-				m_MazeManager.refillMainMaze(m_CurrentSeed);
+<<<<<<< HEAD
+				m_MazeManager.refillMainMaze(currentSeed);
+=======
+				m_MazeGenerator.refillMainMaze(m_CurrentSeed);
+>>>>>>> 7a38d2abe52ea992ae7e6a5516910b877477f8a2
 				m_MazeTimer = 0.0f;
 				currentDelay = 0.0f;
 			}

@@ -5,15 +5,17 @@
 #include "../ConfusShared/EHitIdentifier.h"
 #include "../ConfusShared/Physics/PhysicsWorld.h"
 #include "../ConfusShared/Networking/PlayerStructs.h"
+#include "Game.h"
 
 namespace Confus
 {
 	PlayerHandler::PlayerHandler(irr::IrrlichtDevice* a_Device,
-		ConfusShared::Physics::PhysicsWorld& a_PhysicsWorld, Audio::AudioManager& a_AudioManager)
+		ConfusShared::Physics::PhysicsWorld& a_PhysicsWorld, Audio::AudioManager& a_AudioManager, Game& a_MainGame)
 		: m_PlayerNode(a_Device, a_PhysicsWorld, 1),
 		m_AudioManager(a_AudioManager),
 		m_PhysicsWorld(a_PhysicsWorld),
-		m_Device(a_Device)
+		m_Device(a_Device),
+		m_MainGame(a_MainGame)
 	{
 	}
 
@@ -145,6 +147,14 @@ namespace Confus
 				std::make_unique<Audio::PlayerAudioEmitter>(newPlayer, &m_AudioManager)));
 		}
 		// Add self
+		int score = 0;
+		bitstreamIn.Read(score);
+		m_MainGame.getClientTeamScore().setTeamScore(ConfusShared::ETeamIdentifier::TeamRed, score);
+		bitstreamIn.Read(score);
+		m_MainGame.getClientTeamScore().setTeamScore(ConfusShared::ETeamIdentifier::TeamBlue, score);
+		int seed = 0;
+		bitstreamIn.Read(seed);
+		m_MainGame.getMazeGenerator().refillMainMazeRequest(seed, RakNet::GetTimeMS());
 		m_Players.emplace(m_PlayerNode.getGUID(), PlayerConstruct(&m_PlayerNode, std::make_unique<Audio::PlayerAudioEmitter>(&m_PlayerNode, &m_AudioManager)));
 	}
 

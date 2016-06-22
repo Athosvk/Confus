@@ -105,6 +105,9 @@ namespace Confus
         /// Resets the game and gameloop
         /// </summary>
         void reset();
+
+		ClientTeamScore& getClientTeamScore() { return m_ClientScore; };
+		ConfusShared::MazeManager& getMazeGenerator() { return m_MazeManager; };
     private:
         /// <summary> Creates all the colliders for the level </summary>
         void initializeLevelColliders();
