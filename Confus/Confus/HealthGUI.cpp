@@ -27,11 +27,17 @@ namespace Confus
 
 	void HealthGUI::update()
 	{
-		for (int i = 0; i < Increment; i++)
-		{
-			m_HealthImages[i]->setVisible(m_PlayerNode->getHealthInstance()->getHealth() >= i * (m_PlayerNode->getHealthInstance()->getMaxHealth() / Increment));
-			m_BloodImages[i]->setVisible(m_PlayerNode->getHealthInstance()->getHealth() <= i * (m_PlayerNode->getHealthInstance()->getMaxHealth() / Increment));
-		}
+        int newHealth = m_PlayerNode->getHealthInstance()->getHealth();
+        if(m_PreviousHealth != newHealth)
+        {
+            m_PreviousHealth = newHealth;
+
+            for(int i = 0; i < Increment; i++)
+            {
+                m_HealthImages[i]->setVisible(newHealth >= (i+1) * (m_PlayerNode->getHealthInstance()->getMaxHealth() / Increment));
+                m_BloodImages[i]->setVisible(newHealth <= i * (m_PlayerNode->getHealthInstance()->getMaxHealth() / Increment));
+            }
+        }
 	}
 
 	HealthGUI::~HealthGUI()
