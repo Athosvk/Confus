@@ -235,7 +235,7 @@ namespace ConfusServer
 					collider = m_PhysicsWorld.createBoxCollider(node, ConfusShared::Physics::ECollisionFilter::LevelStatic,
 						ConfusShared::Physics::ECollisionFilter::Player);
 				}
-				else if(std::string(node->getName()).find("Basefolder", 0) == std::string::npos)
+				else if(std::string(node->getName()).find("Basefolder", 0) == std::string::npos && std::string(node->getName()).find("Base", 0) == std::string::npos)
 				{
 					collider = m_PhysicsWorld.createBoxCollider(node->getScale(), node, ConfusShared::Physics::ECollisionFilter::LevelStatic |
 						ConfusShared::Physics::ECollisionFilter::Interactable,
@@ -278,14 +278,6 @@ namespace ConfusServer
 
         ConfusShared::Player* newPlayer = new ConfusShared::Player(m_Device, m_PhysicsWorld, id);
 		newPlayer->setTeamIdentifier(teamID, m_Device);
-		if(teamID == ConfusShared::ETeamIdentifier::TeamBlue)
-		{
-			newPlayer->setStartPosition(irr::core::vector3df(0.f, 10.f, 0.f));
-		}
-		else if(teamID == ConfusShared::ETeamIdentifier::TeamRed)
-		{
-			newPlayer->setStartPosition(irr::core::vector3df(0.f, 10.f, 0.f));
-		}
 		newPlayer->respawn();
         newPlayer->getHealthInstance()->DamageEvent += [this, newPlayer](EHitIdentifier a_HitIdentifier) -> void
         {

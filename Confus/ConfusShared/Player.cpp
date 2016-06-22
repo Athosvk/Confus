@@ -140,6 +140,14 @@ namespace ConfusShared
 	void Player::setTeamIdentifier(ConfusShared::ETeamIdentifier a_TeamIdentifier, irr::IrrlichtDevice* a_Device)
 	{
 		m_TeamIdentifier = a_TeamIdentifier;
+        if(m_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamRed)
+        {
+            setStartPosition(irr::core::vector3df(0.f, 15.5f, -83.f));
+        }
+        else if(m_TeamIdentifier == ConfusShared::ETeamIdentifier::TeamBlue)
+        {
+            setStartPosition(irr::core::vector3df(0.f, 15.5f, 11.f));
+        }
 		updateColor(a_Device);
 	}
 
