@@ -37,6 +37,7 @@ namespace ConfusShared
 
 	void MazeManager::refillMainMaze(int a_Seed)
 	{
+		m_OnMazeChange();
 		m_MazeGenerator.generateMaze(m_ReplacementMaze, a_Seed, irr::core::vector2d<irr::u32>(20, 20));
 		replaceMainMaze();
 		m_ReplacementMaze.resetMaze();
