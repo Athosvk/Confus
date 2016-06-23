@@ -196,8 +196,8 @@ namespace ConfusServer
 			m_Connection->broadcastPacket(&bitstream);
 		}
 
-		m_RedRespawnFloor.update(m_DeltaTime);
-		m_BlueRespawnFloor.update(m_DeltaTime);
+		m_RedRespawnFloor.update(static_cast<float>(m_DeltaTime));
+		m_BlueRespawnFloor.update(static_cast<float>(m_DeltaTime));
     }
 
 	void Game::processBroadcasts()
