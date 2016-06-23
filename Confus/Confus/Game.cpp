@@ -211,6 +211,12 @@ namespace Confus
 		{
 			denyConnection(a_Data);
 		});
+
+		m_Connection->addFunctionToMap(static_cast<unsigned char>(ConfusShared::Networking::EPacketType::Respawn), [this](RakNet::Packet* a_Data)
+		{
+			m_RedRespawnFloor.disableCollision();
+			m_BlueRespawnFloor.disableCollision();
+		});
     }
 
     void Game::handleInput()
@@ -239,7 +245,9 @@ namespace Confus
         irr::core::matrix4 playerRotation(m_PlayerHandler.getMainPlayer()->getAbsoluteTransformation());
         irr::core::vector3df forwardVector = irr::core::vector3df(playerRotation[8], playerRotation[9], playerRotation[10] );
         irr::core::vector3df upVector = irr::core::vector3df(playerRotation[4], playerRotation[5], playerRotation[6]);
-        m_Listener.setDirection(forwardVector, upVector);    
+        m_Listener.setDirection(forwardVector, upVector);
+		m_RedRespawnFloor.update(m_DeltaTime);
+		m_BlueRespawnFloor.update(m_DeltaTime);
     }
 
     void Game::reset()

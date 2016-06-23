@@ -33,8 +33,10 @@ namespace ConfusServer
 			m_PhysicsWorld, 1.5f),
         m_BlueFlag(m_Device, ConfusShared::ETeamIdentifier::TeamBlue, m_PhysicsWorld),
 		m_RedFlag(m_Device, ConfusShared::ETeamIdentifier::TeamRed, m_PhysicsWorld),
-		m_TeamScoreManager(m_BlueFlag, m_RedFlag) 
-    {
+		m_TeamScoreManager(m_BlueFlag, m_RedFlag),
+		m_RedRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, 11.f)),
+		m_BlueRespawnFloor(m_Device, m_PhysicsWorld, irr::core::vector3df(0.f, 3.45f, -83.f))
+	{
     }
 
     Game::~Game()
@@ -181,6 +183,21 @@ namespace ConfusServer
 				currentDelay = 0.0f;
 			}
         }
+
+		static double respawnTimer = 0.0;
+		respawnTimer += m_DeltaTime;
+		if(respawnTimer > 10.0)
+		{
+			respawnTimer -= 10.0;
+			m_BlueRespawnFloor.disableCollision();
+			m_RedRespawnFloor.disableCollision();
+			RakNet::BitStream bitstream;
+			bitstream.Write(ConfusShared::Networking::EPacketType::Respawn);
+			m_Connection->broadcastPacket(&bitstream);
+		}
+
+		m_RedRespawnFloor.update(m_DeltaTime);
+		m_BlueRespawnFloor.update(m_DeltaTime);
     }
 
 	void Game::processBroadcasts()

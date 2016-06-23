@@ -9,6 +9,7 @@
 #include "TeamScore.h"
 #include "RemoteInputReceiver.h"
 #include "RemoteFlagUpdater.h"
+#include "../ConfusShared/RespawnFloor.h"
 
 namespace ConfusServer
 { 
@@ -118,6 +119,9 @@ namespace ConfusServer
 
         std::unique_ptr<RemoteFlagUpdater> m_RedFlagUpdater;
         std::unique_ptr<RemoteFlagUpdater> m_BlueFlagUpdater;
+
+		ConfusShared::RespawnFloor m_RedRespawnFloor;
+		ConfusShared::RespawnFloor m_BlueRespawnFloor;
 
 		///<summar>The time selected for the maze change, need this for new players joining after the broadcast time</summary>
 		int m_ChangeTime = 1000;

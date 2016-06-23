@@ -5,6 +5,8 @@
 
 namespace ConfusShared
 {
+	const float RespawnFloor::PassThroughTime = 1.0f;
+
 	RespawnFloor::RespawnFloor(irr::IrrlichtDevice* a_Device, Physics::PhysicsWorld& a_PhysicsWorld,
 		irr::core::vector3df a_Position)
     {
@@ -24,10 +26,17 @@ namespace ConfusShared
 		m_RigidBody->makeStatic();
     }
 
-
-    RespawnFloor::~RespawnFloor()
-    {
-    }
+	void RespawnFloor::update(float a_DeltaTime)
+	{
+		if(m_PassThroughTimer > 0.0f)
+		{
+			m_PassThroughTimer -= a_DeltaTime;
+			if(m_PassThroughTimer <= 0.0f)
+			{
+				enableCollision();
+			}
+		}
+	}
 
     void RespawnFloor::enableCollision()
     {
@@ -41,6 +50,7 @@ namespace ConfusShared
         m_FloorNode->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_TRANSPARENT_ALPHA_CHANNEL);
         m_FloorNode->setMaterialTexture(0, m_TransparentTexture);
 		m_RigidBody->deactivate();
+		m_PassThroughTimer = PassThroughTime;
     }
 }
 

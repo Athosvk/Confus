@@ -42,6 +42,7 @@ namespace ConfusShared
             RedFlag = 12 + ID_USER_PACKET_ENUM,
             BlueFlag = 13 + ID_USER_PACKET_ENUM,
 			JoinSync = 14 + ID_USER_PACKET_ENUM,
+			Respawn = 15
 		};
 	}
 }
